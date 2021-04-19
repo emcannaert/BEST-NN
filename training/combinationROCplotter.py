@@ -125,7 +125,8 @@ print("Loaded the BES variable only neural network!")
 # Load image only network /////////////////////////////////////////////////////////
 #==================================================================================
 
-model_imageOnly = load_model(ImageOnly)
+#model_imageOnly = load_model(ImageOnly)
+model_imageOnly = load_model(BESonly)
 
 print("Loaded the boosted jet image only neural network!")
 
@@ -136,6 +137,14 @@ print("Loaded the boosted jet image only neural network!")
 model_BEST = load_model(BESimage)
 
 print("Loaded the BEST neural network!")
+
+#==================================================================================
+# Load the BEST PCT results ///////////////////////////////////////////////////////
+#==================================================================================
+
+file_PCT = h5py.File('/uscms/home/bonillaj/nobackup/Brendan/CMSSW_10_2_18/src/PCT_HEP/logs/log/BESTOUTPUT.h5', 'r')
+PCTpredict = file_PCT['DNN']
+PCTtruth = to_categorical(file_PCT['pid'], num_classes=6)
 
 #==================================================================================
 # Create ROC Curves ///////////////////////////////////////////////////////////////
@@ -241,6 +250,38 @@ roc_auc_BJI["macro"] = auc(fprBJI["macro"], tprBJI["macro"])
 
 print("Created ROC curves")
 
+# PCT network 
+# compute ROC curve and area for each class
+n_classes = globals()["truthLabelsTest"].shape[1]
+fprPCT = dict()
+tprPCT = dict()
+roc_auc_PCT = dict()
+for i in range(n_classes):
+    fprPCT[i], tprPCT[i], _ = roc_curve(PCTtruth[:, i], PCTpredict[:, i]) # returns 3 outputs but only care about 2
+    roc_auc_PCT[i] = auc(fprPCT[i], tprPCT[i])
+
+# compute micro-average ROC curve and ROC area
+fprPCT["micro"], tprPCT["micro"], _ = roc_curve(globals()["truthLabelsTest"].ravel(), PCTpredict.ravel() )
+roc_auc_PCT["micro"] = auc(fprPCT["micro"], tprPCT["micro"] )
+
+# compute macro-average ROC curve and ROC area
+# first aggregate all false positive rates
+all_fprPCT = numpy.unique(numpy.concatenate([fprPCT[i] for i in range(n_classes)]) )
+
+# interpolate all roc curves
+mean_tprPCT = numpy.zeros_like(all_fprPCT)
+for i in range(n_classes):
+    mean_tprPCT += interp(all_fprPCT, fprPCT[i], tprPCT[i] )
+
+# average and compute macro AUC
+mean_tprPCT /= n_classes
+
+fprPCT["macro"] = all_fprPCT
+tprPCT["macro"] = mean_tprPCT
+roc_auc_PCT["macro"] = auc(fprPCT["macro"], tprPCT["macro"])
+
+print("Created ROC curves")
+
 #==================================================================================
 # Plot ROC curves /////////////////////////////////////////////////////////////////
 #==================================================================================
@@ -256,6 +297,9 @@ plt.plot(fprBJI["micro"], tprBJI["micro"],
 plt.plot(fprBEST["micro"], tprBEST["micro"],
          label='BEST micro-average ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST["micro"]),
          color='blue', linewidth=2)
+plt.plot(fprPCT["micro"], tprPCT["micro"],
+         label='PCT micro-average ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT["micro"]),
+         color='green', linewidth=2)
 plt.plot(fprBES["macro"], tprBES["macro"],
          label='BES macro-average ROC curve (area = {0:0.2f})' ''.format(roc_auc_BES["macro"]),
          color='orange', linestyle=':', linewidth=4)
@@ -265,6 +309,9 @@ plt.plot(fprBJI["macro"], tprBJI["macro"],
 plt.plot(fprBEST["macro"], tprBEST["macro"],
          label='BEST macro-average ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST["macro"]),
          color='blue', linestyle=':', linewidth=4)
+plt.plot(fprPCT["macro"], tprPCT["macro"],
+         label='PCT macro-average ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT["macro"]),
+         color='green', linestyle=':', linewidth=4)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -287,6 +334,9 @@ plt.plot(fprBJI[0], tprBJI[0],
 plt.plot(fprBEST[0], tprBEST[0],
          label='BEST ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST[0]),
          color='blue', linewidth=2)
+plt.plot(fprPCT[0], tprPCT[0],
+         label='PCT ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT[0]),
+         color='green', linewidth=2)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -308,6 +358,9 @@ plt.plot(fprBJI[1], tprBJI[1],
 plt.plot(fprBEST[1], tprBEST[1],
          label='BEST ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST[1]),
          color='blue', linewidth=2)
+plt.plot(fprPCT[1], tprPCT[1],
+         label='PCT ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT[1]),
+         color='green', linewidth=2)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -329,6 +382,9 @@ plt.plot(fprBJI[2], tprBJI[2],
 plt.plot(fprBEST[2], tprBEST[2],
          label='BEST ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST[2]),
          color='blue', linewidth=2)
+plt.plot(fprPCT[2], tprPCT[2],
+         label='PCT ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT[2]),
+         color='green', linewidth=2)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -350,6 +406,9 @@ plt.plot(fprBJI[3], tprBJI[3],
 plt.plot(fprBEST[3], tprBEST[3],
          label='BEST ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST[3]),
          color='blue', linewidth=2)
+plt.plot(fprPCT[3], tprPCT[3],
+         label='PCT ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT[3]),
+         color='green', linewidth=2)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -371,6 +430,9 @@ plt.plot(fprBJI[4], tprBJI[4],
 plt.plot(fprBEST[4], tprBEST[4],
          label='BEST ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST[4]),
          color='blue', linewidth=2)
+plt.plot(fprPCT[4], tprPCT[4],
+         label='PCT ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT[4]),
+         color='green', linewidth=2)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -392,6 +454,9 @@ plt.plot(fprBJI[5], tprBJI[5],
 plt.plot(fprBEST[5], tprBEST[5],
          label='BEST ROC curve (area = {0:0.2f})' ''.format(roc_auc_BEST[5]),
          color='blue', linewidth=2)
+plt.plot(fprPCT[5], tprPCT[5],
+         label='PCT ROC curve (area = {0:0.2f})' ''.format(roc_auc_PCT[5]),
+         color='green', linewidth=2)
 plt.plot([0, 1], [0, 1], 'k--', lw=2)
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
