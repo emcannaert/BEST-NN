@@ -1,17 +1,20 @@
 #!/bin/bash
 #=========================================================================================
-# fillSamples.sh --------------------------------------------------------------------------
+# fillSamples.sh -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott -------------------------------------------------------------
+# Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
-# This script lives in the BEST/scripts directory, and fills text files in the BEST/samples directory. Moving it will cause minor problems with $fileToWrite, but you can modify the path for $fileToWrite.
+# This script lives in the BEST/scripts directory, and fills text files in the BEST/samples directory. 
+# The symbolic link in the BEST/preprocess directory should be executed when using this script.
 # This script takes arguments for particle, year, and datatype to create/fill the sample files with dataset names from DAS, using dasgoclient.
 # This script is specific to calling datasets for the Summer 2020 Ultra Legacy samples submitted by the UCD BEST team, searching for VLQs. But it can be modified to search for other datasets! 
 # This script also checks for and keeps track of a version two, or "v2", for each dataset, as these updated datasets are still being produced as of writing this code.
 
 ######################################### NOTES TO SELF ############################
 # Implement data
+# Implement a quiet option?
+# Change the file deleting code to simply delete the datasets that are being replaced, and not the entire file?
 # HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong), DAS is missing mass points: (2017: 2000), (2018: 6500)
 # WW: DAS is missing mass point: (2015: 5000)
 # ZZ: DAS is missing mass points: (2015: 600, 1600), (2017: 2000, 3000, 3500, 5000), (2018: 1000, 1400, 1800)
@@ -20,37 +23,41 @@
 # tt: DAS is missing mass points: (all years: 5000, 5500, 6000, 6500, 7000, 7500, 8000), (2017 and 2018: 500, 600, 800, 1000)
 # tt: There should be multiple widths per mass point, but for now there is only one width per mass point. This code will need to be updated to handle widths correctly in the future.
 
-#Define ANSI colors here for the output since I am extra:
-RED='\033[0;31m' # Red
-CYAN='\033[1;36m' # Light Cyan
-BLUE='\033[0;34m' # Blue
-PURP='\033[1;35m' # Light Purple
-GRN='\033[1;32m' # Light Green
-YEL='\033[1;33m' # Yellow
-BRN='\033[0;33m' # Brown/Orange
+# Define ANSI colors here for the output since I am extra:
+RED='\033[91m' # Red
+CYAN='\033[96m' # Light Cyan
+BLUE='\033[94m' # Blue
+PURP='\033[35m' # Light Purple
+GRN='\033[92m' # Light Green
+YEL='\033[93m' # Yellow
 NC='\033[0m' # No Color
+# BOLD = '\033[1m'
+# UNDERLINE = '\033[4m'
+#implement bold/underline?
+
 #This alias makes the script simpler, as '-e' is needed to print color. This is undone by 'unalias' at the end of the code.
 shopt -s expand_aliases
 alias echo='echo -e'
 
-if [[ $# != 1 ]] && [[ $# != 6 ]]; then # Check that user provided options, exit if not. The only valid inputs would have 1 or 6 options/arguments.
+# Check that user provided options, exit if not. The only valid inputs would have 1 or 6 options/arguments.
+if [[ $# != 1 ]] && [[ $# != 6 ]]; then 
     echo "${YEL}WOAH, slow down there friend!${NC} Your command line contains $# options/arguments!"
     echo "Please pass options and arguments as:"
     echo
     echo "${CYAN}-p \"<particle 1> <particle 2>...\" ${GRN}-y \"<year 1> <year 2>...\" ${PURP}-d <datatype>${NC}"
     echo
-    echo "${CYAN}Particle arguments: ${RED}all${NC}, ${YEL}or${NC} any combination of ${CYAN}QCD, HH, WW, ZZ, tt, bb${NC}"
-    echo "${GRN}Year arguments: ${RED}all${NC}, ${YEL}or${NC} any combination of ${GRN}2015, 2016, 2017, 2018${NC}"
-    echo "${PURP}Datatype arguments: ${RED}all${NC} ${YEL}or${NC} ${PURP}mc${NC} ${YEL}or${NC} ${PURP}data${NC}"
+    echo "${CYAN}Particle arguments: ${BLUE}all${NC}, ${YEL}or${NC} any combination of ${CYAN}QCD, HH, WW, ZZ, tt, bb${NC}"
+    echo "${GRN}Year arguments: ${BLUE}all${NC}, ${YEL}or${NC} any combination of ${GRN}2015, 2016, 2017, 2018${NC}"
+    echo "${PURP}Datatype arguments: ${BLUE}all${NC} ${YEL}or${NC} ${PURP}mc${NC} ${YEL}or${NC} ${PURP}data${NC}"
     echo
     echo "All options and arguments are case-sensitive, and all options-argument pairs can be executed in any order."
-    echo "${YEL}Example:${NC} ./fillSamples.sh ${PURP}-d mc ${GRN}-y ${RED}all ${CYAN}-p HH${NC}"
+    echo "${YEL}Example:${NC} ./fillSamples.sh ${PURP}-d mc ${GRN}-y ${BLUE}all ${CYAN}-p HH${NC}"
     echo
     echo "Quotes are necessary when passing multiple arguments for one option."
     echo "${YEL}Example:${NC} ./fillSamples.sh ${GRN}-y \"2015 2016 2017\" ${PURP}-d data ${CYAN}-p \"HH WW\"${NC}"    
     echo
-    echo "Simply passing '${RED}-a${NC}' as the only option selects the '${RED}all${NC}' argument for ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype.${NC}"
-    echo "${YEL}Example:${NC} ./fillSamples.sh ${RED}-a${NC}"
+    echo "Simply passing '${BLUE}-a${NC}' as the only option selects the '${BLUE}all${NC}' argument for ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype.${NC}"
+    echo "${YEL}Example:${NC} ./fillSamples.sh ${BLUE}-a${NC}"
     exit 1
 fi
 
@@ -68,12 +75,12 @@ while getopts :ap:y:d: opt; do
   case $opt in
     a) # The -a option. Chooses all samples.
         if [[ $# == 1 ]]; then #Checks for correct usage, exits if not.
-            echo "\"${RED}all${NC}\" option triggered. ${RED}All${NC} samples for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, will be generated."
+            echo "\"${BLUE}all${NC}\" option triggered. ${BLUE}All${NC} samples for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, will be generated."
             myParticles=${allParticles[*]}
             myYears=${allYears[*]}
             myDatatypes=${allDatatypes[*]}
         else
-            echo "${YEL}Error:${NC} Invalid input. To run ${RED}all${NC} samples for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, execute ./fillSamples.sh ${RED}-a${NC}"
+            echo "${YEL}Error:${NC} Invalid input. To run ${BLUE}all${NC} samples for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, execute ./fillSamples.sh ${BLUE}-a${NC}"
             echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
             echo "${RED}Exiting without creating samples...${NC}"
             exit 1
@@ -88,7 +95,7 @@ while getopts :ap:y:d: opt; do
                     myParticles+=($part)
                 else #Invalid arguments trigger error message
                     echo "${YEL}Error:${NC} Invalid argument for ${CYAN}$opt${NC}: $part"
-                    echo "Please choose ${RED}'all'${NC}, or the case-sensitive arguments: ${CYAN}${allParticles[*]}${NC}"
+                    echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${CYAN}${allParticles[*]}${NC}"
                     echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
                     echo "${RED}Exiting without creating samples...${NC}"
                     exit 1
@@ -105,7 +112,7 @@ while getopts :ap:y:d: opt; do
                     myYears+=($yr)
                 else #Invalid arguments trigger error message
                     echo "${YEL}Error:${NC} Invalid argument for ${GRN}$opt${NC}: $yr"
-                    echo "Please choose ${RED}'all'${NC}, or the case-sensitive arguments: ${GRN}${allYears[*]}${NC}"
+                    echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${GRN}${allYears[*]}${NC}"
                     echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
                     echo "${RED}Exiting without creating samples...${NC}"
                     exit 1
@@ -122,7 +129,7 @@ while getopts :ap:y:d: opt; do
                     myDatatypes+=($dat)
                 else ##Invalid arguments trigger error message
                     echo "${YEL}Error:${NC} Invalid argument for ${PURP}$opt${NC}: $dat"
-                    echo "Please choose ${RED}'all'${NC}, or the case-sensitive arguments: ${PURP}${allDatatypes[*]}${NC}"
+                    echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${PURP}${allDatatypes[*]}${NC}"
                     echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
                     echo "${RED}Exiting without creating samples...${NC}"
                     exit 1
@@ -247,6 +254,7 @@ for dat in ${myDatatypes[*]}; do #Loop over mc and data
         for part in ${myParticles[*]}; do #Loop over particles
             echo "${CYAN}Beginning $part${NC}..."
             #These help keep track of how many datasets still need a version 2.
+            echo "#$part" >> $fileToWrite
             v2Counter=0
             v1Counter=0
             v2Flag=false # Boolean flag
