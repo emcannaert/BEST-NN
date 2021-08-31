@@ -1,7 +1,7 @@
 #=========================================================================================
 # run_HH.py ------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Authors: Brendan Regnery, Reyer Band, Johan Bonilla ------------------------------------
+# Authors: Brendan Regnery, Reyer Band ---------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 #=========================================================================================
@@ -13,7 +13,8 @@ from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 #106X = CMSSW 10.6.X choose 2017 and copy link from twiki
-GT = '102X_mcRun2_asymptotic_v7'
+# GT = '102X_mc2017_realistic_v7'
+GT = '106X_mc2017_realistic_v8'
 process = cms.Process("run")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -30,7 +31,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 process.source = cms.Source("PoolSource",
     # replace 'myfile.root' with the source file you want to use
     fileNames = cms.untracked.vstring(
-        '/store/mc/RunIISummer16MiniAODv3/BulkGravTohhTohbbhbb_narrow_M-2000_13TeV-madgraph/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1/00000/DEEE9B39-80CF-E811-9712-0025901AC3F8.root'
+        '/store/mc/RunIIFall17MiniAODv2/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_13TeV-madgraph_correctedcfg/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/00000/708A0593-35BB-E811-8598-0CC47A2B03A2.root'
         )
                             )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -57,7 +58,8 @@ process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
 process.run = cms.EDProducer('BESTProducer',
 	inputJetColl = cms.string('slimmedJetsAK8'),
         jetColl = cms.string('PUPPI'),                     
-        jetType = cms.string('H')
+        jetType = cms.string('H'),
+        storeDaughters = cms.bool(True)
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string("BESTInputs.root") )
 

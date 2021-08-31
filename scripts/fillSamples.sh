@@ -186,51 +186,98 @@ checkDAS(){ ################### Takes inputs as: "checkDAS particle year datatyp
     # Here we build the case structure for each particle, and define "$dasPart", which is used to search DAS.
     # The -a flag is for arrays, the -g flag declares the array globally, allowing us to call it outside of the checkDAS function.
     # The sort -r command sorts the results into reverse order. This is helpful for looping over the datasets and detecting the v2 datasets;
-    # the v2 datasset will always print right after the v1 dataset, so by filling the array in reverese, we get the v2 dataset first each time, simplifying future loops.
-    # Note that everytime this function is called, $dasDatasets is overwritten.
+    # the v2 dataset will always print right after the v1 dataset, so by filling the array in reverese, we get the v2 dataset first each time, simplifying future loops.
+    # Note that everytime this function is called, $dasDatasets and $crabNames are overwritten.
+    # $crabNames and $dasDatasets fill the sample files, and are used by the python script to submit crab jobs
     case $1 in
         "WW") # W case
-            dasPart="BulkGravToWWToWhadWhad"
-            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            dasPart="GravToWW"
+            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/Bulk${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            declare -ag crabNames=()
+            for datset in ${dasDatasets[@]}; do
+                trimstring1=${datset#*"_M-"} # Trims the front of string
+                trimstring2=${trimstring1%"_Tune"*} # Trims back of string; now $trimstring2 is the mass point of the dataset
+                crabNames+=("GravitonWW_${trimstring2}GeV_trees") # This will be the name of the crab project directory 
+            done
         ;;        
         "ZZ") # Z case
-            dasPart="BulkGravToZZToZhadZhad"
-            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            dasPart="GravToZZ"
+            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/Bulk${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            declare -ag crabNames=()
+            for datset in ${dasDatasets[@]}; do
+                trimstring1=${datset#*"_M-"} # Trims the front of string
+                trimstring2=${trimstring1%"_Tune"*} # Trims back of string; now $trimstring2 is the mass point of the dataset
+                crabNames+=("GravitonZZ_${trimstring2}GeV_trees") # This will be the name of the crab project directory 
+            done        
         ;;        
         "bb") # b case
             dasPart="ZprimeToBB"
             declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            declare -ag crabNames=()
+            for datset in ${dasDatasets[@]}; do
+                trimstring1=${datset#*"_M-"} # Trims the front of string
+                trimstring2=${trimstring1%"_Tune"*} # Trims back of string; now $trimstring2 is the mass point of the dataset
+                crabNames+=("ZprimeBB_${trimstring2}GeV_trees") # This will be the name of the crab project directory 
+            done        
         ;;
         "HH") # Higgs case
-            dasPart="GluGluToBulkGravitonToHHTo4B"
-            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            dasPart="GravitonToHH"
+            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/GluGluToBulk${dasPart}To4B*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            declare -ag crabNames=()
+            for datset in ${dasDatasets[@]}; do
+                if [[ "$datset" =~ "60000" ]]; then
+                    crabNames+=("GravitonHH_6000GeV_trees") # Special case where the mc dataset for 6000Gev was accidentally named 60000Gev in DAS. The data is generated correctly at 6000GeV, so we just need to rename the crab directory.
+                else
+                    trimstring1=${datset#*"_M-"} # Trims the front of string
+                    trimstring2=${trimstring1%"_narrow"*} # Trims back of string; now $trimstring2 is the mass point of the dataset
+                    crabNames+=("GravitonHH_${trimstring2}GeV_trees") # This will be the name of the crab project directory 
+                fi
+            done    
         ;;
         "tt") # Top case
             dasPart="ZprimeToTT"
             declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
+            declare -ag crabNames=()
+            for datset in ${dasDatasets[@]}; do
+                trimstring1=${datset#*"_M"} # Trims the front of string
+                trimstring2=${trimstring1%"_W"*} # Trims back of string; now $trimstring2 is the mass point of the dataset
+                crabNames+=("ZprimeTT_${trimstring2}GeV_trees") # This will be the name of the crab project directory 
+            done        
         ;;
         "QCD") # QCD case (Flattened pT samples only exist for 2015 and 2016 at the moment)
-            dasPart="QCD_Pt*to*"
-            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
-
+            dasPart="QCD_Pt"
+            declare -ag dasDatasets=( $(dasgoclient -query="dataset dataset=/${dasPart}*to*/${dasYear}*-106X*/MINIAODSIM datatype=$3" | sort -r) )
             declare -a trimmedDatasetsQCD
             for datset in ${dasDatasets[*]}; do # Need to trim the low pT files; want to keep everything above 400pT (so we lowest we keep 300to470)
                 if [[ ! "$datset" =~ ("15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300") ]]; then # If dataset is one of these pT ranges, add it to $trimmedDatasetsQCD
                     trimmedDatasetsQCD+=( "$datset" )
                 fi
             done
-            dasDatasets=( "${trimmedDatasetsQCD[@]}" ) # Update $dasDatasets to have desired pT samples          
+            dasDatasets=( "${trimmedDatasetsQCD[@]}" ) # Update $dasDatasets to have desired pT samples     
+
+            declare -ag crabNames=()
+            for datset in ${dasDatasets[@]}; do
+                if [[ "$datset" =~ "Flat" ]]; then
+                    crabNames+=("QCD_Flat_Pt_trees") # Special case where the Pt is flattened across the whole range. Compare to the Pt binned data.
+                else
+                    trimstring=${datset%"_Tune"*} # Trims back of string; now $trimstring is the Pt range of the dataset, with a slash in front, like: "/QCD_Pt_*to*"
+                    crabNames+=("${trimstring:1}_trees") # This will be the name of the crab project directory. The :1 removes the first character, which is the slash. 
+                fi
+            done
         ;;
     esac
 
     if [[ $2 == "2016" ]]; then # If year = 2016, then the 2015 datasets will be mixed into $dasDatasets; this code removes those datasets.
         declare -a trimmedDatasetsYear
-        for datset in ${dasDatasets[*]}; do
-            if [[ "$datset" != *"RunIISummer20UL16MiniAODAPV"* ]]; then # If dataset is NOT a 2015 dataset, add the dataset to $trimmedDatasetsYear
-                trimmedDatasetsYear+=( "$datset" )
+        declare -a trimmedCrabNames
+        for i in ${!dasDatasets[*]}; do
+            if [[ "${dasDatasets[$i]}" != *"RunIISummer20UL16MiniAODAPV"* ]]; then # If dataset is NOT a 2015 dataset, add the dataset to $trimmedDatasetsYear
+                trimmedDatasetsYear+=( "${dasDatasets[$i]}" )
+                trimmedCrabNames+=( "${crabNames[$i]}" )
             fi
         done
         dasDatasets=( "${trimmedDatasetsYear[@]}" ) # Update $dasDatasets to have only 2016 samples
+        crabNames=( "${trimmedCrabNames[@]}" )
     fi
 
     # Uncomment this if you want to print what datasets are being found by checkDAS
@@ -261,15 +308,15 @@ for dat in ${myDatatypes[*]}; do #Loop over mc and data
             v1Expected= # Empty strings to fill and compare later...
             v1Actual= # ...to help keep an eye out for errors
             checkDAS $part $yr $dat # Check DAS for every v1 and v2 dataset for this particle+year+datatype, load results into $dasDatasets array
-            for datset in ${dasDatasets[*]}; do # Loop over DAS search results. Now we are checking each DAS dataset individually.
-                if [[ "$datset" == *"${dasYear}v2"* ]]; then # Trigers if the dataset is a v2 dataset
-                    echo $datset >> $fileToWrite # Write the dataset to the samples file
+            for i in ${!dasDatasets[*]}; do # Loop over DAS search results. Now we are checking each DAS dataset individually. Note the different loop structure--here, we use an integer iterator, not the dataset string.
+                if [[ "${dasDatasets[$i]}" == *"${dasYear}v2"* ]]; then # Trigers if the dataset is a v2 dataset
+                    echo "${crabNames[$i]},${dasDatasets[$i]}" >> $fileToWrite # Write the dataset to the samples file
                     ((v2Counter++)) # This increments v2counter
                     v2Flag=true # If this is a v2 dataset, then the next dataset in the loop SHOULD be the v1 version of this dataset--so we trigger this flag.
-                    v1Expected=${datset/"${dasYear}v2"*/${dasYear}} # This string SHOULD be the beginning of the dataset name of the v1 version of this dataset (UNNECESSARY IF YOU TRUST DAS, WHICH YOU SHOULDN'T)
+                    v1Expected=${dasDatasets[i]/"${dasYear}v2"*/${dasYear}} # This string SHOULD be the beginning of the dataset name of the v1 version of this dataset (UNNECESSARY IF YOU TRUST DAS, WHICH YOU SHOULDN'T)
                 elif $v2Flag; then # This will only trigger if the previous dataset was a v2. This will reset the v2flag and skip the v1 dataset, or throw an error if the names don't match
                     v2Flag=false # Reset the v2flag
-                    v1Actual=${datset/"${dasYear}"*/${dasYear}} # This string is the ACTUAL beginning of the v1 dataset name. Since particle, year, and datatype must be the same, this is essentially checking that the mass points match.
+                    v1Actual=${dasDatasets[i]/"${dasYear}"*/${dasYear}} # This string is the ACTUAL beginning of the v1 dataset name. Since particle, year, and datatype must be the same, this is essentially checking that the mass points match.
                     if [[ "${v1Actual}" != "${v1Expected}" ]]; then # This triggers if the supposed v1 dataset doesn't match the v2--this shouldn't ever trigger unless something weird happens with the future DAS dataset names.
                         echo "${RED}ERROR: THE BEGINNING OF v2 AND v1 DATASET NAMES DO NOT MATCH.${NC}"
                         echo "${YEL}v1 dataset expected to be named:${NC} ${v1Expected}"
@@ -278,7 +325,7 @@ for dat in ${myDatatypes[*]}; do #Loop over mc and data
                         exit 1
                     fi
                 else # If this triggers, then this dataset is a v1, and there is for sure not a v2 version of it.
-                    echo $datset >> $fileToWrite # Write the dataset to the samples file                            
+                    echo "${crabNames[$i]},${dasDatasets[$i]}" >> $fileToWrite # Write the dataset to the samples file
                     ((v1Counter++)) # This increments v1counter                    
                 fi
             done

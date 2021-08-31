@@ -8,12 +8,13 @@
 # The datasets are pulled from BEST/samples, which is filled by running fillSamples.sh.
 # This file takes user inputs to determine which files to submit to crab.
 
+######################################### NOTES TO SELF ############################
+# Check with johan
+# figure out best way to submit crab (over and over? all at once? script? python?)
+
 from WMCore.Configuration import Configuration
 import argparse
 import sys
-
-sys.exit(2)
-
 
 # Define ANSI colors here for the output since I am extra:
 def bluestr(string):
@@ -28,11 +29,6 @@ def grnstr(string):
     return '\033[92m' + string + '\033[0m'
 def yelstr(string):
     return '\033[93m' + string + '\033[0m'
-
-#using optargs to update things in the case of all wont really work
-#should simply set up arrays like in the fill samples script
-#allkeys and mykeys. can prolly define allkeys before parser and use it for choices
-#need to trouble shoot why i cant test this code
 
 # This is just a quick work-around for a limitation of argparse text formatting, since argparse takes only one input for formatter_class.
 class RawTextAndDescriptionFormatter(argparse.RawTextHelpFormatter, argparse.RawDescriptionHelpFormatter):
@@ -76,55 +72,60 @@ elif not optargs.all:
                         parser.print_help()
                         sys.exit(2)
 
-# config.section_("General")
 print(optargs)
-print(bluestr(str(optargs.all)))
-print(cyanstr(str(optargs.particle)))
-print(grnstr(str(optargs.year)))
-print(pinkstr(str(optargs.datatype)))
-print(' '.join(optargs.particle))
-
-print(' '.join(optargs.__dict__["particle"]))
-# optargs = parser.parse_args( ['-p', ' '.join(optargs.__dict__["particle"])] )
-# optargs = parser.parse_args( ['-p', str(optargs.particle), '-y', '2015', '2017'] )
-print(optargs)
-print(bluestr(str(optargs.all)))
-print(cyanstr(str(optargs.particle)))
-print(grnstr(str(optargs.year)))
-print(pinkstr(str(optargs.datatype)))
+# print(bluestr(str(optargs.all)))
+# print(cyanstr(str(optargs.particle)))
+# print(grnstr(str(optargs.year)))
+# print(pinkstr(str(optargs.datatype)))
 
 # At this point, the inputs are assured to be valid, and we can begin the main functions of this file.
 
-# First, define the full list of valid arguments for each option
+# First, define the full list of valid arguments for each option, and then empty lists to fill with user input.
 allParticles = ["HH", "WW", "ZZ", "tt", "bb", "QCD"]
 allYears = ["2015", "2016", "2017", "2018"]
 allDatatypes = ["mc", "data"]
+myParticles = []
+myYears = []
+myDatatypes = []
 
-# Declare initial lists to fill with user chosen arguments later
-# if 
-# myParticles
-# myYears
-# myDatatypes
+# These load the my"..." lists with the user chosen input
+if optargs.all or optargs.particle[0] == "all":
+    myParticles = allParticles
+elif optargs.particle:
+    myParticles = optargs.particle
+if optargs.all or optargs.year[0] == "all":
+    myYears = allYears
+elif optargs.year:
+    myYears = optargs.year
+if optargs.all or optargs.datatype[0] == "all":
+    myDatatypes = allDatatypes
+elif optargs.datatype:
+    myDatatypes = optargs.datatype
 
-# config = Configuration()
+print(cyanstr(str(myParticles)))
+print(grnstr(str(myYears)))
+print(pinkstr(str(myDatatypes)))
+
+config = Configuration()
+config.section_("General")
+
+
+# for dat in myDatatypes:
+#     print pinkstr(dat)
+#     if dat == "data": #data is not implemented yet
+#         continue
+#     for yr in myYears:
+#         print grnstr(yr)
+#         filename =  dat+"_"+yr+".txt"
+#         print "Opening " + filename + "..."
+#         for line in open(filename):
+#             #blah
+#         for part in myParticles:
+#             print cyanstr(part)
 
 
 
-
-# if optargs.all:
-    #do all stuff
-# else:
-    #do the other stuff
-
-# for opt in optargs.__dict__:
-#     if optargs.__dict__[opt]:
-#         for arg in range(len(optargs.__dict__[opt])):
-#             if optargs.__dict__[opt][arg] == "all" and len(optargs.__dict__[opt]) > 1:
-#                 print (redstr("INPUT ERROR: ") + yelstr("If 'all' is passed as an argument, it must be the only argument passed for that option.  See help:\n") )
-#                 parser.print_help()
-#                 sys.exit(2)
-
-# #turn this into some sort of array, loop; getops
+#turn this into some sort of array, loop; 
 # config.General.requestName = 'ZprimeBB_2TeV_trees'
 # config.General.requestName = 'GravitonHH_2TeV_trees'
 # config.General.requestName = 'QCD_Flat_Pt_trees'
