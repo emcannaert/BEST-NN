@@ -237,6 +237,25 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_mass");
     listOfVars.push_back("jetAK8_SoftDropMass");
 
+    // Deep AK8
+    listOfVars.push_back("jetAK8_deepAK8_rawL");
+    listOfVars.push_back("jetAK8_deepAK8_rawC");
+    listOfVars.push_back("jetAK8_deepAK8_rawB");
+    listOfVars.push_back("jetAK8_deepAK8_rawW");
+    listOfVars.push_back("jetAK8_deepAK8_rawZ");
+    listOfVars.push_back("jetAK8_deepAK8_rawH");
+    listOfVars.push_back("jetAK8_deepAK8_rawT");
+    listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawL");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawC");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawB");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawW");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawH");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawT");
+    listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+
+
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
     listOfVecVars.push_back("SV_pt"); // Possible bug!

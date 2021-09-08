@@ -7,7 +7,13 @@
 
 # Check job status of crab jobs.
 # grep the output of crab status to terminal and see who isn't 100% done
-for d in CrabBEST/*/ ; do
-    echo $d | cut -d '/' -f 2 
+# for d in CrabBEST/*/ ; do
+#     echo $d | cut -d '/' -f 2 
+#     crab status $d | grep 'Jobs status'
+# done
+
+for d in test/submit*/CrabBEST/*/ ; do
+    # echo $d | cut -d '/' -f 2 
+    echo $d
     crab status $d | grep 'Jobs status'
 done
