@@ -50,12 +50,12 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
                       std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                       std::vector<pat::Jet>::const_iterator jet, std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets,
                       std::map<std::string, std::array<std::array<std::array<float, 16>, 31>, 31> > &imgVars,
-                      std::string frame, float mass, bool storeJetImages);
+                      int mass, bool storeJetImages);
 
 // store the daughters, rest frame daughters, and rest frame jets
 void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet,
                        std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
-                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> frames,
+                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
                        std::map<std::string, std::vector<float> > &jetVecVars, int jetColl );
 
 // make the rest frame jet images
