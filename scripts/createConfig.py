@@ -130,30 +130,33 @@ for dat in myDatatypes:
                 if "GLOBALTAGFLAG" in line:
                     runf.write( 'GT = "' + GlobalTag + '"\n' ) # Write global tag (unique by year)
                 elif "PARTICLESTRINGFLAG" in line: 
-                    runf.write( '\tjetType = cms.string("' + part[0] +'"),\n' ) # Write first letter of particle
+                    runf.write( '\t\t\t\t\t\t\t jetType = cms.string("' + part[0] +'"),\n' ) # Write first letter of particle
+                elif "'myfile.root'" in line: # Write a single sample file to run config file for local runs (this file gets overwritten by CRAB when submitting one of the many crab config files generated below).
+                    if part == "QCD": runf.write( '\t\t"' + datasetDict[dat][yr][part]["600to800"][2] + '"\n' ) # QCD uses pT and not mass
+                    else: runf.write( '\t\t"' + datasetDict[dat][yr][part]["4000"][2] + '"\n' ) # All other particles across all years have a mass point of 4000
                 else: 
                     runf.write(line) # Copy the rest of the file
             runf.close
             runtempf.close
 
             # Create the crab config files for each year, particle, and mass point
-            for k, v in datasetDict[dat][yr][part].items(): # Iterate through the dictionary (k) and [crabdir,dataset,file] (v)
+            for key, value in datasetDict[dat][yr][part].items(): # Iterate through dictionary by mass point (key) and [crabdir,dataset,file] (value)
 
                 if part == "QCD":
-                    configFile = crabPath + "/crab_" + part +"_Pt_" + k + ".py" # Create unique config file name, like "crab_QCD_Pt_470to600.py"
+                    configFile = crabPath + "/crab_" + part +"_Pt_" + key + ".py" # Create unique config file name, like "crab_QCD_Pt_470to600.py"
                 else:
-                    configFile = crabPath + "/crab_" + part +"_M_" + k + ".py" # Create unique config file name, like "crab_HH_M_500.py"
+                    configFile = crabPath + "/crab_" + part +"_M_" + key + ".py" # Create unique config file name, like "crab_HH_M_500.py"
 
                 if os.path.exists(configFile): os.remove(configFile) # Delete old crab config file
                 conf = open(configFile, "w") # Open new crab config file to write
                 contempf = open(configtemplateFile, "r") # Read in crab config template
                 for line in contempf:
                     if "CRABDIRFLAG" in line: 
-                        conf.write( 'config.General.requestName = "' + datasetDict[dat][yr][part][k][0] + '"\n' ) # Here the dictionary calls [k]th mass point's corresponding crab directory name (the [0])  
+                        conf.write( 'config.General.requestName = "' + value[0] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding crab directory name (value[0])  
                     elif "RUNPARTICLEFLAG" in line:
-                        conf.write( 'config.JobType.psetName = "run_' + part +'.py"\n' ) # Write the corresponding run config file to use 
+                        conf.write( 'config.JobType.psetName = "config/run_' + part +'.py"\n' ) # Write the corresponding run config file to use 
                     elif "DATASETFLAG" in line:
-                        conf.write( 'config.Data.inputDataset = "' + datasetDict[dat][yr][part][k][1] + '"\n' ) # Here the dictionary calls [k]th mass point's corresponding dataset name (the [1])  
+                        conf.write( 'config.Data.inputDataset = "' + value[1] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1])  
                     else:
                         conf.write(line) # Copy the rest of the file
                 conf.close
