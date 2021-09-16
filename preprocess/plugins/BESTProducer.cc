@@ -8,7 +8,7 @@
  Description: This class preprocesses MC samples so that they can be used with BEST ---
  -----------------------------------------------------------------------------------------
  Implementation:                                                                       ---
-     This EDProducer is meant to be used with CMSSW_9_4_8                              ---
+     This EDProducer is meant to be used with CMSSW_10_6_27                            ---
 */
 //========================================================================================
 // Authors:  Brendan Regnery, Justin Pilot, Reyer Band, Devin Taylor ---------------------
@@ -90,7 +90,7 @@ namespace best {
     JetType jetTypeFromString(const std::string& label) {
         static const JetTypeStringToEnum jetTypeStringToEnumMap[] = {
             {'Q', Q},
-	    {'H', H},
+            {'H', H},
             {'t', t},
             {'W', W},
             {'Z', Z},
@@ -216,7 +216,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     storeJetImages (iConfig.getParameter<bool>("storeJetImages"))
 {
 
-  std::cout<<"Jet Colls, "<<inputJetColl_<<", "<<jetColl_<<std::endl;
+    std::cout<<"Jet Colls, "<<inputJetColl_<<", "<<jetColl_<<std::endl;
     //------------------------------------------------------------------------------
     // Prepare TFile Service -------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -526,7 +526,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     // Make Branches for each of the jet constituents' variables
     for (unsigned i = 0; i < listOfVecVars.size(); i++){
-      jetTree->Branch( (listOfVecVars[i]).c_str() , &(jetVecVars[ listOfVecVars[i] ]) ); //Possible bug!
+        jetTree->Branch( (listOfVecVars[i]).c_str() , &(jetVecVars[ listOfVecVars[i] ]) ); //Possible bug!
     }
 
     // Make branches for each of the images
@@ -678,19 +678,19 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
-	daughtersOfJet.clear();
-	boostedDaughters.clear();
-	restJets.clear();
+        daughtersOfJet.clear();
+        boostedDaughters.clear();
+        restJets.clear();
         TLorentzVector jet(ijet->px(), ijet->py(), ijet->pz(), ijet->energy() );
 
         if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4 &&ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 10) {
 
             // gen particle loop, only relevant for non-QCD jets
-	    if (jetType_ !=0){
-	        for (size_t iGenParticle = 0; iGenParticle < genParticleToMatch.size(); iGenParticle++){
-		    // Check if jet matches any saved genParticle
-		    if(jet.DeltaR(genParticleToMatch[iGenParticle]) < 0.1){
-                        GenMatching = true;
+            if (jetType_ !=0){
+                for (size_t iGenParticle = 0; iGenParticle < genParticleToMatch.size(); iGenParticle++){
+                    // Check if jet matches any saved genParticle
+                    if(jet.DeltaR(genParticleToMatch[iGenParticle]) < 0.1){
+                                GenMatching = true;
                     }
                 }
             }
@@ -731,26 +731,26 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 // Fill the jet entry tree
                 jetTree->Fill();
             }
-	}
+        }
 
-	//-------------------------------------------------------------------------------
-	// Clear and Reset all tree variables -------------------------------------------
-	//-------------------------------------------------------------------------------
-	for (unsigned i = 0; i < listOfVars.size(); i++){
-	    treeVars[ listOfVars[i] ] = -999.99;
-	}
-	for (unsigned i = 0; i < listOfVecVars.size(); i++){
-	    jetVecVars[ listOfVecVars[i] ].clear();
-	}
-	/*
-	for (unsigned i = 0; i < listOfImgVars.size(); i++){
-	    for (unsigned j = 0; j < imgVars[ listOfImgVars[i] ].size(); j++) {
-	        for (unsigned k = 0; k < imgVars[ listOfImgVars[i] ][j].size(); k++) {
-	            imgVars[ listOfImgVars[i] ][j][k].clear();
-		}
-	    }
-	}
-	*/
+        //-------------------------------------------------------------------------------
+        // Clear and Reset all tree variables -------------------------------------------
+        //-------------------------------------------------------------------------------
+        for (unsigned i = 0; i < listOfVars.size(); i++){
+            treeVars[ listOfVars[i] ] = -999.99;
+        }
+        for (unsigned i = 0; i < listOfVecVars.size(); i++){
+            jetVecVars[ listOfVecVars[i] ].clear();
+        }
+        /*
+        for (unsigned i = 0; i < listOfImgVars.size(); i++){
+            for (unsigned j = 0; j < imgVars[ listOfImgVars[i] ].size(); j++) {
+                for (unsigned k = 0; k < imgVars[ listOfImgVars[i] ][j].size(); k++) {
+                    imgVars[ listOfImgVars[i] ][j][k].clear();
+            }
+            }
+        }
+        */
     }
 
     // Delete vector
