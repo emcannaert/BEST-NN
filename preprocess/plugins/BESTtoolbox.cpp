@@ -449,21 +449,11 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
     bool isPhoton = false;
     bool isNeutralHadron = false; // In our analysis, the only neutral hadrons we see are K longs.
     bool isChargedHadron = false; // In our analysis, the only charged hadrons we see are pions.
-    if (absPDGID == 11){ // Check is candidate is an electron or positron
-        isElectron = true;
-    }
-    else if (absPDGID == 13){ // Check if candidate is a muon or antimuon
-        isMuon = true;
-    } 
-    else if (absPDGID == 22){ // Check if candidate is a photon
-        isPhoton = true;
-    }
-    else if (absPDGID == 130){ // Check if candidate is K long
-        isNeutralHadron = true;
-    }
-    else if (absPDGID == 211){ // Check if candidate is pion or antipion
-        isChargedHadron = true;
-    }
+    if (absPDGID == 11) isElectron = true; // Check is candidate is an electron or positron
+    else if (absPDGID == 13) isMuon = true; // Check if candidate is a muon or antimuon
+    else if (absPDGID == 22) isPhoton = true; // Check if candidate is a photon
+    else if (absPDGID == 130) isNeutralHadron = true; // Check if candidate is K long
+    else if (absPDGID == 211) isChargedHadron = true; // Check if candidate is pion or antipion
 
     // Store the candidate
     jetVecVars["LabFrame_PF_candidate_px"].push_back(daughtersOfJet[i]->px() );
