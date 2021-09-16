@@ -170,6 +170,7 @@ class BESTProducer : public edm::stream::EDProducer<> {
       best::JetType jetType_;
       best::JetColl jetColl_;
       bool storeDaughters;
+      bool storeJetImages;
 
       // Tree variables
       TTree *jetTree;
@@ -177,7 +178,7 @@ class BESTProducer : public edm::stream::EDProducer<> {
       std::vector<std::string> listOfVars;
       std::map<std::string, std::vector<float> > jetVecVars;
       std::vector<std::string> listOfVecVars;
-      std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > imgVars;
+      std::map<std::string, std::array<std::array<std::array<float, 16>, 31>, 31> > imgVars;
       std::vector<std::string> listOfImgVars;
 
       // Tokens
@@ -211,9 +212,11 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     inputJetColl_ (iConfig.getParameter<std::string>("inputJetColl")),
     jetType_ (best::jetTypeFromString(iConfig.getParameter<std::string>("jetType"))),
     jetColl_ (best::jetCollFromString(iConfig.getParameter<std::string>("jetColl"))),
-    storeDaughters (iConfig.getParameter<bool>("storeDaughters"))
+    storeDaughters (iConfig.getParameter<bool>("storeDaughters")),
+    storeJetImages (iConfig.getParameter<bool>("storeJetImages"))
 {
 
+  std::cout<<"Jet Colls, "<<inputJetColl_<<", "<<jetColl_<<std::endl;
     //------------------------------------------------------------------------------
     // Prepare TFile Service -------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -235,7 +238,9 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_eta");
     listOfVars.push_back("jetAK8_pt");
     listOfVars.push_back("jetAK8_mass");
+    listOfVars.push_back("jetAK8_energy");
     listOfVars.push_back("jetAK8_SoftDropMass");
+    listOfVars.push_back("jetAK8_charge");
 
     // Deep AK8
     listOfVars.push_back("jetAK8_deepAK8_rawL");
@@ -255,6 +260,11 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_deepAK8MD_rawT");
     listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
 
+    // b-tagging
+    listOfVars.push_back("jetAK8_bDisc_pfDeepCSVJetTags_probb");
+    listOfVars.push_back("jetAK8_bDisc_pfDeepCSVJetTags_probbb");
+    listOfVars.push_back("jetAK8_bDisc_pfCombinedInclusiveSecondaryVertexV2BJetTags");
+    listOfVars.push_back("jetAK8_bDisc_pfBoostedDoubleSecondaryVertexAK8BJetTags");
 
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
@@ -300,6 +310,11 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("FoxWolfH3_Z");
     listOfVars.push_back("FoxWolfH4_Z");
 
+    listOfVars.push_back("FoxWolfH1_Bottom");
+    listOfVars.push_back("FoxWolfH2_Bottom");
+    listOfVars.push_back("FoxWolfH3_Bottom");
+    listOfVars.push_back("FoxWolfH4_Bottom");
+
     // Event Shape Variables
     listOfVars.push_back("isotropy_Higgs");
     listOfVars.push_back("sphericity_Higgs");
@@ -321,11 +336,17 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("aplanarity_Z");
     listOfVars.push_back("thrust_Z");
 
+    listOfVars.push_back("isotropy_Bottom");
+    listOfVars.push_back("sphericity_Bottom");
+    listOfVars.push_back("aplanarity_Bottom");
+    listOfVars.push_back("thrust_Bottom");
+
     // Jet Mass
     listOfVars.push_back("nJets_Higgs");
     listOfVars.push_back("nJets_Top");
     listOfVars.push_back("nJets_W");
     listOfVars.push_back("nJets_Z");
+    listOfVars.push_back("nJets_Bottom");
 
     listOfVars.push_back("jet12_mass_Higgs");
     listOfVars.push_back("jet23_mass_Higgs");
@@ -346,6 +367,12 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jet23_mass_Z");
     listOfVars.push_back("jet13_mass_Z");
     listOfVars.push_back("jet1234_mass_Z");
+
+    listOfVars.push_back("jet12_mass_Bottom");
+    listOfVars.push_back("jet23_mass_Bottom");
+    listOfVars.push_back("jet13_mass_Bottom");
+    listOfVars.push_back("jet1234_mass_Bottom");
+
     //Subjet CosTheta and delta CosTheta
     listOfVars.push_back("jet12_CosTheta_Higgs");
     listOfVars.push_back("jet23_CosTheta_Higgs");
@@ -367,6 +394,11 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jet13_CosTheta_Z");
     listOfVars.push_back("jet1234_CosTheta_Z");
 
+    listOfVars.push_back("jet12_CosTheta_Bottom");
+    listOfVars.push_back("jet23_CosTheta_Bottom");
+    listOfVars.push_back("jet13_CosTheta_Bottom");
+    listOfVars.push_back("jet1234_CosTheta_Bottom");
+
     listOfVars.push_back("jet12_DeltaCosTheta_Higgs");
     listOfVars.push_back("jet13_DeltaCosTheta_Higgs");
     listOfVars.push_back("jet23_DeltaCosTheta_Higgs");
@@ -383,11 +415,16 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jet13_DeltaCosTheta_Z");
     listOfVars.push_back("jet23_DeltaCosTheta_Z");
 
+    listOfVars.push_back("jet12_DeltaCosTheta_Bottom");
+    listOfVars.push_back("jet13_DeltaCosTheta_Bottom");
+    listOfVars.push_back("jet23_DeltaCosTheta_Bottom");
+
     // Jet Asymmetry
     listOfVars.push_back("asymmetry_Higgs");
     listOfVars.push_back("asymmetry_Top");
     listOfVars.push_back("asymmetry_W");
     listOfVars.push_back("asymmetry_Z");
+    listOfVars.push_back("asymmetry_Bottom");
 
     // add the daughter and rest frame information
     if(storeDaughters == true){
@@ -397,6 +434,25 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         listOfVecVars.push_back("LabFrame_PF_candidate_py");
         listOfVecVars.push_back("LabFrame_PF_candidate_pz");
         listOfVecVars.push_back("LabFrame_PF_candidate_energy");
+        listOfVecVars.push_back("LabFrame_PF_candidate_mass");
+        listOfVecVars.push_back("LabFrame_PF_candidate_ecalEnergy");
+
+        listOfVecVars.push_back("LabFrame_PF_candidate_charge");
+        listOfVecVars.push_back("LabFrame_PF_candidate_pdgId");
+        listOfVecVars.push_back("LabFrame_PF_candidate_abspdgId");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isElectron");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isMuon");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isPhoton");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isNeutralHadron");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isChargedHadron");
+        
+        listOfVecVars.push_back("LabFrame_PF_candidate_deltaEta");
+        listOfVecVars.push_back("LabFrame_PF_candidate_deltaPhi");
+        listOfVecVars.push_back("LabFrame_PF_candidate_deltaR");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logpT");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logEnergy");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logpTRatio");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logEnergyRatio");
 
         listOfVecVars.push_back("HiggsFrame_PF_candidate_px");
         listOfVecVars.push_back("HiggsFrame_PF_candidate_py");
@@ -417,6 +473,11 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         listOfVecVars.push_back("ZFrame_PF_candidate_py");
         listOfVecVars.push_back("ZFrame_PF_candidate_pz");
         listOfVecVars.push_back("ZFrame_PF_candidate_energy");
+
+        listOfVecVars.push_back("BottomFrame_PF_candidate_px");
+        listOfVecVars.push_back("BottomFrame_PF_candidate_py");
+        listOfVecVars.push_back("BottomFrame_PF_candidate_pz");
+        listOfVecVars.push_back("BottomFrame_PF_candidate_energy");
 
         // PUPPI weights
         listOfVecVars.push_back("PUPPI_Weights");
@@ -441,13 +502,21 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         listOfVecVars.push_back("ZFrame_jet_py");
         listOfVecVars.push_back("ZFrame_jet_pz");
         listOfVecVars.push_back("ZFrame_jet_energy");
+
+        listOfVecVars.push_back("BottomFrame_jet_px");
+        listOfVecVars.push_back("BottomFrame_jet_py");
+        listOfVecVars.push_back("BottomFrame_jet_pz");
+        listOfVecVars.push_back("BottomFrame_jet_energy");
     }
 
     // rest frame jet image variables
-    listOfImgVars.push_back("HiggsFrame_image");
-    listOfImgVars.push_back("TopFrame_image");
-    listOfImgVars.push_back("WFrame_image");
-    listOfImgVars.push_back("ZFrame_image");
+    if(storeJetImages == true){
+        listOfImgVars.push_back("HiggsFrame_image");
+        listOfImgVars.push_back("TopFrame_image");
+        listOfImgVars.push_back("WFrame_image");
+        listOfImgVars.push_back("ZFrame_image");
+        listOfImgVars.push_back("BottomFrame_image");
+    }
 
     // Make Branches for each variable
     for (unsigned i = 0; i < listOfVars.size(); i++){
@@ -461,8 +530,10 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     }
 
     // Make branches for each of the images
-    for (unsigned i = 0; i < listOfImgVars.size(); i++){
-        jetTree->Branch( (listOfImgVars[i]).c_str() , &(imgVars[ listOfImgVars[i] ]), (listOfImgVars[i]+"[31][31][1]/F").c_str() );
+    if(storeJetImages == true){
+        for (unsigned i = 0; i < listOfImgVars.size(); i++){
+            jetTree->Branch( (listOfImgVars[i]).c_str() , &(imgVars[ listOfImgVars[i] ]), (listOfImgVars[i]+"[31][31][16]/F").c_str() );
+        }
     }
 
     //------------------------------------------------------------------------------
@@ -470,10 +541,15 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     //------------------------------------------------------------------------------
 
     // AK8 Jets
+    std::cout<<"AK8 Jets input tag: "<<inputJetColl_<<std::endl;
     edm::InputTag ak8JetsTag_;
-    ak8JetsTag_ = edm::InputTag("slimmedJetsAK8", "", "PAT");
-    //    ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "run"); // this may be needed as an option for 2016 mc
+    //ak8JetsTag_ = edm::InputTag("selectedUpdatedPatJetsAK8WithDeepTags", "", "PAT");
+    //ak8JetsTag_ = edm::InputTag("slimmedJetsAK8", "", "PAT");
+    ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "PAT");
+    //ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "run"); // this may be needed as an option for 2016 mc
+    std::cout<<"Before consumes"<<std::endl;
     ak8JetsToken_ = consumes<std::vector<pat::Jet> >(ak8JetsTag_);
+    std::cout<<"After consumes"<<std::endl;
 
     // Gen Particles
     edm::InputTag genPartTag_;
@@ -489,6 +565,8 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     edm::InputTag secVerticesTag_;
     secVerticesTag_ = edm::InputTag("slimmedSecondaryVertices", "", "PAT");
     secVerticesToken_ = consumes<std::vector<reco::VertexCompositePtrCandidate> >(secVerticesTag_);
+
+    std::cout<<"Done??"<<std::endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -524,10 +602,16 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     // Create miniAOD object collections -------------------------------------------
     //------------------------------------------------------------------------------
 
+    std::cout<<"Start"<<std::endl;
+    
     // Find objects corresponding to the token and link to the handle
     Handle< std::vector<pat::Jet> > ak8JetsCollection;
+    std::cout<<"Get by Token"<<std::endl;
     iEvent.getByToken(ak8JetsToken_, ak8JetsCollection);
+    //std::cout<<ak8JetsCollection<<std::endl;
+    std::cout<<"Product"<<std::endl;
     vector<pat::Jet> ak8Jets = *ak8JetsCollection.product();
+    std::cout<<"Got AK8 collection"<<std::endl;
 
     Handle< std::vector<reco::GenParticle> > genPartCollection;
     iEvent.getByToken(genPartToken_, genPartCollection);
@@ -624,19 +708,22 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (daughtersOfJet.size() < 3) continue;
 
                 // Higgs Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Higgs", 125.) == false) continue;
+                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Higgs", 125., storeJetImages) == false) continue;
 
                 // Top Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Top", 172.5) == false) continue;
+                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Top", 172.5, storeJetImages) == false) continue;
 
                 // W Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "W", 80.4) == false) continue;
+                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "W", 80.4, storeJetImages) == false) continue;
 
                 // Z Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Z", 91.2) == false) continue;
+                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Z", 91.2, storeJetImages) == false) continue;
+
+                // Bottom Rest Frame Variables
+                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Bottom", 6.0, storeJetImages) == false) continue;
 
                 // store daughters, rest frame daughters, and rest frame jets
-                vector<string> frames = {"Higgs", "Top", "W", "Z"};
+                vector<string> frames = {"Higgs", "Top", "W", "Z", "Bottom"};
                 if(storeDaughters == true){
                     storeJetDaughters(daughtersOfJet, ijet, boostedDaughters, restJets, frames, jetVecVars, jetColl_ );
                 }

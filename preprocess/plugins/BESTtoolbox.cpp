@@ -125,9 +125,16 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_eta"] = jet->eta();
     besVars["jetAK8_pt"] = jet->pt();
     besVars["jetAK8_mass"] = jet->mass();
+    besVars["jetAK8_energy"] = jet->energy();
+
+    // B-tagging
     besVars["bDisc"] = jet->bDiscriminator("pfDeepCSVJetTags:probb") + jet->bDiscriminator("pfDeepCSVJetTags:probbb");
+    besVars["jetAK8_bDisc_pfDeepCSVJetTags_probb"] = jet->bDiscriminator("pfDeepCSVJetTags:probb");
+    besVars["jetAK8_bDisc_pfDeepCSVJetTags_probbb"] = jet->bDiscriminator("pfDeepCSVJetTags:probbb");
+    besVars["jetAK8_bDisc_pfCombinedInclusiveSecondaryVertexV2BJetTags"] = jet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+    besVars["jetAK8_bDisc_pfBoostedDoubleSecondaryVertexAK8BJetTags"] = jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags");
 
-
+    
     // Deep AK8
     std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
     std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
@@ -171,38 +178,54 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
     else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
 
+    
+    // Jet Charge = (1/sum{pT^0.6}) * sum{q * pT^0.6}
+    float jetCharge = 0;
+    float jetChargeNorm = 0;
+    for(int subJetIndex = 0; subJetIndex<(int)jet->numberOfDaughters(); subJetIndex++) {
+      float subJetPt = jet->daughter(subJetIndex)->pt();
+      jetCharge += pow(subJetPt,0.6)*jet->daughter(subJetIndex)->charge();
+      jetChargeNorm += pow(subJetPt,0.6);
+    }
+    if (jetChargeNorm > 0) {
+      jetCharge = jetCharge/jetChargeNorm;
+    } else {
+      jetCharge = -99;
+    }
+    besVars["jetAK8_charge"] = jetCharge;
+
     // Store Subjettiness info
     if(jetColl == 0){ // CHS jets
         besVars["jetAK8_Tau4"] = jet->userFloat("NjettinessAK8CHS:tau4");  //important for H->WW jets
         besVars["jetAK8_Tau3"] = jet->userFloat("NjettinessAK8CHS:tau3");
         besVars["jetAK8_Tau2"] = jet->userFloat("NjettinessAK8CHS:tau2");
         besVars["jetAK8_Tau1"] = jet->userFloat("NjettinessAK8CHS:tau1");
-	besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8CHS:tau2") / jet->userFloat("NjettinessAK8CHS:tau1");
+	      besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8CHS:tau2") / jet->userFloat("NjettinessAK8CHS:tau1");
         besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8CHS:tau3") / jet->userFloat("NjettinessAK8CHS:tau2");
-	besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass");
+	      besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass");
     }
     if(jetColl == 1){ // PUPPI jets
         besVars["jetAK8_Tau4"] = jet->userFloat("NjettinessAK8Puppi:tau4");  //important for H->WW jets
         besVars["jetAK8_Tau3"] = jet->userFloat("NjettinessAK8Puppi:tau3");
         besVars["jetAK8_Tau2"] = jet->userFloat("NjettinessAK8Puppi:tau2");
         besVars["jetAK8_Tau1"] = jet->userFloat("NjettinessAK8Puppi:tau1");
-	besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8Puppi:tau2") / jet->userFloat("NjettinessAK8Puppi:tau1");
+	      besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8Puppi:tau2") / jet->userFloat("NjettinessAK8Puppi:tau1");
         besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8Puppi:tau3") / jet->userFloat("NjettinessAK8Puppi:tau2");
-	besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
-	auto subjets = jet->subjets("SoftDropPuppi");
-	if (subjets.size() < 2){
-	  std::cout << "This will exit, not enough subjets" << std::endl;
-	  exit(1);
-	}
-	if (!subjets[0]){
-	  std::cout << "This will exit, invalid subjet 0" << std::endl;
+      	besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
+        auto subjets = jet->subjets("SoftDropPuppi");
+        if (subjets.size() < 2){
+          std::cout << "This will exit, not enough subjets" << std::endl;
+          exit(1);
+        }
+        if (!subjets[0]){
+          std::cout << "This will exit, invalid subjet 0" << std::endl;
           exit(1);
         }
         if (!subjets[1]){
-	  std::cout << "This will exit, invalid subjet 1" << std::endl;
+          std::cout << "This will exit, invalid subjet 1" << std::endl;
           exit(1);
-	}
-	besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
+        }
+        besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
         besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[1]->bDiscriminator("pfDeepCSVJetTags:probbb");
     }
 }
@@ -218,22 +241,22 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
                              std::vector<reco::VertexCompositePtrCandidate> secVertices){
     int numMatched = 0; // counts number of secondary vertices
     for(std::vector<reco::VertexCompositePtrCandidate>::const_iterator vertBegin = secVertices.begin(),
-	  vertEnd = secVertices.end(), ivert = vertBegin; ivert != vertEnd; ivert++){
+	        vertEnd = secVertices.end(), ivert = vertBegin; ivert != vertEnd; ivert++){
         TLorentzVector vert(ivert->px(), ivert->py(), ivert->pz(), ivert->energy() );
-	// match vertices to jet
-	if(jet.DeltaR(vert) < 0.8 ){
-	    numMatched++;
-	    // save secondary vertex info for the first three sec vertices
-	    jetVecVars["SV_pt"].push_back(ivert->pt() );
-	    jetVecVars["SV_eta"].push_back(ivert->eta() );
-	    jetVecVars["SV_phi"].push_back(ivert->phi() );
-	    jetVecVars["SV_mass"].push_back(ivert->mass() );
-	    jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
-	    jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
-	    jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
-	}
+        // match vertices to jet
+        if(jet.DeltaR(vert) < 0.8 ){
+            numMatched++;
+            // save secondary vertex info for the first three sec vertices
+            jetVecVars["SV_pt"].push_back(ivert->pt() );
+            jetVecVars["SV_eta"].push_back(ivert->eta() );
+            jetVecVars["SV_phi"].push_back(ivert->phi() );
+            jetVecVars["SV_mass"].push_back(ivert->mass() );
+            jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
+            jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
+            jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
+        }
     }
-    
+
     besVars["nSecondaryVertices"] = numMatched;
 }
 
@@ -249,8 +272,8 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
 bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::Candidate *> &daughtersOfJet,
                       std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                       std::vector<pat::Jet>::const_iterator jet, std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets,
-                      std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > &imgVars,
-                      std::string frame, float mass){
+                      std::map<std::string, std::array<std::array<std::array<float, 16>, 31>, 31> > &imgVars,
+                      std::string frame, float mass, bool storeJetImages){
 
     // get 4 vector for heavy object rest frame
     typedef reco::Candidate::PolarLorentzVector fourv;
@@ -259,6 +282,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), mass );
 
     std::vector<TLorentzVector> particles;
+    std::vector<reco::Candidate *> particlesPFCands;
     std::vector<math::XYZVector> particles2;
     std::vector<reco::LeafCandidate> particles3;
     std::vector<fastjet::PseudoJet> FJparticles;
@@ -292,14 +316,15 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
         pboost( thisJetLV.Vect(), thisParticleLV.Vect(), thisParticleLV);
 
         particles.push_back( thisParticleLV );
+        particlesPFCands.push_back(daughtersOfJet[i]);
         particles2.push_back( math::XYZVector( thisParticleLV.X(), thisParticleLV.Y(), thisParticleLV.Z() ));
         particles3.push_back( reco::LeafCandidate(+1, reco::Candidate::LorentzVector( thisParticleLV.X(), thisParticleLV.Y(),
                                                                                         thisParticleLV.Z(), thisParticleLV.T() ) ));
         FJparticles.push_back( fastjet::PseudoJet( thisParticleLV.X(), thisParticleLV.Y(), thisParticleLV.Z(), thisParticleLV.T() ) );
 
         // Sum rest frame momenta for asymmetry calculation, but only for pt > 10
-	//Why?????
-	//        if (daughtersOfJet[i]->pt() < 10) continue;
+        //Why?????
+        //        if (daughtersOfJet[i]->pt() < 10) continue;
         sumPz += thisParticleLV.Pz();
         sumP += abs( thisParticleLV.P() );
     }
@@ -339,30 +364,30 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
         // make a TLorentzVector for the current clustered rest frame jet
         TLorentzVector iJetLV(jetsFJ[i].px(), jetsFJ[i].py(), jetsFJ[i].pz(), jetsFJ[i].e() );
-	rotationJets.push_back(iJetLV);
+        rotationJets.push_back(iJetLV);
 
         // get fest frame jet four vector combinations
         switch(i){
         case 0:
-	  //            jet12LV   = jet12LV   + iJetLV;
-	  //            jet13LV   = jet13LV   + iJetLV;
-	  //            jet1234LV = jet1234LV + iJetLV;
+            //            jet12LV   = jet12LV   + iJetLV;
+            //            jet13LV   = jet13LV   + iJetLV;
+            //            jet1234LV = jet1234LV + iJetLV;
             jet12LV   = iJetLV;
             jet13LV   = iJetLV;
             jet1234LV = iJetLV;
 
             break;
         case 1:
-	  besVars["jet12_DeltaCosTheta_"+frame]   = (jet12LV.Vect()).Dot(iJetLV.Vect()) / (jet12LV.Vect().Mag() * iJetLV.Vect().Mag());
+            besVars["jet12_DeltaCosTheta_"+frame]   = (jet12LV.Vect()).Dot(iJetLV.Vect()) / (jet12LV.Vect().Mag() * iJetLV.Vect().Mag());
             jet12LV   = jet12LV   + iJetLV;
-	    //            jet23LV   = jet23LV   + iJetLV;
+	          //            jet23LV   = jet23LV   + iJetLV;
             jet23LV   = iJetLV;
             jet1234LV = jet1234LV + iJetLV;
             break;
         case 2:
-	  besVars["jet13_DeltaCosTheta_"+frame]   = (jet13LV.Vect()).Dot(iJetLV.Vect()) / (jet13LV.Vect().Mag() * iJetLV.Vect().Mag());
+            besVars["jet13_DeltaCosTheta_"+frame]   = (jet13LV.Vect()).Dot(iJetLV.Vect()) / (jet13LV.Vect().Mag() * iJetLV.Vect().Mag());
             jet13LV   = jet13LV   + iJetLV;
-	    besVars["jet23_DeltaCosTheta_"+frame]   = (jet23LV.Vect()).Dot(iJetLV.Vect()) / (jet23LV.Vect().Mag() * iJetLV.Vect().Mag());
+	          besVars["jet23_DeltaCosTheta_"+frame]   = (jet23LV.Vect()).Dot(iJetLV.Vect()) / (jet23LV.Vect().Mag() * iJetLV.Vect().Mag());
             jet23LV   = jet23LV   + iJetLV;
             jet1234LV = jet1234LV + iJetLV;
             break;
@@ -373,10 +398,10 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     }
 
     if (rotationJets.size()<2) return false;
-    
+
     // make the rest frame jet images
     boostedDaughters[frame+"Frame"] = particles;
-    imgVars[frame+"Frame_image"] = boostedJetCamera(particles, rotationJets);
+    if (storeJetImages == true) imgVars[frame+"Frame_image"] = boostedJetCamera(particles, rotationJets, particlesPFCands);
 
     // Store reclustered jet mass combinations
     besVars["jet12_mass_"+frame]   = jet12LV.M();
@@ -388,7 +413,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     besVars["jet23_CosTheta_"+frame]   = jet23LV.CosTheta();
     besVars["jet1234_CosTheta_"+frame] = jet1234LV.CosTheta();
     besVars["nJets_"+frame] = jetsFJ.size();
-    
+
     return true;
 }
 
@@ -409,20 +434,71 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         // Do not include low pT particles
         if (daughtersOfJet[i]->pt() < 0.5) continue;
 
+        // Calculate delta eta and phi for the candidates to the center of the jet
+        float deltaEta = daughtersOfJet[i]->eta() - jet->eta();
+        float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
+
+        // Calculate pT and Energy logarithms for candidates
+        float logpT = TMath::Log(daughtersOfJet[i]->pt());
+        float logEnergy = TMath::Log(daughtersOfJet[i]->energy());
+
+        // Determine particle type, set boolean flags
+        int absPDGID = abs( daughtersOfJet[i]->pdgId() );
+        bool isElectron = false;
+        bool isMuon = false;
+        bool isPhoton = false;
+        bool isNeutralHadron = false; // In our analysis, the only neutral hadrons we see are K longs.
+        bool isChargedHadron = false; // In our analysis, the only charged hadrons we see are pions.
+        if (absPDGID == 11){ // Check is candidate is an electron or positron
+            isElectron = true;
+        }
+        else if (absPDGID == 13){ // Check if candidate is a muon or antimuon
+            isMuon = true;
+        } 
+        else if (absPDGID == 22){ // Check if candidate is a photon
+            isPhoton = true;
+        }
+        else if (absPDGID == 130){ // Check if candidate is K long
+            isNeutralHadron = true;
+        }
+        else if (absPDGID == 211){ // Check if candidate is pion or antipion
+            isChargedHadron = true;
+        }
+
         // Store the candidate
         jetVecVars["LabFrame_PF_candidate_px"].push_back(daughtersOfJet[i]->px() );
         jetVecVars["LabFrame_PF_candidate_py"].push_back(daughtersOfJet[i]->py() );
         jetVecVars["LabFrame_PF_candidate_pz"].push_back(daughtersOfJet[i]->pz() );
         jetVecVars["LabFrame_PF_candidate_energy"].push_back(daughtersOfJet[i]->energy() );
+        //jetVecVars["LabFrame_PF_candidate_ecalEnergy"].push_back(daughtersOfJet[i]->ecalEnergy() );
+        jetVecVars["LabFrame_PF_candidate_ecalEnergy"].push_back(((reco::PFCandidate *)daughtersOfJet[i])->ecalEnergy() );
+
+        jetVecVars["LabFrame_PF_candidate_charge"].push_back(daughtersOfJet[i]->charge() );
+        jetVecVars["LabFrame_PF_candidate_pdgId"].push_back(daughtersOfJet[i]->pdgId() );
+        jetVecVars["LabFrame_PF_candidate_abspdgId"].push_back(absPDGID );
+        jetVecVars["LabFrame_PF_candidate_isElectron"].push_back(isElectron );
+        jetVecVars["LabFrame_PF_candidate_isMuon"].push_back(isMuon );
+        jetVecVars["LabFrame_PF_candidate_isPhoton"].push_back(isPhoton );
+        jetVecVars["LabFrame_PF_candidate_isNeutralHadron"].push_back(isNeutralHadron );
+        jetVecVars["LabFrame_PF_candidate_isChargedHadron"].push_back(isChargedHadron );
+        
+        jetVecVars["LabFrame_PF_candidate_deltaEta"].push_back(deltaEta );
+        jetVecVars["LabFrame_PF_candidate_deltaPhi"].push_back(deltaPhi );
+        jetVecVars["LabFrame_PF_candidate_deltaR"].push_back( TMath::Sqrt( TMath::Sq(deltaEta) + TMath::Sq(deltaPhi) ) ); // Angular separation between the candidate and the jet axis
+        jetVecVars["LabFrame_PF_candidate_logpT"].push_back(logpT );
+        jetVecVars["LabFrame_PF_candidate_logEnergy"].push_back(logEnergy );
+        jetVecVars["LabFrame_PF_candidate_logpTRatio"].push_back(logpT - TMath::Log(jet->pt()) ); // Logarithm of the candidate's pT relative to the jet pT
+        jetVecVars["LabFrame_PF_candidate_logEnergyRatio"].push_back(logEnergy - TMath::Log(jet->energy()) ); // Logarithm of the candidate's energy releative to the jet energy
+
 
         // PUPPI weights for puppi jets
         if (jetColl == 1){
             pat::PackedCandidate *iparticle = (pat::PackedCandidate *) daughtersOfJet[i];
-	    if(!iparticle){
-	      std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate"<<std::endl;
-	      std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
-	      exit(1);
-	    }
+            if(!iparticle){
+              std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate"<<std::endl;
+              std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
+              exit(1);
+            }
             jetVecVars["PUPPI_weights"].push_back( iparticle->puppiWeight() );
         }
     }
@@ -463,151 +539,113 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 // boostedCands = the lorentz vectores of the the jet PF candidates in the rest frame-
 // Image = the container for the jet image -----------------------------------------------
 //----------------------------------------------------------------------------------------
-std::array<std::array<std::array<float, 1>, 31>, 31> boostedJetCamera(std::vector<TLorentzVector> &pfCands, std::vector<TLorentzVector> &reclusteredJets){
-    // create a place to store the image
-    std::array<std::array<std::array<float, 1>, 31>, 31> Image;
+std::array<std::array<std::array<float, 16>, 31>, 31> boostedJetCamera(std::vector<TLorentzVector> &pfCands, std::vector<TLorentzVector> &reclusteredJets, std::vector<reco::Candidate * > &particlesPFCands){
+  // create a place to store the image
+  // Image colors are: all, neutral, charged, positive, negative
+  std::array<std::array<std::array<float, 16>, 31>, 31> Image;
 
-    //Sort the new list of particle flow candidates and reclustered jets in the rest rame by energy
-    auto sortLambda = [] (const TLorentzVector& lv1, const TLorentzVector& lv2) {return lv1.E() > lv2.E(); };
-    std::sort(pfCands.begin(), pfCands.end(), sortLambda);
-    std::sort(reclusteredJets.begin(), reclusteredJets.end(), sortLambda);
+  //Sort the new list of particle flow candidates and reclustered jets in the rest rame by energy
+  auto sortLambda = [] (const TLorentzVector& lv1, const TLorentzVector& lv2) {return lv1.E() > lv2.E(); };
+  std::sort(pfCands.begin(), pfCands.end(), sortLambda);
+  std::sort(reclusteredJets.begin(), reclusteredJets.end(), sortLambda);
 
-    //------------------------------------------------------------------------------------
-    // Rotations in the rest frame -------------------------------------------------------
-    //------------------------------------------------------------------------------------
-
-    // define the rotation angles for the first two rotations based on Reclusterd Jets
-    float rotPhi = reclusteredJets.at(0).Phi();
-    float rotTheta = reclusteredJets.at(0).Theta();
-
-    // perform the first two rotations and sum energy
-    float candNum = 0;
-    for(auto icand = pfCands.begin(); icand != pfCands.end(); icand++){
-
-        // rotate all candidates so that the leading candidate is in the x y plane
-        icand->RotateZ(-rotPhi);
-
-        // rotate all candidates so that the leading candidate is on the x axis
-        icand->RotateY(TMath::Pi()/2.0 - rotTheta);
-
-
-        candNum++;
+  //Initialize image with 0's in all bins
+  for (int nx = 0; nx < 31; nx++){
+    for (int ny = 0; ny < 31; ny++){
+      for (int col = 0; col < 16; col++) {
+	      Image[nx][ny][col] = 0;
+      }
     }
-    
-    // Also rotate the reclustered jets
-    float jetNum = 0;
-    for(auto ijet = reclusteredJets.begin(); ijet != reclusteredJets.end(); ijet++){
+  }
+  //find the x and y coordinates using the Cassini projection
+  //Then fill Image with candidate energy
+  //for(auto icand = pfCands.begin(); icand != pfCands.end(); icand++){
+  //std::cout << "New jet, with this many PFCands " << pfCands.size() << std::endl;
+  for(int i = 0; i < (int)pfCands.size(); i++){
+    TLorentzVector icand = pfCands[i];
+    int x_bin = -1;
+    int y_bin = -1;
 
-        // rotate all jets so that the leading candidate is in the x y plane
-        ijet->RotateZ(-rotPhi);
+    float y_val = TMath::ATan2( TMath::Tan(icand.Theta() - TMath::Pi()/2 ),TMath::Cos(icand.Phi() ) );
+    y_bin = static_cast<int>(31*(y_val + TMath::Pi() )/(2*TMath::Pi() ));
+    y_bin = y_bin%31;
 
-        // make sure the leading candidate has been fully rotated
-        if(jetNum == 0) ijet->SetPy(0);
+    float x_val = TMath::ASin(TMath::Cos(icand.Theta() - TMath::Pi()/2 )*TMath::Sin(icand.Phi() ) );
+    x_bin = static_cast<int>(31*(x_val + TMath::Pi()/2)/(TMath::Pi() ));
+    x_bin = x_bin%31;
 
-        // rotate all candidates so that the leading jet is on the x axis
-        ijet->RotateY(TMath::Pi()/2.0 - rotTheta);
-
-        // make sure the leading jet has been fully rotated
-        if(jetNum == 0) ijet->SetPz(0);
-
-        jetNum++;
+    //Image[x_bin][y_bin][0] += icand->E();
+    //std::cout << "Particle ID "<< particlesPFCands[i]->pdgId()  << ", Charge "  <<  particlesPFCands[i]->charge()  <<  ", Theta " << icand.Theta() << ", Energy " << icand.E() << ", transverse " << icand.Et() << std::endl;
+    Image[x_bin][y_bin][0] += icand.Et();  // 0: All
+    if (abs(particlesPFCands[i]->charge())>0) {
+      Image[x_bin][y_bin][2] += icand.Et(); // 2: Charged
+      if (particlesPFCands[i]->charge()>0) {
+	      Image[x_bin][y_bin][3] += icand.Et(); // 3: Positive
+      } else {
+	      Image[x_bin][y_bin][4] += icand.Et(); // 4: Negative
+      }
+    } else {
+      Image[x_bin][y_bin][1] += icand.Et(); // 1: Neutral
     }
-
-    // create the rotation angle for the third rotation based on reclustered jets
-    float subPsi = TMath::ATan2(reclusteredJets.at(1).Py(), reclusteredJets.at(1).Pz());
-
-    // Rotate PF cands
-    candNum = 0;
-    for(auto icand = pfCands.begin(); icand != pfCands.end(); icand++){
-
-        // rotate all candidates about the x axis so that the subleading candidate is in the xy plane
-        icand->RotateX(subPsi - TMath::Pi()/2.0);
-
-        candNum++;
+    if (abs(particlesPFCands[i]->pdgId())==11) {
+      Image[x_bin][y_bin][5] += icand.Et(); // 5: Electron-like
+      if (particlesPFCands[i]->pdgId()==11) {
+	      Image[x_bin][y_bin][6] += icand.Et(); // 6: Electron
+      } else {
+      	Image[x_bin][y_bin][7] += icand.Et(); // 7: Positron
+      }
     }
-
-    // Rotate reclusterd jets
-    jetNum = 0;
-    for(auto ijet = reclusteredJets.begin(); ijet != reclusteredJets.end(); ijet++){
-
-        // rotate all candidates about the x axis so that the subleading candidate is in the xy plane
-        ijet->RotateX(subPsi - TMath::Pi()/2.0);
-
-        // make sure the leading candidate has been fully rotated
-        if(jetNum == 1) ijet->SetPz(0);
-
-        jetNum++;
+    if (abs(particlesPFCands[i]->pdgId())==13) {
+      Image[x_bin][y_bin][8] += icand.Et(); // 8: Muon-like
+      if (particlesPFCands[i]->pdgId()==13) {
+	      Image[x_bin][y_bin][9] += icand.Et(); // 9: Muon
+      } else {
+      	Image[x_bin][y_bin][10] += icand.Et(); // 10: Anti-Muon
+      }
     }
-
-    //Reflect if necessary
-    float rightSum = 0;
-    float leftSum = 0;
-    float topSum = 0;
-    float botSum = 0;
-    for(auto icand = pfCands.begin(); icand != pfCands.end(); icand++){
-        if (icand->CosTheta() > 0){
-            topSum+=icand->E();
-        }
-        else if (icand->CosTheta() < 0){
-            botSum+=icand->E();
-        }
-
-        if (icand->Phi() > 0){
-            rightSum+=icand->E();
-        }
-        else if (icand->Phi() < 0){
-            leftSum+=icand->E();
-        }
+    if (particlesPFCands[i]->pdgId()==22) {
+      Image[x_bin][y_bin][11] += icand.Et(); // 11: Photon
     }
-    //Initialize image with 0's in all bins
-    for (int nx = 0; nx < 31; nx++){
-        for (int ny= 0; ny < 31; ny++){
-            Image[nx][ny][0] = 0;
-        }
+    if (particlesPFCands[i]->pdgId()==130) {
+      Image[x_bin][y_bin][12] += icand.Et(); // 12: Kaon-L
     }
-    //find the x and y coordinates in phi, theta binned space
-    //Then fill Image with normalized energy
-
-    for(auto icand = pfCands.begin(); icand != pfCands.end(); icand++){
-        int x_bin = -1;
-        int y_bin = -1;
-        if (topSum >= botSum){
-            y_bin = static_cast<int>(31*(icand->CosTheta() + 1)/(2.0));
-            y_bin = y_bin%31;
-        }
-        else{
-            y_bin = static_cast<int>(31*(-icand->CosTheta() + 1)/(2.0));
-            y_bin = y_bin%31;
-        }
-        if (rightSum >= leftSum){
-            x_bin = static_cast<int>(31*(icand->Phi() + TMath::Pi())/(2.0 * TMath::Pi()));
-            x_bin = x_bin%31;
-        }
-        else{
-            x_bin = static_cast<int>(31*(-icand->Phi() + TMath::Pi())/(2.0 * TMath::Pi()));
-            x_bin = x_bin%31;
-        }
-        Image[x_bin][y_bin][0] += icand->E() * 10 ;
+    if (abs(particlesPFCands[i]->pdgId())==211) {
+      Image[x_bin][y_bin][13] += icand.Et(); // 13: Pion-like
+      if (particlesPFCands[i]->pdgId()==211) {
+	      Image[x_bin][y_bin][14] += icand.Et(); // 14: Pi-Plus
+      } else {
+      	Image[x_bin][y_bin][15] += icand.Et(); // 15: Pi-Minus
+      }
     }
 
-    // find the leading (highest energy) pixel
-    float normE = Image[15][15][0];
-    for (int x = 0; x < 31; x++){
-        for (int y = 0; y < 31; y++){
-            if (Image[x][y][0] > normE){
-                normE = Image[x][y][0];
-            }
-        }
-    }
 
-    // normalize pixels using leading pixel
-    for (int x = 0; x < 31; x++){
-        for (int y = 0; y < 31; y++){
-            Image[x][y][0] = Image[x][y][0] / normE;
-        }
-    }
+    /* 'Flat' images
+       if(icand->E() > 0){
+       Image[x_bin][y_bin][0] = 0.5;
+       }
+    */
+  }
 
-    return Image;
+  // find the leading (highest energy) pixel
+  float normE = Image[15][15][0];
+  for (int x = 0; x < 31; x++){
+    for (int y = 0; y < 31; y++){
+      if (Image[x][y][0] > normE){
+	      normE = Image[x][y][0];
+      }
+    }
+  }
+
+  // normalize pixels using leading pixel
+  for (int x = 0; x < 31; x++){
+    for (int y = 0; y < 31; y++){
+      for (int col = 0; col < 16; col++){
+	      Image[x][y][col] = Image[x][y][col] / normE;
+      }
+    }
+  }
+
+  return Image;
 }
 
 
