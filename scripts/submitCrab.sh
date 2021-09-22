@@ -4,7 +4,6 @@
 #-----------------------------------------------------------------------------------------
 # Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-#135
 
 # Better PATH variables? 
 # Check that all the jobs submit (is 5 seconds good enough?)
@@ -13,8 +12,6 @@
 # Edit checkcrab for new format, check number of submissions? Pipe output to text file? Curate a summary? Auto resubmit?
 # Edit kill jobs?
 # Can I run crab in parallel?
-# Test that specific cases run correctly
-# Make log file, config file, and crab dir uniform?
 
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -156,7 +153,7 @@ if [[ $(voms-proxy-info -timeleft) > 3600 ]] && [[ $(voms-proxy-info -vo) == "cm
     echo "${GRN}Valid proxy confirmed!${NC}"
     echo
 else
-    echo "${YEL}Error: Proxy either doesn't exist or will expire soon. Initializing new proxy...${NC}"
+    echo "${YEL}Error: Proxy either doesn't exist or will expire soon.${NC} Initializing new proxy..."
     voms-proxy-init --valid 192:00 -voms cms
     echo
 fi
@@ -166,10 +163,6 @@ fi
 # Call createConfig.py to generate the config files:
 python createConfig.py -p ${myParticles[*]} -y ${myYears[*]} -d ${myDatatypes[*]}
 
-
-eval `scramv1 runtime -sh` # This is the alias to cmsenv
-source /cvmfs/cms.cern.ch/crab3/crab.sh # Source crab
-
 # Use loop structure below to submit crab jobs. 
 for dat in ${myDatatypes[*]}; do # Loop over mc and data
     if [[ $dat == "data" ]] ; then continue; fi #skips the loop for data, not implemented yet
@@ -178,14 +171,18 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
 
         yearDir="submit$yr"
         mkdir -p $yearDir # Make sure $yearDir exists
-        echo "${YEL}Entering $yearDir...${NC}"
+        echo "${YEL}Entering $yearDir..."
         cd $yearDir
-        mkdir -p logFiles # Make logFiles directory if it doesn't exist
-        echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
-        newtxt="fail.txt"
 
-        declare -a massPnts=()
-        for part in ${myParticles[*]}; do # Loop over particles
+
+        mkdir -p logFiles # Make logFiles directory if it doesn't exist
+
+        # echo "Created ${yearDir}/logFiles directory."
+
+        for part in ${allParticles[*]}; do # Loop over particles
+
+            listOfScripts=config/crab*$part*.py
+            echo "${YEL}Submitting crab jobs in ${GRN}$yearDir ${YEL}for ${PURP}$part${NC}"
 
             # UPDATE THIS TO USE ARRAYS INSTEAD OF WHATS IN THE DIR? COULD BE A WAY TO AUTOCHECK IF EVERYTHING SUBMITS
             # wait this should just use the list of crab dirs that I already made...
@@ -198,53 +195,20 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
             # To test this, make sure crabkill works so crab jobs can be cancelled
             # ask johan: parallel crab? how many scripts (better many scripts that do specific things, even if overlap in code, or fewer scripts that you give options to??)
 
-            # Maybe try not running it in background
-            
-            listOfScripts=config/crab*$part*.py
-            echo "${YEL}Submitting crab jobs in ${GRN}$yearDir ${YEL}for ${PURP}$part${NC}"
-
             for f in $listOfScripts; do
+
                 trimstring=${f#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
                 crab submit $f >> logFiles/$crabName.txt &
-                # sleep 1s # If crab jobs are submitted too quickly, some don't go through
-                massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
-
+                sleep 5s # If crab jobs are submitted too quickly, some don't go through
             done
-            # Could rapid submit all files, add masses to list, then loop over them to check
-        done
-        
-        echo "nap time"
-        sleep 60s
-        echo "checking dirs"
-        for m in ${massPnts[*]}; do
-            echo $m
-            bestDir="CrabBEST/"*"_${mass}_trees"*
-            if [[ ! -d $bestDir ]]; then
-                echo "sad dir"
-                echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
-                # crab submit $f >> logFiles/$crabName.txt &
-            fi
-        done
 
-
-        
-        echo "${YEL}Exiting $yearDir...${NC}"
+        done
+        echo "${YEL}Exiting $yearDir..."
         cd ..
         # echo "${YEL}Checkout your new list of files at:${NC} $fileToWrite"
     done
 done
-
-echo "jobs submitted"
-sleep 60s
-
-# auto kill
-for d in */CrabBEST/*/ ; do
-    # echo $d | cut -d '/' -f 2 
-    crab kill -d $d
-done
-
-echo "jobs killed"
 
 #Undo the alias used for this script
 unalias echo

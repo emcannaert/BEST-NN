@@ -3,20 +3,20 @@ config = Configuration()
 
 config.section_("General")
 
-# This line will be replaced by createConfig.py: config.General.requestName = "CRABDIRFLAG"
+# This line will be replaced by createConfig.py: CRABDIRFLAG
 config.General.workArea = "CrabBEST"
 config.General.transferLogs = True
 
 config.section_("JobType")
 config.JobType.pluginName = "Analysis"
 
-# This line will be replaced by createConfig.py: config.JobType.psetName = "RUNPARTICLEFLAG"
+# This line will be replaced by createConfig.py: RUNPARTICLEFLAG
 #config.JobType.inputFiles = ["TMVARegression_MLP.weights.xml"]
 config.JobType.outputFiles = ["BESTInputs.root"]
 #config.JobType.allowUndistributedCMSSW = True
 
 config.section_("Data")
-# This line will be replaced by createConfig.py: config.Data.inputDataset = "DATASETFLAG"
+# This line will be replaced by createConfig.py:: DATASETFLAG
 config.Data.splitting = "Automatic"
 #config.Data.splitting = "FileBased"
 #config.Data.unitsPerJob = 1

@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-# This line will be replaced by createConfig.py: GT = "GLOBALTAGFLAG"
+# This line will be replaced by createConfig.py: GLOBALTAGFLAG
 process = cms.Process("run")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -17,16 +17,14 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
 
 process.source = cms.Source("PoolSource",
-        # Replace root file below with the source file you want to use (overwritten by crab config files that call this run file)
-        fileNames = cms.untracked.vstring(
-                'myfile.root'
-                                         )
-)
+                        # replace 'myfile.root' with the source file you want to use
+                        # fileNames = cms.untracked.vstring(
+                                # 'myfile.root'
+                                # )
+                            )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
-#=========================================================================================
-# Add Deep AK8 variables -----------------------------------------------------------------
-#=========================================================================================
+##### Deep AK8 
 updateJetCollection(
    process,
    jetSource = cms.InputTag('slimmedJetsAK8'),
@@ -57,7 +55,7 @@ updateJetCollection(
                          'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight'],
     postfix = 'WithDeepTags',
     #postfix = 'AK8',
-    printWarning = False # Making this false removes the "b tagging need to be run on uncorrected jets" warning, which would print for every job.
+    printWarning = True
 )
 
 
@@ -70,22 +68,22 @@ process.selectedAK8Jets = cms.EDFilter('PATJetSelector',
                                         src = cms.InputTag('slimmedJetsAK8'),
                                         cut = cms.string('pt > 500.0 && abs(eta) < 2.4'),
                                         filter = cms.bool(True)
-)
+                                        )
 
 process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
                                     minNumber = cms.uint32(1),
                                     maxNumber = cms.uint32(99999),
                                     src = cms.InputTag('slimmedJetsAK8')
                                     #filter = cms.bool(True)
-)
+                                    )
 
 
 # Run the producer
 process.run = cms.EDProducer('BESTProducer',
-                             inputJetColl = cms.string('slimmedJetsAK8'),
-                             jetColl = cms.string('PUPPI'),                     
-                             # This line will be replaced by createConfig.py: jetType = cms.string("PARTICLESTRINGFLAG")
-                             storeDaughters = cms.bool(True)
+	inputJetColl = cms.string('slimmedJetsAK8'),
+        jetColl = cms.string('PUPPI'),                     
+# This line will be replaced by createConfig.py:: PARTICLESTRINGFLAG
+        storeDaughters = cms.bool(True)
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string("BESTInputs.root") )
 
@@ -93,12 +91,12 @@ process.out = cms.OutputModule("PoolOutputModule",
                                fileName = cms.untracked.string("ana_out.root"),
                                SelectEvents   = cms.untracked.PSet( SelectEvents = cms.vstring('p') ),
                                outputCommands = cms.untracked.vstring('drop *',
-                                                                      'keep *_fixedGridRhoAll_*_*',
-                                                                      'keep *_run_*_*'
+								      'keep *_fixedGridRhoAll_*_*',
+                                                                      'keep *_run_*_*',
                                                                       #, 'keep *_goodPatJetsCATopTagPF_*_*'
                                                                       #, 'keep recoPFJets_*_*_*'
                                                                       ) 
-)
+                               )
 process.outpath = cms.EndPath(process.out)
 
 # Organize the running procedure
