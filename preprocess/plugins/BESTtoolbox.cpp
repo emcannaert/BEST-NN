@@ -249,13 +249,13 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
                       std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                       std::vector<pat::Jet>::const_iterator jet, std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets,
                       std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > &imgVars,
-                      std::string frame, float mass){
+                      int mass){
 
     // get 4 vector for heavy object rest frame
     typedef reco::Candidate::PolarLorentzVector fourv;
     fourv thisJet = jet->polarP4();
     TLorentzVector thisJetLV(0.,0.,0.,0.);
-    thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), mass );
+    thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)mass );
 
     std::vector<TLorentzVector> particles;
     std::vector<math::XYZVector> particles2;
@@ -302,6 +302,8 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
         sumPz += thisParticleLV.Pz();
         sumP += abs( thisParticleLV.P() );
     }
+
+    std::string frame = std::to_string(mass)+"GeV";
 
     // Fox Wolfram Moments
     double fwm[5] = { 0.0, 0.0 ,0.0 ,0.0,0.0};
@@ -399,7 +401,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
 void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet,
                        std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
-                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> frames,
+                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
                        std::map<std::string, std::vector<float> > &jetVecVars, int jetColl ){
     // loop over lab frame candidates
     for(unsigned int i = 0; i < daughtersOfJet.size(); i++){
@@ -474,9 +476,9 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
 
     // loop over rest frames
-    for(unsigned int iFrame = 0; iFrame < frames.size(); iFrame++){
+    for(unsigned int iFrame = 0; iFrame < restMasses.size(); iFrame++){
 
-        std::string frame = frames[iFrame];
+        std::string frame = std::to_string(restMasses[iFrame]);
 
         // loop over candidates in the rest frame
         for(auto icand = boostedDaughters[frame+"Frame"].begin(); icand != boostedDaughters[frame+"Frame"].end(); icand++){
@@ -486,7 +488,6 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
             jetVecVars[frame+"Frame_PF_candidate_py"].push_back(icand->Py() );
             jetVecVars[frame+"Frame_PF_candidate_pz"].push_back(icand->Pz() );
             jetVecVars[frame+"Frame_PF_candidate_energy"].push_back(icand->E() );
-
         }
 
         // loop over rest frame jets

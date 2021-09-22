@@ -279,116 +279,69 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_Tau32");
     listOfVars.push_back("jetAK8_Tau21");
 
-    // Fox Wolfram Moments
-    listOfVars.push_back("FoxWolfH1_Higgs");
-    listOfVars.push_back("FoxWolfH2_Higgs");
-    listOfVars.push_back("FoxWolfH3_Higgs");
-    listOfVars.push_back("FoxWolfH4_Higgs");
+    // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
+    std::vector<int> restMasses;
+    restMasses.clear();
+    unsigned int iterMass = 1;
+    while(iterMass <= 200) {
+        restMasses.push_back(iterMass); // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+        iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+    }
 
-    listOfVars.push_back("FoxWolfH1_Top");
-    listOfVars.push_back("FoxWolfH2_Top");
-    listOfVars.push_back("FoxWolfH3_Top");
-    listOfVars.push_back("FoxWolfH4_Top");
+    // Now use this vector to generate the variable names to add:
+    for (unsigned int imass=0; imass < restMasses.size(); imass++) {
+        std::string frame = std::to_string(restMasses[imass])+"GeV";
 
-    listOfVars.push_back("FoxWolfH1_W");
-    listOfVars.push_back("FoxWolfH2_W");
-    listOfVars.push_back("FoxWolfH3_W");
-    listOfVars.push_back("FoxWolfH4_W");
+        // Fox Wolfram Moments
+        listOfVars.push_back("FoxWolfH1_"+frame);
+        listOfVars.push_back("FoxWolfH2_"+frame);
+        listOfVars.push_back("FoxWolfH3_"+frame);
+        listOfVars.push_back("FoxWolfH4_"+frame);
 
-    listOfVars.push_back("FoxWolfH1_Z");
-    listOfVars.push_back("FoxWolfH2_Z");
-    listOfVars.push_back("FoxWolfH3_Z");
-    listOfVars.push_back("FoxWolfH4_Z");
+        // Event Shape Variables
+        listOfVars.push_back("isotropy_"+frame);
+        listOfVars.push_back("sphericity_"+frame);
+        listOfVars.push_back("aplanarity_"+frame);
+        listOfVars.push_back("thrust_"+frame);
 
-    // Event Shape Variables
-    listOfVars.push_back("isotropy_Higgs");
-    listOfVars.push_back("sphericity_Higgs");
-    listOfVars.push_back("aplanarity_Higgs");
-    listOfVars.push_back("thrust_Higgs");
+        // Jet Mass
+        listOfVars.push_back("nJets_"+frame);
 
-    listOfVars.push_back("isotropy_Top");
-    listOfVars.push_back("sphericity_Top");
-    listOfVars.push_back("aplanarity_Top");
-    listOfVars.push_back("thrust_Top");
+        listOfVars.push_back("jet12_mass_"+frame);
+        listOfVars.push_back("jet23_mass_"+frame);
+        listOfVars.push_back("jet13_mass_"+frame);
+        listOfVars.push_back("jet1234_mass_"+frame);
 
-    listOfVars.push_back("isotropy_W");
-    listOfVars.push_back("sphericity_W");
-    listOfVars.push_back("aplanarity_W");
-    listOfVars.push_back("thrust_W");
+        //Subjet CosTheta and delta CosTheta
+        listOfVars.push_back("jet12_CosTheta_"+frame);
+        listOfVars.push_back("jet23_CosTheta_"+frame);
+        listOfVars.push_back("jet13_CosTheta_"+frame);
+        listOfVars.push_back("jet1234_CosTheta_"+frame);
 
-    listOfVars.push_back("isotropy_Z");
-    listOfVars.push_back("sphericity_Z");
-    listOfVars.push_back("aplanarity_Z");
-    listOfVars.push_back("thrust_Z");
+        listOfVars.push_back("jet12_DeltaCosTheta_"+frame);
+        listOfVars.push_back("jet13_DeltaCosTheta_"+frame);
+        listOfVars.push_back("jet23_DeltaCosTheta_"+frame);
 
-    // Jet Mass
-    listOfVars.push_back("nJets_Higgs");
-    listOfVars.push_back("nJets_Top");
-    listOfVars.push_back("nJets_W");
-    listOfVars.push_back("nJets_Z");
+        // Jet Asymmetry
+        listOfVars.push_back("asymmetry_"+frame);
+    
+        // add the daughter and rest frame information
+        if(storeDaughters == true){
 
-    listOfVars.push_back("jet12_mass_Higgs");
-    listOfVars.push_back("jet23_mass_Higgs");
-    listOfVars.push_back("jet13_mass_Higgs");
-    listOfVars.push_back("jet1234_mass_Higgs");
+            // Jet PF Candidate Variables
+            listOfVecVars.push_back(frame+"Frame_PF_candidate_px");
+            listOfVecVars.push_back(frame+"Frame_PF_candidate_py");
+            listOfVecVars.push_back(frame+"Frame_PF_candidate_pz");
+            listOfVecVars.push_back(frame+"Frame_PF_candidate_energy");
 
-    listOfVars.push_back("jet12_mass_Top");
-    listOfVars.push_back("jet23_mass_Top");
-    listOfVars.push_back("jet13_mass_Top");
-    listOfVars.push_back("jet1234_mass_Top");
-
-    listOfVars.push_back("jet12_mass_W");
-    listOfVars.push_back("jet23_mass_W");
-    listOfVars.push_back("jet13_mass_W");
-    listOfVars.push_back("jet1234_mass_W");
-
-    listOfVars.push_back("jet12_mass_Z");
-    listOfVars.push_back("jet23_mass_Z");
-    listOfVars.push_back("jet13_mass_Z");
-    listOfVars.push_back("jet1234_mass_Z");
-
-    //Subjet CosTheta and delta CosTheta
-    listOfVars.push_back("jet12_CosTheta_Higgs");
-    listOfVars.push_back("jet23_CosTheta_Higgs");
-    listOfVars.push_back("jet13_CosTheta_Higgs");
-    listOfVars.push_back("jet1234_CosTheta_Higgs");
-
-    listOfVars.push_back("jet12_CosTheta_Top");
-    listOfVars.push_back("jet23_CosTheta_Top");
-    listOfVars.push_back("jet13_CosTheta_Top");
-    listOfVars.push_back("jet1234_CosTheta_Top");
-
-    listOfVars.push_back("jet12_CosTheta_W");
-    listOfVars.push_back("jet23_CosTheta_W");
-    listOfVars.push_back("jet13_CosTheta_W");
-    listOfVars.push_back("jet1234_CosTheta_W");
-
-    listOfVars.push_back("jet12_CosTheta_Z");
-    listOfVars.push_back("jet23_CosTheta_Z");
-    listOfVars.push_back("jet13_CosTheta_Z");
-    listOfVars.push_back("jet1234_CosTheta_Z");
-
-    listOfVars.push_back("jet12_DeltaCosTheta_Higgs");
-    listOfVars.push_back("jet13_DeltaCosTheta_Higgs");
-    listOfVars.push_back("jet23_DeltaCosTheta_Higgs");
-
-    listOfVars.push_back("jet12_DeltaCosTheta_Top");
-    listOfVars.push_back("jet13_DeltaCosTheta_Top");
-    listOfVars.push_back("jet23_DeltaCosTheta_Top");
-
-    listOfVars.push_back("jet12_DeltaCosTheta_W");
-    listOfVars.push_back("jet13_DeltaCosTheta_W");
-    listOfVars.push_back("jet23_DeltaCosTheta_W");
-
-    listOfVars.push_back("jet12_DeltaCosTheta_Z");
-    listOfVars.push_back("jet13_DeltaCosTheta_Z");
-    listOfVars.push_back("jet23_DeltaCosTheta_Z");
-
-    // Jet Asymmetry
-    listOfVars.push_back("asymmetry_Higgs");
-    listOfVars.push_back("asymmetry_Top");
-    listOfVars.push_back("asymmetry_W");
-    listOfVars.push_back("asymmetry_Z");
+            // rest frame subjet variables
+            listOfVecVars.push_back(frame+"Frame_jet_px");
+            listOfVecVars.push_back(frame+"Frame_jet_py");
+            listOfVecVars.push_back(frame+"Frame_jet_pz");
+            listOfVecVars.push_back(frame+"Frame_jet_energy");
+        }
+    }     
+    restMasses.clear();
 
     // add the daughter and rest frame information
     if(storeDaughters == true){
@@ -416,56 +369,10 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         listOfVecVars.push_back("LabFrame_PF_candidate_logpTRatio");
         listOfVecVars.push_back("LabFrame_PF_candidate_logEnergyRatio");
 
-        listOfVecVars.push_back("HiggsFrame_PF_candidate_px");
-        listOfVecVars.push_back("HiggsFrame_PF_candidate_py");
-        listOfVecVars.push_back("HiggsFrame_PF_candidate_pz");
-        listOfVecVars.push_back("HiggsFrame_PF_candidate_energy");
-
-        listOfVecVars.push_back("TopFrame_PF_candidate_px");
-        listOfVecVars.push_back("TopFrame_PF_candidate_py");
-        listOfVecVars.push_back("TopFrame_PF_candidate_pz");
-        listOfVecVars.push_back("TopFrame_PF_candidate_energy");
-
-        listOfVecVars.push_back("WFrame_PF_candidate_px");
-        listOfVecVars.push_back("WFrame_PF_candidate_py");
-        listOfVecVars.push_back("WFrame_PF_candidate_pz");
-        listOfVecVars.push_back("WFrame_PF_candidate_energy");
-
-        listOfVecVars.push_back("ZFrame_PF_candidate_px");
-        listOfVecVars.push_back("ZFrame_PF_candidate_py");
-        listOfVecVars.push_back("ZFrame_PF_candidate_pz");
-        listOfVecVars.push_back("ZFrame_PF_candidate_energy");
-
         // PUPPI weights
         listOfVecVars.push_back("PUPPI_Weights");
 
-        // rest frame subjet variables
-        listOfVecVars.push_back("HiggsFrame_jet_px");
-        listOfVecVars.push_back("HiggsFrame_jet_py");
-        listOfVecVars.push_back("HiggsFrame_jet_pz");
-        listOfVecVars.push_back("HiggsFrame_jet_energy");
-
-        listOfVecVars.push_back("TopFrame_jet_px");
-        listOfVecVars.push_back("TopFrame_jet_py");
-        listOfVecVars.push_back("TopFrame_jet_pz");
-        listOfVecVars.push_back("TopFrame_jet_energy");
-
-        listOfVecVars.push_back("WFrame_jet_px");
-        listOfVecVars.push_back("WFrame_jet_py");
-        listOfVecVars.push_back("WFrame_jet_pz");
-        listOfVecVars.push_back("WFrame_jet_energy");
-
-        listOfVecVars.push_back("ZFrame_jet_px");
-        listOfVecVars.push_back("ZFrame_jet_py");
-        listOfVecVars.push_back("ZFrame_jet_pz");
-        listOfVecVars.push_back("ZFrame_jet_energy");
     }
-
-    // rest frame jet image variables
-    listOfImgVars.push_back("HiggsFrame_image");
-    listOfImgVars.push_back("TopFrame_image");
-    listOfImgVars.push_back("WFrame_image");
-    listOfImgVars.push_back("ZFrame_image");
 
     // Make Branches for each variable
     for (unsigned i = 0; i < listOfVars.size(); i++){
@@ -604,6 +511,15 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     map<string, vector<TLorentzVector> > boostedDaughters;
     map<string, vector<fastjet::PseudoJet> > restJets;
 
+    // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
+    std::vector<int> restMasses;
+    restMasses.clear();
+    unsigned int iterMass = 1;
+    while(iterMass <= 200) {
+        restMasses.push_back(iterMass); // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+        iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+    }
+
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
         daughtersOfJet.clear();
@@ -636,26 +552,19 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 getJetDaughters(daughtersOfJet, ijet);
                 if (daughtersOfJet.size() < 3) continue;
 
-                // Higgs Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Higgs", 125.) == false) continue;
-
-                // Top Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Top", 172.5) == false) continue;
-
-                // W Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "W", 80.4) == false) continue;
-
-                // Z Rest Frame Variables
-                if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, "Z", 91.2) == false) continue;
-
+                for (unsigned int imass=0; imass < restMasses.size(); imass++) {
+                    // Calculate all rest frame variables, skip both loops if frame doesn't work
+                    if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, imgVars, restMasses[imass]) == false) goto endjetloop;
+                } 
+                
                 // store daughters, rest frame daughters, and rest frame jets
-                vector<string> frames = {"Higgs", "Top", "W", "Z"};
                 if(storeDaughters == true){
-                    storeJetDaughters(daughtersOfJet, ijet, boostedDaughters, restJets, frames, jetVecVars, jetColl_ );
+                    storeJetDaughters(daughtersOfJet, ijet, boostedDaughters, restJets, restMasses, jetVecVars, jetColl_ );
                 }
 
                 // Fill the jet entry tree
                 jetTree->Fill();
+                endjetloop:; // When goto is triggered in the imass loop, the code jumps to here. This is like using "continue" twice, to skip this iteration of the ijet loop.
             }
         }
 
@@ -683,6 +592,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     daughtersOfJet.clear();
     boostedDaughters.clear();
     restJets.clear();
+    restMasses.clear();
 }
 
 
