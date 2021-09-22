@@ -14,12 +14,12 @@
 //----------------------------------------------------------------------------------------
 
 float LegendreP(float x, int order){
-   if (order == 0) return 1;
-   else if (order == 1) return x;
-   else if (order == 2) return 0.5*(3*x*x - 1);
-   else if (order == 3) return 0.5*(5*x*x*x - 3*x);
-   else if (order == 4) return 0.125*(35*x*x*x*x - 30*x*x + 3);
-   else return 0;
+    if (order == 0) return 1;
+    else if (order == 1) return x;
+    else if (order == 2) return 0.5*(3*x*x - 1);
+    else if (order == 3) return 0.5*(5*x*x*x - 3*x);
+    else if (order == 4) return 0.125*(35*x*x*x*x - 30*x*x + 3);
+    else return 0;
 }
 
 //========================================================================================
@@ -33,57 +33,56 @@ float LegendreP(float x, int order){
 
 int FWMoments(std::vector<TLorentzVector> particles, double (&outputs)[5] ){
 
-   // get number of particles to loop over
-   int numParticles = particles.size();
+    // get number of particles to loop over
+    int numParticles = particles.size();
 
-   // get energy normalization for the FW moments
-   float s = 0.0;
-   for(int i = 0; i < numParticles; i++){
-   	s += particles[i].E();
-   }
+    // get energy normalization for the FW moments
+    float s = 0.0;
+    for(int i = 0; i < numParticles; i++){
+        s += particles[i].E();
+    }
 
-   float H0 = 0.0;
-   float H4 = 0.0;
-   float H3 = 0.0;
-   float H2 = 0.0;
-   float H1 = 0.0;
+    float H0 = 0.0;
+    float H4 = 0.0;
+    float H3 = 0.0;
+    float H2 = 0.0;
+    float H1 = 0.0;
 
-   for (int i = 0; i < numParticles; i++){
+    for (int i = 0; i < numParticles; i++){
 
-   	for (int j = i; j < numParticles; j++){
+        for (int j = i; j < numParticles; j++){
 
-                // calculate cos of jet constituent angles
-   		float costh = ( particles[i].Px() * particles[j].Px() + particles[i].Py() * particles[j].Py()
-                                   + particles[i].Pz() * particles[j].Pz() ) / ( particles[i].P() * particles[j].P() );
-   		float w1 = particles[i].P();
-   		float w2 = particles[j].P();
+            // calculate cos of jet constituent angles
+            float costh = ( particles[i].Px() * particles[j].Px() + particles[i].Py() * particles[j].Py()
+                                        + particles[i].Pz() * particles[j].Pz() ) / ( particles[i].P() * particles[j].P() );
+            float w1 = particles[i].P();
+            float w2 = particles[j].P();
 
-                // calculate legendre polynomials of jet constiteuent angles
-   		float fw0 = LegendreP(costh, 0);
-   		float fw1 = LegendreP(costh, 1);
-   		float fw2 = LegendreP(costh, 2);
-   		float fw3 = LegendreP(costh, 3);
-   		float fw4 = LegendreP(costh, 4);
+            // calculate legendre polynomials of jet constiteuent angles
+            float fw0 = LegendreP(costh, 0);
+            float fw1 = LegendreP(costh, 1);
+            float fw2 = LegendreP(costh, 2);
+            float fw3 = LegendreP(costh, 3);
+            float fw4 = LegendreP(costh, 4);
 
-                // calculate the Fox Wolfram moments
-   		H0 += w1 * w2 * fw0;
-   		H1 += w1 * w2 * fw1;
-   		H2 += w1 * w2 * fw2;
-   		H3 += w1 * w2 * fw3;
-   		H4 += w1 * w2 * fw4;
+            // calculate the Fox Wolfram moments
+            H0 += w1 * w2 * fw0;
+            H1 += w1 * w2 * fw1;
+            H2 += w1 * w2 * fw2;
+            H3 += w1 * w2 * fw3;
+            H4 += w1 * w2 * fw4;
+        }
+    }
 
-   	}
-   }
+    // Normalize the Fox Wolfram moments
+    if (H0 == 0) H0 += 0.001;      // to prevent dividing by zero
+    outputs[0] = (H0);
+    outputs[1] = (H1 / H0);
+    outputs[2] = (H2 / H0);
+    outputs[3] = (H3 / H0);
+    outputs[4] = (H4 / H0);
 
-   // Normalize the Fox Wolfram moments
-   if (H0 == 0) H0 += 0.001;      // to prevent dividing by zero
-   outputs[0] = (H0);
-   outputs[1] = (H1 / H0);
-   outputs[2] = (H2 / H0);
-   outputs[3] = (H3 / H0);
-   outputs[4] = (H4 / H0);
-
-   return 0;
+    return 0;
 }
 
 //========================================================================================
@@ -127,7 +126,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_mass"] = jet->mass();
     besVars["bDisc"] = jet->bDiscriminator("pfDeepCSVJetTags:probb") + jet->bDiscriminator("pfDeepCSVJetTags:probbb");
 
-
+    // Abbott: Update these else if's to a switch/case?
     // Deep AK8
     std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
     std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
@@ -177,32 +176,32 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         besVars["jetAK8_Tau3"] = jet->userFloat("NjettinessAK8CHS:tau3");
         besVars["jetAK8_Tau2"] = jet->userFloat("NjettinessAK8CHS:tau2");
         besVars["jetAK8_Tau1"] = jet->userFloat("NjettinessAK8CHS:tau1");
-	besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8CHS:tau2") / jet->userFloat("NjettinessAK8CHS:tau1");
+        besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8CHS:tau2") / jet->userFloat("NjettinessAK8CHS:tau1");
         besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8CHS:tau3") / jet->userFloat("NjettinessAK8CHS:tau2");
-	besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass");
+        besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass");
     }
     if(jetColl == 1){ // PUPPI jets
         besVars["jetAK8_Tau4"] = jet->userFloat("NjettinessAK8Puppi:tau4");  //important for H->WW jets
         besVars["jetAK8_Tau3"] = jet->userFloat("NjettinessAK8Puppi:tau3");
         besVars["jetAK8_Tau2"] = jet->userFloat("NjettinessAK8Puppi:tau2");
         besVars["jetAK8_Tau1"] = jet->userFloat("NjettinessAK8Puppi:tau1");
-	besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8Puppi:tau2") / jet->userFloat("NjettinessAK8Puppi:tau1");
+        besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8Puppi:tau2") / jet->userFloat("NjettinessAK8Puppi:tau1");
         besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8Puppi:tau3") / jet->userFloat("NjettinessAK8Puppi:tau2");
-	besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
-	auto subjets = jet->subjets("SoftDropPuppi");
-	if (subjets.size() < 2){
-	  std::cout << "This will exit, not enough subjets" << std::endl;
-	  exit(1);
-	}
-	if (!subjets[0]){
-	  std::cout << "This will exit, invalid subjet 0" << std::endl;
-          exit(1);
+        besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
+        auto subjets = jet->subjets("SoftDropPuppi");
+        if (subjets.size() < 2){
+            std::cout << "This will exit, not enough subjets" << std::endl;
+            exit(1);
+        }
+        if (!subjets[0]){
+            std::cout << "This will exit, invalid subjet 0" << std::endl;
+            exit(1);
         }
         if (!subjets[1]){
-	  std::cout << "This will exit, invalid subjet 1" << std::endl;
-          exit(1);
-	}
-	besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
+            std::cout << "This will exit, invalid subjet 1" << std::endl;
+                exit(1);
+        }
+        besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
         besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[1]->bDiscriminator("pfDeepCSVJetTags:probbb");
     }
 }
@@ -218,20 +217,20 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
                              std::vector<reco::VertexCompositePtrCandidate> secVertices){
     int numMatched = 0; // counts number of secondary vertices
     for(std::vector<reco::VertexCompositePtrCandidate>::const_iterator vertBegin = secVertices.begin(),
-	  vertEnd = secVertices.end(), ivert = vertBegin; ivert != vertEnd; ivert++){
+                            vertEnd = secVertices.end(), ivert = vertBegin; ivert != vertEnd; ivert++){
         TLorentzVector vert(ivert->px(), ivert->py(), ivert->pz(), ivert->energy() );
-	// match vertices to jet
-	if(jet.DeltaR(vert) < 0.8 ){
-	    numMatched++;
-	    // save secondary vertex info for the first three sec vertices
-	    jetVecVars["SV_pt"].push_back(ivert->pt() );
-	    jetVecVars["SV_eta"].push_back(ivert->eta() );
-	    jetVecVars["SV_phi"].push_back(ivert->phi() );
-	    jetVecVars["SV_mass"].push_back(ivert->mass() );
-	    jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
-	    jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
-	    jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
-	}
+        // match vertices to jet
+        if(jet.DeltaR(vert) < 0.8 ){
+            numMatched++;
+            // save secondary vertex info for the first three sec vertices
+            jetVecVars["SV_pt"].push_back(ivert->pt() );
+            jetVecVars["SV_eta"].push_back(ivert->eta() );
+            jetVecVars["SV_phi"].push_back(ivert->phi() );
+            jetVecVars["SV_mass"].push_back(ivert->mass() );
+            jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
+            jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
+            jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
+        }
     }
     
     besVars["nSecondaryVertices"] = numMatched;
@@ -298,8 +297,8 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
         FJparticles.push_back( fastjet::PseudoJet( thisParticleLV.X(), thisParticleLV.Y(), thisParticleLV.Z(), thisParticleLV.T() ) );
 
         // Sum rest frame momenta for asymmetry calculation, but only for pt > 10
-	//Why?????
-	//        if (daughtersOfJet[i]->pt() < 10) continue;
+        //Why?????
+        // if (daughtersOfJet[i]->pt() < 10) continue;
         sumPz += thisParticleLV.Pz();
         sumP += abs( thisParticleLV.P() );
     }
@@ -327,9 +326,9 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // Recluster the jets in the heavy object rest frame
     fastjet::JetDefinition jet_def(fastjet::antikt_algorithm, 0.4);
     fastjet::ClusterSequence cs(FJparticles, jet_def);
-    //    std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_pt(cs.inclusive_jets(20.0));
+    // std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_pt(cs.inclusive_jets(20.0));
     //Changed to 0.0 here, the 20.0 cuts on pT relative to a meaningless axis
-    //    std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_pt(cs.inclusive_jets(0.0));
+    // std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_pt(cs.inclusive_jets(0.0));
     std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_E(cs.inclusive_jets(0.0));
     restJets[frame+"Frame"] = jetsFJ;
 
@@ -339,36 +338,35 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
         // make a TLorentzVector for the current clustered rest frame jet
         TLorentzVector iJetLV(jetsFJ[i].px(), jetsFJ[i].py(), jetsFJ[i].pz(), jetsFJ[i].e() );
-	rotationJets.push_back(iJetLV);
+        rotationJets.push_back(iJetLV);
 
         // get fest frame jet four vector combinations
         switch(i){
-        case 0:
-	  //            jet12LV   = jet12LV   + iJetLV;
-	  //            jet13LV   = jet13LV   + iJetLV;
-	  //            jet1234LV = jet1234LV + iJetLV;
-            jet12LV   = iJetLV;
-            jet13LV   = iJetLV;
-            jet1234LV = iJetLV;
-
-            break;
-        case 1:
-	  besVars["jet12_DeltaCosTheta_"+frame]   = (jet12LV.Vect()).Dot(iJetLV.Vect()) / (jet12LV.Vect().Mag() * iJetLV.Vect().Mag());
-            jet12LV   = jet12LV   + iJetLV;
-	    //            jet23LV   = jet23LV   + iJetLV;
-            jet23LV   = iJetLV;
-            jet1234LV = jet1234LV + iJetLV;
-            break;
-        case 2:
-	  besVars["jet13_DeltaCosTheta_"+frame]   = (jet13LV.Vect()).Dot(iJetLV.Vect()) / (jet13LV.Vect().Mag() * iJetLV.Vect().Mag());
-            jet13LV   = jet13LV   + iJetLV;
-	    besVars["jet23_DeltaCosTheta_"+frame]   = (jet23LV.Vect()).Dot(iJetLV.Vect()) / (jet23LV.Vect().Mag() * iJetLV.Vect().Mag());
-            jet23LV   = jet23LV   + iJetLV;
-            jet1234LV = jet1234LV + iJetLV;
-            break;
-        case 3:
-            jet1234LV = jet1234LV + iJetLV;
-            break;
+            case 0:
+                // jet12LV   = jet12LV   + iJetLV;
+                // jet13LV   = jet13LV   + iJetLV;
+                // jet1234LV = jet1234LV + iJetLV;
+                jet12LV   = iJetLV;
+                jet13LV   = iJetLV;
+                jet1234LV = iJetLV;
+                break;
+            case 1:
+                besVars["jet12_DeltaCosTheta_"+frame]   = (jet12LV.Vect()).Dot(iJetLV.Vect()) / (jet12LV.Vect().Mag() * iJetLV.Vect().Mag());
+                jet12LV   = jet12LV   + iJetLV;
+                // jet23LV   = jet23LV   + iJetLV;
+                jet23LV   = iJetLV;
+                jet1234LV = jet1234LV + iJetLV;
+                break;
+            case 2:
+                besVars["jet13_DeltaCosTheta_"+frame]   = (jet13LV.Vect()).Dot(iJetLV.Vect()) / (jet13LV.Vect().Mag() * iJetLV.Vect().Mag());
+                jet13LV   = jet13LV   + iJetLV;
+                besVars["jet23_DeltaCosTheta_"+frame]   = (jet23LV.Vect()).Dot(iJetLV.Vect()) / (jet23LV.Vect().Mag() * iJetLV.Vect().Mag());
+                jet23LV   = jet23LV   + iJetLV;
+                jet1234LV = jet1234LV + iJetLV;
+                break;
+            case 3:
+                jet1234LV = jet1234LV + iJetLV;
+                break;
         }
     }
 
@@ -409,20 +407,67 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         // Do not include low pT particles
         if (daughtersOfJet[i]->pt() < 0.5) continue;
 
+        // Calculate delta eta and phi for the candidates to the center of the jet
+        float deltaEta = daughtersOfJet[i]->eta() - jet->eta();
+        float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
+
+        // Calculate pT and Energy logarithms for candidates
+        float logpT = TMath::Log(daughtersOfJet[i]->pt());
+        float logEnergy = TMath::Log(daughtersOfJet[i]->energy());
+
+        // Determine particle type, set boolean flags
+        int absPDGID = abs( daughtersOfJet[i]->pdgId() );
+        bool isElectron = false;
+        bool isMuon = false;
+        bool isPhoton = false;
+        bool isNeutralHadron = false; // In our analysis, the only neutral hadrons we see are K longs.
+        bool isChargedHadron = false; // In our analysis, the only charged hadrons we see are pions.
+
+        // Set flags:
+        switch(absPDGID){
+        case 11: // Check is candidate is an electron or positron
+            isElectron = true; break;
+        case 13: // Check if candidate is a muon or antimuon
+            isMuon = true; break;
+        case 22: // Check if candidate is a photon
+            isPhoton = true; break;
+        case 130: // Check if candidate is K long
+            isNeutralHadron = true; break;
+        case 211: // Check if candidate is pion or antipion
+            isChargedHadron = true; break; 
+        }
+
         // Store the candidate
         jetVecVars["LabFrame_PF_candidate_px"].push_back(daughtersOfJet[i]->px() );
         jetVecVars["LabFrame_PF_candidate_py"].push_back(daughtersOfJet[i]->py() );
         jetVecVars["LabFrame_PF_candidate_pz"].push_back(daughtersOfJet[i]->pz() );
         jetVecVars["LabFrame_PF_candidate_energy"].push_back(daughtersOfJet[i]->energy() );
 
+        jetVecVars["LabFrame_PF_candidate_charge"].push_back(daughtersOfJet[i]->charge() );
+        jetVecVars["LabFrame_PF_candidate_pdgId"].push_back(daughtersOfJet[i]->pdgId() );
+        jetVecVars["LabFrame_PF_candidate_abspdgId"].push_back(absPDGID );
+        jetVecVars["LabFrame_PF_candidate_isElectron"].push_back(isElectron );
+        jetVecVars["LabFrame_PF_candidate_isMuon"].push_back(isMuon );
+        jetVecVars["LabFrame_PF_candidate_isPhoton"].push_back(isPhoton );
+        jetVecVars["LabFrame_PF_candidate_isNeutralHadron"].push_back(isNeutralHadron );
+        jetVecVars["LabFrame_PF_candidate_isChargedHadron"].push_back(isChargedHadron );
+
+        jetVecVars["LabFrame_PF_candidate_deltaEta"].push_back(deltaEta );
+        jetVecVars["LabFrame_PF_candidate_deltaPhi"].push_back(deltaPhi );
+        jetVecVars["LabFrame_PF_candidate_deltaR"].push_back( TMath::Sqrt( TMath::Sq(deltaEta) + TMath::Sq(deltaPhi) ) ); // Angular separation between the candidate and the jet axis
+        jetVecVars["LabFrame_PF_candidate_logpT"].push_back(logpT );
+        jetVecVars["LabFrame_PF_candidate_logEnergy"].push_back(logEnergy );
+        jetVecVars["LabFrame_PF_candidate_logpTRatio"].push_back(logpT - TMath::Log(jet->pt()) ); // Logarithm of the candidate's pT relative to the jet pT
+        jetVecVars["LabFrame_PF_candidate_logEnergyRatio"].push_back(logEnergy - TMath::Log(jet->energy()) ); // Logarithm of the candidate's energy releative to the jet energy
+
         // PUPPI weights for puppi jets
         if (jetColl == 1){
             pat::PackedCandidate *iparticle = (pat::PackedCandidate *) daughtersOfJet[i];
-	    if(!iparticle){
-	      std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate"<<std::endl;
-	      std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
-	      exit(1);
-	    }
+            if(!iparticle){
+                std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate"<<std::endl;
+                std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
+                exit(1);
+            }
             jetVecVars["PUPPI_weights"].push_back( iparticle->puppiWeight() );
         }
     }
@@ -489,7 +534,6 @@ std::array<std::array<std::array<float, 1>, 31>, 31> boostedJetCamera(std::vecto
 
         // rotate all candidates so that the leading candidate is on the x axis
         icand->RotateY(TMath::Pi()/2.0 - rotTheta);
-
 
         candNum++;
     }
