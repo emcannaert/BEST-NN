@@ -154,7 +154,7 @@ if [[ $(voms-proxy-info -timeleft) > 3600 ]] && [[ $(voms-proxy-info -vo) == "cm
     echo "${GRN}Valid proxy confirmed!${NC}"
     echo
 else
-    echo "${YEL}Error: Proxy either doesn't exist or will expire soon.${NC} Initializing new proxy..."
+    echo "${YEL}Error: Proxy either doesn't exist or will expire soon. Initializing new proxy...${NC}"
     voms-proxy-init --valid 192:00 -voms cms
     echo
 fi
