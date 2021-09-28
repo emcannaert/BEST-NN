@@ -79,11 +79,11 @@ else # Specific cases, sets up to update specfic datasets.
                 if [[ $OPTARG == "all" ]]; then
                     myParticles=${allParticles[*]}
                 else 
-                    for part in $OPTARG; do    
-                        if [[ ${allParticles[*]} =~ $part ]]; then # Check for valid arguments, then fills array.
-                            myParticles+=($part)
+                    for particle in $OPTARG; do    
+                        if [[ ${allParticles[*]} =~ $particle ]]; then # Check for valid arguments, then fills array.
+                            myParticles+=($particle)
                         else # Invalid arguments trigger error message
-                            echo "${YEL}Error:${NC} Invalid argument for ${CYAN}$opt${NC}: $part"
+                            echo "${YEL}Error:${NC} Invalid argument for ${CYAN}$opt${NC}: $particle"
                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${CYAN}${allParticles[*]}${NC}"
                             echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
                             echo "${RED}Exiting without creating samples...${NC}"
@@ -96,11 +96,11 @@ else # Specific cases, sets up to update specfic datasets.
                 if [[ $OPTARG == "all" ]]; then
                     myYears=${allYears[*]}
                 else
-                    for yr in $OPTARG; do
-                        if [[ ${allYears[*]} =~ $yr ]]; then # Check for valid arguments, then fills array.
-                            myYears+=($yr)
+                    for year in $OPTARG; do
+                        if [[ ${allYears[*]} =~ $year ]]; then # Check for valid arguments, then fills array.
+                            myYears+=($year)
                         else # Invalid arguments trigger error message
-                            echo "${YEL}Error:${NC} Invalid argument for ${GRN}$opt${NC}: $yr"
+                            echo "${YEL}Error:${NC} Invalid argument for ${GRN}$opt${NC}: $year"
                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${GRN}${allYears[*]}${NC}"
                             echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
                             echo "${RED}Exiting without creating samples...${NC}"
@@ -113,11 +113,11 @@ else # Specific cases, sets up to update specfic datasets.
                 if [[ $OPTARG == "all" ]]; then
                     myDatatypes=${allDatatypes[*]}
                 else
-                    for dat in $OPTARG; do
-                        if [[ ${allDatatypes[*]} =~ $dat ]]; then # Check for valid arguments, then fills array.
-                            myDatatypes+=($dat)
+                    for datatype in $OPTARG; do
+                        if [[ ${allDatatypes[*]} =~ $datatype ]]; then # Check for valid arguments, then fills array.
+                            myDatatypes+=($datatype)
                         else # Invalid arguments trigger error message
-                            echo "${YEL}Error:${NC} Invalid argument for ${PURP}$opt${NC}: $dat"
+                            echo "${YEL}Error:${NC} Invalid argument for ${PURP}$opt${NC}: $datatype"
                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${PURP}${allDatatypes[*]}${NC}"
                             echo "${YEL}Run script without any options to see usage:${NC} ./fillSamples.sh"
                             echo "${RED}Exiting without creating samples...${NC}"
@@ -159,7 +159,7 @@ fi
 # Declare $dasFront, an associative array of strings used to search DAS and trim strings:
 declare -Ag dasFront=(  ["HH"]="GluGluToBulkGravitonToHHTo4B_M-"    ["WW"]="BulkGravToWWToWhadWhad_narrow_M-"   ["ZZ"]="BulkGravToZZToZhadZhad_narrow_M-" 
                         ["tt"]="ZprimeToTT_M"                       ["bb"]="ZprimeToBB_narrow_M-"               ["QCD"]="QCD_Pt_" )
-# Declare $dasBack, an associative array of strings used to search DAS trim strings:
+# Declare $dasBack, an associative array of strings used to search DAS and trim strings:
 declare -Ag dasBack=( ["HH"]="_narrow" ["WW"]="_Tune" ["ZZ"]="_Tune" ["tt"]="_W" ["bb"]="_Tune" ["QCD"]="_Tune" )
 # The mass point for each sample will the substring in $dasResults that is between $dasFront and $dasBack; the above arrays will also be used to isolate the mass points.
 
@@ -254,16 +254,16 @@ checkDASFiles(){ ################## Takes input as: "checkDASFiles dataset"
 
 # This loop will create the sample text files, search for the datasets on DAS, check for version, and fill the text files accordingly.
 # It will also check for a previous set of sample files, and report any new datasets.
-for dat in ${myDatatypes[*]}; do # Loop over user chosen datatypes
-    if [[ $dat == "data" ]] ; then break; fi # skips the loop for data, not implemented yet
-    echo "\n${PURP}Beginning $dat...${NC}"
+for datatype in ${myDatatypes[*]}; do # Loop over user chosen datatypes
+    if [[ $datatype == "data" ]] ; then break; fi # skips the loop for data, not implemented yet
+    echo "\n${PURP}Beginning $datatype...${NC}"
 
-    for yr in ${myYears[*]}; do # Loop over user chosen years
-        echo "\n${GRN}Beginning $yr...${NC}"
+    for year in ${myYears[*]}; do # Loop over user chosen years
+        echo "\n${GRN}Beginning $year...${NC}"
 
         # Define file names
-        fileToWrite="../../samples/${dat}_${yr}.txt"
-        filePrevious="../../samples/previous/${dat}_${yr}.txt"
+        fileToWrite="../../samples/${dat}_${year}.txt"
+        filePrevious="../../samples/previous/${datatype}_${year}.txt"
         if [[ -f "$fileToWrite" ]] ; then # Triggers if there is already a set of sample files
             if [[ -f "$filePrevious" ]]; then # If a previous set of samples already exists, delete it
                 echo "${YEL}Deleting old previous sample file at:${NC} $filePrevious"        
@@ -275,13 +275,13 @@ for dat in ${myDatatypes[*]}; do # Loop over user chosen datatypes
         elif [[ -f "$filePrevious" ]]; then
             echo "${YEL}No current sample file detected. Will use, but not change, previous sample file: $filePrevious"
         else
-            echo "${YEL}No current or previous sample files detected. Will build fresh ${GRN}$yr ${PURP}$dat ${YEL}sample files from only the user inputted${NC} ${CYAN}particle ${YEL}selections. This might take a few minutes."
+            echo "${YEL}No current or previous sample files detected. Will build fresh ${GRN}$year ${PURP}$dat ${YEL}sample files from only the user inputted${NC} ${CYAN}particle ${YEL}selections. This might take a few minutes."
         fi
 
         echo "# Mass Point, Crab Directory, \tDataset Name, \t File With Most Events" >> $fileToWrite # Header for sample file
-        for part in ${allParticles[*]}; do # Loop over particles
-            echo "\n${CYAN}Beginning $part...${NC}"
-            echo "#$part" >> $fileToWrite # Labels the particle sections in sample file
+        for particle in ${allParticles[*]}; do # Loop over particles
+            echo "\n${CYAN}Beginning $particle...${NC}"
+            echo "#$particle" >> $fileToWrite # Labels the particle sections in sample file
 
             if [[ -f "$filePrevious" ]]; then # If a previous sample file exists, read in the corresponding particle section of data
                 targetSection=false
@@ -294,7 +294,7 @@ for dat in ${myDatatypes[*]}; do # Loop over user chosen datatypes
                 IFS=',' # This lets us read in the comma separated sample files
                 # This loop reads the previous sample file, stores values to arrays
                 while read first second third fourth; do 
-                    if [[ "$first" == "#$part" ]]; then # Triggers when reaching the beginning of the relevant lines for this $part loop
+                    if [[ "$first" == "#$particle" ]]; then # Triggers when reaching the beginning of the relevant lines for this $particle loop
                         targetSection=true
                     elif [[ "$targetSection" == true ]]; then
                         if [[ ${allParticles[*]} =~ "${first:1}" ]]; then break; fi # Ends while loop when the next particle section of datasets begins 
@@ -307,8 +307,8 @@ for dat in ${myDatatypes[*]}; do # Loop over user chosen datatypes
                 IFS=$OLDIFS # Resets $IFS so the rest of the code works
 
                 # Now compare with current datasets
-                if [[ ${myParticles[*]} =~ $part ]]; then # Checks if user specified this particle. If so, check DAS for updates to the list of datasets.
-                    checkDASDatasets $part $yr $dat # Check DAS for user chosen particle/year/datatype set, which loads several arrays/strings/counters.
+                if [[ ${myParticles[*]} =~ $particle ]]; then # Checks if user specified this particle. If so, check DAS for updates to the list of datasets.
+                    checkDASDatasets $particle $year $datatype # Check DAS for user chosen particle/year/datatype set, which loads several arrays/strings/counters.
                     j=0 # Index for the set of Previous arrays (if there is a new mass point found by checkDASDatasets, then the size of $dasDatasets and $dasPrevious will not match)
                     newCounter=0 # Keeps track of how many new files are found
 
@@ -335,18 +335,18 @@ for dat in ${myDatatypes[*]}; do # Loop over user chosen datatypes
                     done
 
                     echo "\t${YEL}${v2Counter} ${BLUE}out of ${YEL}${#dasMasses[@]} ${BLUE}datasets were ${YEL}v2 datasets, ${BLUE}and ${YEL}$newCounter new mass points ${BLUE}were found.${NC}"
-                    echo "\t${BLUE}Wrote${NC} /${CYAN}${dasFront[$part]}${NC}[masses]${CYAN}${dasBack[$part]}${NC}*/${GRN}${dasYear}${NC}*/${PURP}MINIAODSIM ${BLUE}datasets to:${NC} ${fileToWrite}"
+                    echo "\t${BLUE}Wrote${NC} /${CYAN}${dasFront[$particle]}${NC}[masses]${CYAN}${dasBack[$particle]}${NC}*/${GRN}${dasYear}${NC}*/${PURP}MINIAODSIM ${BLUE}datasets to:${NC} ${fileToWrite}"
 
                 else # If the user did not specify the particle, and a Previous sample file exists, simply copy the previous file for that particle.
-                    echo "${CYAN}Copying $part...${NC}"        
+                    echo "${CYAN}Copying $particle...${NC}"        
                     for j in ${!dasPrevious[*]}; do
                         # Write the dataset to the samples file; using Previous results saves time checking DAS for individual files
                         echo "${massPrevious[$j]},${crabPrevious[$j]},${dasPrevious[$j]},${dasFilePrevious[$j]}" >> $fileToWrite 
                     done
                 fi     
             else # Triggers if there is not a previous sample file
-                if [[ ${myParticles[*]} =~ $part ]]; then # Checks if user specified this particle. If so, check DAS for datasets and fill sample file.
-                    checkDASDatasets $part $yr $dat # Check DAS for user submitted particle/year/datatype set, loads several arrays/strings/counters, prints out v1 vs. v2 dataset counters
+                if [[ ${myParticles[*]} =~ $particle ]]; then # Checks if user specified this particle. If so, check DAS for datasets and fill sample file.
+                    checkDASDatasets $particle $year $datatype # Check DAS for user submitted particle/year/datatype set, loads several arrays/strings/counters, prints out v1 vs. v2 dataset counters
                     
                     for mass in ${dasMasses[*]}; do # Begin loop over dataset results
                         # Check DAS for file with most events, and write new dataset information to samples file:
@@ -355,9 +355,9 @@ for dat in ${myDatatypes[*]}; do # Loop over user chosen datatypes
                     done
                     
                     echo "\t${YEL}${v2Counter} ${BLUE}out of ${YEL}${#dasMasses[@]} ${BLUE}datasets were ${YEL}v2 datasets.${NC}"
-                    echo "\t${BLUE}Wrote${NC} /${CYAN}${dasFront[$part]}${NC}[masses]${CYAN}${dasBack[$part]}${NC}*/${GRN}${dasYear}${NC}*/${PURP}MINIAODSIM ${BLUE}datasets to:${NC} ${fileToWrite}"
+                    echo "\t${BLUE}Wrote${NC} /${CYAN}${dasFront[$particle]}${NC}[masses]${CYAN}${dasBack[$particle]}${NC}*/${GRN}${dasYear}${NC}*/${PURP}MINIAODSIM ${BLUE}datasets to:${NC} ${fileToWrite}"
                 else
-                    echo "${CYAN}Skipping $part...${NC}"
+                    echo "${CYAN}Skipping $particle...${NC}"
                 fi
             fi
         done
