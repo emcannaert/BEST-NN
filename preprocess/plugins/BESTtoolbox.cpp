@@ -120,17 +120,18 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
     // Jet four vector and Soft Drop info
-    besVars["jetAK8_phi"] = jet->phi();
-    besVars["jetAK8_eta"] = jet->eta();
-    besVars["jetAK8_pt"] = jet->pt();
-    besVars["jetAK8_mass"] = jet->mass();
-    besVars["bDisc"] = jet->bDiscriminator("pfDeepCSVJetTags:probb") + jet->bDiscriminator("pfDeepCSVJetTags:probbb");
+    besVars["jetAK8_phi"]   = jet->phi();
+    besVars["jetAK8_eta"]   = jet->eta();
+    besVars["jetAK8_pt"]    = jet->pt();
+    besVars["jetAK8_mass"]  = jet->mass();
+    besVars["bDisc"]        = jet->bDiscriminator("pfDeepCSVJetTags:probb") + jet->bDiscriminator("pfDeepCSVJetTags:probbb");
+    besVars["bDisc_probb"]  = jet->bDiscriminator("pfDeepCSVJetTags:probb");
+    besVars["bDisc_probbb"] = jet->bDiscriminator("pfDeepCSVJetTags:probbb");
 
-    // Abbott: Update these else if's to a switch/case?
     // Deep AK8
-    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
-    std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
-    std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
+    // std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
+    // std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
+    // std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
     besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
     besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
     besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
@@ -140,6 +141,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
     besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});        
     besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    // Abbott: Update these else if's to a switch/case? Wait probably not. Ask Johan about what this is
     float epsilon = 1e-4;
     // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
     if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
@@ -169,6 +171,22 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
     else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
     else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+
+    // Jet Charge = (1/sum{pT^0.6}) * sum{q * pT^0.6}
+    float jetCharge = 0;
+    float jetChargeNorm = 0;
+    for(int subJetIndex = 0; subJetIndex<(int)jet->numberOfDaughters(); subJetIndex++) {
+        float subJetPt = jet->daughter(subJetIndex)->pt();
+        jetCharge += pow(subJetPt,0.6)*jet->daughter(subJetIndex)->charge();
+        jetChargeNorm += pow(subJetPt,0.6);
+    }
+    if (jetChargeNorm > 0) {
+        jetCharge = jetCharge/jetChargeNorm;
+    } else {
+        jetCharge = -99;
+    }
+    besVars["jetAK8_charge"] = jetCharge;
+
 
     // Store Subjettiness info
     if(jetColl == 0){ // CHS jets
@@ -201,8 +219,33 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
             std::cout << "This will exit, invalid subjet 1" << std::endl;
                 exit(1);
         }
-        besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
-        besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[1]->bDiscriminator("pfDeepCSVJetTags:probbb");
+        // Fill leading subjet bDisc variables, and get maximum bDisc values
+        double maxbDisc = 0;
+        double imaxbDisc;
+        for (unsigned int isubjet=0; isubjet < subjets.size(); isubjet++) {
+            double bDiscVal = subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probbb");
+            
+            // Find max bDisc value and index
+            if (bDiscVal > maxbDisc) { 
+                maxbDisc  = bDiscVal;
+                imaxbDisc = isubjet;
+            }
+
+            // Fill BES var for leading two subjets
+            if (isubjet <= 1) { // Only triggers for first 2 iterations of loop, the leading subjets
+                std::string leadingSubJet = std::to_string(isubjet + 1); // this is either 1 or 2, the leading subjets, which correspond to index 0 and 1 for isubjet
+                besVars["bDisc"+leadingSubJet]           = bDiscVal;
+                besVars["bDisc"+leadingSubJet+"_probb"]  = subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probb");
+                besVars["bDisc"+leadingSubJet+"_probbb"] = subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probbb");
+            }       
+        }
+        besVars["bDiscSubJet_Max"] = maxbDisc;
+        besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
+        // separate these like the above abbott
+        // maximum subjet CSV value -> loop through all subjets, always store 0 and 1, but do them all and store the index + value of largest probb + probbb
+        // sep branch bDisc_Max and bDisc_Max_i
+        // besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
+        // besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[1]->bDiscriminator("pfDeepCSVJetTags:probbb");
     }
 }
 
@@ -232,7 +275,11 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
             jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
         }
     }
-    
+    // abbott start to process samples to prepare for BEST training
+    // big task: format converter->SV stuff disabled there
+    // SV number is variable, NN needs a fixed amount of inputs...what do?
+    // plot nSecondaryVertices, if managable choose 10 or 5 and pad out zeroes
+    // doo root tree scans, root -b file.root, get tree, tree->Scan("nSecVert:SV_pt","cut") <- check that we are seeing all the SV that are there
     besVars["nSecondaryVertices"] = numMatched;
 }
 
@@ -249,13 +296,18 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
                       std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                       std::vector<pat::Jet>::const_iterator jet, std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets,
                       std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > &imgVars,
-                      int mass){
+                    //   int mass){
+                      std::string mass){
 
     // get 4 vector for heavy object rest frame
     typedef reco::Candidate::PolarLorentzVector fourv;
     fourv thisJet = jet->polarP4();
     TLorentzVector thisJetLV(0.,0.,0.,0.);
-    thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)mass );
+    if      ( mass == "ak8" )           thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)jet->mass() );
+    else if ( mass == "ak8_SoftDrop" )  thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), jet->userFloat("ak8PFJetsPuppiSoftDropMass") );
+    else                                thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), std::stof(mass) ); // The "GeV" automatically gets trimmed when converting to float
+    // thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)mass );
+    // Possibly adjust pT as well? think about physics (and exp) like assume measuring higgs, see this mass, what correction to pT to get best fit? dif for dif signals 
 
     std::vector<TLorentzVector> particles;
     std::vector<math::XYZVector> particles2;
@@ -271,7 +323,6 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
     double sumPz = 0;
     double sumP = 0;
-
     // Boost to object rest frame
     for(unsigned int i = 0; i < daughtersOfJet.size(); i++){
         // Do not include low pT particles
@@ -279,7 +330,6 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
         // Create 4 vector to boost to Higgs frame
         TLorentzVector thisParticleLV( daughtersOfJet[i]->px(), daughtersOfJet[i]->py(), daughtersOfJet[i]->pz(), daughtersOfJet[i]->energy() );
-
         // Boost to heavy object rest frame
         thisParticleLV.Boost( -thisJetLV.BoostVector() );
 
@@ -297,14 +347,14 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
         FJparticles.push_back( fastjet::PseudoJet( thisParticleLV.X(), thisParticleLV.Y(), thisParticleLV.Z(), thisParticleLV.T() ) );
 
         // Sum rest frame momenta for asymmetry calculation, but only for pt > 10
-        //Why?????
+        // Why?????
         // if (daughtersOfJet[i]->pt() < 10) continue;
         sumPz += thisParticleLV.Pz();
-        sumP += abs( thisParticleLV.P() );
+        sumP  += abs( thisParticleLV.P() );
     }
-
-    std::string frame = std::to_string(mass)+"GeV";
-
+    // std::string frame = std::to_string(mass)+"GeV";
+    // std::string frame = mass+"GeV";
+    std::string frame = mass;
     // Fox Wolfram Moments
     double fwm[5] = { 0.0, 0.0 ,0.0 ,0.0,0.0};
     FWMoments( particles, fwm);
@@ -322,27 +372,25 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     besVars["thrust_"+frame]     = thrustCalculator.thrust();
 
     // Jet Asymmetry
-    double asymmetry             = sumPz/sumP;
+    double asymmetry            = sumPz/sumP;
     besVars["asymmetry_"+frame] = asymmetry;
 
     // Recluster the jets in the heavy object rest frame
     fastjet::JetDefinition jet_def(fastjet::antikt_algorithm, 0.4);
     fastjet::ClusterSequence cs(FJparticles, jet_def);
     // std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_pt(cs.inclusive_jets(20.0));
-    //Changed to 0.0 here, the 20.0 cuts on pT relative to a meaningless axis
+    // Changed to 0.0 here, the 20.0 cuts on pT relative to a meaningless axis
     // std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_pt(cs.inclusive_jets(0.0));
     std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_E(cs.inclusive_jets(0.0));
     restJets[frame+"Frame"] = jetsFJ;
-
     // Store reclustered jet info
     std::vector<TLorentzVector> rotationJets;
     for(unsigned int i = 0; i < jetsFJ.size(); i++){
-
         // make a TLorentzVector for the current clustered rest frame jet
         TLorentzVector iJetLV(jetsFJ[i].px(), jetsFJ[i].py(), jetsFJ[i].pz(), jetsFJ[i].e() );
         rotationJets.push_back(iJetLV);
 
-        // get fest frame jet four vector combinations
+        // get rest frame jet four vector combinations
         switch(i){
             case 0:
                 // jet12LV   = jet12LV   + iJetLV;
@@ -371,7 +419,6 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
                 break;
         }
     }
-
     if (rotationJets.size()<2) return false;
     
     // make the rest frame jet images
@@ -388,7 +435,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     besVars["jet23_CosTheta_"+frame]   = jet23LV.CosTheta();
     besVars["jet1234_CosTheta_"+frame] = jet1234LV.CosTheta();
     besVars["nJets_"+frame] = jetsFJ.size();
-    
+
     return true;
 }
 
@@ -401,7 +448,8 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
 void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet,
                        std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
-                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
+                    //    std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
+                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> restMasses,
                        std::map<std::string, std::vector<float> > &jetVecVars, int jetColl ){
     // loop over lab frame candidates
     for(unsigned int i = 0; i < daughtersOfJet.size(); i++){
@@ -418,7 +466,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         float logEnergy = TMath::Log(daughtersOfJet[i]->energy());
 
         // Determine particle type, set boolean flags
-        int absPDGID = abs( daughtersOfJet[i]->pdgId() );
+        int  absPDGID = abs( daughtersOfJet[i]->pdgId() );
         bool isElectron = false;
         bool isMuon = false;
         bool isPhoton = false;
@@ -474,15 +522,13 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         }
     }
 
-
     // loop over rest frames
     for(unsigned int iFrame = 0; iFrame < restMasses.size(); iFrame++){
 
-        std::string frame = std::to_string(restMasses[iFrame]);
-
+        // std::string frame = std::to_string(restMasses[iFrame]);
+        std::string frame = restMasses[iFrame];
         // loop over candidates in the rest frame
         for(auto icand = boostedDaughters[frame+"Frame"].begin(); icand != boostedDaughters[frame+"Frame"].end(); icand++){
-
             // store the rest frame candidate
             jetVecVars[frame+"Frame_PF_candidate_px"].push_back(icand->Px() );
             jetVecVars[frame+"Frame_PF_candidate_py"].push_back(icand->Py() );
@@ -492,7 +538,6 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
         // loop over rest frame jets
         for(auto ijet = restJets[frame+"Frame"].begin(); ijet != restJets[frame+"Frame"].end(); ijet++){
-
             // store the rest frame jet information
             jetVecVars[frame+"Frame_jet_px"].push_back(ijet->px());
             jetVecVars[frame+"Frame_jet_py"].push_back(ijet->py());

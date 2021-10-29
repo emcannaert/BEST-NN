@@ -15,6 +15,7 @@
 # Can I run crab in parallel?
 # Test that specific cases run correctly
 # Make log file, config file, and crab dir uniform?
+# Crab resubmitter, waits for hours?
 
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -175,8 +176,8 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
     if [[ $dat == "data" ]] ; then continue; fi #skips the loop for data, not implemented yet
 
     for yr in ${myYears[*]}; do # Loop over years
-
-        yearDir="submit$yr"
+        # if [[ $yr != "2017" ]]; then continue; fi
+        yearDir="jobs$yr"
         mkdir -p $yearDir # Make sure $yearDir exists
         echo "${YEL}Entering $yearDir...${NC}"
         cd $yearDir
@@ -206,26 +207,26 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
             for f in $listOfScripts; do
                 trimstring=${f#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
-                crab submit $f >> logFiles/$crabName.txt &
-                # sleep 1s # If crab jobs are submitted too quickly, some don't go through
-                massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
+                crab submit $f >> logFiles/$crabName.txt 
+                sleep 5s # If crab jobs are submitted too quickly, some don't go through
+                # massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
 
             done
             # Could rapid submit all files, add masses to list, then loop over them to check
         done
         
-        echo "nap time"
-        sleep 60s
-        echo "checking dirs"
-        for m in ${massPnts[*]}; do
-            echo $m
-            bestDir="CrabBEST/"*"_${mass}_trees"*
-            if [[ ! -d $bestDir ]]; then
-                echo "sad dir"
-                echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
-                # crab submit $f >> logFiles/$crabName.txt &
-            fi
-        done
+        # echo "nap time"
+        # sleep 60s
+        # echo "checking dirs"
+        # for m in ${massPnts[*]}; do
+        #     echo $m
+        #     bestDir="CrabBEST/"*"_${mass}_trees"*
+        #     if [[ ! -d $bestDir ]]; then
+        #         echo "sad dir"
+        #         echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
+        #         # crab submit $f >> logFiles/$crabName.txt &
+        #     fi
+        # done
 
 
         
@@ -236,15 +237,15 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
 done
 
 echo "jobs submitted"
-sleep 60s
+# sleep 60s
 
-# auto kill
-for d in */CrabBEST/*/ ; do
-    # echo $d | cut -d '/' -f 2 
-    crab kill -d $d
-done
+# # auto kill
+# for d in */CrabBEST/*/ ; do
+#     # echo $d | cut -d '/' -f 2 
+#     crab kill -d $d
+# done
 
-echo "jobs killed"
+# echo "jobs killed"
 
 #Undo the alias used for this script
 unalias echo

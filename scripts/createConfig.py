@@ -105,8 +105,8 @@ for dat in myDatatypes:
     if dat == "data": continue # Skip data, not implemented yet
 
     for yr in myYears:
- 
-        crabPath = "submit" + yr + "/config" # Path to config directory
+        # if not yr == "2017" : continue
+        crabPath = "jobs" + yr + "/config" # Path to config directory
         if not os.path.exists(crabPath): os.makedirs(crabPath) # If config directory doesn't exist, create it
 
         # Load Global Tag:
@@ -141,10 +141,11 @@ for dat in myDatatypes:
 
             # Create the crab config files for each year, particle, and mass point
             for key, value in datasetDict[dat][yr][part].items(): # Iterate through dictionary by mass point (key) and [crabdir,dataset,file] (value)
-
                 if part == "QCD":
+                    # if not key == "1400to1800": continue
                     configFile = crabPath + "/crab_" + part +"_Pt_" + key + ".py" # Create unique config file name, like "crab_QCD_Pt_470to600.py"
                 else:
+                    # if not key == "4000": continue
                     configFile = crabPath + "/crab_" + part +"_M_" + key + ".py" # Create unique config file name, like "crab_HH_M_500.py"
 
                 if os.path.exists(configFile): os.remove(configFile) # Delete old crab config file

@@ -236,6 +236,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_pt");
     listOfVars.push_back("jetAK8_mass");
     listOfVars.push_back("jetAK8_SoftDropMass");
+    listOfVars.push_back("jetAK8_charge");
 
     // Deep AK8
     listOfVars.push_back("jetAK8_deepAK8_rawL");
@@ -268,8 +269,17 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     // Deep Jet b Discriminants
     listOfVars.push_back("bDisc");
+    listOfVars.push_back("bDisc_probb");
+    listOfVars.push_back("bDisc_probbb");
     listOfVars.push_back("bDisc1");
+    listOfVars.push_back("bDisc1_probb");
+    listOfVars.push_back("bDisc1_probbb");
     listOfVars.push_back("bDisc2");
+    listOfVars.push_back("bDisc2_probb");
+    listOfVars.push_back("bDisc2_probbb");
+    listOfVars.push_back("bDiscSubJet_Max");
+    listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
+    
 
     // nsubjettiness
     listOfVars.push_back("jetAK8_Tau4");
@@ -280,17 +290,24 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_Tau21");
 
     // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
-    std::vector<int> restMasses;
+    std::vector<std::string> restMasses;
     restMasses.clear();
-    unsigned int iterMass = 1;
-    while(iterMass <= 200) {
-        restMasses.push_back(iterMass); // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
-        iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+    unsigned int iterMass = 5;
+    while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+        // restMasses.push_back(iterMass); 
+        // iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+        restMasses.push_back(std::to_string(iterMass)+"GeV"); 
+        iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
     }
+    // Add some extreme masses to investigate, and add ak8 masses
+    restMasses.push_back("500GeV"); restMasses.push_back("600GeV"); restMasses.push_back("700GeV"); restMasses.push_back("800GeV"); restMasses.push_back("900GeV"); restMasses.push_back("1000GeV");
+    restMasses.push_back("ak8"); restMasses.push_back("ak8_SoftDrop");
 
     // Now use this vector to generate the variable names to add:
     for (unsigned int imass=0; imass < restMasses.size(); imass++) {
-        std::string frame = std::to_string(restMasses[imass])+"GeV";
+        // std::string frame = std::to_string(restMasses[imass])+"GeV";
+        std::string frame = restMasses[imass];
+
 
         // Fox Wolfram Moments
         listOfVars.push_back("FoxWolfH1_"+frame);
@@ -360,7 +377,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         listOfVecVars.push_back("LabFrame_PF_candidate_isPhoton");
         listOfVecVars.push_back("LabFrame_PF_candidate_isNeutralHadron");
         listOfVecVars.push_back("LabFrame_PF_candidate_isChargedHadron");
-        
+
         listOfVecVars.push_back("LabFrame_PF_candidate_deltaEta");
         listOfVecVars.push_back("LabFrame_PF_candidate_deltaPhi");
         listOfVecVars.push_back("LabFrame_PF_candidate_deltaR");
@@ -512,13 +529,18 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     map<string, vector<fastjet::PseudoJet> > restJets;
 
     // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
-    std::vector<int> restMasses;
+    std::vector<std::string> restMasses;
     restMasses.clear();
-    unsigned int iterMass = 1;
-    while(iterMass <= 200) {
-        restMasses.push_back(iterMass); // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
-        iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+    unsigned int iterMass = 5;
+    while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+        // restMasses.push_back(iterMass); 
+        // iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+        restMasses.push_back(std::to_string(iterMass)+"GeV"); 
+        iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
     }
+    // Add some extreme masses to investigate, and add ak8 masses
+    restMasses.push_back("500GeV"); restMasses.push_back("600GeV"); restMasses.push_back("700GeV"); restMasses.push_back("800GeV"); restMasses.push_back("900GeV"); restMasses.push_back("1000GeV");
+    restMasses.push_back("ak8"); restMasses.push_back("ak8_SoftDrop");
 
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
@@ -527,7 +549,8 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         restJets.clear();
         TLorentzVector jet(ijet->px(), ijet->py(), ijet->pz(), ijet->energy() );
 
-        if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4 &&ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 10) {
+        // if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4 &&ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 10) {
+        if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4) {
 
             // gen particle loop, only relevant for non-QCD jets
             if (jetType_ !=0){
@@ -567,7 +590,6 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 endjetloop:; // When goto is triggered in the imass loop, the code jumps to here. This is like using "continue" twice, to skip this iteration of the ijet loop.
             }
         }
-
         //-------------------------------------------------------------------------------
         // Clear and Reset all tree variables -------------------------------------------
         //-------------------------------------------------------------------------------

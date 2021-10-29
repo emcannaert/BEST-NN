@@ -34,7 +34,7 @@ pids=
 for d in */CrabBEST/*/ ; do
     # echo $d | cut -d '/' -f 2 
     # echo "$d" >> $checkFile
-    crab status $d | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $checkFile &
+    crab status $d | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $checkFile 
     pids+=" $!"
     # crab status $d >> $checkFile &
 done

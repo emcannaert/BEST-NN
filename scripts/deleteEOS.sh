@@ -22,9 +22,14 @@
 #     done
 # done
 
+# do eosls /store/user/msabbott/ >> dirs.txt first
 file="dirs.txt"
 
 while read line; do # Reads the previous sample file, stores values to arrays
-    echo "deleting $line"
-    eos root://cmseos.fnal.gov rm -rf $line
+    fullPath="/eos/uscms/store/user/msabbott/$line"
+    # fullPath="/eos/user/m/msabbott/$line"
+    echo "deleting $fullPath"
+    eos root://cmseos.fnal.gov rm -rf $fullPath
+    # echo "deleting $line"
+    # eos root://cmseos.fnal.gov rm -rf $line
 done < "dirs.txt"

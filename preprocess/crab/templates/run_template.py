@@ -68,7 +68,7 @@ updateJetCollection(
 # Apply a preselction
 process.selectedAK8Jets = cms.EDFilter('PATJetSelector',
                                         src = cms.InputTag('slimmedJetsAK8'),
-                                        cut = cms.string('pt > 500.0 && abs(eta) < 2.4'),
+                                        cut = cms.string('500.0 < pt && pt < 3500.0 && abs(eta) < 2.4'),
                                         filter = cms.bool(True)
 )
 
