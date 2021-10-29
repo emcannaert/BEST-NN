@@ -213,7 +213,7 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
         if [[ $year == "2016" ]] && [[ $dataset =~ "RunIISummer20UL16MiniAODAPV" ]] ; then continue; fi
 
         # Skip QCD datasets with low pT, and also any MuEnriched datasets that may be present:
-        if [[ $particle == "QCD" ]] && [[ $dataset =~ ("15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"MuEnriched") ]]; then continue; fi
+        if [[ $particle == "QCD" ]] && [[ $dataset =~ ("15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"Enriched"|"bcToE") ]]; then continue; fi
 
         # Now trim the dataset string to get the mass point and build the crab directory name:
         trimString=${dataset#*${dasFront[$particle]}} # Trims the corresponding $dasFront string from the front of the $dasResults string 
@@ -262,7 +262,7 @@ for datatype in ${myDatatypes[*]}; do # Loop over user chosen datatypes
         echo "\n${GRN}Beginning $year...${NC}"
 
         # Define file names
-        fileToWrite="../../samples/${dat}_${year}.txt"
+        fileToWrite="../../samples/${datatype}_${year}.txt"
         filePrevious="../../samples/previous/${datatype}_${year}.txt"
         if [[ -f "$fileToWrite" ]] ; then # Triggers if there is already a set of sample files
             if [[ -f "$filePrevious" ]]; then # If a previous set of samples already exists, delete it
