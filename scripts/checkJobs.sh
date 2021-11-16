@@ -40,5 +40,6 @@ for d in */CrabBEST/*/ ; do
 done
 # echo ${pids[*]}
 wait $pids 
+echo "###############################" >> $checkFile
 # sort -o $checkFile{,}
 echo -e "\n${YEL}Finished checking jobs. Find complete output at${NC} $checkFile" 

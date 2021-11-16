@@ -292,22 +292,30 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
     std::vector<std::string> restMasses;
     restMasses.clear();
-    unsigned int iterMass = 5;
+    unsigned int iterMass = 50;
     while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
         // restMasses.push_back(iterMass); 
         // iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
         restMasses.push_back(std::to_string(iterMass)+"GeV"); 
-        iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
+        // iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
+        iterMass += 50;
     }
-    // Add some extreme masses to investigate, and add ak8 masses
-    restMasses.push_back("500GeV"); restMasses.push_back("600GeV"); restMasses.push_back("700GeV"); restMasses.push_back("800GeV"); restMasses.push_back("900GeV"); restMasses.push_back("1000GeV");
+    
+    // unsigned int iterMass = 5;
+    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+    //     // restMasses.push_back(iterMass); 
+    //     // iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+    //     restMasses.push_back(std::to_string(iterMass)+"GeV"); 
+    //     iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
+    // }
+    // // Add some extreme masses to investigate, and add ak8 masses
+    // restMasses.push_back("500GeV"); restMasses.push_back("600GeV"); restMasses.push_back("700GeV"); restMasses.push_back("800GeV"); restMasses.push_back("900GeV"); restMasses.push_back("1000GeV");
+    restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z"); restMasses.push_back("Higgs"); restMasses.push_back("Top");
     restMasses.push_back("ak8"); restMasses.push_back("ak8_SoftDrop");
-
     // Now use this vector to generate the variable names to add:
     for (unsigned int imass=0; imass < restMasses.size(); imass++) {
         // std::string frame = std::to_string(restMasses[imass])+"GeV";
         std::string frame = restMasses[imass];
-
 
         // Fox Wolfram Moments
         listOfVars.push_back("FoxWolfH1_"+frame);
@@ -531,15 +539,25 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
     std::vector<std::string> restMasses;
     restMasses.clear();
-    unsigned int iterMass = 5;
+    unsigned int iterMass = 50;
     while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
         // restMasses.push_back(iterMass); 
         // iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
         restMasses.push_back(std::to_string(iterMass)+"GeV"); 
-        iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
+        // iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
+        iterMass += 50;
     }
-    // Add some extreme masses to investigate, and add ak8 masses
-    restMasses.push_back("500GeV"); restMasses.push_back("600GeV"); restMasses.push_back("700GeV"); restMasses.push_back("800GeV"); restMasses.push_back("900GeV"); restMasses.push_back("1000GeV");
+    
+    // unsigned int iterMass = 5;
+    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+    //     // restMasses.push_back(iterMass); 
+    //     // iterMass += ( (iterMass < 15) || (iterMass >= 80 && iterMass < 95) || (iterMass >= 165 && iterMass < 180) ) ? 1: 5;
+    //     restMasses.push_back(std::to_string(iterMass)+"GeV"); 
+    //     iterMass += ( (iterMass >= 110 && iterMass < 160) || (iterMass >= 180 && iterMass < 220) ) ? 1: 5; // Increment by 1 if between 110 and 160 or 180 and 220, else increment by 5 
+    // }
+    // // Add some extreme masses to investigate, and add ak8 masses
+    // restMasses.push_back("500GeV"); restMasses.push_back("600GeV"); restMasses.push_back("700GeV"); restMasses.push_back("800GeV"); restMasses.push_back("900GeV"); restMasses.push_back("1000GeV");
+    restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z"); restMasses.push_back("Higgs"); restMasses.push_back("Top");
     restMasses.push_back("ak8"); restMasses.push_back("ak8_SoftDrop");
 
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){

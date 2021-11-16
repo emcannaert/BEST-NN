@@ -4,7 +4,7 @@
 #-----------------------------------------------------------------------------------------
 # Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-#135
+#134
 
 # Better PATH variables? 
 # Check that all the jobs submit (is 5 seconds good enough?)
@@ -162,6 +162,10 @@ else
     echo
 fi
 
+##### REMOVE THIS
+myYears="2017"
+# myParticles="QCD"
+
 ################# At this point, the code unique to this file begins: 
 
 # Call createConfig.py to generate the config files:
@@ -187,7 +191,7 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
 
         declare -a massPnts=()
         for part in ${myParticles[*]}; do # Loop over particles
-
+            # if [[ $part += "QCD" ]] ; then continue; fi
             # UPDATE THIS TO USE ARRAYS INSTEAD OF WHATS IN THE DIR? COULD BE A WAY TO AUTOCHECK IF EVERYTHING SUBMITS
             # wait this should just use the list of crab dirs that I already made...
 

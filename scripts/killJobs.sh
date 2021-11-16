@@ -19,7 +19,7 @@
 echo -e "\n${YEL}Killing jobs..."
 killFile="logKill.txt"
 pids=
-for d in */CrabBEST/*/ ; do
+for d in */CrabBEST/*QCD*/ ; do
     # echo $d | cut -d '/' -f 2 
     crab kill -d $d >> $killFile &
     pids+=" $!"

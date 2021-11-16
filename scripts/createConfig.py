@@ -98,7 +98,7 @@ elif optargs.datatype:
 configtemplateFile = "templates/crab_template.py"
 runtemplateFile = "templates/run_template.py"
 
-# GlobalTags = ["106X_mcRun2_asymptotic_preVFP_v11","106X_mcRun2_asymptotic_v17", "106X_mc2017_realistic_v8", "106X_upgrade2018_realistic_v15_L1v1"]
+GlobalTags = {"2016_APV":"106X_mcRun2_asymptotic_preVFP_v11", "2016":"106X_mcRun2_asymptotic_v17", "2017":"106X_mc2017_realistic_v8", "2018":"106X_upgrade2018_realistic_v15_L1v1"}
 
 print( yelstr("Creating config files...") )
 for dat in myDatatypes:
@@ -109,16 +109,6 @@ for dat in myDatatypes:
         crabPath = "jobs" + yr + "/config" # Path to config directory
         if not os.path.exists(crabPath): os.makedirs(crabPath) # If config directory doesn't exist, create it
 
-        # Load Global Tag:
-        if yr == "2016_APV":
-            GlobalTag = "106X_mcRun2_asymptotic_preVFP_v11"
-        elif yr == "2016":
-            GlobalTag = "106X_mcRun2_asymptotic_v17"
-        elif yr == "2017":
-            GlobalTag = "106X_mc2017_realistic_v8"
-        elif yr == "2018":
-            GlobalTag = "106X_upgrade2018_realistic_v15_L1v1"
-
         for part in myParticles:
 
             # Create the run config files for each year, for each particle
@@ -128,12 +118,15 @@ for dat in myDatatypes:
             runtempf = open(runtemplateFile, "r") # Open template run config file to read 
             for line in runtempf:
                 if "GLOBALTAGFLAG" in line:
-                    runf.write( 'GT = "' + GlobalTag + '"\n' ) # Write global tag (unique by year)
-                elif "PARTICLESTRINGFLAG" in line: 
-                    runf.write( '\t\t\t\t\t\t\t jetType = cms.string("' + part[0] +'"),\n' ) # Write first letter of particle
+                    runf.write( 'GT = "' + GlobalTags[yr] + '"\n' ) # Write global tag (unique by year)
+                elif "MAXEVENTSFLAG" in line: 
+                    if part == "QCD": runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(500))\n' ) # limit max events per file for QCD
+                    else: runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))\n' ) # All other particles use all events                    
                 elif "'myfile.root'" in line: # Write a single sample file to run config file for local runs (this file gets overwritten by CRAB when submitting one of the many crab config files generated below).
                     if part == "QCD": runf.write( '\t\t"' + datasetDict[dat][yr][part]["600to800"][2] + '"\n' ) # QCD uses pT and not mass
                     else: runf.write( '\t\t"' + datasetDict[dat][yr][part]["4000"][2] + '"\n' ) # All other particles across all years have a mass point of 4000
+                elif "PARTICLESTRINGFLAG" in line: 
+                    runf.write( '\t\t\t\t\t\t\t jetType = cms.string("' + part[0] +'"),\n' ) # Write first letter of particle
                 else: 
                     runf.write(line) # Copy the rest of the file
             runf.close
@@ -143,6 +136,7 @@ for dat in myDatatypes:
             for key, value in datasetDict[dat][yr][part].items(): # Iterate through dictionary by mass point (key) and [crabdir,dataset,file] (value)
                 if part == "QCD":
                     # if not key == "1400to1800": continue
+                    if key == "Flat": continue
                     configFile = crabPath + "/crab_" + part +"_Pt_" + key + ".py" # Create unique config file name, like "crab_QCD_Pt_470to600.py"
                 else:
                     # if not key == "4000": continue
