@@ -22,6 +22,7 @@
 #     done
 # done
 
+# Fix this, you can do better
 # do eosls /store/user/msabbott/ >> dirs.txt first
 file="dirs.txt"
 

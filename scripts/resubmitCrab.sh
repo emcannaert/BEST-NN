@@ -7,6 +7,7 @@ echo -e "\n${YEL}Resubmitting jobs..."
 logFile="logResubmit.txt"
 pids=
 for d in */CrabBEST/*/ ; do
+    if [[ "$d" == *"QCD"* ]]; then continue; fi
     # echo $d | cut -d '/' -f 2 
     crab resubmit -d $d >> $logFile 
     # pids+=" $!"

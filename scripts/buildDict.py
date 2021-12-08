@@ -43,9 +43,9 @@ for dat in allDatatypes:
 
 # Write the raw dictionary to a python file, to be imported in other files:
 outputfile = "datasetDictionary.py"
-if os.path.exists(outputfile):
-        os.remove(outputfile)
-file = open(outputfile, "w")
+outpath = "../../scripts/" + outputfile
+if os.path.exists(outpath): os.remove(outpath)
+file = open(outpath, "w")
 file.write("datasetDict = " + str(datasetDict))
 file.close
 

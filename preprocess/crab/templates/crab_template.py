@@ -10,7 +10,7 @@ config.General.transferLogs = True
 config.section_("JobType")
 config.JobType.pluginName = "Analysis"
 
-# This line will be replaced by createConfig.py: config.JobType.psetName = "RUNPARTICLEFLAG"
+# This line will be replaced by createConfig.py: config.JobType.psetName  = "RUNPARTICLEFLAG"
 #config.JobType.inputFiles = ["TMVARegression_MLP.weights.xml"]
 config.JobType.outputFiles = ["BESTInputs.root"]
 #config.JobType.allowUndistributedCMSSW = True
@@ -18,8 +18,7 @@ config.JobType.outputFiles = ["BESTInputs.root"]
 config.section_("Data")
 # This line will be replaced by createConfig.py: config.Data.inputDataset = "DATASETFLAG"
 config.Data.splitting = "Automatic"
-#config.Data.splitting = "FileBased"
-#config.Data.unitsPerJob = 1
+# This line will be replaced by createConfig.py: config.Data.totalUnits   = "MAXUNITSFLAG"
 config.Data.ignoreLocality = True
 config.Data.publication = False
 # This string is used to construct the output dataset name

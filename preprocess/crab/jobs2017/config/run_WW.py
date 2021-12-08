@@ -13,12 +13,12 @@ process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+# This line will be replaced by createConfig.py: process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(MAXEVENTSFLAG))
 
 process.source = cms.Source("PoolSource",
         # Replace root file below with the source file you want to use (overwritten by crab config files that call this run file)
         fileNames = cms.untracked.vstring(
-		"/store/mc/RunIISummer20UL17MiniAOD/BulkGravToWWToWhadWhad_narrow_M-4000_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mc2017_realistic_v6-v2/120000/001661F8-7870-7940-9DAE-D73339E759D7.root"
+		"/store/mc/RunIISummer20UL17MiniAODv2/BulkGravToWWToWhadWhad_narrow_M-4000_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mc2017_realistic_v9-v2/2430000/C0A92BF5-F87F-F143-97CD-A8D3C5997872.root"
                                          )
 )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000

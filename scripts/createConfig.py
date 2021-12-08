@@ -99,6 +99,7 @@ configtemplateFile = "templates/crab_template.py"
 runtemplateFile = "templates/run_template.py"
 
 GlobalTags = {"2016_APV":"106X_mcRun2_asymptotic_preVFP_v11", "2016":"106X_mcRun2_asymptotic_v17", "2017":"106X_mc2017_realistic_v8", "2018":"106X_upgrade2018_realistic_v15_L1v1"}
+QCDMaxEvents = {"470to600":"325000", "600to800":"500000", "800to1000":"500000", "1000to1400":"1000000", "1400to1800":"1000000", "1800to2400":"1500000", "2400to3200":"2000000", "3200toInf":"2000000"}
 
 print( yelstr("Creating config files...") )
 for dat in myDatatypes:
@@ -119,12 +120,14 @@ for dat in myDatatypes:
             for line in runtempf:
                 if "GLOBALTAGFLAG" in line:
                     runf.write( 'GT = "' + GlobalTags[yr] + '"\n' ) # Write global tag (unique by year)
-                elif "MAXEVENTSFLAG" in line: 
-                    if part == "QCD": runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(500))\n' ) # limit max events per file for QCD
-                    else: runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))\n' ) # All other particles use all events                    
+                # elif "MAXEVENTSFLAG" in line: 
+                    # if part == "QCD":   runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(' + QCDMaxEvents[key] + '))\n' ) # limit max events per file for QCD
+                    # else:               runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))\n' ) # All other particles use all events            
+                    # runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))\n' ) # All other particles use all events                   
                 elif "'myfile.root'" in line: # Write a single sample file to run config file for local runs (this file gets overwritten by CRAB when submitting one of the many crab config files generated below).
-                    if part == "QCD": runf.write( '\t\t"' + datasetDict[dat][yr][part]["600to800"][2] + '"\n' ) # QCD uses pT and not mass
-                    else: runf.write( '\t\t"' + datasetDict[dat][yr][part]["4000"][2] + '"\n' ) # All other particles across all years have a mass point of 4000
+                    if part == "QCD":   runf.write( '\t\t"' + datasetDict[dat][yr][part]["600to800"][2] + '"\n' ) # QCD uses pT and not mass
+                    elif part == "tt":  runf.write( '\t\t"' + datasetDict[dat][yr][part]["4000_W40"][2] + '"\n' ) # tt needs a width
+                    else:               runf.write( '\t\t"' + datasetDict[dat][yr][part]["4000"][2] + '"\n' ) # All other particles across all years have a mass point of 4000
                 elif "PARTICLESTRINGFLAG" in line: 
                     runf.write( '\t\t\t\t\t\t\t jetType = cms.string("' + part[0] +'"),\n' ) # Write first letter of particle
                 else: 
@@ -151,7 +154,16 @@ for dat in myDatatypes:
                     elif "RUNPARTICLEFLAG" in line:
                         conf.write( 'config.JobType.psetName = "config/run_' + part +'.py"\n' ) # Write the corresponding run config file to use 
                     elif "DATASETFLAG" in line:
-                        conf.write( 'config.Data.inputDataset = "' + value[1] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1])  
+                        conf.write( 'config.Data.inputDataset = "' + value[1] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1]) 
+                    # elif "SPLITTINGFLAG" in line:
+                        # if part == "QCD": conf.write( 'config.Data.splitting = "FileBased"\n' )
+                        # else: conf.write( 'config.Data.splitting = "Automatic"\n' )
+                    elif "MAXUNITSFLAG" in line:
+                        # if not part == "QCD": conf.write( '#' ) # comment this line out unless it is QCD
+                        if part == "QCD": conf.write( 'config.Data.totalUnits = ' + QCDMaxEvents[key] + '\n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1])  
+                    # elif "JOBFLAG" in line:
+                        # if not part == "QCD": conf.write( '#' ) # comment this line out unless it is QCD
+                        # conf.write( 'config.Data.unitsPerJob = 1 \n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1])  
                     else:
                         conf.write(line) # Copy the rest of the file
                 conf.close

@@ -191,7 +191,7 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
 
         declare -a massPnts=()
         for part in ${myParticles[*]}; do # Loop over particles
-            # if [[ $part += "QCD" ]] ; then continue; fi
+            # if [[ $part == "QCD" ]] ; then continue; fi
             # UPDATE THIS TO USE ARRAYS INSTEAD OF WHATS IN THE DIR? COULD BE A WAY TO AUTOCHECK IF EVERYTHING SUBMITS
             # wait this should just use the list of crab dirs that I already made...
 
@@ -203,6 +203,8 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
             # To test this, make sure crabkill works so crab jobs can be cancelled
             # ask johan: parallel crab? how many scripts (better many scripts that do specific things, even if overlap in code, or fewer scripts that you give options to??)
 
+            # Check if dir exists, then check if .requestcache exists? grep the crab.log for status instead of doing crab status * ?
+
             # Maybe try not running it in background
             
             listOfScripts=config/crab*$part*.py
@@ -212,7 +214,7 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
                 trimstring=${f#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
                 crab submit $f >> logFiles/$crabName.txt 
-                sleep 5s # If crab jobs are submitted too quickly, some don't go through
+                sleep 2s # If crab jobs are submitted too quickly, some don't go through
                 # massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
 
             done

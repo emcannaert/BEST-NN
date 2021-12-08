@@ -27,6 +27,10 @@ NC='\033[0m' # No Color
 # fi
 
 # Put in flags that do things?
+# grep status, check it, assign TRUE/FALSE flag to dictionary that contains crab file directory? 
+# Then resubmit or display just those or output to terminal
+
+#assign out to var. check for finished 100%. if yes just print dir or nothing. if no print more info
 
 checkFile="logCheck.txt"
 echo -e "\n${YEL}Checking jobs...${NC}"
@@ -34,9 +38,13 @@ pids=
 for d in */CrabBEST/*/ ; do
     # echo $d | cut -d '/' -f 2 
     # echo "$d" >> $checkFile
-    crab status $d | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $checkFile 
+    # crab status $d | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $checkFile 
+    output=`crab status $d | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)'`
+
+    if "finished     		100.0%" =~ 
+    # crab status $d >> $checkFile 
+    echo -e "----------------------\n\n----------------------" >> $checkFile
     pids+=" $!"
-    # crab status $d >> $checkFile &
 done
 # echo ${pids[*]}
 wait $pids 

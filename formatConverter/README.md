@@ -14,6 +14,16 @@ It compares the C++ images to ones created in python.
 
 There are two strategies for training (shape-matching and batch-generator), which require slightly different steps to produce the data needed to train.
 
+## Tagged Samples
+
+If you wish to use already produced samples, copy them from eos
+
+```
+mkdir ~/nobackup/BESTTag2Samples
+eosls /store/user/jbonilla/BESTTag2Samples/
+xrdcp root://cmsxrootd.fnal.gov//store/user/jbonilla/BESTTag2Samples/<FileYouWishToCopy> ~/nobackup/BESTTag2Samples/
+```
+
 ## Conversion Instructions
 
 The conversion takes place using uproot to create useful python data structures. First, make sure that there are directories to store
@@ -43,8 +53,9 @@ python Higgs_sample_formatConverter.py
 For shape-matching, use the more generic 'sampleConverter.py' script. This may also work for batch-generation but not tested.
 
 ```bash
-python sampleConverter.py -s all -eos <path/to/eosSampleListsDir/> -o <path/to/h5samples/>
+python sampleConverter.py -s all -y all -eos <path/to/eosSampleListsDir/> -o <path/to/h5samples/>
 ```
+
 
 Also for shape-matching, you will want to first split the sample into train, validation, and test sets with 'sampleSplitter.py' then flatten (shape-match) each of those output files. See each file for full list of arguments.
 

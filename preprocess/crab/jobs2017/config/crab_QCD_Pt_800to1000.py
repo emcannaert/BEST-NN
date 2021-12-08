@@ -18,8 +18,7 @@ config.JobType.outputFiles = ["BESTInputs.root"]
 config.section_("Data")
 config.Data.inputDataset = "/QCD_Pt_800to1000_TuneCP5_13TeV_pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v1/MINIAODSIM"
 config.Data.splitting = "Automatic"
-#config.Data.splitting = "FileBased"
-#config.Data.unitsPerJob = 1
+config.Data.totalUnits = 500000
 config.Data.ignoreLocality = True
 config.Data.publication = False
 # This string is used to construct the output dataset name

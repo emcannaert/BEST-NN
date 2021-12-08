@@ -140,10 +140,6 @@ process.ghostTrackCommon = cms.PSet(
     trackSort = cms.string('sip2dSig')
 )
 
-process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(500)
-)
-
 process.softPFElectronCommon = cms.PSet(
     gbrForestLabel = cms.string('btag_SoftPFElectron_BDT'),
     useAdaBoost = cms.bool(False),

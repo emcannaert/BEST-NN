@@ -3,7 +3,7 @@ config = Configuration()
 
 config.section_("General")
 
-config.General.requestName = "GravitonZZ_4500GeV_trees"
+config.General.requestName = "GravitonZZ_M_4500GeV_trees"
 config.General.workArea = "CrabBEST"
 config.General.transferLogs = True
 
@@ -18,8 +18,6 @@ config.JobType.outputFiles = ["BESTInputs.root"]
 config.section_("Data")
 config.Data.inputDataset = "/BulkGravToZZToZhadZhad_narrow_M-4500_TuneCP5_13TeV-madgraph-pythia/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM"
 config.Data.splitting = "Automatic"
-#config.Data.splitting = "FileBased"
-#config.Data.unitsPerJob = 1
 config.Data.ignoreLocality = True
 config.Data.publication = False
 # This string is used to construct the output dataset name

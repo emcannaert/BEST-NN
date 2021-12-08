@@ -3,7 +3,7 @@ config = Configuration()
 
 config.section_("General")
 
-config.General.requestName = "ZprimeBB_5000GeV_trees"
+config.General.requestName = "ZprimeBB_M_5000GeV_trees"
 config.General.workArea = "CrabBEST"
 config.General.transferLogs = True
 
@@ -16,10 +16,8 @@ config.JobType.outputFiles = ["BESTInputs.root"]
 #config.JobType.allowUndistributedCMSSW = True
 
 config.section_("Data")
-config.Data.inputDataset = "/ZprimeToBB_narrow_M-5000_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL17MiniAOD-106X_mc2017_realistic_v6-v2/MINIAODSIM"
+config.Data.inputDataset = "/ZprimeToBB_narrow_M-5000_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM"
 config.Data.splitting = "Automatic"
-#config.Data.splitting = "FileBased"
-#config.Data.unitsPerJob = 1
 config.Data.ignoreLocality = True
 config.Data.publication = False
 # This string is used to construct the output dataset name
