@@ -90,7 +90,7 @@ namespace best {
     JetType jetTypeFromString(const std::string& label) {
         static const JetTypeStringToEnum jetTypeStringToEnumMap[] = {
             {'Q', Q},
-	    {'H', H},
+	        {'H', H},
             {'t', t},
             {'W', W},
             {'Z', Z},
@@ -146,53 +146,53 @@ namespace best {
 ///////////////////////////////////////////////////////////////////////////////////
 
 class BESTProducer : public edm::stream::EDProducer<> {
-   public:
-      explicit BESTProducer(const edm::ParameterSet&);
-      ~BESTProducer();
+    public:
+        explicit BESTProducer(const edm::ParameterSet&);
+        ~BESTProducer();
 
-      static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+        static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
-      //===========================================================================
-      // User functions -----------------------------------------------------------
-      //===========================================================================
+        //===========================================================================
+        // User functions -----------------------------------------------------------
+        //===========================================================================
 
-   private:
-      virtual void beginStream(edm::StreamID) override;
-      virtual void produce(edm::Event&, const edm::EventSetup&) override;
-      virtual void endStream() override;
+    private:
+        virtual void beginStream(edm::StreamID) override;
+        virtual void produce(edm::Event&, const edm::EventSetup&) override;
+        virtual void endStream() override;
 
-      //===========================================================================
-      // Member Data --------------------------------------------------------------
-      //===========================================================================
+        //===========================================================================
+        // Member Data --------------------------------------------------------------
+        //===========================================================================
 
-      // Input variables
-      std::string inputJetColl_;
-      best::JetType jetType_;
-      best::JetColl jetColl_;
-      bool storeDaughters;
+        // Input variables
+        std::string inputJetColl_;
+        best::JetType jetType_;
+        best::JetColl jetColl_;
+        bool storeDaughters;
 
-      // Tree variables
-      TTree *jetTree;
-      std::map<std::string, float> treeVars;
-      std::vector<std::string> listOfVars;
-      std::map<std::string, std::vector<float> > jetVecVars;
-      std::vector<std::string> listOfVecVars;
-      std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > imgVars;
-      std::vector<std::string> listOfImgVars;
+        // Tree variables
+        TTree *jetTree;
+        std::map<std::string, float> treeVars;
+        std::vector<std::string> listOfVars;
+        std::map<std::string, std::vector<float> > jetVecVars;
+        std::vector<std::string> listOfVecVars;
+        std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > imgVars;
+        std::vector<std::string> listOfImgVars;
 
-      // Tokens
-      //edm::EDGetTokenT<std::vector<pat::PackedCandidate> > pfCandsToken_;
-      edm::EDGetTokenT<std::vector<pat::Jet> > ak8JetsToken_;
-      //edm::EDGetTokenT<std::vector<pat::Jet> > ak4JetsToken_;
-      edm::EDGetTokenT<std::vector<reco::GenParticle> > genPartToken_;
-      edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate> > secVerticesToken_;
-      edm::EDGetTokenT<std::vector<reco::Vertex> > verticesToken_;
+        // Tokens
+        //edm::EDGetTokenT<std::vector<pat::PackedCandidate> > pfCandsToken_;
+        edm::EDGetTokenT<std::vector<pat::Jet> > ak8JetsToken_;
+        //edm::EDGetTokenT<std::vector<pat::Jet> > ak4JetsToken_;
+        edm::EDGetTokenT<std::vector<reco::GenParticle> > genPartToken_;
+        edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate> > secVerticesToken_;
+        edm::EDGetTokenT<std::vector<reco::Vertex> > verticesToken_;
 
-      //edm::EDGetTokenT<std::vector<pat::Jet> > ak8CHSSoftDropSubjetsToken_;
+        //edm::EDGetTokenT<std::vector<pat::Jet> > ak8CHSSoftDropSubjetsToken_;
 
-      //edm::EDGetTokenT<edm::TriggerResults> trigResultsToken_;
-      //edm::EDGetTokenT<bool> BadChCandFilterToken_;
-      //edm::EDGetTokenT<bool> BadPFMuonFilterToken_;
+        //edm::EDGetTokenT<edm::TriggerResults> trigResultsToken_;
+        //edm::EDGetTokenT<bool> BadChCandFilterToken_;
+        //edm::EDGetTokenT<bool> BadPFMuonFilterToken_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +236,25 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_pt");
     listOfVars.push_back("jetAK8_mass");
     listOfVars.push_back("jetAK8_SoftDropMass");
+
+    // Deep AK8
+    listOfVars.push_back("jetAK8_deepAK8_rawL");
+    listOfVars.push_back("jetAK8_deepAK8_rawC");
+    listOfVars.push_back("jetAK8_deepAK8_rawB");
+    listOfVars.push_back("jetAK8_deepAK8_rawW");
+    listOfVars.push_back("jetAK8_deepAK8_rawZ");
+    listOfVars.push_back("jetAK8_deepAK8_rawH");
+    listOfVars.push_back("jetAK8_deepAK8_rawT");
+    listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawL");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawC");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawB");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawW");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawH");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawT");
+    listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+
 
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
@@ -327,6 +346,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jet23_mass_Z");
     listOfVars.push_back("jet13_mass_Z");
     listOfVars.push_back("jet1234_mass_Z");
+
     //Subjet CosTheta and delta CosTheta
     listOfVars.push_back("jet12_CosTheta_Higgs");
     listOfVars.push_back("jet23_CosTheta_Higgs");
@@ -378,6 +398,23 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         listOfVecVars.push_back("LabFrame_PF_candidate_py");
         listOfVecVars.push_back("LabFrame_PF_candidate_pz");
         listOfVecVars.push_back("LabFrame_PF_candidate_energy");
+
+        listOfVecVars.push_back("LabFrame_PF_candidate_charge");
+        listOfVecVars.push_back("LabFrame_PF_candidate_pdgId");
+        listOfVecVars.push_back("LabFrame_PF_candidate_abspdgId");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isElectron");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isMuon");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isPhoton");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isNeutralHadron");
+        listOfVecVars.push_back("LabFrame_PF_candidate_isChargedHadron");
+        
+        listOfVecVars.push_back("LabFrame_PF_candidate_deltaEta");
+        listOfVecVars.push_back("LabFrame_PF_candidate_deltaPhi");
+        listOfVecVars.push_back("LabFrame_PF_candidate_deltaR");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logpT");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logEnergy");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logpTRatio");
+        listOfVecVars.push_back("LabFrame_PF_candidate_logEnergyRatio");
 
         listOfVecVars.push_back("HiggsFrame_PF_candidate_px");
         listOfVecVars.push_back("HiggsFrame_PF_candidate_py");
@@ -438,7 +475,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     // Make Branches for each of the jet constituents' variables
     for (unsigned i = 0; i < listOfVecVars.size(); i++){
-      jetTree->Branch( (listOfVecVars[i]).c_str() , &(jetVecVars[ listOfVecVars[i] ]) ); //Possible bug!
+        jetTree->Branch( (listOfVecVars[i]).c_str() , &(jetVecVars[ listOfVecVars[i] ]) ); //Possible bug!
     }
 
     // Make branches for each of the images
@@ -453,7 +490,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // AK8 Jets
     edm::InputTag ak8JetsTag_;
     ak8JetsTag_ = edm::InputTag("slimmedJetsAK8", "", "PAT");
-    //    ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "run"); // this may be needed as an option for 2016 mc
+    // ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "run"); // this may be needed as an option for 2016 mc
     ak8JetsToken_ = consumes<std::vector<pat::Jet> >(ak8JetsTag_);
 
     // Gen Particles
@@ -533,24 +570,18 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     //------------------------------------------------------------------------------
     int pdgID = -99;
     switch(jetType_){
-    case 1:
-      pdgID = 25;
-      break;
-    case 2:
-      pdgID = 6;
-      break;
-    case 3:
-      pdgID =  24;
-      break;
-    case 4:
-      pdgID = 23;
-      break;
-    case 5:
-      pdgID = 5;
-      break;
-    default:
-      pdgID = -99;
-      break;
+        case 1:
+            pdgID = 25; break;
+        case 2:
+            pdgID = 6; break;
+        case 3:
+            pdgID = 24; break;
+        case 4:
+            pdgID = 23; break;
+        case 5:
+            pdgID = 5; break;
+        default:
+            pdgID = -99; break;
     }
     // Store heavy particle for jet matching
     std::vector<TLorentzVector> genParticleToMatch;
@@ -575,22 +606,23 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
-	daughtersOfJet.clear();
-	boostedDaughters.clear();
-	restJets.clear();
+        daughtersOfJet.clear();
+        boostedDaughters.clear();
+        restJets.clear();
         TLorentzVector jet(ijet->px(), ijet->py(), ijet->pz(), ijet->energy() );
 
         if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4 &&ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 10) {
 
             // gen particle loop, only relevant for non-QCD jets
-	    if (jetType_ !=0){
-	        for (size_t iGenParticle = 0; iGenParticle < genParticleToMatch.size(); iGenParticle++){
-		    // Check if jet matches any saved genParticle
-		    if(jet.DeltaR(genParticleToMatch[iGenParticle]) < 0.1){
+            if (jetType_ !=0){
+                for (size_t iGenParticle = 0; iGenParticle < genParticleToMatch.size(); iGenParticle++){
+                    // Check if jet matches any saved genParticle
+                    if(jet.DeltaR(genParticleToMatch[iGenParticle]) < 0.1){
                         GenMatching = true;
                     }
                 }
             }
+
             if (GenMatching || (jetType_ == 0)){
 
                 // Store Jet Variables
@@ -625,26 +657,26 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 // Fill the jet entry tree
                 jetTree->Fill();
             }
-	}
+        }
 
-	//-------------------------------------------------------------------------------
-	// Clear and Reset all tree variables -------------------------------------------
-	//-------------------------------------------------------------------------------
-	for (unsigned i = 0; i < listOfVars.size(); i++){
-	    treeVars[ listOfVars[i] ] = -999.99;
-	}
-	for (unsigned i = 0; i < listOfVecVars.size(); i++){
-	    jetVecVars[ listOfVecVars[i] ].clear();
-	}
-	/*
-	for (unsigned i = 0; i < listOfImgVars.size(); i++){
-	    for (unsigned j = 0; j < imgVars[ listOfImgVars[i] ].size(); j++) {
-	        for (unsigned k = 0; k < imgVars[ listOfImgVars[i] ][j].size(); k++) {
-	            imgVars[ listOfImgVars[i] ][j][k].clear();
-		}
-	    }
-	}
-	*/
+        //-------------------------------------------------------------------------------
+        // Clear and Reset all tree variables -------------------------------------------
+        //-------------------------------------------------------------------------------
+        for (unsigned i = 0; i < listOfVars.size(); i++){
+            treeVars[ listOfVars[i] ] = -999.99;
+        }
+        for (unsigned i = 0; i < listOfVecVars.size(); i++){
+            jetVecVars[ listOfVecVars[i] ].clear();
+        }
+        /*
+        for (unsigned i = 0; i < listOfImgVars.size(); i++){
+            for (unsigned j = 0; j < imgVars[ listOfImgVars[i] ].size(); j++) {
+                for (unsigned k = 0; k < imgVars[ listOfImgVars[i] ][j].size(); k++) {
+                    imgVars[ listOfImgVars[i] ][j][k].clear();
+            }
+            }
+        }
+        */
     }
 
     // Delete vector
@@ -678,11 +710,11 @@ BESTProducer::endStream()
 
 void
 BESTProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-  //The following says we do not know what parameters are allowed so do no validation
-  // Please change this to state exactly what you do use, even if it is no parameters
-  edm::ParameterSetDescription desc;
-  desc.setUnknown();
-  descriptions.addDefault(desc);
+    //The following says we do not know what parameters are allowed so do no validation
+    // Please change this to state exactly what you do use, even if it is no parameters
+    edm::ParameterSetDescription desc;
+    desc.setUnknown();
+    descriptions.addDefault(desc);
 }
 
 //define this as a plug-in

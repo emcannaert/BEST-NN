@@ -12,7 +12,7 @@ import FWCore.ParameterSet.Config as cms
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-
+#106X = CMSSW 10.6.X choose 2017 and copy link from twiki
 GT = '102X_mcRun2_asymptotic_v7'
 process = cms.Process("run")
 

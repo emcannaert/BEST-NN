@@ -14,7 +14,7 @@ This repository requires CMSSW and python tools for machine learning.
 
 ## Installation
 
-This program is written for use with ``CMSSW_10_2_18``. Start installation by installing CMSSW.
+This program is written for use with ``CMSSW_10_6_27``. Start installation by installing CMSSW.
 
 ```bash
 cmsrel CMSSW_10_2_18

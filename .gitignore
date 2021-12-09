@@ -9,3 +9,5 @@
 *.pkl
 *.out
 *.err
+*vscode*
+preprocess/test/*
