@@ -149,14 +149,13 @@ echo "${PURP}Datatype(s)${NC} selected: ${PURP}${myDatatypes[*]}${NC}"
 echo
 echo "${BLUE}Initiating DAS search. Checking voms cms proxy...${NC}"
 
-# BUG: DOES NOT CHECK IF USER INPUTTED PASSWORD CORRECTLY. USE WHILE LOOP? NEED TO UPDATE ELSEWHERE TOO (crabsubmit.sh at least)
 # This checks for a voms cms proxy that will last longer than 60 minutes, and has the user create a new one if not
-if [[ $(voms-proxy-info -timeleft) > 3600 ]] && [[ $(voms-proxy-info -vo) == "cms" ]]; then
-    echo "${GRN}Valid proxy confirmed!${NC}"
-else
+if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then
     echo "${YEL}Error: Proxy either doesn't exist or will expire soon. Initializing new proxy...${NC}"
     voms-proxy-init --valid 192:00 -voms cms
+    if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then exit 1; fi # Exit if user failed to create proxy
 fi
+echo "${GRN}Valid proxy confirmed!${NC}"
 
 # Declare $dasFront, an associative array of strings used to search DAS and trim strings:
 declare -Ag dasFront=(  ["HH"]="GluGluToBulkGravitonToHHTo4B_M-"    ["WW"]="BulkGravToWWToWhadWhad_narrow_M-"   ["ZZ"]="BulkGravToZZToZhadZhad_narrow_M-" 

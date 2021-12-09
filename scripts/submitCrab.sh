@@ -4,8 +4,13 @@
 #-----------------------------------------------------------------------------------------
 # Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-#134
 
+# This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
+# This script takes options/arguments from the user and submits the appropriate jobs to crab. 
+# This script will also call createConfig.py to generate the crab config files to submit.
+# The script lives in the scripts directory and the symbolic links in each of the submit201X directories should be executed within their respective directories.
+
+#### Possible improvements to make:
 # Better PATH variables? 
 # Check that all the jobs submit (is 5 seconds good enough?)
 # Edit submitCrab/creatConfig to display number of files per dir for samples + submissions (prolly bash); grep lines of sample file, grep files in dirs
@@ -18,10 +23,6 @@
 # Crab resubmitter, waits for hours?
 
 
-# This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
-# This script takes options/arguments from the user and submits the appropriate jobs to crab. 
-# This script will also call createConfig.py to generate the crab config files to submit.
-# The script lives in the scripts directory and the symbolic links in each of the submit201X directories should be executed within their respective directories.
 
 
 ################# These lines of code that parse in the arguments are nearly identical to fillSamples.sh:
@@ -153,17 +154,15 @@ echo
 echo "${BLUE}Submitting crab jobs. Checking voms cms proxy...${NC}"
 
 # This checks for a voms cms proxy that will last longer than 60 minutes, and has the user create a new one if not
-if [[ $(voms-proxy-info -timeleft) > 3600 ]] && [[ $(voms-proxy-info -vo) == "cms" ]]; then
-    echo "${GRN}Valid proxy confirmed!${NC}"
-    echo
-else
+if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then
     echo "${YEL}Error: Proxy either doesn't exist or will expire soon. Initializing new proxy...${NC}"
     voms-proxy-init --valid 192:00 -voms cms
-    echo
+    if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then exit 1; fi # Exit if user failed to create proxy
 fi
+echo "${GRN}Valid proxy confirmed!${NC}"
 
-##### REMOVE THIS
-myYears="2017"
+##### Overrides for testing/debugging:
+# myYears="2017"
 # myParticles="QCD"
 
 ################# At this point, the code unique to this file begins: 
