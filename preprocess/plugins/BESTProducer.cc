@@ -11,7 +11,7 @@
      This EDProducer is meant to be used with CMSSW_10_6_27                            ---
 */
 //========================================================================================
-// Authors:  Brendan Regnery, Justin Pilot, Reyer Band, Devin Taylor ---------------------
+// Authors: Brendan Regnery, Justin Pilot, Reyer Band, Devin Taylor, Mark Samuel Abbott --
 //         Created:  WED, 8 Aug 2018 21:00:28 GMT  ---------------------------------------
 //========================================================================================
 //////////////////////////////////////////////////////////////////////////////////////////

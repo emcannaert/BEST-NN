@@ -1,11 +1,16 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# W_sample_formatConverter.py /////////////////////////////////////////////////////
+# sampleConverter.py //////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Johan S Bonilla, Brendan Regnery -------------------------------------
-# This program converts root ntuples to the python format necessar for training ///
+# Author(s): Mark Samuel Abbott, Johan S Bonilla, Brendan Regnery -----------------
+# This program converts root ntuples to the python format necessary for training //
 # Inputs should be root files from preprocess
 # Output should be three sets of hd5f files: trainingSet, validationSet, testignSet
 #----------------------------------------------------------------------------------
+
+################################## NOTES TO SELF ##################################
+# Make firstConvert its own function
+# Add more comments
+
 import time
 
 startTime = time.time() # Tracks how long script takes
@@ -17,20 +22,6 @@ import numpy as np
 import h5py
 import argparse
 import os
-
-##### Possible solutions to size problem:
-# Increase size of nobackup space
-#   -> Seems impossible. Could access b2g group space? Would take a few days. Could also use 3day nobackup, but risky...
-# Store on eos:   if max size < 200GB, then: create h5 file for one process, copy to eos, delete locally, repeat 
-#   -> If files are too big, could store the h5 files on Johan's eos space, as mine might fill up. (Johan would need 2.4TB of eosspace...maybe move half the processes?)
-#      Or move the current root files to johan's space for now, and store h5 in my space so i can manipulate easier 
-# Adjust/Optimize format and compression of datasets 
-#   -> Chunks? Different filters (MAFISC, bitshuffle, zfp, Zstandard, SZ)? Change amount of datasets? Combine or split datasets? 
-# Reduce amount of info stored 
-#   -> 100->50 PFcands, 50->10 SV, less events, store certain info as ints
-# Instead of compressing everything at once, just store variables needed for different BEST performance comparisons
-#   -> Like compressing vars for just the new boost range, running it through BEST, save performance. Then start over with old boosts, etc.
-
 
 
 # Enter batch mode in root, so python can access displays
@@ -87,6 +78,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
         for arrays in uproot.iterate(fileList, treeName, entrysteps = batchSize, namedecode='utf-8'):
             
             # Load keys and labels
+            # To make this code neater, I should change the first convert stuff to a function that is run once
             global firstConvert # Necessary for if statement to see firstConvert
             if firstConvert: # Variables are identical across sampleType and Year, so this code only needs to happen once:
                 keys = arrays.keys()

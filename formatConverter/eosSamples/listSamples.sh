@@ -1,11 +1,15 @@
 #!/bin/bash
 #=========================================================================================
-# listHiggsSamples.sh --------------------------------------------------------------------
+# listSamples.sh -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Johan S Bonilla, Brendan Regnery --------------------------------------------
+# Author(s): Johan S Bonilla, Brendan Regnery, Mark Samuel Abbott ------------------------
 #-----------------------------------------------------------------------------------------
 
-# Edit this to match style of other scripts? Delete old list scripts
+# This script lives in the BEST/formatConverter/eosSamples directory.
+# This script lists each BESTInputs file on eos, for each particle, for each year.
+
+################################## NOTES TO SELF ##################################
+# Edit this to match style of other scripts
 
 # List files from eos with BEST in name (typically /eos/path/BESTInputs_*.root)
 eosDirPath="/store/user/maabbott/"

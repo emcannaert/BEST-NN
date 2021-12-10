@@ -1,30 +1,29 @@
 #!/bin/bash
 #=========================================================================================
-# submitCrab.sh --------------------------------------------------------------------------
+# crabSubmit.sh --------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott ----------------------------------------------------------
+# Author(s): Mark Samuel Abbott, Johan S. Bonilla ----------------------------------------
 #-----------------------------------------------------------------------------------------
-#134
-
-# Better PATH variables? 
-# Check that all the jobs submit (is 5 seconds good enough?)
-# Edit submitCrab/creatConfig to display number of files per dir for samples + submissions (prolly bash); grep lines of sample file, grep files in dirs
-# could prolly print the output by reading in the sample file arrays with the fillscripts code and compare that to a grep of the CrabBEST dir, automatically submit
-# Edit checkcrab for new format, check number of submissions? Pipe output to text file? Curate a summary? Auto resubmit?
-# Edit kill jobs?
-# Can I run crab in parallel?
-# Test that specific cases run correctly
-# Make log file, config file, and crab dir uniform?
-# Crab resubmitter, waits for hours?
-
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
-# This script takes options/arguments from the user and submits the appropriate jobs to crab. 
-# This script will also call createConfig.py to generate the crab config files to submit.
+# This script submits user chosen jobs and submits them to crab. 
+# This script will also call buildConfig.py to generate the crab config files to submit.
 # The script lives in the scripts directory and the symbolic links in each of the submit201X directories should be executed within their respective directories.
 
+################################## NOTES TO SELF ##################################
+# Submit jobs in parallel?
 
-################# These lines of code that parse in the arguments are nearly identical to fillSamples.sh:
+#==================================================================================
+# Setup ///////////////////////////////////////////////////////////////////////////
+#==================================================================================
+
+# Declare particles, years, and datatypes to submit. 
+# These need to be edited manually, as passing an argument to ./crabSubmit.sh breaks the 'crab submit ...' command later.
+declare -a myParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+# declare -a myParticles=("QCD")
+declare -a myYears=("2016_APV" "2016" "2017" "2018")
+# declare -a myYears=("2017")
+declare -a myDatatypes=("mc" "data")
 
 # Define ANSI colors here for the output since I am extra:
 RED='\033[91m' # Red
@@ -38,37 +37,6 @@ NC='\033[0m' # No Color
 shopt -s expand_aliases
 alias echo='echo -e'
 
-# Check that user provided valid amount of options, exit if not. The only valid inputs would have 0 or 6 options/arguments.
-if [[ $# != 0 ]] && [[ $# != 6 ]]; then 
-    echo "${YEL}WOAH, slow down there friend!${NC} Your command line contains $# options/arguments!"
-    echo "Please pass options and arguments as:"
-    echo
-    echo "./submitCrab ${CYAN}-p \"<particle 1> <particle 2>...\" ${GRN}-y \"<year 1> <year 2>...\" ${PURP}-d <datatype>${NC}"
-    echo
-    echo "${CYAN}Particle arguments: ${BLUE}all${NC}, ${YEL}or${NC} any combination of ${CYAN}QCD, HH, WW, ZZ, tt, bb${NC}"
-    echo "${GRN}Year arguments: ${BLUE}all${NC}, ${YEL}or${NC} any combination of ${GRN}2016_APV, 2016, 2017, 2018${NC}"
-    echo "${PURP}Datatype arguments: ${BLUE}all${NC} ${YEL}or${NC} ${PURP}mc${NC} ${YEL}or${NC} ${PURP}data${NC}"
-    echo "${YEL}Note that for the ${GRN}year${YEL} arguments, ${GRN}2016_APV${YEL} is a special case. It corresponds to the 2015 datasets, but in DAS it us under 2016 with APV in the dataset name."
-    echo
-    echo "All options and arguments are case-sensitive, and all options-argument pairs can be executed in any order."
-    echo "${YEL}Example:${NC} ./submitCrab.sh ${PURP}-d mc ${GRN}-y ${BLUE}all ${CYAN}-p HH${NC}"
-    echo
-    echo "Quotes are necessary when passing multiple arguments for one option."
-    echo "${YEL}Example:${NC} ./submitCrab.sh ${GRN}-y \"2016_APV 2016 2017\" ${PURP}-d data ${CYAN}-p \"HH WW\"${NC}"    
-    echo
-    echo "Simply running the script without any options or arguments selects the '${BLUE}all${NC}' argument for ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype.${NC}"
-    echo "${YEL}Example:${NC} ./submitCrab.sh"
-    exit 1
-fi
-
-# Declare the full list of valid arguments for each option
-declare -a allParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
-declare -a allYears=("2016_APV" "2016" "2017" "2018")
-declare -a allDatatypes=("mc" "data")
-# Declare initial arrays to fill with user chosen arguments later
-declare -a myParticles
-declare -a myYears
-declare -a myDatatypes
 
 # This is where the options and arguments are parsed in.
 if [[ $# == 0 ]]; then # Default case, sets up to submit everything.
@@ -89,7 +57,7 @@ else # Specific cases, sets up to submit specfic crab jobs.
                         else # Invalid arguments trigger error message
                             echo "${YEL}Error:${NC} Invalid argument for ${CYAN}$opt${NC}: $part"
                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${CYAN}${allParticles[*]}${NC}"
-                            echo "${YEL}Run script without any options to see usage:${NC} ./submitCrab.sh"
+                            echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
                             echo "${RED}Exiting without submitting jobs...${NC}"
                             exit 1
                         fi
@@ -106,7 +74,7 @@ else # Specific cases, sets up to submit specfic crab jobs.
                         else # Invalid arguments trigger error message
                             echo "${YEL}Error:${NC} Invalid argument for ${GRN}$opt${NC}: $yr"
                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${GRN}${allYears[*]}${NC}"
-                            echo "${YEL}Run script without any options to see usage:${NC} ./submitCrab.sh"
+                            echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
                             echo "${RED}Exiting without submitting jobs...${NC}"
                             exit 1
                         fi
@@ -123,7 +91,7 @@ else # Specific cases, sets up to submit specfic crab jobs.
                         else # Invalid arguments trigger error message
                             echo "${YEL}Error:${NC} Invalid argument for ${PURP}$opt${NC}: $dat"
                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${PURP}${allDatatypes[*]}${NC}"
-                            echo "${YEL}Run script without any options to see usage:${NC} ./submitCrab.sh"
+                            echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
                             echo "${RED}Exiting without creating samples...${NC}"
                             exit 1
                         fi
@@ -132,13 +100,13 @@ else # Specific cases, sets up to submit specfic crab jobs.
             ;;
             \?) # Catches invalid options
                 echo "${YEL}Error:${NC} Invalid option: -$OPTARG"
-                echo "${YEL}Run script without any options to see usage:${NC} ./submitCrab.sh"
+                echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
                 echo "${RED}Exiting without creating samples...${NC}"
                 exit 1
             ;;
             :)  # Catches options missing arguments
                 echo "${YEL}Error:${NC} Option -$OPTARG requires an argument."
-                echo "${YEL}Run script without any options to see usage:${NC} ./submitCrab.sh"
+                echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
                 echo "${RED}Exiting without creating samples...${NC}"
                 exit 1
             ;;
@@ -153,35 +121,31 @@ echo
 echo "${BLUE}Submitting crab jobs. Checking voms cms proxy...${NC}"
 
 # This checks for a voms cms proxy that will last longer than 60 minutes, and has the user create a new one if not
-if [[ $(voms-proxy-info -timeleft) > 3600 ]] && [[ $(voms-proxy-info -vo) == "cms" ]]; then
-    echo "${GRN}Valid proxy confirmed!${NC}"
-    echo
-else
+if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then
     echo "${YEL}Error: Proxy either doesn't exist or will expire soon. Initializing new proxy...${NC}"
     voms-proxy-init --valid 192:00 -voms cms
-    echo
+    if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then exit 1; fi # Exit if user failed to create proxy
 fi
-
-##### REMOVE THIS
-myYears="2017"
-myParticles="QCD"
+echo "${GRN}Valid proxy confirmed!${NC}"
 
 ################# At this point, the code unique to this file begins: 
 
-# Call createConfig.py to generate the config files:
-python createConfig.py -p ${myParticles[*]} -y ${myYears[*]} -d ${myDatatypes[*]}
-
+# Call buildConfig.py to generate the config files:
+python buildConfig.py -p ${myParticles[*]} -y ${myYears[*]} -d ${myDatatypes[*]}
 
 eval `scramv1 runtime -sh` # This is the alias to cmsenv
-?source /cvmfs/cms.cern.ch/crab3/crab.sh # Source crab
+source /cvmfs/cms.cern.ch/crab3/crab.sh # Source crab
+
+#==================================================================================
+# Submit Crab /////////////////////////////////////////////////////////////////////
+#==================================================================================
 
 # Use loop structure below to submit crab jobs. 
 for dat in ${myDatatypes[*]}; do # Loop over mc and data
     if [[ $dat == "data" ]] ; then continue; fi #skips the loop for data, not implemented yet
 
     for yr in ${myYears[*]}; do # Loop over years
-        # if [[ $yr != "2017" ]]; then continue; fi
-        yearDir="jobs$yr"
+        yearDir="submit$yr"
         mkdir -p $yearDir # Make sure $yearDir exists
         echo "${YEL}Entering $yearDir...${NC}"
         cd $yearDir
@@ -189,59 +153,70 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
         echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
         newtxt="fail.txt"
 
-        declare -a massPnts=()
+        # declare -a massPnts=()
         for part in ${myParticles[*]}; do # Loop over particles
-            # if [[ $part == "QCD" ]] ; then continue; fi
-            # UPDATE THIS TO USE ARRAYS INSTEAD OF WHATS IN THE DIR? COULD BE A WAY TO AUTOCHECK IF EVERYTHING SUBMITS
-            # wait this should just use the list of crab dirs that I already made...
-
-            #so copy code to read in file, then store prolly just the crab dir, and iterate over that to check everything.
-            # to submit everything, just recreate the python code that creates the config file; the mass point is right there. iterate over those to submit everything
-            # compare the two to find if something is a sample but didnt get submitted
-            # automatically submit that job, maybe by adding the relevant array values to a separate list and having a loop of code iterate over that through an if statement
-            # could maybe reuse this code for crab resubmit/crab check (should be the same, maybe an option to NOT resubmit)
-            # To test this, make sure crabkill works so crab jobs can be cancelled
-            # ask johan: parallel crab? how many scripts (better many scripts that do specific things, even if overlap in code, or fewer scripts that you give options to??)
-
-            # Maybe try not running it in background
-            
+            # UPDATE THIS TO USE ARRAYS/DICT INSTEAD OF WHATS IN THE DIR? COULD BE A WAY TO AUTOCHECK IF EVERYTHING SUBMITS...
+            # Check if dir exists, then check if .requestcache exists? grep the crab.log for status instead of doing crab status * ?
+          
             listOfScripts=config/crab*$part*.py
             echo "${YEL}Submitting crab jobs in ${GRN}$yearDir ${YEL}for ${PURP}$part${NC}"
 
-            for f in $listOfScripts; do
-                trimstring=${f#*"/"} # Trims the config/ from front of string
+            for job in $listOfScripts; do
+                trimstring=${job#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
-                crab submit $f >> logFiles/$crabName.txt 
-                sleep 5s # If crab jobs are submitted too quickly, some don't go through
+                crab submit $job >> logFiles/$crabName.txt 
+                sleep 2s # If crab jobs are submitted too quickly, some don't go through
                 # massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
 
             done
-            # Could rapid submit all files, add masses to list, then loop over them to check
         done
-        
-        # echo "nap time"
-        # sleep 60s
-        # echo "checking dirs"
-        # for m in ${massPnts[*]}; do
-        #     echo $m
-        #     bestDir="CrabBEST/"*"_${mass}_trees"*
-        #     if [[ ! -d $bestDir ]]; then
-        #         echo "sad dir"
-        #         echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
-        #         # crab submit $f >> logFiles/$crabName.txt &
-        #     fi
-        # done
-
-
-        
+                
         echo "${YEL}Exiting $yearDir...${NC}"
         cd ..
-        # echo "${YEL}Checkout your new list of files at:${NC} $fileToWrite"
     done
 done
 
 echo "jobs submitted"
-# sleep 60s
+
+
+#==================================================================================
+# Check Submission ////////////////////////////////////////////////////////////////
+#==================================================================================
+
+# Currently, script submits jobs in series. This takes longer but eliminates risk of lost jobs.
+# If the jobs are submitted in the background with '&', they can be rapidly submitting to CRAB in parallel. 
+# However, this sometimes causes jobs to be 'lost', and not submit successfully.
+# Below is some test code (DOES NOT WORK YET) that would handle this issue.
+
+# for dat in ${myDatatypes[*]}; do # Loop over mc and data
+#     if [[ $dat == "data" ]] ; then continue; fi #skips the loop for data, not implemented yet
+
+#     for yr in ${myYears[*]}; do # Loop over years
+#         # if [[ $yr != "2017" ]]; then continue; fi
+#         yearDir="jobs$yr"
+#         mkdir -p $yearDir # Make sure $yearDir exists
+#         echo "${YEL}Entering $yearDir...${NC}"
+#         cd $yearDir
+#         mkdir -p logFiles # Make logFiles directory if it doesn't exist
+#         echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
+#         newtxt="fail.txt"
+
+#         declare -a massPnts=()
+        
+#         echo "nap time"
+#         sleep 60s
+#         echo "checking dirs"
+#         for m in ${massPnts[*]}; do
+#             echo $m
+#             bestDir="CrabBEST/"*"_${mass}_trees"*
+#             if [[ ! -d $bestDir ]]; then
+#                 echo "sad dir"
+#                 echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
+#                 # crab submit $f >> logFiles/$crabName.txt &
+#             fi
+#         done
+#     done
+# done
 
 # # auto kill
 # for d in */CrabBEST/*/ ; do

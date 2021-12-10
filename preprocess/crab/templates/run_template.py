@@ -13,7 +13,8 @@ process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
-# This line will be replaced by createConfig.py: process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(MAXEVENTSFLAG))
+# Option to set max events, used for local cmsRun jobs
+# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
 process.source = cms.Source("PoolSource",
         # Replace root file below with the source file you want to use (overwritten by crab config files that call this run file)

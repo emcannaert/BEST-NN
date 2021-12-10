@@ -1,11 +1,17 @@
-#!/bin/bash                                                                                                                                                            
-#=========================================================================================                                                                             
-# delete.sh --------------------------------------------------------------------                                                                             
-#-----------------------------------------------------------------------------------------                                                                             
-# Author(s): Johan S Bonilla -------------------------------------------------------------                                                                             
-#-----------------------------------------------------------------------------------------                                                                             
+#!/bin/bash
+#=========================================================================================
+# deleteEOS.sh ---------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
+# Author(s): Mark Samuel Abbott, Johan S. Bonilla ----------------------------------------
+#-----------------------------------------------------------------------------------------
 
-# Delete old eos samples
+# This script lives in the BEST/scripts directory.
+# This script deletes every directory in the user's eos space.
+
+################################## NOTES TO SELF ##################################
+# Update this to not have to use dirs.txt. xrdfsls was failing because of the alias. 
+# Use 'xrdfs root://cmseos.fnal.gov ls -u' instead, should work
+# Include code to delete certain jobs? Certain years, particles, mass points, timestamps?
 
 # eosDirPath="/store/user/msabbott/"
 # echo "Listing files in $eosDirPath"
@@ -22,10 +28,11 @@
 #     done
 # done
 
-# Fix this, you can do better
+# The below code is a work around. Should edit code above and use that instead.
+
 # do eosls /store/user/msabbott/ >> dirs.txt first
 file="dirs.txt"
-
+# Delete old eos samples
 while read line; do # Reads the previous sample file, stores values to arrays
     fullPath="/eos/uscms/store/user/msabbott/$line"
     # fullPath="/eos/user/m/msabbott/$line"

@@ -1,10 +1,19 @@
+#=========================================================================================
+# localPlotter.py ------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
+# Author(s): Mark Samuel Abbott ----------------------------------------------------------
+#-----------------------------------------------------------------------------------------
+
 import ROOT
 import sys
 import os
 import time
 import numpy
 
-#### INITIALIZE STUFF ####
+#==================================================================================
+# Setup ///////////////////////////////////////////////////////////////////////////
+#==================================================================================
+
 startTime = time.time() # Tracks how long script takes
 ROOT.gROOT.SetBatch(1) # Prevent any windows from being displayed 
 ROOT.gErrorIgnoreLevel = ROOT.kWarning # Suppress output lower than ignore level "Warning" (suppresses the Info... plot has been created) 
@@ -17,8 +26,6 @@ ROOT.gStyle.SetTitleFontSize(0.025)
 
 plotPath = "fixedbDisc_plots/"
 scanDir = "noCut/"
-
-##### CREATE BOOST VECTOR AND DICTIONARIES #####
 
 # Create the vector of boosts used in BESTProducer:
 boosts = []
@@ -48,8 +55,8 @@ labFrameDict ={ "jetAK8_mass":"100,0,600", "jetAK8_SoftDropMass":"100,0,250", "j
                 "SV_nTracks":"20,0,20", "SV_chi2":"100,0,20", "SV_Ndof":"25,0,25", "bDiscSubJet_Max":"100,0,1", "bDiscSubJet_Max_index":"6,0,6",
                 "bDisc":"100,0,1", "bDisc_probb":"100,0,1", "bDisc_probbb":"100,0,1","bDisc1":"100,0,1", "bDisc1_probb":"100,0,1", 
                 "bDisc1_probbb":"100,0,1", "bDisc2":"100,0,1", "bDisc2_probb":"100,0,1", "bDisc2_probbb":"100,0,1"
-                "bDisc":"100,-2,1", "bDisc_probb":"100,-1,1", "bDisc_probbb":"100,-1,1","bDisc1":"100,-2,1", "bDisc1_probb":"100,-1,1", 
-                "bDisc1_probbb":"100,-1,1", "bDisc2":"100,-2,1", "bDisc2_probb":"100,-1,1", "bDisc2_probbb":"100,-1,1"
+                # "bDisc":"100,-2,1", "bDisc_probb":"100,-1,1", "bDisc_probbb":"100,-1,1","bDisc1":"100,-2,1", "bDisc1_probb":"100,-1,1", 
+                # "bDisc1_probbb":"100,-1,1", "bDisc2":"100,-2,1", "bDisc2_probb":"100,-1,1", "bDisc2_probbb":"100,-1,1"
               }
                                
                                     
@@ -78,6 +85,10 @@ for particle, particleValues in particleDict.items():
 # Now particle dictionary has the form: {particle:[restmass, restmass range, {mass point:[root file name string, root TFile object, 
 #                                                                           {coarse key:THStack Coarse scan object, fine key:THStack Fine scan object} ] } ], ... }
 # While the boost variable dictionary has the form: {variable: {}, ... }
+
+#==================================================================================
+# Plot Lab Frame Variables ////////////////////////////////////////////////////////
+#==================================================================================
 
 # Plot lab frame variables, only one each per particle
 print("Plotting lab frame variables...")
@@ -147,6 +158,9 @@ for massPoint, stack in ak8HistDict.items():
 del ak8HistDict
 del labFrameDict
 
+#==================================================================================
+# Plot Boost Frame Variables //////////////////////////////////////////////////////
+#==================================================================================
 
 # Two sets of plots: 
 # Boost set, which plots all particles for each boost (everything needs to be reset each loop)
@@ -225,6 +239,10 @@ for boost in boosts: # Iterate over boosts
 
 print("Boosts complete. Plotting scans...")
 
+#==================================================================================
+# Plot Boost Scans ////////////////////////////////////////////////////////////////
+#==================================================================================
+
 # These will replace the very large dictionaries, which will be deleted
 massPointList = ["all"]
 varList = varDict.keys()
@@ -266,6 +284,11 @@ for particle, particleValues in particleDict.items(): # Iterate over each partic
 print("All pngs complete!")
 del particleDict
 del varDict
+
+#==================================================================================
+# Generate Gifs ///////////////////////////////////////////////////////////////////
+#==================================================================================
+
 print("Creating gifs...")
 
 for var in varList: # This iterates over the variables in the root file
@@ -288,7 +311,6 @@ for var in varList: # This iterates over the variables in the root file
             del particleImage
 
 print("Gifs complete!")
-
 
 # Check how long the script took to run
 runf = open("timeLog", "w") 

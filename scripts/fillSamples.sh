@@ -11,8 +11,7 @@
 # This script is specific to calling datasets for the Summer 2020 Ultra Legacy samples submitted by the UCD BEST team, for the purpose of training BEST. But it can be modified to search for other datasets! 
 # This script also checks for and keeps track of a version two, or "v2", for each dataset, as these updated datasets are still being produced as of writing this code.
 
-######################################### NOTES TO SELF ############################
-# Add comment sections
+################################## NOTES TO SELF ##################################
 # Implement data
 
 ###(NOTE: 2015 = 2016_APV)###

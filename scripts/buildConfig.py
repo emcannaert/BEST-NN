@@ -1,13 +1,11 @@
 #=========================================================================================
-# createConfig.py -----------------------------------------------------------------------
+# createConfig.py ------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Authors: Mark Samuel Abbott ------------------------------------------------------------
+# Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-
-# Condense global tag code? Assosiate it with iterator for myYears? small dictionary?
 
 # This script was written for Python 2.7.5.
-# This file is meant to be called by submitCrab.sh, but could be run manually.
+# This file is meant to be called by submitCrab.sh, but could be run manually if various file paths are updated.
 # This file calls in template config files for crab_*.py and run_*.py, and writes a version of the config file unique to each dataset (particle, year, datatype, mass) under the config directory for each year.
 # This file calls the dictionary "datasetDict" from datasetDictionary.py, which is created by buildDict.py.
 # This file takes user inputs to determine which config files to create.
@@ -16,6 +14,10 @@ import argparse # Assists parsing of arguments
 import sys
 import os
 from datasetDictionary import datasetDict # Import the dictionary of sample files
+
+#==================================================================================
+# Setup ///////////////////////////////////////////////////////////////////////////
+#==================================================================================
 
 # Define ANSI colors here for the output since I am extra:
 def bluestr(string):
@@ -67,7 +69,6 @@ else: # This makes sure that is "all" is passed for -p, -y, or -d, that it is th
                     parser.print_help()
                     sys.exit(2)
 
-
 # At this point, the inputs are assured to be valid, and we can begin the main functions of this file.
 # First, define the full list of valid arguments for each option, and then empty lists to fill with user input.
 allParticles = ["HH", "WW", "ZZ", "tt", "bb", "QCD"]
@@ -77,7 +78,7 @@ myParticles = []
 myYears = []
 myDatatypes = []
 
-# These load the "my..." lists with the user chosen input:
+# These fill the "my..." lists with the user chosen input:
 if len(sys.argv) == 1 or optargs.particle[0] == "all":
     myParticles = allParticles
 elif optargs.particle:
@@ -101,13 +102,16 @@ runtemplateFile = "templates/run_template.py"
 GlobalTags = {"2016_APV":"106X_mcRun2_asymptotic_preVFP_v11", "2016":"106X_mcRun2_asymptotic_v17", "2017":"106X_mc2017_realistic_v8", "2018":"106X_upgrade2018_realistic_v15_L1v1"}
 QCDMaxEvents = {"470to600":"325000", "600to800":"500000", "800to1000":"500000", "1000to1400":"1000000", "1400to1800":"1000000", "1800to2400":"1500000", "2400to3200":"2000000", "3200toInf":"2000000"}
 
+#==================================================================================
+# Create Config Files /////////////////////////////////////////////////////////////
+#==================================================================================
+
 print( yelstr("Creating config files...") )
 for dat in myDatatypes:
     if dat == "data": continue # Skip data, not implemented yet
 
     for yr in myYears:
-        # if not yr == "2017" : continue
-        crabPath = "jobs" + yr + "/config" # Path to config directory
+        crabPath = "submit" + yr + "/config" # Path to config directory
         if not os.path.exists(crabPath): os.makedirs(crabPath) # If config directory doesn't exist, create it
 
         for part in myParticles:
@@ -120,10 +124,6 @@ for dat in myDatatypes:
             for line in runtempf:
                 if "GLOBALTAGFLAG" in line:
                     runf.write( 'GT = "' + GlobalTags[yr] + '"\n' ) # Write global tag (unique by year)
-                # elif "MAXEVENTSFLAG" in line: 
-                    # if part == "QCD":   runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(' + QCDMaxEvents[key] + '))\n' ) # limit max events per file for QCD
-                    # else:               runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))\n' ) # All other particles use all events            
-                    # runf.write( 'process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))\n' ) # All other particles use all events                   
                 elif "'myfile.root'" in line: # Write a single sample file to run config file for local runs (this file gets overwritten by CRAB when submitting one of the many crab config files generated below).
                     if part == "QCD":   runf.write( '\t\t"' + datasetDict[dat][yr][part]["600to800"][2] + '"\n' ) # QCD uses pT and not mass
                     elif part == "tt":  runf.write( '\t\t"' + datasetDict[dat][yr][part]["4000_W40"][2] + '"\n' ) # tt needs a width
@@ -155,24 +155,12 @@ for dat in myDatatypes:
                         conf.write( 'config.JobType.psetName = "config/run_' + part +'.py"\n' ) # Write the corresponding run config file to use 
                     elif "DATASETFLAG" in line:
                         conf.write( 'config.Data.inputDataset = "' + value[1] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1]) 
-                    # elif "SPLITTINGFLAG" in line:
-                        # if part == "QCD": conf.write( 'config.Data.splitting = "FileBased"\n' )
-                        # else: conf.write( 'config.Data.splitting = "Automatic"\n' )
                     elif "MAXUNITSFLAG" in line:
-                        # if not part == "QCD": conf.write( '#' ) # comment this line out unless it is QCD
                         if part == "QCD": conf.write( 'config.Data.totalUnits = ' + QCDMaxEvents[key] + '\n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1])  
-                    # elif "JOBFLAG" in line:
-                        # if not part == "QCD": conf.write( '#' ) # comment this line out unless it is QCD
-                        # conf.write( 'config.Data.unitsPerJob = 1 \n' ) # Here the dictionary calls [key]th mass point's corresponding dataset name (value[1])  
                     else:
                         conf.write(line) # Copy the rest of the file
                 conf.close
                 contempf.close
 
-
         print( yelstr("Config files for ") + grnstr(crabPath) + yelstr(" complete!") )
 print( yelstr("Finished creating config files.") )
-
-
-# config.Data.inputDataset = '/QCD_Pt-15to7000_TuneCP5_Flat_13TeV_pythia8/RunIISummer16MiniAODv3-PUFlat0to70_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM'
-# #config.Data.splitting = 'FileBased' #auto for 2016/2018, file for 2017...file for everything else
