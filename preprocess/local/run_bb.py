@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-# This line will be replaced by createConfig.py: GT = "GLOBALTAGFLAG"
+GT = "106X_mc2017_realistic_v8"
 process = cms.Process("run")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -13,13 +13,16 @@ process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
-# Option to set max events, used for local cmsRun jobs
-# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+
 
 process.source = cms.Source("PoolSource",
         # Replace root file below with the source file you want to use (overwritten by crab config files that call this run file)
         fileNames = cms.untracked.vstring(
-                'myfile.root'
+        "/store/mc/RunIISummer20UL17MiniAODv2/ZprimeToBB_narrow_M-500_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/270000/51390FFC-E719-1949-B5A4-9F66968AC963.root"
+        # "/store/mc/RunIISummer20UL17MiniAODv2/ZprimeToBB_narrow_M-1000_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/260000/DD3D1F45-D908-6542-A376-0C5BDB026BA0.root"
+        # "/store/mc/RunIISummer20UL17MiniAODv2/ZprimeToBB_narrow_M-4000_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/230000/447CB897-C61C-5F47-8DEA-6AD4F9CB62A7.root"
+        # "/store/mc/RunIISummer20UL17MiniAOD/ZprimeToBB_narrow_M-8000_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/70000/CDD0C65D-4FB7-134A-A9B3-D68B5D03B7B8.root"
                                          )
 )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -84,13 +87,13 @@ process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
 process.run = cms.EDProducer('BESTProducer',
                              inputJetColl = cms.string('slimmedJetsAK8'),
                              jetColl = cms.string('PUPPI'),                     
-                             # This line will be replaced by createConfig.py: jetType = cms.string("PARTICLESTRINGFLAG")
-                             storeDaughters = cms.bool(True)
+							 jetType = cms.string("b"),
+                             storeDaughters = cms.bool(True),
 )
-process.TFileService = cms.Service("TFileService", fileName = cms.string("BESTInputs.root") )
+process.TFileService = cms.Service("TFileService", fileName = cms.string("bb_500_BESTInputs.root") )
 
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string("ana_out.root"),
+                               fileName = cms.untracked.string("bb_500_ana_out.root"),
                                SelectEvents   = cms.untracked.PSet( SelectEvents = cms.vstring('p') ),
                                outputCommands = cms.untracked.vstring('drop *',
                                                                       'keep *_fixedGridRhoAll_*_*',

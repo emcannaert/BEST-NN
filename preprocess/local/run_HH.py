@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-# This line will be replaced by createConfig.py: GT = "GLOBALTAGFLAG"
+GT = "106X_mc2017_realistic_v8"
 process = cms.Process("run")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -13,13 +13,16 @@ process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
-# Option to set max events, used for local cmsRun jobs
-# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+
 
 process.source = cms.Source("PoolSource",
         # Replace root file below with the source file you want to use (overwritten by crab config files that call this run file)
         fileNames = cms.untracked.vstring(
-                'myfile.root'
+        # "/store/mc/RunIISummer20UL16MiniAODv2/GluGluToBulkGravitonToHHTo4B_M-500_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/270000/4464EFA7-46EC-EC4E-88B4-912456E503BD.root"
+        # "/store/mc/RunIISummer20UL16MiniAODAPV/GluGluToBulkGravitonToHHTo4B_M-1000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v8-v2/120000/865B900D-E5A9-2947-9C52-45F21DD49855.root"
+        "/store/mc/RunIISummer20UL17MiniAOD/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/70000/CC9620A0-A1EE-3C48-B8DF-285766228071.root"
+        # "/store/mc/RunIISummer20UL16MiniAODv2/GluGluToBulkGravitonToHHTo4B_M-8000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/260000/53BD7641-0BEC-FE4F-9961-85BF441D6D86.root"
                                          )
 )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
@@ -84,13 +87,13 @@ process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
 process.run = cms.EDProducer('BESTProducer',
                              inputJetColl = cms.string('slimmedJetsAK8'),
                              jetColl = cms.string('PUPPI'),                     
-                             # This line will be replaced by createConfig.py: jetType = cms.string("PARTICLESTRINGFLAG")
-                             storeDaughters = cms.bool(True)
+							 jetType = cms.string("H"),
+                             storeDaughters = cms.bool(True),
 )
-process.TFileService = cms.Service("TFileService", fileName = cms.string("BESTInputs.root") )
+process.TFileService = cms.Service("TFileService", fileName = cms.string("HH_4000_BESTInputs.root") )
 
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string("ana_out.root"),
+                               fileName = cms.untracked.string("HH_ana_out.root"),
                                SelectEvents   = cms.untracked.PSet( SelectEvents = cms.vstring('p') ),
                                outputCommands = cms.untracked.vstring('drop *',
                                                                       'keep *_fixedGridRhoAll_*_*',
