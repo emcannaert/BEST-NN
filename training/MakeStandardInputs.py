@@ -14,20 +14,20 @@ from sklearn.externals import joblib
 import json
 import argparse, os
 
-listOfSamples = ["b","Higgs","QCD","Top","W","Z"]
+listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
 setTypes = ["","train","validation","test"]
 
 
 #==================================================================================
 # Standardize BES Vars /////////////////////////////////////////////////////////////////
 #==================================================================================
-def standardizeBESTVars(fileDir = "../formatConverter/h5samples/", sampleTypes = ["QCD","Higgs","Top","W","Z","b"], setTypes = [""], suffix = ""):
+def standardizeBESTVars(fileDir = "../formatConverter/h5samples/", sampleTypes = ["QCD","HH","TT","WW","ZZ","BB"], setTypes = [""], suffix = "", year = "2017"):
    # put BES variables in data frames
    for mySet in setTypes:
       jetBESDF = {}
       for mySample in sampleTypes:
          print("Getting", mySample, mySet)
-         filePath = fileDir+mySample+"Sample_BESTinputs"
+         filePath = fileDir+mySample+"Sample_"+year+"_BESTinputs"
          if not mySet == "":
             filePath = filePath + "_" + mySet
          if suffix == "":
@@ -44,6 +44,7 @@ def standardizeBESTVars(fileDir = "../formatConverter/h5samples/", sampleTypes =
 
       allBESinputs = numpy.concatenate([jetBESDF[mySample] for mySample in sampleTypes])
       print("Shape allBESinputs", allBESinputs.shape)
+      ## Maybe we don't need to scale eveything?
       scaler = preprocessing.StandardScaler().fit(allBESinputs)
 
       with open('ScalerParameters_'+mySet+'.txt', 'w') as outputFile:
@@ -76,7 +77,10 @@ def standardizeBESTVars(fileDir = "../formatConverter/h5samples/", sampleTypes =
          inF = h5py.File(inFilePath, "r")
          #Copy the images to the new file
          #Treat QCD separately because of dumb labeling scheme I introduced
-         for myFrame in ['HiggsFrame_images','TopFrame_images','ZFrame_images','WFrame_images']:
+         for myFrame in inF.keys(): #['HiggsFrame_images','TopFrame_images','ZFrame_images','WFrame_images']:
+            if myFrame == 'BES_vars': 
+               print("Already copied BES_vars, skipping")
+               continue
             print("Copying", myFrame)
             outF.create_dataset(myFrame, data=inF[myFrame], compression='lzf')
          inF.close()
@@ -99,6 +103,9 @@ if __name__ == "__main__":
     parser.add_argument('-sf','--suffix',
                         dest='suffix',
                         default="")
+    parser.add_argument('-y','--year',
+                        dest='year',
+                        default="2017")
     parser.add_argument('-st','--setType',
                         dest='setType',
                         help='<Required> Which (comma separated) sets to process. Examples: 1) --all; 2) train,validation,test',
@@ -110,7 +117,7 @@ if __name__ == "__main__":
     # Make directories you need
     if not os.path.isdir(args.h5Dir): print(args.h5Dir, "does not exist")
 
-    standardizeBESTVars(args.h5Dir, listOfSamples, setTypes, args.suffix)
+    standardizeBESTVars(args.h5Dir, listOfSamples, setTypes, args.suffix, args.year)
         
     ## Plot total pT distributions
     

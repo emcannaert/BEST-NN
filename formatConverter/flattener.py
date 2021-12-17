@@ -41,7 +41,7 @@ def flattenFile(keepProbs, h5Dir, outDir, listOfSamples, myYear, myType, bins, b
         totalEvents = fIn[list(fIn.keys())[0]].shape[0]
         print("Begin batching for sample", mySample, "in year", myYear,"total events", totalEvents)
         
-        ## Perform the keep/throw-away opration in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
+        ## Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
         while (counter < totalEvents):
             batchSize = userBatchSize if (totalEvents > counter+userBatchSize) else (totalEvents-counter)
             print("Batch size", batchSize, "at", counter)
@@ -54,6 +54,8 @@ def flattenFile(keepProbs, h5Dir, outDir, listOfSamples, myYear, myType, bins, b
             for myKey in fIn.keys():
                 print("Key", myKey)
                 myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
+                dsetShape  = fIn[myKey].shape
+                dsetChunks = fIn[myKey].chunks 
                 print("Shape of myKeyData", myKeyData.shape)
                 # Loop over bins (events in dataset may belong to any pt-bin)
                 for binIndex in range(0,len(bins)):
@@ -83,12 +85,10 @@ def flattenFile(keepProbs, h5Dir, outDir, listOfSamples, myYear, myType, bins, b
                     # Store kept data
                     if not myKey in besData.keys():
                         print("Making new datset")
-                        if "images" in myKey.lower():
-                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None, fIn[myKey].shape[1], fIn[myKey].shape[2], fIn[myKey].shape[3]), compression='lzf')
-                        elif "vars" in myKey.lower():
-                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None, fIn[myKey].shape[1]), compression='lzf')
-                        elif "pf" in myKey.lower():
-                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None, fIn[myKey].shape[1], fIn[myKey].shape[2]), compression='lzf')
+                        if myKey == "BES_vars": # max shape by # of vars
+                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
+                        else: # max shape by # of pfcands (or SV's) and # of vars
+                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
                     else:
                         # append the dataset
                         print("Appending dataset")
@@ -157,7 +157,7 @@ def getProbabilities(h5Dir, listOfSamples, myYear, myType, bins, binSize, maxRan
 # -s is the samples to process: if 'all' then it does QCD,W,Z,Top,b,Higgs. Else you can provide a comma separated list
 # -st is the types of sample sets to process, i.e. train, validation, test. If 'all' then it does these three but also the pre-split samples
 # -b is the batch size to do the copying when flattening. This is a performance hyper-parameter. The output is unaffected.
-# -fi flattenIndex is the BESvars index to flatten on. Currenltly the default is 28 since that corresponds to pt in the current samples.
+# -fi flattenIndex is the BESvars index to flatten on. Currenltly the default is 548 since that corresponds to pt in the current samples.
 # -rl rangeLow is the lower limit to set the bins. Anything below this will always be rejected.
 # -rh rangeHigh is the upper limit to set the bins. Anything above this will always be rejected.
 # -nb is the number of bins for the flattening range. Bin size is set by (rl-rh)/nbins.
@@ -187,19 +187,23 @@ if __name__ == "__main__":
     parser.add_argument('-fi', '--flattenIndex',
                         dest='flattenIndex',
                         type=int,
-                        default=28)
+                        # default=28)
+                        default=548)
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
-                        default=0)
+                        # default=0)
+                        default=500)
     parser.add_argument('-rh', '--rangeHigh',
                         dest='rangeHigh',
                         type=float,
-                        default=3500)
+                        # default=3500)
+                        default=1600)
     parser.add_argument('-nb', '--nBins',
                         dest='nBins',
                         type=int,
-                        default=175)
+                        # default=175)
+                        default=55)
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
                         default="~/nobackup/h5samples/")
