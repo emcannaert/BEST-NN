@@ -181,6 +181,17 @@ declare -Ag dasBack=( ["HH"]="_narrow" ["WW"]="_Tune" ["ZZ"]="_Tune" ["tt"]="_Tu
 declare -Ag crabTemplate=(  ["HH"]="GravitonHH_M_MASSGeV_trees" ["WW"]="GravitonWW_M_MASSGeV_trees" ["ZZ"]="GravitonZZ_M_MASSGeV_trees" 
                             ["tt"]="ZprimeTT_M_MASSWIDTH_trees"   ["bb"]="ZprimeBB_M_MASSGeV_trees"   ["QCD"]="QCD_Pt_MASS_trees" )
 
+# Declare $dasFront, an associative array of strings used to search DAS and trim strings:
+declare -Ag dasFront=(  ["HH"]="GluGluToBulkGravitonToHHTo4B_M-"    ["WW"]="BulkGravToWWToWhadWhad_narrow_M-"   ["ZZ"]="BulkGravToZZToZhadZhad_narrow_M-" 
+                        ["tt"]="ZprimeToTT_M"                       ["bb"]="ZprimeToBB_narrow_M-"               ["QCD"]="QCD_Pt_" )
+# Declare $dasBack, an associative array of strings used to search DAS and trim strings:
+declare -Ag dasBack=( ["HH"]="_narrow" ["WW"]="_Tune" ["ZZ"]="_Tune" ["tt"]="_W" ["bb"]="_Tune" ["QCD"]="_Tune" )
+# The mass point for each sample will the substring in $dasResults that is between $dasFront and $dasBack; the above arrays will also be used to isolate the mass points.
+
+# Declare $crabTemplate, an associative array of strings used to build the crab directory names:
+declare -Ag crabTemplate=(  ["HH"]="GravitonHH_M_MASSGeV_trees" ["WW"]="GravitonWW_M_MASSGeV_trees" ["ZZ"]="GravitonZZ_M_MASSGeV_trees" 
+                            ["tt"]="ZprimeTT_M_MASSGeV_trees"   ["bb"]="ZprimeBB_M_MASSGeV_trees"   ["QCD"]="QCD_Pt_MASS_trees" )
+
 # These 21 mass points were originally used when submitting the GridPacks:
 # declare -a massPoints=("500" "600" "800" "1000" "1200" "1400" "1600" "1800" "2000" "2500" "3000" "3500" "4000" "4500" "5000" "5500" "6000" "6500" "7000" "7500" "8000")
 

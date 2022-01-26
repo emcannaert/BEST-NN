@@ -58,7 +58,7 @@ def standardizeBESTVars(fileDir = "../formatConverter/h5samples/", sampleTypes =
          #if infParticle == 'H' : infParticle = 'Higgs'
          #if infParticle == 'T' : infParticle = 'Top'
          #if infParticle == 'B' : infParticle = 'b'
-         outFilePath = fileDir+mySample+"Sample_BESTinputs"
+         outFilePath = outDir+mySample+"Sample_BESTinputs"
          if not mySet == "":
             outFilePath = outFilePath + "_" + mySet
          if not suffix == "":
@@ -99,7 +99,10 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
-                        default="/uscms/home/bonillaj/nobackup/h5samples/")
+                        default="~/nobackup/h5samples/")
+    parser.add_argument('-o','--outDir',
+                        dest='outDir',
+                        default="~/nobackup/h5samples/")
     parser.add_argument('-sf','--suffix',
                         dest='suffix',
                         default="")
@@ -108,7 +111,7 @@ if __name__ == "__main__":
                         default="2017")
     parser.add_argument('-st','--setType',
                         dest='setType',
-                        help='<Required> Which (comma separated) sets to process. Examples: 1) --all; 2) train,validation,test',
+                        help='<Required> Which (comma separated) sets to process. Examples: 1) all; 2) train,validation,test',
                         required=True)
     args = parser.parse_args()
     if not args.samples == "all": listOfSamples = args.samples.split(',')

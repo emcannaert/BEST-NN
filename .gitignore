@@ -10,3 +10,4 @@
 *.out
 *.err
 *vscode*
+preprocess/test/*

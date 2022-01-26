@@ -14,6 +14,16 @@ eosls /store/user/jbonilla/BESTTag2Samples/
 xrdcp root://cmsxrootd.fnal.gov//store/user/jbonilla/BESTTag2Samples/<FileYouWishToCopy> ~/nobackup/BESTTag2Samples/
 ```
 
+## Tagged Samples
+
+If you wish to use already produced samples, copy them from eos
+
+```
+mkdir ~/nobackup/BESTTag2Samples
+eosls /store/user/jbonilla/BESTTag2Samples/
+xrdcp root://cmsxrootd.fnal.gov//store/user/jbonilla/BESTTag2Samples/<FileYouWishToCopy> ~/nobackup/BESTTag2Samples/
+```
+
 ## Conversion Instructions
 
 The conversion takes place using uproot to create useful python data structures. First, make sure that there are directories to store
