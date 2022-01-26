@@ -8,8 +8,10 @@
 # Output should be three sets of hd5f files: training, validation, testing      ///
 #----------------------------------------------------------------------------------
 
+# fuss with defaults? make them uniform across convert,split,flatten
+
 # modules
-import ROOT as root
+#import ROOT as root
 import uproot
 import numpy as np
 import pandas as pd
@@ -24,25 +26,28 @@ import time
 from sklearn.model_selection import train_test_split
 
 # User modules
-import tools.imageOperations as img
+#import tools.imageOperations as img
 
 # Enter batch mode in root, so python can access displays
-root.gROOT.SetBatch(True)
+#root.gROOT.SetBatch(True)
 
 # Global variables
-listOfSamples = ["b","Higgs","QCD","Top","W","Z"]
+listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
+listOfYears = ["2016","2017","2018"]
 
 # Helper functions
 def splitFileSKL(inputPath, outDir, debug, userBatchSize):
     print("Starting clock")
     startTime = time.time()
     
-    listOfFrameTypes = ["Higgs","Top","W","Z"]
+    listOfFrameTypes = ["Higgs","Top","W","Z","Bottom"]
     setTypes = ["train", "validation", "test"]
 
     # Open file, grab keys, and NEvents
     inputFile = h5py.File(inputPath,"r")
-    dataKeys = inputFile.keys()
+    dataKeys = list(inputFile.keys())
+    print(dataKeys)
+    print(inputFile[dataKeys[0]].shape)
     totalEvents = inputFile[dataKeys[0]].shape[0]
 
     # Create data frame and output files to handle copied information
@@ -64,6 +69,7 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
         print("Batch size of ",batchSize,", at counter ",counter)
         print("Starting key loop")
         for myKey in dataKeys:
+            print("MyKey",myKey)
             keyTime = time.time()
             #dsetH5 = inputFile[myKey]
             dsetNP = np.array(inputFile[myKey][counter:counter+batchSize])
@@ -71,19 +77,26 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
             ## Shuffle=True shuffles the incoming data set.
             ## Random state sets the seed. The values are meaningless, but the same value leads to same results
             ## The most important thing here is that each key is passed the same random state so the same events are split and kept
-            output1 = train_test_split(dsetNP, train_size=0.34, shuffle=True, random_state=42)
-            output2 = train_test_split(output1[1], train_size=0.5, shuffle=True, random_state=24)
+
+            #update these names
+            output1 = train_test_split(dsetNP, train_size=0.8, shuffle=True, random_state=42) # Full dataset -> 80% train (output1[0]), 20% 'test' (output1[1]) -> next line
+            output2 = train_test_split(output1[1], train_size=0.5, shuffle=True, random_state=24) # 20% 'test' -> 10% validation (output2[0]), 10% test (output2[1])
             print("Outdset creation time:", time.time()-keyTime)
             if counter == 0:
-                if "frame" in myKey.lower():
+                if "images" in myKey.lower():
                     besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=output1[0], maxshape=(None, inputFile[myKey].shape[1], inputFile[myKey].shape[2], inputFile[myKey].shape[3]), compression='lzf')
                     besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=output2[0], maxshape=(None, inputFile[myKey].shape[1], inputFile[myKey].shape[2], inputFile[myKey].shape[3]), compression='lzf')
                     besData["test"][myKey] = h5fTest.create_dataset(myKey, data=output2[1], maxshape=(None, inputFile[myKey].shape[1], inputFile[myKey].shape[2], inputFile[myKey].shape[3]), compression='lzf')
                     print("DS store time:", time.time()-keyTime)
-                else:
+                elif "vars" in myKey.lower(): # max shape by # of vars
                     besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=output1[0], maxshape=(None, inputFile[myKey].shape[1]), compression='lzf')
                     besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=output2[0], maxshape=(None, inputFile[myKey].shape[1]), compression='lzf')
                     besData["test"][myKey] = h5fTest.create_dataset(myKey, data=output2[1], maxshape=(None, inputFile[myKey].shape[1]), compression='lzf')
+                    print("DS store time:", time.time()-keyTime)
+                elif "pf" in myKey.lower(): # max shape by # of pfcands and # of vars
+                    besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=output1[0], maxshape=(None, inputFile[myKey].shape[1], inputFile[myKey].shape[2]), compression='lzf')
+                    besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=output2[0], maxshape=(None, inputFile[myKey].shape[1], inputFile[myKey].shape[2]), compression='lzf')
+                    besData["test"][myKey] = h5fTest.create_dataset(myKey, data=output2[1], maxshape=(None, inputFile[myKey].shape[1], inputFile[myKey].shape[2]), compression='lzf')
                     print("DS store time:", time.time()-keyTime)
             else:
                 # append the dataset
@@ -183,11 +196,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
     parser.add_argument('-s', '--samples',
                         dest='samples',
-                        help='<Required> Which (comma separated) samples to process. Examples: 1) --all; 2) W,Z,b',
+                        help='<Required> Which (comma separated) samples to process. Examples: 1) --all; 2) WW,ZZ,BB',
+                        required=True)
+    parser.add_argument('-y', '--years',
+                        dest='years',
+                        help='<Required> Which (comma separated) years to process. Examples: 1) --all; 2) 2016,2018',
                         required=True)
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
-                        default="root://cmsxrootd.fnal.gov//store/user/jbonilla/BESTTag2Samples/")
+                        default="~/nobackup/h5Dir/")
     parser.add_argument('-o','--outDir',
                         dest='outDir',
                         default='~/nobackup/h5Dir/')
@@ -198,8 +215,10 @@ if __name__ == "__main__":
                         action='store_true')
     args = parser.parse_args()
     if not args.samples == "all": listOfSamples = args.samples.split(',')
+    if not args.years == "all": listOfYears = args.years.split(',')
     if args.debug:
         print("Samples to process: ", listOfSamples)
+        print("Years to process: ", listOfYears)
 
     # Check existance of directories you need
     if not os.path.isdir(args.h5Dir): 
@@ -208,14 +227,13 @@ if __name__ == "__main__":
     if not os.path.isdir(args.outDir):
         os.mkdir(args.outDir)
 
-    for sampleType in listOfSamples:
-        print("Processing", sampleType)
-        inputPath = args.h5Dir+sampleType+"Sample_BESTinputs.h5"
-        #splitFileSlow(inputPath, args.outDir, args.debug)
-        splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize)
+    for year in listOfYears:
+        for sampleType in listOfSamples:
+            print("Processing", sampleType)
+            inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
+            #splitFileSlow(inputPath, args.outDir, args.debug)
+            splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize)
         
-        
-    ## Plot total pT distributions
-    
+            
     print("Done")
 
