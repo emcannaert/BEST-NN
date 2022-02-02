@@ -212,12 +212,10 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
     # To search for our datasets on DAS, we need to manipulate the input data a bit. This is specific to our current analysis but can be modified for other analyses.
 
     # Here we define "$dasYear", which is used to search DAS.
-
     # The Summer 2020 Ultra Legacy samples for 2016_APV (2015) are named "16MiniAODAPV"; the regular 2016 files do not have the "APV".
     if [[ $year == "2016_APV" ]]; then  dasYear="RunIISummer20UL16MiniAODAPV"
     # All other years are straightforward. This trims the first two characters off of the year string, so 2017 becomes 17, etc.
     else                                dasYear="RunIISummer20UL${year:2}MiniAOD"; fi
-
     
     # Clear and declare associative arrays to fill later with DAS search results:
     # The -A flag is for associative arrays, the -g flag declares the bash array globally, allowing us to call it outside of the checkDASDatasets function.
@@ -246,7 +244,6 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
 
         # Now trim the dataset string to get the mass point and build the crab directory name:
         trimString=${dataset#*${dasFront[$particle]}} # Trims the corresponding $dasFront string from the front of the $dasResults string 
-
         massPoint=${trimString%${dasBack[$particle]}*} # Trims the rest of the back of $trimString; now $massPoint is the mass point of the dataset
 
         # Check for special cases: 
