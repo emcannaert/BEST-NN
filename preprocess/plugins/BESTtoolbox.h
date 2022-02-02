@@ -49,17 +49,15 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars, std::map< st
 bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::Candidate *> &daughtersOfJet,
                       std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                       std::vector<pat::Jet>::const_iterator jet, std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets,
-                      std::map<std::string, std::array<std::array<std::array<float, 1>, 31>, 31> > &imgVars,
-                      std::string frame, float mass);
+                    //   int mass);
+                      std::string mass);
 
 // store the daughters, rest frame daughters, and rest frame jets
 void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet,
                        std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
-                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> frames,
+                    //    std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
+                       std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> restMasses,
                        std::map<std::string, std::vector<float> > &jetVecVars, int jetColl );
-
-// make the rest frame jet images
-std::array<std::array<std::array<float, 1>, 31>, 31> boostedJetCamera(std::vector<TLorentzVector> &pfCands, std::vector<TLorentzVector> &reclusteredJets);
 
 // make rest frame z axis the boost axis
 void pboost( TVector3 pbeam, TVector3 plab, TLorentzVector &pboo );

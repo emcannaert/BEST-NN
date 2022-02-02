@@ -10,17 +10,30 @@
 # This script takes arguments for particle, year, and datatype to create/fill the sample files with mass points,dataset names from DAS, using dasgoclient.
 # This script is specific to calling datasets for the Summer 2020 Ultra Legacy samples submitted by the UCD BEST team, for the purpose of training BEST. But it can be modified to search for other datasets! 
 # This script also checks for and keeps track of a version two, or "v2", for each dataset, as these updated datasets are still being produced as of writing this code.
-
-######################################### NOTES TO SELF ############################
-# Add comment sections
+################################## NOTES TO SELF ##################################
 # Implement data
-# Implement finding mass points that are closest to the list
-# Implment skipping finding DAS file?
-# HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong)
-# ZZ: DAS is missing mass points: (2015: 600, 1600), (2017: 2000), (2018: 1000, 1400, 1800)
-# tt: Mass points on DAS not in the 21 mass points given: (2015 and 2016: 400, 700, 900) <- The script finds all samples, regardless of relation to the 21 mass points
-# tt: DAS is missing mass points: (all years: 5000, 5500, 6000, 6500, 7000, 7500, 8000), (2017 and 2018: 500, 600, 800, 1000)
-# tt: There should be multiple widths per mass point, but for now there is only one width per mass point. This code will need to be updated to handle widths correctly in the future.
+
+###(NOTE: 2015 = 2016_APV)###
+# As of Dec. 10, 2021:
+#   Missing Mass Points:
+#       ZZ:  2017: 2000; 2018: 1000
+#       QCD: 2017: Flat
+#       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; All years: 5000, 5500, 6000, 6500, 7000, 7500, 8000
+#   Dataset Versions:
+#       2015: All tt and QCD datasets are v2, the rest is v1.
+#       2016: All datasets are v2
+#       2017: All datasets are v2, except for two extra tt datasets (detailed below)
+#       2018: All datasets are v2 (NOTE: No v1 dataset exists for QCD Flat)
+#   Notes:
+#       HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong)
+#       tt: Mass points on DAS not in the 21 mass points given: (2015 and 2016: 400, 700, 900) <- The script finds all samples, regardless of relation to the 21 mass points requested
+#       tt: Using extra tt samples that were not originally requested. Can be identified by a capital "P" in dataset name (/ZPrimeToTT... instead of /ZprimetoTT...)
+#           Gives 2 extra v2 datasets per mass point (17 from 400 to 4500, 34 total each year) at 30% and 10% width, except that (2017: M900_W270 and M1400_W140) are v1
+
+
+#==================================================================================
+# Setup ///////////////////////////////////////////////////////////////////////////
+#==================================================================================
 
 # Define ANSI colors here for the output since I am extra:
 RED='\033[91m' # Red
@@ -149,12 +162,23 @@ echo
 echo "${BLUE}Initiating DAS search. Checking voms cms proxy...${NC}"
 
 # This checks for a voms cms proxy that will last longer than 60 minutes, and has the user create a new one if not
-if [[ $(voms-proxy-info -timeleft) > 3600 ]] && [[ $(voms-proxy-info -vo) == "cms" ]]; then
-    echo "${GRN}Valid proxy confirmed!${NC}"
-else
+if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then
     echo "${YEL}Error: Proxy either doesn't exist or will expire soon. Initializing new proxy...${NC}"
     voms-proxy-init --valid 192:00 -voms cms
+    if [[ ! $(voms-proxy-info -timeleft) > 3600 ]] || [[ $(voms-proxy-info -vo) != "cms" ]]; then exit 1; fi # Exit if user failed to create proxy
 fi
+echo "${GRN}Valid proxy confirmed!${NC}"
+
+# Declare $dasFront, an associative array of strings used to search DAS and trim strings:
+declare -Ag dasFront=(  ["HH"]="GluGluToBulkGravitonToHHTo4B_M-"    ["WW"]="BulkGravToWWToWhadWhad_narrow_M-"   ["ZZ"]="BulkGravToZZToZhadZhad_narrow_M-" 
+                        ["tt"]="Z*rimeToTT_M"                       ["bb"]="ZprimeToBB_narrow_M-"               ["QCD"]="QCD_Pt_" )
+# Declare $dasBack, an associative array of strings used to search DAS and trim strings:
+declare -Ag dasBack=( ["HH"]="_narrow" ["WW"]="_Tune" ["ZZ"]="_Tune" ["tt"]="_Tune" ["bb"]="_Tune" ["QCD"]="_Tune" )
+# The mass point for each sample will the substring in $dasResults that is between $dasFront and $dasBack; the above arrays will also be used to isolate the mass points.
+
+# Declare $crabTemplate, an associative array of strings used to build the crab directory names:
+declare -Ag crabTemplate=(  ["HH"]="GravitonHH_M_MASSGeV_trees" ["WW"]="GravitonWW_M_MASSGeV_trees" ["ZZ"]="GravitonZZ_M_MASSGeV_trees" 
+                            ["tt"]="ZprimeTT_M_MASSWIDTH_trees"   ["bb"]="ZprimeBB_M_MASSGeV_trees"   ["QCD"]="QCD_Pt_MASS_trees" )
 
 # Declare $dasFront, an associative array of strings used to search DAS and trim strings:
 declare -Ag dasFront=(  ["HH"]="GluGluToBulkGravitonToHHTo4B_M-"    ["WW"]="BulkGravToWWToWhadWhad_narrow_M-"   ["ZZ"]="BulkGravToZZToZhadZhad_narrow_M-" 
@@ -170,6 +194,10 @@ declare -Ag crabTemplate=(  ["HH"]="GravitonHH_M_MASSGeV_trees" ["WW"]="Graviton
 # These 21 mass points were originally used when submitting the GridPacks:
 # declare -a massPoints=("500" "600" "800" "1000" "1200" "1400" "1600" "1800" "2000" "2500" "3000" "3500" "4000" "4500" "5000" "5500" "6000" "6500" "7000" "7500" "8000")
 
+#==================================================================================
+# Define Functions ////////////////////////////////////////////////////////////////
+#==================================================================================
+
 # Here we define a function to call dasgoclient to search DAS, and assign the result to an array of strings to "$dasResults".
 # If the datasets pass certain criteria, the datasets in this array are added to an associative array called $dasDatasets.
 # This function also saves the mass point for each dataset that passes the criteria to an array of strings "$dasMasses", and uses these masses as keys for $dasDatasets and $crabNames.
@@ -184,11 +212,12 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
     # To search for our datasets on DAS, we need to manipulate the input data a bit. This is specific to our current analysis but can be modified for other analyses.
 
     # Here we define "$dasYear", which is used to search DAS.
-    if [[ $year == "2016_APV" ]]; then # The Summer 2020 Ultra Legacy samples for 2016_APV (2015) are named "16MiniAODAPV"; the regular 2016 files do not have the "APV".
-        dasYear="RunIISummer20UL16MiniAODAPV"
-    else # All other years are straightforward. This trims the first two characters off of the year string, so 2017 becomes 17, etc.
-        dasYear="RunIISummer20UL${year:2}MiniAOD"
-    fi
+
+    # The Summer 2020 Ultra Legacy samples for 2016_APV (2015) are named "16MiniAODAPV"; the regular 2016 files do not have the "APV".
+    if [[ $year == "2016_APV" ]]; then  dasYear="RunIISummer20UL16MiniAODAPV"
+    # All other years are straightforward. This trims the first two characters off of the year string, so 2017 becomes 17, etc.
+    else                                dasYear="RunIISummer20UL${year:2}MiniAOD"; fi
+
     
     # Clear and declare associative arrays to fill later with DAS search results:
     # The -A flag is for associative arrays, the -g flag declares the bash array globally, allowing us to call it outside of the checkDASDatasets function.
@@ -217,22 +246,31 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
 
         # Now trim the dataset string to get the mass point and build the crab directory name:
         trimString=${dataset#*${dasFront[$particle]}} # Trims the corresponding $dasFront string from the front of the $dasResults string 
-        massString=${trimString%${dasBack[$particle]}*} # Trims the rest of the back of $trimString; now $massString is the mass point of the dataset
+
+        massPoint=${trimString%${dasBack[$particle]}*} # Trims the rest of the back of $trimString; now $massPoint is the mass point of the dataset
 
         # Check for special cases: 
-        if [[ $particle == "HH"  ]] && [[ $massString == "60000" ]]; then massString="6000"; fi # 6000GeV Higgs dataset is mislabeled as 60000Gev
-        if [[ $particle == "QCD" ]] && [[ $dataset    =~ "Flat"  ]]; then massString="Flat"; fi # The 15to7000 QCD pT sample is the flattened pT
-
+        if [[ $particle  == "HH"   ]] && [[ $massPoint == "60000" ]]; then massPoint="6000"; fi # 6000GeV Higgs dataset is mislabeled as 60000Gev
+        if [[ $particle  == "QCD"  ]] && [[ $dataset   =~ "Flat"  ]]; then massPoint="Flat"; fi # The 15to7000 QCD pT sample is the flattened pT
+        if [[ $year      == "2018" ]] && [[ $massPoint =~ "Flat"  ]]; then ((v2Counter++));  fi # There is no v1 2018 QCD Flat dataset, so v2Counter needs to be incremented manually
+        
         # Check if current mass point is the same as previous mass point. If so, then the current dataset is a v2, and the previous dataset is the corresponding v1.
-        if (( $k != 0 )) && [[ $massString == ${dasMasses[$k-1]} ]] ; then 
+        if (( $k != 0 )) && [[ $massPoint == ${dasMasses[$k-1]} ]] ; then 
             ((v2Counter++)) # If dataset is a v2, increment $v2Counter. The code after the if statement will update the v1 entry to the v2 entry.
         else
-            dasMasses[$k]=$massString # If the dataset is a v1, then add the new mass point to $dasMasses
+            dasMasses[$k]=$massPoint # If the dataset is a v1, then add the new mass point to $dasMasses
             ((k++)) # Increment $dasMasses index
         fi
 
-        dasDatasets[$massString]=$dataset # Store dataset
-        crabNames[$massString]=${crabTemplate[$particle]/"MASS"/${massString}} # Replace "MASS" with current mass point, store crab directory name 
+        dasDatasets[$massPoint]=$dataset # Store dataset
+
+        if [[ $particle == "tt" ]] ; then # Special case for top samples, which can have different datasets with different widths for the same mass 1000_W100
+            widthString=${massPoint#*"_W"} # Trims $massPoint from the front, leaving just the width
+            massString=${massPoint%"_W"*} # Trims $massPoint from the back, leaving just the mass
+            crabNames[$massPoint]=${crabTemplate[$particle]/"MASSWIDTH"/"${massString}GeV_W_${widthString}GeV"} # Replace "MASSWIDTH" with current mass point/width, store crab directory name 
+        else # All other particles do not have widths, can be treated the same:
+            crabNames[$massPoint]=${crabTemplate[$particle]/"MASS"/${massPoint}} # Replace "MASS" with current mass point, store crab directory name 
+        fi
     done 
     dasMasses=($(echo ${dasMasses[*]}| tr " " "\n" | sort -n)) # Sort $dasMasses
 }
@@ -251,6 +289,10 @@ checkDASFiles(){ ################## Takes input as: "checkDASFiles dataset"
         fi
     done 
 }
+
+#==================================================================================
+# Fill Samples ////////////////////////////////////////////////////////////////////
+#==================================================================================
 
 # This loop will create the sample text files, search for the datasets on DAS, check for version, and fill the text files accordingly.
 # It will also check for a previous set of sample files, and report any new datasets.

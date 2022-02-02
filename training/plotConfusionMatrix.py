@@ -5,23 +5,15 @@
 #==================================================================================
 
 # modules
-import numpy
-import pandas as pd
+import numpy as np
 import h5py
 import matplotlib
 matplotlib.use('Agg') #prevents opening displays, must use before pyplot
 import matplotlib.pyplot as plt
-import tensorflow as tf
-import pickle
-import copy
 import random
 import numpy.random
-
-# get stuff from modules
-from sklearn import svm, metrics, preprocessing, neural_network, tree
-from sklearn.linear_model import SGDClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.externals import joblib
+import tensorflow as tf
+from sklearn import metrics
 
 # set up keras
 import argparse, os
@@ -29,13 +21,7 @@ from os import environ
 environ["KERAS_BACKEND"] = "tensorflow" #must set backend before importing keras
 from keras.models import Sequential, Model
 from keras.models import load_model
-from keras.optimizers import SGD
-from keras.layers import Input, Activation, Dense, SeparableConv2D, Conv2D, MaxPool2D, BatchNormalization, Dropout, Flatten, MaxoutDense
-from keras.layers import GRU, LSTM, ConvLSTM2D, Reshape
-from keras.layers import concatenate
-from keras.regularizers import l1,l2
-from keras.utils import np_utils, to_categorical, plot_model
-from keras.callbacks import EarlyStopping, ModelCheckpoint
+
 
 # set up gpu environment
 from keras import backend as k
@@ -49,257 +35,126 @@ k.tensorflow_backend.set_session(tf.Session(config=config))
 # Print which gpu/cpu this is running on
 sess = tf.Session(config=config)
 h = tf.constant('hello world')
-print(sess.run(h))
+#print(sess.run(h))
 
 # set options 
 savePDF = True
 savePNG = True
-
-setTypes = ["Test"]
-sampleTypes = ["W","Z","Higgs","Top","b","QCD"]
-frameTypes = ["W","Z","Higgs","Top"]
-
+sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 BatchSize = 1200
+#models = ["BES","Images","Ensemble","Both"]
+print("Begin CM")
 
-models = ["BES","Images","Combined","Both"]
+def makeCM(model_BEST, h5Dir, plotDir, year, suffix, maskPath, testMaxEvents, modelType):
+    import tools.functions as functs
+    print("Begin CM")
+    cm = {}
+    maskFile = open(maskPath, "r")
+    maskIndex = []
+    for line in maskFile:
+      maskIndex.append(line.split(':')[0])
+      maskFile.close()
+      print(maskPath + " chosen; mask size " + str(len(maskIndex)))
+      myMask = [True if str(i) in maskIndex else False for i in range(596)]
+    myTestEvents = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_test_flattened_standardized.h5","r")["BES_vars"])[:,myMask] for mySample in sampleTypes]
+    print("My Test events shape:",[myTestEvents[i].shape for i in range(len(myTestEvents))])
+    myTestTruth  = [np.zeros((len(myTestEvents[i]),len(sampleTypes))) for i in range(len(myTestEvents))] # shape: N,6 filled w/ 0s
+    for i in range(len(sampleTypes)):
+      myTestTruth[i][:,i] = 1.
+                   
+    print("My test truth shape:",[myTestTruth[i].shape for i in range(len(myTestTruth))]) 
+    print("Labels are:",[[i,mySample] for i,mySample in enumerate(sampleTypes)])
+    globals()["jetBESvarsTest"]  = np.concatenate(myTestEvents)
+    globals()["truthLabelsTest"] = np.concatenate(myTestTruth)
+    print("Shuffle Test")
+    rng_state = np.random.get_state()
+    np.random.set_state(rng_state)
+    np.random.shuffle(globals()["truthLabelsTest"])
+    np.random.set_state(rng_state)
+    np.random.shuffle(globals()["jetBESvarsTest"])
 
-def loadData(setTypes, doBES, doImages):
-   #==================================================================================
-   # Initialize what will be np arrays ////////////////////////////////////////////////////////////
-   #==================================================================================
-   # This will create a series of global variables like jetTopFrameTrain and jetHiggsFrameValidation and jetBESvarsTrain, (4frames+1BesVars)*2sets=10globVars
-   for mySet in setTypes:
-      if doImages:
-         for myFrame in frameTypes:
-            globals()["jet"+myFrame+"Frame"+mySet] = []
-      if doBES:
-         globals()["jetBESvars"+mySet] = []
+    print("Making CM")
+    print("Max events to test on: " + str(testMaxEvents))
+    print("(None means no limit, test all events)")
+    # cm["BES"] = metrics.confusion_matrix(np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:] ]), axis=1), np.argmax(globals()["truthLabelsTest"][:], axis=1) )
+    cm["BES"] = metrics.confusion_matrix(np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1), np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:testMaxEvents] ]), axis=1) )
+    # cm["BES"] = metrics.confusion_matrix(np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:testMaxEvents] ]), axis=1), np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1) )
+                           
+    print("Plot confusion matrix")
+    plt.figure()
+    targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
+    for myKey in cm.keys():
+        print("myKey",myKey)
 
-      globals()["truthLabels"+mySet] = []
+        # functs.plot_confusion_matrix(cm[myKey].T, targetNames)
+        functs.plot_confusion_matrix(cm[myKey], targetNames)
+        if savePDF == True:
+            if not os.path.isdir(plotDir): os.makedirs(plotDir)
+            print("Saving to", plotDir+'/ConfusionMatrix_'+myKey+suffix+'.pdf')
+            plt.savefig(plotDir+'/ConfusionMatrix_'+myKey+suffix+'.pdf')
+        plt.clf()
 
-   ## and this makes 12 global variables to store data
+        # functs.plot_confusion_matrix(cm[myKey].T, targetNames, normalize=True)
+        functs.plot_confusion_matrix(cm[myKey], targetNames, normalize=True)
+        if savePDF == True:
+            if not os.path.isdir(plotDir): os.makedirs(plotDir)
+            print("Saving to", plotDir+'/ConfusionMatrix_'+myKey+suffix+'_normalized.pdf')
+            plt.savefig(plotDir+'/ConfusionMatrix_'+myKey+suffix+'_normalized.pdf')
+        plt.clf()
+    plt.close()
 
-   print(globals().keys())
-
-   #==================================================================================
-   # Load Data from  h5 //////////////////////////////////////////////////////////////
-   #==================================================================================
-
-   # Loop over 2sets*6samples=12 files
-   makeTruthLabelsOnce = True
-   for mySet in setTypes:
-      for index, mySample in enumerate(sampleTypes):
-         print("Opening "+mySample+mySet+" file")
-         myF = h5py.File("/uscms/home/bonillaj/nobackup/h5samples/"+mySample+"Sample_BESTinputs_"+mySet.lower()+"_flattened_standardized.h5","r")
-
-         ## Make TruthLabels, only once (i.e. for key=BESvars)
-         if globals()["truthLabels"+mySet] == []:
-            print("Making new", "truthLabels"+mySet)
-            globals()["truthLabels"+mySet] = numpy.full(len(myF['BES_vars'][()]), index)
-         else:
-            print("Concatenate", "truthLabels"+mySet)
-            globals()["truthLabels"+mySet] = numpy.concatenate((globals()["truthLabels"+mySet], numpy.full(len(myF['BES_vars'][()]), index)))
-            
-         for myKey in myF.keys():
-            varKey = "jet"
-            if "image" in myKey.lower():
-               if not doImages:
-                  continue
-               varKey = varKey+myKey.split("_")[0] # so HiggsFrame, TopFrame, etc
-            else:
-               if not doBES:
-                  continue
-               varKey = varKey+"BESvars"
-               
-            varKey = varKey+mySet
-         
-            ## Append data
-            if globals()[varKey] == []:
-               print("Making new", varKey)
-               globals()[varKey] = myF[myKey][()]
-            else:
-               print("Concatenate", varKey)
-               globals()[varKey] = numpy.concatenate((globals()[varKey], myF[myKey][()]))
-            
-         myF.close()
-         
-   print("Finished Accessing H5 data")
-   ## Order of categories: 0-W, 1-Z, 2-H, 3-t, 4-b, 5-QCD (order of sampleTypes). Format properly.
-   print("To_Categorical")
-   for mySet in setTypes:
-      globals()["truthLabels"+mySet] = to_categorical(globals()["truthLabels"+mySet], num_classes = 6)
-      print("Made Truth Labels "+mySet, globals()["truthLabels"+mySet].shape)
-
-
-
-'''
-#==================================================================================
-# Initialize what will be np arrays ////////////////////////////////////////////////////////////
-#==================================================================================
-# This will create a series of global variables like jetTopFrameTrain and jetHiggsFrameValidation and jetBESvarsTrain, (4frames+1BesVars)*2sets=10globVars
-for mySet in setTypes:
-   if doImages:
-      for myFrame in frameTypes:
-         globals()["jet"+myFrame+"Frame"+mySet] = []
-   if doBES:
-      globals()["jetBESvars"+mySet] = []
-      
-#jetImagesTrain = [] #Should be a concatenation of XFrameImageTrain (ensure above sampleType order), each which appends {W,Z,H,Top,b,QCD}_XFrame_images_train
-#jetImagesValidation = [] #Should be a concatenation of XFrameImageValidation (ensure above sampleType order), each which appends {W,Z,H,Top,b,QCD}_XFrame_images_train
-
-truthLabelsTest = []
-
-## and this makes 12 global variables to store data
-
-print(globals())
-
-
-#==================================================================================
-# Load Data from  h5 //////////////////////////////////////////////////////////////
-#==================================================================================
-
-# Loop over 2sets*6samples=12 files
-for mySet in setTypes:
-   for index, mySample in enumerate(sampleTypes):
-      print("Opening "+mySample+mySet+" file")
-      myF = h5py.File("/uscms/home/bonillaj/nobackup/h5samples/"+mySample+"Sample_BESTinputs_"+mySet.lower()+"_flattened_standardized.h5","r")
-
-      ## Make TruthLabels, only once (i.e. for key=BESvars)
-      if globals()["truthLabels"+mySet] == []:
-         print("Making new", "truthLabels"+mySet)
-         globals()["truthLabels"+mySet] = numpy.full(len(myF["BES_vars"][()]), index)
-      else:
-         print("Concatenate", "truthLabels"+mySet)
-         globals()["truthLabels"+mySet] = numpy.concatenate((globals()["truthLabels"+mySet], numpy.full(len(myF["BES_vars"][()]), index)))
-      
-      for myKey in myF.keys():
-         varKey = "jet"
-         if "image" in myKey.lower():
-            if not doImages:
-               continue
-            varKey = varKey+myKey.split("_")[0] # so HiggsFrame, TopFrame, etc
-         else:
-            if not doBES:
-               continue
-            varKey = varKey+"BESvars"
-               
-         varKey = varKey+mySet
-         
-         ## Append data
-         if globals()[varKey] == []:
-            print("Making new", varKey)
-            globals()[varKey] = myF[myKey][()]
-         else:
-            print("Concatenate", varKey)
-            globals()[varKey] = numpy.concatenate((globals()[varKey], myF[myKey][()]))
-            
-      myF.close()
-      
-print("Finished Accessing H5 data")
-
-## Order of categories: 0-W, 1-Z, 2-H, 3-t, 4-b, 5-QCD (order of sampleTypes). Format properly.
-print("To_Categorical")
-truthLabelsTest = to_categorical(truthLabelsTest, num_classes = 6)
-print("Made Truth Labels Test", truthLabelsTest.shape)
-'''
-
-def makeCM(model_BEST, doBES, doImages, doEnsemble, suffix):
-   import tools.functions as functs
-   #from johanTraining import loadData
-   print("Before load")
-   print(globals().keys())
-   loadData(["Test"], doBES, doImages)
-   print("After load")
-   print(globals().keys())
-   if doBES:
-      print("BESvars Test Shape", globals()["jetBESvarsTest"].shape)
-   for myFrame in frameTypes:
-      if not doImages:
-         continue
-      print(myFrame+" Images Train Shape", globals()["jet"+myFrame+"FrameTest"].shape)
-
-   print("Shuffle Test")
-   rng_state = numpy.random.get_state()
-   numpy.random.set_state(rng_state)
-   numpy.random.shuffle(globals()["truthLabelsTest"])
-   if doBES:
-      numpy.random.set_state(rng_state)
-      numpy.random.shuffle(globals()["jetBESvarsTest"])
-   if doImages:
-      numpy.random.set_state(rng_state)
-      numpy.random.shuffle(globals()["jetWFrameTest"])
-      numpy.random.set_state(rng_state)
-      numpy.random.shuffle(globals()["jetZFrameTest"])
-      numpy.random.set_state(rng_state)
-      numpy.random.shuffle(globals()["jetHiggsFrameTest"])
-      numpy.random.set_state(rng_state)
-      numpy.random.shuffle(globals()["jetTopFrameTest"])
-
-   print("Load model")
-   cm = {}
-   if doEnsemble:
-      model_BES = load_model("/uscms/home/bonillaj/nobackup/models/BEST_model_BES.h5")
-      model_Images = load_model("/uscms/home/bonillaj/nobackup/models/BEST_model_Images.h5")
-      predictTestBES = model_BES.predict([globals()["jetBESvarsTest"][:]])
-      predictTestImages = model_Images.predict([globals()["jetWFrameTest"][:], globals()["jetZFrameTest"][:], globals()["jetHiggsFrameTest"][:], globals()["jetTopFrameTest"][:]])
-      #model_BEST = load_model(modelBEST)
-      print("Make confusion matrix")
-      cm["BES"] = metrics.confusion_matrix(numpy.argmax(model_BES.predict([globals()["jetBESvarsTest"][:] ]), axis=1), numpy.argmax(globals()["truthLabelsTest"][:], axis=1) )
-      cm["Images"] = metrics.confusion_matrix(numpy.argmax(model_Images.predict([globals()["jetWFrameTest"][:], globals()["jetZFrameTest"][:], globals()["jetHiggsFrameTest"][:], globals()["jetTopFrameTest"][:]]), axis=1), numpy.argmax(globals()["truthLabelsTest"][:], axis=1) )
-      cm["Ensemble"] = metrics.confusion_matrix(numpy.argmax(model_BEST.predict([numpy.concatenate((predictTestBES[:], predictTestImages[:]), axis=1)]), axis=1), numpy.argmax(globals()["truthLabelsTest"][:], axis=1) )
-   else:
-      #model_BEST = load_model(modelBEST)
-      if doBES and not doImages:
-         cm["BES"] = metrics.confusion_matrix(numpy.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:] ]), axis=1), numpy.argmax(globals()["truthLabelsTest"][:], axis=1) )
-      elif not doBES and doImages:
-         cm["Images"] = metrics.confusion_matrix(numpy.argmax(model_BEST.predict([globals()["jetWFrameTest"][:], globals()["jetZFrameTest"][:], globals()["jetHiggsFrameTest"][:], globals()["jetTopFrameTest"][:]]), axis=1), numpy.argmax(globals()["truthLabelsTest"][:], axis=1) )
-      elif doBES and doImages:
-         cm["Combined"] = metrics.confusion_matrix(numpy.argmax(model_BEST.predict([globals()["jetWFrameTest"][:], globals()["jetZFrameTest"][:], globals()["jetHiggsFrameTest"][:], globals()["jetTopFrameTest"][:], globals()["jetBESvarsTest"][:] ]), axis=1), numpy.argmax(globals()["truthLabelsTest"][:], axis=1) )
-      print("Plot confusion matrix")
-   plt.figure(
-   )
-   targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
-   for myKey in cm.keys():
-      functs.plot_confusion_matrix(cm[myKey].T, targetNames, normalize=True)
-      if savePDF == True:
-         if not os.path.isdir("plots"+suffix):
-            os.mkdir("plots"+suffix)
-         plt.savefig('plots'+suffix+'/ConfusionMatrix'+myKey+suffix+'.pdf')
-      plt.clf()
-   plt.close()
-
-   print("Finished")
+    # Record classification rates
+    classifylog = open("logs/classifylog_" + modelType, "a") 
+    classifylog.write("-----------------------------------\n")
+    classifylog.write("Running " + suffix + ":\n")
+    totalTested = np.count_nonzero(globals()["truthLabelsTest"][:testMaxEvents] == 1, axis=0)
+    i = 0
+    targetNames = ['W', 'Z', 'H', 'Top', 'b', 'QCD']
+    classifylog.write("\t\t\t\t\t\t\t\t\t\tW\t Z\t  H\t  Top\tb  QCD  Total\n")
+    for target in targetNames:
+        classifyMessage = "\t" + target + " Category: Tagger predicted\t" + str( totalPredicted ) + " " + str(np.sum(totalPredicted)) + " out of " + str(totalTested[i]) + " (" + str(100 * (float(totalPredicted[i])/float(totalTested[i]))  )[:6] + "%) truth events.\n"        
+        print(classifyMessage)
+        classifylog.write(classifyMessage)
+        i += 1
+    classifylog.write("-----------------------------------\n")
+    classifylog.close
+    print("Finished")
 
 
 if __name__ == "__main__":
-   from johanTraining import loadData
-   loadData(["Test"])
-   # Take in arguments
-   parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
-   parser.add_argument('-hd','--h5Dir',
-                       dest='h5Dir',
-                       default="~/nobackup/h5samples/")
-   parser.add_argument('-o','--outDir',
-                       dest='outDir',
-                       default="~/nobackup/models/")
-   parser.add_argument('-sf','--suffix',
-                       dest='suffix',
-                       default="")
-   parser.add_argument('-m', '--models',
-                        dest='models',
-                        help='<Required> Which (comma separated) models to process. Examples: 1) all, 2) BES,Images,Combined,Ensemble',
-                        required=True)
-   if not args.samples == "all": listOfSamples = args.samples.split(',')
-   parser.add_argument('-b','--doBES', dest='doBES', default=False, action='store_true')
-   parser.add_argument('-i','--doImages', dest='doImages', default=False, action='store_true')
-   parser.add_argument('-e','--doEnsemble', dest='doEnsemble', default=False, action='store_true')
-   args = parser.parse_args()
+    # Take in arguments
+    parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
+    parser.add_argument('-hd','--h5Dir',
+                        dest='h5Dir',
+                        default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/")
+    parser.add_argument('-o','--outDir',
+                        dest='outDir',
+                        default="~/nobackup/models/")
+    parser.add_argument('-m','--maskPath',
+                        dest='maskPath',
+                        default="/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/oldBESTMask.txt")
+    parser.add_argument('-sf','--suffix',
+                        dest='suffix',
+                        default="")
+    parser.add_argument('-y','--year',
+                        dest='year',
+                        default="2017")
+    args = parser.parse_args()
 
-   doBES = args.doBES
-   doImages = args.doImages
-   doEnsemble = args.doEnsemble
-   if doEnsemble:
-      doBES = True
-      doImages = True
-   for myModel in models:
-      makeCM(load_model("BEST_model_"+myModel+".h5"), doBES, doImages, doEnsemble, args.suffix)
+    # modelType = "oldBEST"
+    # modelType = "BESonly"
+    modelType = "tweakedOldBEST"
+    # modelType = ""
+   
+    maskName  = args.maskPath[1 + args.maskPath.rfind("/"):] # Strip everything after the final '/', giving just the name of the mask
+    mySuffix = args.suffix + args.year + "_" + maskName[:-4] + "_" + modelType
+    plotDir  = "plots/" + modelType + "/" + mySuffix
+    modelDir = args.outDir + "/" + modelType + "/" + mySuffix
+    modelFile = modelDir + "/BEST_model_" + mySuffix + ".h5"
+    maskSave  = modelDir + "/" + maskName
+    print(modelFile)
+
+    # testMaxEvents = None
+    testMaxEvents = 50000
+    if os.path.isfile(modelFile):
+        makeCM(load_model(modelFile), args.h5Dir, plotDir, args.year, mySuffix, maskSave, testMaxEvents, modelType)

@@ -1,0 +1,11 @@
+0:deltaEta
+1:deltaPhi
+2:deltaR
+3:energy
+4:logEnergy
+5:logEnergyRatio
+6:logpT
+7:logpTRatio
+8:px
+9:py
+10:pz
