@@ -38,7 +38,7 @@ from sklearn.metrics import roc_curve, auc
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
-                          title='Confusion matrix',
+                          title='Confusion Matrix',
                           cmap=plt.cm.Blues):
    """
    This function prints and plots the confusion matrix.
@@ -47,8 +47,10 @@ def plot_confusion_matrix(cm, classes,
    if normalize:
        cm = cm.astype('float') / cm.sum(axis=1)[:, numpy.newaxis]
        print("Normalized confusion matrix")
+       title = "Normalized Confusion Matrix"
    else:
        print('Confusion matrix, without normalization')
+       title = "Confusion Matrix"
 
    print(cm)
 
@@ -198,7 +200,7 @@ def randomizeData(array):
 # target_predict is the models prediction of data that has not been trained on ////
 #----------------------------------------------------------------------------------
 
-def plotPerformance(loss, acc, suffix): #, train_test, target_test, target_predict):
+def plotPerformance(loss, acc, suffix, plotDir): #, train_test, target_test, target_predict):
    
    # plot loss vs epoch
    plt.figure()
@@ -207,10 +209,9 @@ def plotPerformance(loss, acc, suffix): #, train_test, target_test, target_predi
    plt.legend(loc="upper right")
    plt.xlabel('epoch')
    plt.ylabel('loss')
-   if not os.path.isdir("plots"+suffix):
-      os.mkdir("plots"+suffix)
-   plt.savefig("plots"+suffix+"/loss"+suffix+".pdf")
-   plt.savefig("plots"+suffix+"/loss"+suffix+".png")
+   if not os.path.isdir(plotDir): os.makedirs(plotDir)
+   plt.savefig(plotDir+"/"+suffix+"_loss.pdf")
+   plt.savefig(plotDir+"/"+suffix+"_loss.png")
    plt.close()
 
    # plot accuracy vs epoch
@@ -220,8 +221,8 @@ def plotPerformance(loss, acc, suffix): #, train_test, target_test, target_predi
    plt.legend(loc="upper left")
    plt.xlabel('epoch')
    plt.ylabel('acc')
-   plt.savefig("plots"+suffix+"/acc"+suffix+".pdf")
-   plt.savefig("plots"+suffix+"/acc"+suffix+".png")
+   plt.savefig(plotDir+"/"+suffix+"_acc.pdf")
+   plt.savefig(plotDir+"/"+suffix+"_acc.png")
    plt.close()
 
    # Plot ROC

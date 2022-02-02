@@ -13,8 +13,8 @@ process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
-
+# Option to set max events, used for local cmsRun jobs
+# process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
 process.source = cms.Source("PoolSource",
         # Replace root file below with the source file you want to use (overwritten by crab config files that call this run file)
@@ -68,7 +68,7 @@ updateJetCollection(
 # Apply a preselction
 process.selectedAK8Jets = cms.EDFilter('PATJetSelector',
                                         src = cms.InputTag('slimmedJetsAK8'),
-                                        cut = cms.string('pt > 500.0 && abs(eta) < 2.4'),
+                                        cut = cms.string('500.0 < pt && pt < 3500.0 && abs(eta) < 2.4'),
                                         filter = cms.bool(True)
 )
 

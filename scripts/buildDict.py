@@ -5,7 +5,7 @@
 #-----------------------------------------------------------------------------------------
 
 # This script was written for Python 2.7.5.
-# This script is meant to be called by fillSamples.sh, but can be run manually. It is designed to be ran from the BEST/preprocess/crab directory, but could be run elsewhere if the path for "sampleFile" is edited.
+# This script is meant to be called by fillSamples.sh, but can be run manually. It is designed to be ran from the BEST/preprocess/crab directory, but could be run elsewhere if the path for "sampleFile" and "outputFile" is edited.
 # This python script builds a nested dictionary out of DAS datasets filled by fillSamples.sh, and this dictionary is then used by createConfig.py.
 # The user can specify the keys particle, year, datatype, and masspoint to get any unique entry. The values returned are the crab directory name, the dataset name, and the file with the greatest amount of events from the datset. 
 # This file does not take any options--if sample input data is missing (year, particle, datatype), the output dictionary will simply not contain that information.
@@ -42,12 +42,11 @@ for dat in allDatatypes:
                     datasetDict[dat][yr][part][mass] = [crab,dataset,datasetFile.strip()] # The strip is needed to get rid of the \n at the end of datasetFile, since it is the last entry in each line.
 
 # Write the raw dictionary to a python file, to be imported in other files:
-outputfile = "datasetDictionary.py"
-if os.path.exists(outputfile):
-        os.remove(outputfile)
-file = open(outputfile, "w")
+outputFile = "datasetDictionary.py"
+outPath = "../../scripts/" + outputFile
+if os.path.exists(outPath): os.remove(outPath)
+file = open(outPath, "w")
 file.write("datasetDict = " + str(datasetDict))
 file.close
 
-print( yelstr("Done building dataset dictionary! Check it out at: " + outputfile) )
-
+print( yelstr("Done building dataset dictionary! Check it out at: " + outputFile) )
