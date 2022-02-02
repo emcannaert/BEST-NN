@@ -288,7 +288,7 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
 //----------------------------------------------------------------------------------------
 // This boosts an ak8 jet (and all of its constituents) into heavy object rest frame -----
 // and then uses it to calculate FoxWolfram moments, Event Shape Variables, --------------
-// and assymmetry variables --------------------------------------------------------------
+// and asymmetry variables ---------------------------------------------------------------
 // If requirements not satisfied to proceed return false. Else finish by returning true --
 //----------------------------------------------------------------------------------------
 
