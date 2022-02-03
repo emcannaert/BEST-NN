@@ -1,9 +1,16 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # MakeStandardInputs.py ///////////////////////////////////////////////////////////
 #----------------------------------------------------------------------------------
-# Author(s): Reyer Band, Johan S. Bonilla, Brendan Regnary ////////////////////////
+# Author(s): Reyer Band, Johan S. Bonilla, Brendan Regnary, Mark Samuel Abbott ////
 # This program makes Standardized Inputs //////////////////////////////////////////
 #----------------------------------------------------------------------------------
+
+################################## NOTES TO SELF ##################################
+# Add more comments, improve explanation at the top.
+# Save model using joblib instead of saving the mean/variance.
+# Make consistent with other scripts.
+# Figure out what the issue with scaling is
+#       Test by scaling and unscaling in the same script, then plotting. 
 
 import numpy
 import h5py

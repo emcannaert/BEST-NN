@@ -1,8 +1,15 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# plotConfusionMatrix.py //////////////////////////////////////////////////////////
+# plotEfficiency.py ///////////////////////////////////////////////////////////////
 #==================================================================================
-# This program trains BEST with flattened inputs //////////////////////////////////
+# Author(s): Mark Samuel Abbott ///////////////////////////////////////////////////
+# This program plots the tag rate and tag efficiency for a given BEST model ///////
 #==================================================================================
+
+################################## NOTES TO SELF ##################################
+# Improve lables/titles.
+# Tie this into plotConfusionMatrix.py? 
+# Check for consistency, add comments.
+
 
 # modules
 import numpy as np

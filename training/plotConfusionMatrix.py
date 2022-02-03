@@ -1,8 +1,15 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # plotConfusionMatrix.py //////////////////////////////////////////////////////////
 #==================================================================================
-# This program trains BEST with flattened inputs //////////////////////////////////
+# Author(s): Mark Samuel Abbott ///////////////////////////////////////////////////
+# This program plots the Confusion Matrix for a given BEST Model //////////////////
 #==================================================================================
+
+################################## NOTES TO SELF ##################################
+# Make own functs script.
+# Split up this script into smaller functions?
+# Check for consistency, add comments.
+
 
 # modules
 import numpy as np
@@ -30,8 +37,6 @@ config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.6
 k.tensorflow_backend.set_session(tf.Session(config=config))
 
-# user modules
-
 # Print which gpu/cpu this is running on
 sess = tf.Session(config=config)
 h = tf.constant('hello world')
@@ -44,10 +49,9 @@ sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 targetNames = ['W', 'Z', 'H', 'Top', 'b', 'QCD']
 
 BatchSize = 1200
-#models = ["BES","Images","Ensemble","Both"]
 print("Begin CM")
 
-def makeCM(model_BEST, h5Dir, plotDir, year, suffix, maskPath, testMaxEvents, modelType):
+def makeCM(model_BEST, h5Dir, plotDir, suffix, maskPath, testMaxEvents, modelType):
     import tools.functions as functs
     print("Begin CM")
     cm = {}
@@ -192,4 +196,4 @@ if __name__ == "__main__":
     # testMaxEvents = None
     testMaxEvents = 50000
     if os.path.isfile(modelFile):
-        makeCM(load_model(modelFile), args.h5Dir, plotDir, args.year, mySuffix, maskSave, testMaxEvents, modelType)
+        makeCM(load_model(modelFile), args.h5Dir, plotDir, mySuffix, maskSave, testMaxEvents, modelType)
