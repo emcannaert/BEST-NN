@@ -2,7 +2,7 @@
 #=========================================================================================
 # crabResubmit.sh ------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott, Johan S. Bonilla ----------------------------------------
+# Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -10,9 +10,9 @@
 
 ################################## NOTES TO SELF ##################################
 # Resubmit crab jobs (currently resubmits all jobs, only the failed jobs will acutally resubmit)
-# Connect to crabStatus.sh, and resubmit jobs that have failed?
+# Consider connecting to crabStatus.sh, and resubmit jobs that have failed?
 
-echo -e "\n${YEL}Resubmitting jobs..."
+echo "Resubmitting jobs..."
 logFile="logResubmit.txt"
 pids=
 for job in */CrabBEST/*/ ; do
@@ -22,4 +22,4 @@ for job in */CrabBEST/*/ ; do
 done
 
 # wait $pids
-echo -e "\n${YEL}Resubmit complete. Check output at $logFile"
+echo "\nResubmit complete. Check output at $logFile"

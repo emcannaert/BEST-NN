@@ -2,7 +2,7 @@
 #=========================================================================================
 # crabKill.sh ----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott, Johan S Bonilla -----------------------------------------
+# Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -12,10 +12,7 @@
 # Check error flags?
 
 
-YEL='\033[93m' # Yellow
-NC='\033[0m' # No Color
-
-echo -e "\n${YEL}Killing jobs..."
+echo "\nKilling jobs..."
 logFile="logKill.txt"
 pids=
 # Kill crab jobs
@@ -26,4 +23,4 @@ for job in */CrabBEST/*/ ; do
 done
 
 wait $pids # Wait until all crab status commands are done
-echo -e "\n${YEL}Killing complete. Check output at $logFile"
+echo "\nKilling complete. Check output at $logFile"
