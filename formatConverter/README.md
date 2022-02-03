@@ -4,16 +4,6 @@
 
 The Format Converter creates python h5 files from input root ntuples so that the images and BES variables are in a proper format for training the BEST neural network.
 
-## Tagged Samples
-
-If you wish to use already produced samples, copy them from eos
-
-```
-mkdir ~/nobackup/BESTTag2Samples
-eosls /store/user/jbonilla/BESTTag2Samples/
-xrdcp root://cmsxrootd.fnal.gov//store/user/jbonilla/BESTTag2Samples/<FileYouWishToCopy> ~/nobackup/BESTTag2Samples/
-```
-
 ## Conversion Instructions
 
 The conversion takes place using uproot to create useful python data structures. First, make sure that there are directories to store
@@ -32,7 +22,7 @@ shell script.
 ```bash
 cmsenv
 cd eosSamples
-source listSamples.sh
+source listSamples.sh all
 ```
 
 Use the `sampleConverter.py` script to convert the eos root files to local h5 files:
@@ -41,8 +31,10 @@ Use the `sampleConverter.py` script to convert the eos root files to local h5 fi
 python sampleConverter.py -s all -y all -eos <path/to/eosSampleListsDir/> -o <path/to/h5samples/>
 ```
 
+## Splitting and Flattening
+
 Next, split the sample into train, validation, and test sets with 'sampleSplitter.py'.
-Then flatten (shape-match) each of those output files. See each file for full list of arguments.
+Then flatten (shape-match by pT) each of those output files. See each file for full list of arguments.
 
 ```bash
 python sampleSplitter.py -s all -hd </path/to/h5samples/> -o </path/to/outputH5samples> -bs <batchSize=(example)600000>
