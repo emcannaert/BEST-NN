@@ -32,7 +32,8 @@ if [ $1 == "all" ]; then
     echo "Making list for all years and samples"
     # myYears=("2016" "2017" "2018")
     myYears="2017"
-    processes=("BB" "HH" "TT" "WW" "ZZ" "QCD") 
+    # processes=("BB" "HH" "TT" "WW" "ZZ" "QCD" ) 
+    processes=("RSG" ) 
 else
     for arg in "$@"; do
 	if [ $arg == "2016" ] || [ $arg == "2017" ] || [ $arg == "2018" ]
@@ -54,7 +55,7 @@ for year in "${myYears[@]}"; do
     # eosBESTFiles=`xrdfsls -R $eosDirPath | grep '.*HH.*211124*.*BEST'`
 
 	# filesToAdd=`grep .*$process.*BEST$year.*211124*.*BESTInputs.*.root <<< "$eosBESTFiles"`
-	filesToAdd=`grep .*$process.*211203*.*BEST <<< "$eosBESTFiles"`
+	filesToAdd=`grep .*$process.*BEST <<< "$eosBESTFiles"`
 	# Check if file exists, if so delete
 	fileToWrite="listOf$process""FilePaths$year.txt"
 	if [ -f $fileToWrite ] ; then

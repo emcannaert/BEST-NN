@@ -23,13 +23,14 @@ logFile="logStatus.txt"
 echo -e "\n${YEL}Checking jobs...${NC}"
 pids= 
 # Check job status of crab jobs.
-for job in */CrabBEST/*/ ; do
+# for job in */CrabBEST/*/ ; do
+for job in submit2017/CrabBEST/*/ ; do
     # echo "$job" >> $logFile 
-    crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $logFile 
     # output=`crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)'`
-
     # if "finished     		100.0%" =~ 
-    # crab status $job >> $logFile # Use this to pipe entire output to file
+
+    # crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $logFile 
+    crab status $job >> $logFile # Use this to pipe entire output to file
     echo -e "----------------------\n\n----------------------" >> $logFile
     pids+=" $!"
 done

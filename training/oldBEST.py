@@ -46,10 +46,7 @@ sess = tf.Session(config=config)
 h = tf.constant('hello world')
 print(sess.run(h))
 
-# Do BES and/or images
-doBES = False
-doImages = False
-doEnsemble = False
+
 mySuffix = ""
 
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
@@ -235,10 +232,6 @@ if __name__ == "__main__":
     #                     default="")
     parser.add_argument('-r','--redoTraining', dest='redoTraining', default=False, action='store_true')
     args = parser.parse_args()
-   
-    doBES = True
-    doImages = False
-    doEnsemble = False
 
     # Make directories you need
     if not os.path.isdir(args.h5Dir):
@@ -267,16 +260,6 @@ if __name__ == "__main__":
         BEST_model = train(args.h5Dir, modelFile, plotDir, mySuffix, float(args.patience), args.maskPath, TrnValTstEvents)
 
     else:
-        # print("Finding models available, training what is missing")
-        # BEST_model = None
-        # # BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_oldBEST", float(args.patience))
-        # if not os.path.isfile(args.outDir+"BEST_model_"+mySuffix+".h5"):
-        #     print(args.outDir+"BEST_model_"+mySuffix+".h5"+" model not found, training a new one")
-        #     if not "jetBESvarsTrain" in globals().keys():
-        #         loadData(args.h5Dir, args.year, ["Train","Validation"])
-        # if BEST_model == None:
-        #     BEST_model = train(args.h5Dir, modelFile, mySuffix, float(args.patience))
-
         print("Begin training new model...")
         if not os.path.isdir(modelDir):
             print("Creating directory for model and mask: " + modelDir )
@@ -298,7 +281,7 @@ if __name__ == "__main__":
             del globals()["jetBESvars"+mySet]
 
     testMaxEvents = TrnValTstEvents[2]
-    makeCM(BEST_model, args.h5Dir, plotDir, args.year, doBES, doImages, doEnsemble, mySuffix, args.maskPath, testMaxEvents, modelType)
+    makeCM(BEST_model, args.h5Dir, plotDir, args.year, mySuffix, args.maskPath, testMaxEvents, modelType)
 
     # Check how long the script took to run
     timelog = open("logs/timelog_" + modelType, "a") 

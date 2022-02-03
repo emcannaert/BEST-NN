@@ -41,6 +41,8 @@ h = tf.constant('hello world')
 savePDF = True
 savePNG = True
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+targetNames = ['W', 'Z', 'H', 'Top', 'b', 'QCD']
+
 BatchSize = 1200
 #models = ["BES","Images","Ensemble","Both"]
 print("Begin CM")
@@ -49,13 +51,15 @@ def makeCM(model_BEST, h5Dir, plotDir, year, suffix, maskPath, testMaxEvents, mo
     import tools.functions as functs
     print("Begin CM")
     cm = {}
+
     maskFile = open(maskPath, "r")
     maskIndex = []
     for line in maskFile:
       maskIndex.append(line.split(':')[0])
-      maskFile.close()
-      print(maskPath + " chosen; mask size " + str(len(maskIndex)))
-      myMask = [True if str(i) in maskIndex else False for i in range(596)]
+    maskFile.close()
+    print(maskPath + " chosen; mask size " + str(len(maskIndex)))
+    myMask = [True if str(i) in maskIndex else False for i in range(596)]
+
     myTestEvents = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_test_flattened_standardized.h5","r")["BES_vars"])[:,myMask] for mySample in sampleTypes]
     print("My Test events shape:",[myTestEvents[i].shape for i in range(len(myTestEvents))])
     myTestTruth  = [np.zeros((len(myTestEvents[i]),len(sampleTypes))) for i in range(len(myTestEvents))] # shape: N,6 filled w/ 0s
@@ -73,16 +77,48 @@ def makeCM(model_BEST, h5Dir, plotDir, year, suffix, maskPath, testMaxEvents, mo
     np.random.set_state(rng_state)
     np.random.shuffle(globals()["jetBESvarsTest"])
 
-    print("Making CM")
+    print("Using BEST to predict...")
     print("Max events to test on: " + str(testMaxEvents))
     print("(None means no limit, test all events)")
+
+    globals()["jetBESvarsTest"]  = model_BEST.predict([globals()["jetBESvarsTest"][:testMaxEvents] ])
+    globals()["truthLabelsTest"] = np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1)
+    print("My predictions shape:",      globals()["jetBESvarsTest"].shape)
+    print("Corresponding truth shape:", globals()["truthLabelsTest"].shape)
+
+    print("Plotting Classification Probabilities")
+    # one plot for each classification (jetbesvarstest[:,i]), 6 total
+    #   each plot has 6 lines, corresponding to what the particle actually was (truthlabelstest[:])
+    saveDir = plotDir + "/classification_probs/"
+    if not os.path.isdir(saveDir): os.makedirs(saveDir)
+    
+    plt.figure()
+    for i, target in enumerate(targetNames):
+        # --- Create Class. Prob. histogram, legend and title ---
+        title = "Probability of " + target + " Classification" 
+        for j, mylabel in enumerate(targetNames):
+            tempMask = [True if j == k else False for k in globals()["truthLabelsTest"]]
+            plt.hist(globals()["jetBESvarsTest"][tempMask,i], label = mylabel, bins = 20, range = [0.0,1.0], histtype='step', log = True)
+        plt.xlim(0.0,1.0)
+        leg = plt.legend(ncol = 6, loc = 'upper center', bbox_to_anchor = (0.0,1.1,1.0,0.1), borderpad = 0.9, borderaxespad = 2.0 )
+        leg.get_frame().set_edgecolor('black')
+        leg.get_frame().set_linewidth(1.1)
+        plt.xlabel( title )
+        plt.gca().tick_params(axis = 'y', which = 'both', direction = 'in', left = True, right = True)
+        plt.gca().tick_params(axis = 'x', direction = 'in', top = True, bottom = True)
+        plt.show()
+        plt.savefig(saveDir + title + ".png")
+        plt.clf()
+    plt.close()
+    
+    print("Making CM")
     # cm["BES"] = metrics.confusion_matrix(np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:] ]), axis=1), np.argmax(globals()["truthLabelsTest"][:], axis=1) )
-    cm["BES"] = metrics.confusion_matrix(np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1), np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:testMaxEvents] ]), axis=1) )
-    # cm["BES"] = metrics.confusion_matrix(np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:testMaxEvents] ]), axis=1), np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1) )
+    # cm["BES"] = metrics.confusion_matrix(np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1), np.argmax(model_BEST.predict([globals()["jetBESvarsTest"][:testMaxEvents] ]), axis=1) )
+    # cm["BES"] = metrics.confusion_matrix(np.argmax(globals()["truthLabelsTest"][:testMaxEvents], axis=1), np.argmax(globals()["jetBESvarsTest"], axis=1) )
+    cm["BES"] = metrics.confusion_matrix(globals()["truthLabelsTest"], np.argmax(globals()["jetBESvarsTest"], axis=1) )
                            
     print("Plot confusion matrix")
     plt.figure()
-    targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
     for myKey in cm.keys():
         print("myKey",myKey)
 
@@ -107,15 +143,14 @@ def makeCM(model_BEST, h5Dir, plotDir, year, suffix, maskPath, testMaxEvents, mo
     classifylog = open("logs/classifylog_" + modelType, "a") 
     classifylog.write("-----------------------------------\n")
     classifylog.write("Running " + suffix + ":\n")
-    totalTested = np.count_nonzero(globals()["truthLabelsTest"][:testMaxEvents] == 1, axis=0)
-    i = 0
-    targetNames = ['W', 'Z', 'H', 'Top', 'b', 'QCD']
+    # totalTested = np.count_nonzero(globals()["truthLabelsTest"][:testMaxEvents] == 1, axis=0)
+    totalTested = np.bincount(globals()["truthLabelsTest"])
     classifylog.write("\t\t\t\t\t\t\t\t\t\tW\t Z\t  H\t  Top\tb  QCD  Total\n")
-    for target in targetNames:
+    for i, target in enumerate(targetNames):
+        totalPredicted = cm["BES"][:,i]
         classifyMessage = "\t" + target + " Category: Tagger predicted\t" + str( totalPredicted ) + " " + str(np.sum(totalPredicted)) + " out of " + str(totalTested[i]) + " (" + str(100 * (float(totalPredicted[i])/float(totalTested[i]))  )[:6] + "%) truth events.\n"        
         print(classifyMessage)
         classifylog.write(classifyMessage)
-        i += 1
     classifylog.write("-----------------------------------\n")
     classifylog.close
     print("Finished")

@@ -1,5 +1,5 @@
 #=========================================================================================
-# createConfig.py ------------------------------------------------------------------------
+# buildConfig.py -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 # Author(s): Mark Samuel Abbott ----------------------------------------------------------
 #-----------------------------------------------------------------------------------------
@@ -32,6 +32,7 @@ def grnstr(string):
     return '\033[92m' + string + '\033[0m'
 def yelstr(string):
     return '\033[93m' + string + '\033[0m'
+
 
 # This is just a quick work-around for a limitation of argparse text formatting, since argparse takes only one input for formatter_class.
 class RawTextAndDescriptionFormatter(argparse.RawTextHelpFormatter, argparse.RawDescriptionHelpFormatter):

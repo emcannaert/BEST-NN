@@ -2,8 +2,8 @@
 # johanTraining.py ////////////////////////////////////////////////////////////////
 #==================================================================================
 # This program trains BEST with flattened inputs //////////////////////////////////
-# One can train the netowork with only BESvars and images, or both ////////////////
-# One can also ask to run the ensemble which takes/creates BES-only and //////////
+# One can train the network with only BESvars and images, or both /////////////////
+# One can also ask to run the ensemble which takes/creates BES-only and ///////////
 # image-only networks, and feeds the output predictions into a separate network ///
 #==================================================================================
 
@@ -485,8 +485,8 @@ def train(doBES, doImages, h5Dir, outDir, suffix, userPatience):
       #quit()
       print("Batch Size: "+str(BatchSize)+", Epochs: 50")
       if 'oldBEST' in suffix:
-         #history = myModel.fit([globals()["jetBESvarsTrain"][0:500000] ], globals()["truthLabelsTrain"][0:500000], batch_size=BatchSize, epochs=50, callbacks=[early_stopping, model_checkpoint], validation_data = [[globals()["jetBESvarsValidation"][:]], globals()["truthLabelsValidation"][:]])
-         history = myModel.fit([globals()["jetBESvarsTrain"][:] ], globals()["truthLabelsTrain"][:], batch_size=BatchSize, epochs=50, callbacks=[early_stopping, model_checkpoint], validation_data = [[globals()["jetBESvarsValidation"][:]], globals()["truthLabelsValidation"][:]])
+         history = myModel.fit([globals()["jetBESvarsTrain"][0:500000] ], globals()["truthLabelsTrain"][0:500000], batch_size=BatchSize, epochs=50, callbacks=[early_stopping, model_checkpoint], validation_data = [[globals()["jetBESvarsValidation"][:]], globals()["truthLabelsValidation"][:]])
+        #  history = myModel.fit([globals()["jetBESvarsTrain"][:] ], globals()["truthLabelsTrain"][:], batch_size=BatchSize, epochs=50, callbacks=[early_stopping, model_checkpoint], validation_data = [[globals()["jetBESvarsValidation"][:]], globals()["truthLabelsValidation"][:]])
       else:
          history = myModel.fit([globals()["jetBESvarsTrain"][:] ], globals()["truthLabelsTrain"][:], batch_size=BatchSize, epochs=50, callbacks=[early_stopping, model_checkpoint], validation_data = [[globals()["jetBESvarsValidation"][:]], globals()["truthLabelsValidation"][:]])
       
@@ -977,149 +977,149 @@ def ensemble(model_BES, model_Images, outDir, suffix, userPatience):
 
 # Main function should take in arguments and call the functions you want
 if __name__ == "__main__":
-   # Take in arguments
-   parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
-   parser.add_argument('-hd','--h5Dir',
-                       dest='h5Dir',
-                       default="~/nobackup/h5samples/")
-   parser.add_argument('-o','--outDir',
-                       dest='outDir',
-                       default="~/nobackup/models/")
-   parser.add_argument('-sf','--suffix',
-                       dest='suffix',
-                       default="")
-   parser.add_argument('-y','--year',
-                       dest='year',
-                       default="2017")
-   parser.add_argument('-p','--patience',
-                       dest='patience',
-                       default="20")
-   parser.add_argument('-b','--doBES', dest='doBES', default=False, action='store_true')
-   parser.add_argument('-i','--doImages', dest='doImages', default=False, action='store_true')
-   parser.add_argument('-e','--doEnsemble', dest='doEnsemble', default=False, action='store_true')
-   parser.add_argument('-r','--redoTraining', dest='redoTraining', default=False, action='store_true')
-   parser.add_argument('-ob','--oldBEST', dest='oldBEST', default=False, action='store_true')
-   args = parser.parse_args()
+    # Take in arguments
+    parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
+    parser.add_argument('-hd','--h5Dir',
+                        dest='h5Dir',
+                        default="~/nobackup/h5samples/")
+    parser.add_argument('-o','--outDir',
+                        dest='outDir',
+                        default="~/nobackup/models/")
+    parser.add_argument('-sf','--suffix',
+                        dest='suffix',
+                        default="")
+    parser.add_argument('-y','--year',
+                        dest='year',
+                        default="2017")
+    parser.add_argument('-p','--patience',
+                        dest='patience',
+                        default="20")
+    parser.add_argument('-b','--doBES', dest='doBES', default=False, action='store_true')
+    parser.add_argument('-i','--doImages', dest='doImages', default=False, action='store_true')
+    parser.add_argument('-e','--doEnsemble', dest='doEnsemble', default=False, action='store_true')
+    parser.add_argument('-r','--redoTraining', dest='redoTraining', default=False, action='store_true')
+    parser.add_argument('-ob','--oldBEST', dest='oldBEST', default=False, action='store_true')
+    args = parser.parse_args()
    
-   if args.doBES: doBES = True
-   if args.doImages: doImages = True
-   if args.doEnsemble: doEnsemble = True
-   if doEnsemble:
-      doBES = True
-      doImages = True
-   mySuffix = args.suffix+args.year
-   if args.oldBEST:
-      doBES = True
-      doImages = False
-      doEnsemble = False
-      mySuffix = mySuffix + "_oldBEST"
-   """
-   else:
-      if doBES and not doImages:
-         mySuffix = mySuffix + "_BESonly"
-      elif not doBES and doImages:
-         mySuffix = mySuffix + "_Imagesonly"
-      else:
-         mySuffix = mySuffix + "_BothBESandImages"
-   """ 
-   # Make directories you need
-   if not os.path.isdir(args.h5Dir):
-      print(args.h5Dir, "does not exist")
-      quit()
-   if not os.path.isdir(args.outDir):
-      print(args.outDir, "does not exist")
-      quit()
+    if args.doBES: doBES = True
+    if args.doImages: doImages = True
+    if args.doEnsemble: doEnsemble = True
+    if doEnsemble:
+        doBES = True
+        doImages = True
+    mySuffix = args.suffix+args.year
+    if args.oldBEST:
+        doBES = True
+        doImages = False
+        doEnsemble = False
+        mySuffix = mySuffix + "_oldBEST"
+    """
+    else:
+        if doBES and not doImages:
+            mySuffix = mySuffix + "_BESonly"
+        elif not doBES and doImages:
+            mySuffix = mySuffix + "_Imagesonly"
+        else:
+            mySuffix = mySuffix + "_BothBESandImages"
+    """ 
+    # Make directories you need
+    if not os.path.isdir(args.h5Dir):
+        print(args.h5Dir, "does not exist")
+        quit()
+    if not os.path.isdir(args.outDir):
+        print(args.outDir, "does not exist")
+        quit()
 
-   if args.redoTraining:
-      print("Redo all training")
-      #loadData(args.h5Dir, args.year, ["Train","Validation"])
-      # If ensemble enabled, BES and Images trained separately, then ensembler is trained based on their output
-      if doEnsemble:
-         BES_model = train(doBES, False, args.outDir, mySuffix+"_BES", float(args.patience))
-         Images_model = train(False, doImages, args.outDir, mySuffix+"_Images", float(args.patience))
-         BEST_model = ensemble(BES_model, Images_model, args.outDir, mySuffix+"_Ensemble", float(args.patience))
-      # If ensemble NOT enabled and both BES and images enabled, the result is a BES+Images network.
-      else:
-         if args.oldBEST:
-            BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_oldBEST", float(args.patience))
-         elif doBES and not doImages:
-            BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_BES", float(args.patience))
-         elif not doBES and doImages:
-            BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_Images", float(args.patience))
-         else:
-            BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_Both", float(args.patience)) 
-   else:
-      print("Finding models available, training what is missing")
-      if doEnsemble:
-         if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_BES.h5"):
-            print("Train BESvars model")
-            if not "jetBESvarsTrain" in globals().keys():
-               loadData(args.h5Dir, args.year, ["Train","Validation"])
+    if args.redoTraining:
+        print("Redo all training")
+        #loadData(args.h5Dir, args.year, ["Train","Validation"])
+        # If ensemble enabled, BES and Images trained separately, then ensembler is trained based on their output
+        if doEnsemble:
             BES_model = train(doBES, False, args.outDir, mySuffix+"_BES", float(args.patience))
-         else:
-            print("Loading BES model")
-            BES_model = load_model(args.outDir+"BEST_model"+mySuffix+"_BES.h5")
-         if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_Images.h5"):
-            print("Train Image model")
-            if not "jetWFrameTrain" in globals().keys():
-               loadData(args.h5Dir, args.year, ["Train","Validation"])
             Images_model = train(False, doImages, args.outDir, mySuffix+"_Images", float(args.patience))
-         else:
-            print("Loading Images model")
-            Images_model = load_model(args.outDir+"BEST_model"+mySuffix+"_Images.h5")
-         if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_Ensemble.h5"):
-            print("Train Ensemble model")
-            if not "jetBESvarsTrain" in globals().keys():
-               loadData(args.h5Dir, args.year, ["Train","Validation"])
             BEST_model = ensemble(BES_model, Images_model, args.outDir, mySuffix+"_Ensemble", float(args.patience))
-         else:
-            print("Loading Ensemble model")
-            BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+"_Ensemble.h5")
-      else:
-         BEST_model = None
-         if args.oldBEST:
-            #BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_oldBEST", float(args.patience))
-            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_oldBEST.h5"):
-               print(args.outDir+"BEST_model"+mySuffix+"_oldBEST.h5"+" model not found, training a new one")
-               if not "jetBESvarsTrain" in globals().keys():
-                  loadData(args.h5Dir, args.year, ["Train","Validation"])
-         elif doBES and not doImages:
-            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+".h5"):
-               print("BESonly model not found, training a new one")
-               if not "jetBESvarsTrain" in globals().keys():
-                  loadData(args.h5Dir, args.year, ["Train","Validation"])
-            else:
-               print("Loading BES-only model")
-               BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+".h5")
-         elif not doBES and doImages:
-            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+".h5"):
-               print("Imagesonly model not found, training a new one")
-               if not "jetWFrameTrain" in globals().keys():
-                  loadData(args.h5Dir, args.year, ["Train","Validation"])
-            else:
-               print("Loading Images-only model")
-               BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+".h5")
-         else:
-            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+".h5"):
-               print("Combined (both BESvars and Images, but not ensembled) model not found, training a new one")
-               if not "jetBESvarsTrain" in globals().keys():
-                  loadData(args.h5Dir, args.year, ["Train","Validation"])
-            else:
-               print("Loading combined BES-images (no ensemble) model")
-               BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+".h5")
-         if BEST_model == None:
+        # If ensemble NOT enabled and both BES and images enabled, the result is a BES+Images network.
+        else:
             if args.oldBEST:
-               mySuffix = mySuffix+"_oldBEST"
-            BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix, float(args.patience))
+                BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_oldBEST", float(args.patience))
+            elif doBES and not doImages:
+                BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_BES", float(args.patience))
+            elif not doBES and doImages:
+                BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_Images", float(args.patience))
+            else:
+                BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_Both", float(args.patience)) 
+    else:
+        print("Finding models available, training what is missing")
+        if doEnsemble:
+            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_BES.h5"):
+                print("Train BESvars model")
+                if not "jetBESvarsTrain" in globals().keys():
+                    loadData(args.h5Dir, args.year, ["Train","Validation"])
+                BES_model = train(doBES, False, args.outDir, mySuffix+"_BES", float(args.patience))
+            else:
+                print("Loading BES model")
+                BES_model = load_model(args.outDir+"BEST_model"+mySuffix+"_BES.h5")
+            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_Images.h5"):
+                print("Train Image model")
+                if not "jetWFrameTrain" in globals().keys():
+                    loadData(args.h5Dir, args.year, ["Train","Validation"])
+                Images_model = train(False, doImages, args.outDir, mySuffix+"_Images", float(args.patience))
+            else:
+                print("Loading Images model")
+                Images_model = load_model(args.outDir+"BEST_model"+mySuffix+"_Images.h5")
+            if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_Ensemble.h5"):
+                print("Train Ensemble model")
+                if not "jetBESvarsTrain" in globals().keys():
+                    loadData(args.h5Dir, args.year, ["Train","Validation"])
+                BEST_model = ensemble(BES_model, Images_model, args.outDir, mySuffix+"_Ensemble", float(args.patience))
+            else:
+                print("Loading Ensemble model")
+                BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+"_Ensemble.h5")
+        else:
+            BEST_model = None
+            if args.oldBEST:
+                #BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_oldBEST", float(args.patience))
+                if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+"_oldBEST.h5"):
+                    print(args.outDir+"BEST_model"+mySuffix+"_oldBEST.h5"+" model not found, training a new one")
+                    if not "jetBESvarsTrain" in globals().keys():
+                        loadData(args.h5Dir, args.year, ["Train","Validation"])
+            elif doBES and not doImages:
+                if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+".h5"):
+                    print("BESonly model not found, training a new one")
+                    if not "jetBESvarsTrain" in globals().keys():
+                        loadData(args.h5Dir, args.year, ["Train","Validation"])
+                else:
+                    print("Loading BES-only model")
+                    BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+".h5")
+            elif not doBES and doImages:
+                if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+".h5"):
+                    print("Imagesonly model not found, training a new one")
+                    if not "jetWFrameTrain" in globals().keys():
+                        loadData(args.h5Dir, args.year, ["Train","Validation"])
+                else:
+                    print("Loading Images-only model")
+                    BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+".h5")
+            else:
+                if not os.path.isfile(args.outDir+"BEST_model"+mySuffix+".h5"):
+                    print("Combined (both BESvars and Images, but not ensembled) model not found, training a new one")
+                    if not "jetBESvarsTrain" in globals().keys():
+                        loadData(args.h5Dir, args.year, ["Train","Validation"])
+                else:
+                    print("Loading combined BES-images (no ensemble) model")
+                    BEST_model = load_model(args.outDir+"BEST_model"+mySuffix+".h5")
+            if BEST_model == None:
+                if args.oldBEST:
+                    mySuffix = mySuffix+"_oldBEST"
+                BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix, float(args.patience))
 
-   for mySet in ["Train","Validation"]:
-      if doImages:
-         for myFrame in frameTypes:
-            if "jet"+myFrame+"Frame"+mySet in globals().keys():
-               del globals()["jet"+myFrame+"Frame"+mySet]
-      if doBES:
-         if "jetBESvars"+mySet in globals().keys():
-            del globals()["jetBESvars"+mySet]
+    for mySet in ["Train","Validation"]:
+        if doImages:
+            for myFrame in frameTypes:
+                if "jet"+myFrame+"Frame"+mySet in globals().keys():
+                    del globals()["jet"+myFrame+"Frame"+mySet]
+        if doBES:
+            if "jetBESvars"+mySet in globals().keys():
+                del globals()["jetBESvars"+mySet]
 
    #if doBES:
    #   makeCM(BES_model, doBES, doImages, doEnsemble, mySuffix+"_BES")
@@ -1128,4 +1128,4 @@ if __name__ == "__main__":
 
    
    
-   #makeCM(BEST_model, args.h5Dir, args.outDir, args.year, doBES, doImages, doEnsemble, mySuffix)
+    makeCM(BEST_model, args.h5Dir, args.outDir, args.year, doBES, doImages, doEnsemble, mySuffix)

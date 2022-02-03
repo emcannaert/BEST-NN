@@ -43,7 +43,7 @@ python johanTraining.py
 python plotConfusionMatrix.py
 ```
 
-Note that there is a couple of boolean flags, doBES and doImages, to specifically turn on part of that training.
+Note that there are a couple of boolean flags, doBES and doImages, to specifically turn on part of that training.
 
 ## Training with only the Higgs Frame Images
 

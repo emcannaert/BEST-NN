@@ -139,7 +139,7 @@ def train(h5Dir, modelFile, plotDir, suffix, userPatience, maskPath, TrnValTstEv
     #                                     verbose=0, save_best_only=True, 
     #                                     save_weights_only=False, mode='auto', 
     #                                     period=1)
-    model_checkpoint = ModelCheckpoint( modelFile, monitor='val_loss', 
+    model_checkpoint = ModelCheckpoint( modelFile, monitor='loss', 
                                         verbose=1, save_best_only=False,
                                         save_weights_only=False,
                                         period=1, mode='auto')
