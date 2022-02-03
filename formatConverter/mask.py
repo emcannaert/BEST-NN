@@ -1,6 +1,15 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # mask.py /////////////////////////////////////////////////////////////////////////
 #==================================================================================
+# Author(s): Mark Samuel Abbott ---------------------------------------------------
+# This script generates masks to be used in the training step. ////////////////////
+#----------------------------------------------------------------------------------
+
+################################## NOTES TO SELF ##################################
+# Figure out how this script should fit into the final release (will we keep it?).
+# Does this belong in formatConverter or training?
+# If we keep it, it needs to be improved and needs more comments.
+
 import os
 
 oldFrames = ["Top", "Higgs", "Z", "W"]

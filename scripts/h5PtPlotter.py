@@ -7,10 +7,13 @@ import matplotlib.pyplot as plt
 import h5py
 import argparse, os
 
+################################## NOTES TO SELF ##################################
+# Plots need titles, code needs more comments.
+# Might be made obsolete by training/plotBESTInputs.py.
+
 # User definitons
 # bins_list = [i*100 for i in range(0,40)]
 bins_list = [i*50 for i in range(10,40)]
-
 
 
 # Global variables
@@ -30,7 +33,6 @@ if __name__ == "__main__":
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
                         help='Location of directory containing h5 files to plot',
-                        # default="/uscms/home/bonillaj/nobackup/h5samples/")
                         default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/")
     parser.add_argument('-o','--outDir',
                         dest='outDir',
@@ -63,7 +65,6 @@ if __name__ == "__main__":
         myPtArrays = []
         for mySample in listOfSamples:
             inputFile = h5py.File(args.h5Dir+mySample+"Sample_2017_BESTinputs"+suffix,"r")
-            # myPtArrays.append(np.array(inputFile["BES_vars"][...,28]))
             myPtArrays.append(np.array(inputFile["BES_vars"][...,548]))
         # --- Create histogram, legend and title ---
         plt.figure()

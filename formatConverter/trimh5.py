@@ -1,6 +1,16 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # trimh5.py ///////////////////////////////////////////////////////////////////////
 #==================================================================================
+# Author(s): Mark Samuel Abbott ---------------------------------------------------
+# This script trims some bad events from the BB and QCD h5 files.  ////////////////
+# Bad variable is "284:ak8SoftDropFrame_jet_energy0" //////////////////////////////
+# The script confirms that the events were removed correctly. /////////////////////
+# SoftDropFrame still being tested, could be left out of final release. /////////// 
+#----------------------------------------------------------------------------------
+
+################################## NOTES TO SELF ##################################
+# Figure out if we should keep this script in the final release.
+# If we keep it, it needs to be more general and needs more comments.
 
 import numpy as np
 import h5py
