@@ -17,19 +17,19 @@
 ###(NOTE: 2015 = 2016_APV)###
 # As of Dec. 10, 2021:
 #   Missing Mass Points:
-#       ZZ:  2017: 2000; 2018: 1000
+#       ZZ:  2018: 1000
 #       QCD: 2017: Flat
 #       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; All years: 5000, 5500, 6000, 6500, 7000, 7500, 8000
 #   Dataset Versions:
 #       2015: All tt and QCD datasets are v2, the rest is v1.
 #       2016: All datasets are v2
-#       2017: All datasets are v2, except for two extra tt datasets (detailed below)
+#       2017: All datasets are v2, except for one extra tt dataset (detailed below)
 #       2018: All datasets are v2 (NOTE: No v1 dataset exists for QCD Flat)
 #   Notes:
 #       HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong)
 #       tt: Mass points on DAS not in the 21 mass points given: (2015 and 2016: 400, 700, 900) <- The script finds all samples, regardless of relation to the 21 mass points requested
 #       tt: Using extra tt samples that were not originally requested. Can be identified by a capital "P" in dataset name (/ZPrimeToTT... instead of /ZprimetoTT...)
-#           Gives 2 extra v2 datasets per mass point (17 from 400 to 4500, 34 total each year) at 30% and 10% width, except that (2017: M900_W270 and M1400_W140) are v1
+#           Gives 2 extra v2 datasets per mass point (17 from 400 to 4500, 34 total each year) at 30% and 10% width, except that (2017: M900_W270) is v1
 
 
 #==================================================================================
