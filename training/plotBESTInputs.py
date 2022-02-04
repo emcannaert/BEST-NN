@@ -38,8 +38,8 @@ from sklearn import preprocessing
 # print("Plotting pT", suffix)
 
 # Load Mask
-# maskPath = "/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/oldBESTMask.txt"
-maskPath = "/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/newBESTMask_noDeepAK8noNJets_trimIso.txt"
+# maskPath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/oldBESTMask.txt"
+maskPath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/newBESTMask_noDeepAK8noNJets_trimIso.txt"
 maskFile = open(maskPath, "r")
 varDict = {}
 allVars = []

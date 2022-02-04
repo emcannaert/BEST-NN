@@ -49,7 +49,7 @@ writeVars = writeVars + labOldVars
 writeVars.sort()
 
 
-varFile = "/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/h5samples/BESvarList.txt"
+varFile = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/h5samples/BESvarList.txt"
 varDict = {}
 allVars = []
 frameVars = []

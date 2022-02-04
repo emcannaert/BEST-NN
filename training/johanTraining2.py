@@ -438,7 +438,7 @@ def train(doBES, doImages, h5Dir, outDir, suffix, userPatience):
       #print("Opened Files")
 
       if 'oldBEST' in suffix:
-         maskFile = open("/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/oldBESTMask.txt", "r")
+         maskFile = open("/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/oldBESTMask.txt", "r")
          oldBESTMaskIndex = []
          for line in maskFile:
             oldBESTMaskIndex.append(line.split(':')[0])

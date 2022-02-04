@@ -75,7 +75,7 @@ def train(h5Dir, modelFile, plotDir, suffix, userPatience, maskPath, TrnValTstEv
 
     # Create the BES framework
     # Train the neural network
-    # maskDir = "/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/"
+    # maskDir = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/"
     # maskName = "oldBESTMask.txt"
     # maskFile = open(maskDir + maskName, "r")
 
@@ -222,7 +222,7 @@ if __name__ == "__main__":
                         default="~/nobackup/models/")
     parser.add_argument('-m','--maskPath',
                         dest='maskPath',
-                        default="/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/oldBESTMask.txt")
+                        default="/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/oldBESTMask.txt")
     parser.add_argument('-sf','--suffix',
                         dest='suffix',
                         default="")
@@ -257,7 +257,7 @@ if __name__ == "__main__":
 
     # mySuffix  = args.suffix + args.year + "_oldBEST"
     # modelFile = args.outDir + "BEST_model_" + mySuffix+ ".h5"
-    # maskPath = "/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/oldBESTMask.txt"
+    # maskPath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/oldBESTMask.txt"
 
     if args.redoTraining:
         print("Redo all training")

@@ -76,7 +76,7 @@ def train(h5Dir, modelFile, plotDir, suffix, userPatience, maskPath, TrnValTstEv
     # Create the BES framework
 
     # Train the neural network
-    # maskDir = "/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/"
+    # maskDir = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/"
     # maskFile = "oldBESTMask.txt"
     # maskFile = open(maskDir + maskFile, "r")
     
@@ -209,7 +209,7 @@ if __name__ == "__main__":
                         default="~/nobackup/models/")
     parser.add_argument('-m','--maskPath',
                         dest='maskPath',
-                        default="/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/masks/oldBESTMask.txt")
+                        default="/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/masks/oldBESTMask.txt")
     parser.add_argument('-sf','--suffix',
                         dest='suffix',
                         default="")

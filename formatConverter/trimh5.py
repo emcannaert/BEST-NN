@@ -20,7 +20,7 @@ eventDict = { "BB":[2534325, 2935341, 2969700], "QCD":[331219, 833858, 1170782, 
 for sample, badEvents in eventDict.items():
     print("\nBeginning " + sample)
     f = h5py.File("/uscms/home/bonillaj/nobackup/h5samples_ULv1/"+sample+"Sample_2017_BESTinputs_train_flattened.h5","r+")
-    # f = h5py.File("/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/h5samples/"+sample+"Sample_2017_BESTinputs_train_flattened.h5","r+")
+    # f = h5py.File("/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/h5samples/"+sample+"Sample_2017_BESTinputs_train_flattened.h5","r+")
     dset = f['BES_vars']
     print("Extracting data to array...")
     oldDS = dset[()]

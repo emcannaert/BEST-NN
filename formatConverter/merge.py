@@ -23,7 +23,7 @@ for setType in setTypes:
     # Open file, grab keys, and NEvents
     print("\nBeginning " + setType)
     ZPrime = h5py.File("/uscms/home/bonillaj/nobackup/h5samples_ULv1/TTSample_2017_BESTinputs_"+setType+".h5","a")
-    RSGluon = h5py.File("/uscms/home/msabbott/nobackup/abbott/CMSSW_10_6_27/src/BEST/formatConverter/h5samples/RSGSample_2017_BESTinputs_"+setType+".h5", 'r')
+    RSGluon = h5py.File("/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/formatConverter/h5samples/RSGSample_2017_BESTinputs_"+setType+".h5", 'r')
     files["ZPrime"][setType]  = ZPrime
     files["RSGluon"][setType] = RSGluon
 
