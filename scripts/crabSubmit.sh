@@ -16,11 +16,13 @@
 
 # Declare particles, years, and datatypes to submit. 
 # These need to be edited manually, as passing an argument to ./crabSubmit.sh breaks the 'crab submit ...' command later.
-declare -a myParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+# declare -a myParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+declare -a myParticles=("bb")
 # declare -a myParticles=("QCD")
-declare -a myYears=("2016_APV" "2016" "2017" "2018")
-# declare -a myYears=("2017")
-declare -a myDatatypes=("mc" "data")
+# declare -a myYears=("2016_APV" "2016" "2017" "2018")
+declare -a myYears=("2017")
+# declare -a myDatatypes=("mc" "data")
+declare -a myDatatypes=("mc")
 
 # Define ANSI colors here for the output since I am extra:
 RED='\033[91m' # Red
@@ -36,80 +38,80 @@ alias echo='echo -e'
 
 
 # This is where the options and arguments are parsed in.
-if [[ $# == 0 ]]; then # Default case, sets up to submit everything.
-    echo "Default behavior triggered. ${BLUE}All${NC} crab jobs for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, will be submitted."
-    myParticles=${allParticles[*]}
-    myYears=${allYears[*]}
-    myDatatypes=${allDatatypes[*]}
-else # Specific cases, sets up to submit specfic crab jobs.
-    while getopts :p:y:d: opt; do
-        case $opt in
-            p)  # The -p option, for particles. Either fills "all" or the specificly chosen arguments.
-                if [[ $OPTARG == "all" ]]; then
-                    myParticles=${allParticles[*]}
-                else 
-                    for part in $OPTARG; do    
-                        if [[ ${allParticles[*]} =~ $part ]]; then # Check for valid arguments, then fills array.
-                            myParticles+=($part)
-                        else # Invalid arguments trigger error message
-                            echo "${YEL}Error:${NC} Invalid argument for ${CYAN}$opt${NC}: $part"
-                            echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${CYAN}${allParticles[*]}${NC}"
-                            echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
-                            echo "${RED}Exiting without submitting jobs...${NC}"
-                            exit 1
-                        fi
-                    done
-                fi
-            ;;
-            y)  # The -y option, for years. Either fills "all" or the specificly chosen arguments.
-                if [[ $OPTARG == "all" ]]; then
-                    myYears=${allYears[*]}
-                else
-                    for yr in $OPTARG; do
-                        if [[ ${allYears[*]} =~ $yr ]]; then # Check for valid arguments, then fills array.
-                            myYears+=($yr)
-                        else # Invalid arguments trigger error message
-                            echo "${YEL}Error:${NC} Invalid argument for ${GRN}$opt${NC}: $yr"
-                            echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${GRN}${allYears[*]}${NC}"
-                            echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
-                            echo "${RED}Exiting without submitting jobs...${NC}"
-                            exit 1
-                        fi
-                    done
-                fi
-            ;;
-            d)  # The -d option, for datatype. Either fills "all" or the specificly chosen arguments.
-                if [[ $OPTARG == "all" ]]; then
-                    myDatatypes=${allDatatypes[*]}
-                else
-                    for dat in $OPTARG; do
-                        if [[ ${allDatatypes[*]} =~ $dat ]]; then # Check for valid arguments, then fills array.
-                            myDatatypes+=($dat)
-                        else # Invalid arguments trigger error message
-                            echo "${YEL}Error:${NC} Invalid argument for ${PURP}$opt${NC}: $dat"
-                            echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${PURP}${allDatatypes[*]}${NC}"
-                            echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
-                            echo "${RED}Exiting without creating samples...${NC}"
-                            exit 1
-                        fi
-                    done
-                fi
-            ;;
-            \?) # Catches invalid options
-                echo "${YEL}Error:${NC} Invalid option: -$OPTARG"
-                echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
-                echo "${RED}Exiting without creating samples...${NC}"
-                exit 1
-            ;;
-            :)  # Catches options missing arguments
-                echo "${YEL}Error:${NC} Option -$OPTARG requires an argument."
-                echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
-                echo "${RED}Exiting without creating samples...${NC}"
-                exit 1
-            ;;
-        esac
-    done
-fi
+# if [[ $# == 0 ]]; then # Default case, sets up to submit everything.
+#     echo "Default behavior triggered. ${BLUE}All${NC} crab jobs for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, will be submitted."
+#     myParticles=${allParticles[*]}
+#     myYears=${allYears[*]}
+#     myDatatypes=${allDatatypes[*]}
+# else # Specific cases, sets up to submit specfic crab jobs.
+#     while getopts :p:y:d: opt; do
+#         case $opt in
+#             p)  # The -p option, for particles. Either fills "all" or the specificly chosen arguments.
+#                 if [[ $OPTARG == "all" ]]; then
+#                     myParticles=${allParticles[*]}
+#                 else 
+#                     for part in $OPTARG; do    
+#                         if [[ ${allParticles[*]} =~ $part ]]; then # Check for valid arguments, then fills array.
+#                             myParticles+=($part)
+#                         else # Invalid arguments trigger error message
+#                             echo "${YEL}Error:${NC} Invalid argument for ${CYAN}$opt${NC}: $part"
+#                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${CYAN}${allParticles[*]}${NC}"
+#                             echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
+#                             echo "${RED}Exiting without submitting jobs...${NC}"
+#                             exit 1
+#                         fi
+#                     done
+#                 fi
+#             ;;
+#             y)  # The -y option, for years. Either fills "all" or the specificly chosen arguments.
+#                 if [[ $OPTARG == "all" ]]; then
+#                     myYears=${allYears[*]}
+#                 else
+#                     for yr in $OPTARG; do
+#                         if [[ ${allYears[*]} =~ $yr ]]; then # Check for valid arguments, then fills array.
+#                             myYears+=($yr)
+#                         else # Invalid arguments trigger error message
+#                             echo "${YEL}Error:${NC} Invalid argument for ${GRN}$opt${NC}: $yr"
+#                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${GRN}${allYears[*]}${NC}"
+#                             echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
+#                             echo "${RED}Exiting without submitting jobs...${NC}"
+#                             exit 1
+#                         fi
+#                     done
+#                 fi
+#             ;;
+#             d)  # The -d option, for datatype. Either fills "all" or the specificly chosen arguments.
+#                 if [[ $OPTARG == "all" ]]; then
+#                     myDatatypes=${allDatatypes[*]}
+#                 else
+#                     for dat in $OPTARG; do
+#                         if [[ ${allDatatypes[*]} =~ $dat ]]; then # Check for valid arguments, then fills array.
+#                             myDatatypes+=($dat)
+#                         else # Invalid arguments trigger error message
+#                             echo "${YEL}Error:${NC} Invalid argument for ${PURP}$opt${NC}: $dat"
+#                             echo "Please choose '${BLUE}all${NC}', or the case-sensitive arguments: ${PURP}${allDatatypes[*]}${NC}"
+#                             echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
+#                             echo "${RED}Exiting without creating samples...${NC}"
+#                             exit 1
+#                         fi
+#                     done
+#                 fi
+#             ;;
+#             \?) # Catches invalid options
+#                 echo "${YEL}Error:${NC} Invalid option: -$OPTARG"
+#                 echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
+#                 echo "${RED}Exiting without creating samples...${NC}"
+#                 exit 1
+#             ;;
+#             :)  # Catches options missing arguments
+#                 echo "${YEL}Error:${NC} Option -$OPTARG requires an argument."
+#                 echo "${YEL}Run script without any options to see usage:${NC} ./crabSubmit.sh"
+#                 echo "${RED}Exiting without creating samples...${NC}"
+#                 exit 1
+#             ;;
+#         esac
+#     done
+# fi
 
 echo "${CYAN}Particle(s)${NC} selected: ${CYAN}${myParticles[*]}${NC}"
 echo "${GRN}Year(s)${NC} selected: ${GRN}${myYears[*]}${NC}"
@@ -147,7 +149,7 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
         echo "${YEL}Entering $yearDir...${NC}"
         cd $yearDir
         mkdir -p logCrabFiles # Make logCrabFiles directory if it doesn't exist
-        echo "${YEL}Crab log directory: ${yearDir}/logCrabFiles${NC}"
+        echo "${YEL}Crab log directory:${GRN} ${yearDir}/logCrabFiles${NC}"
         newtxt="fail.txt"
 
         # declare -a massPnts=()

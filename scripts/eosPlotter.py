@@ -15,7 +15,8 @@ import os
 import time
 import numpy
 import subprocess
-from datasetDictionary import datasetDict # Import the dictionary of sample files
+# from datasetDictionary import datasetDict # Import the dictionary of sample files
+from tempDict import datasetDict # Import the dictionary of sample files
 import ROOT
 
 ######################################### NOTES TO SELF ###########################
