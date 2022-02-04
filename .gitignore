@@ -10,4 +10,5 @@
 *.out
 *.err
 *vscode*
-preprocess/test/*
+*workspace*
+samples/backup/*

@@ -30,8 +30,9 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
+# listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
 # listOfSamples = ["HH"]
+listOfSamples = ["RSG"]
 years = ["2016","2017","2018"]
 treeName = "run/jetTree"
 
@@ -93,7 +94,8 @@ def convert(eosDir, outDir, sampleType, year, debug):
                         
                         if myFrameLabel == "AllFrame":
 
-                            if myInfoLabel == "Weights": myInfoLabel = u'PUPPI_Weights' # Take this out the next BEST compile
+                            if myInfoLabel == "Weights": myInfoLabel = u'PUPPI_Weights' # Remove this the next BEST compile
+                            if myInfoLabel == "PUPPIweights": myInfoLabel = u'PUPPI_Weights' # Remove this the next BEST compile
 
                             invPFInfoLabels.append(myInfoLabel) # Only one of each of these variables, so no if statement needed
                             invKeys.append(key)
@@ -114,7 +116,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
 
                 if listBESvars == True:
                     print("There will be ", len(besKeys), " Input features stored")
-                    print("There will be ", len(depKeys),  " PF Frame Dependent features stored")
+                    print("There will be ", len(depKeys), " PF Frame Dependent features stored")
                     print("There will be ", len(invKeys), " PF Frame Invariant features stored")
                     print("There will be ", len(svKeys),  " SV features stored")                    
                 if listBESvars == True:
@@ -292,7 +294,7 @@ if __name__ == "__main__":
     print("Done")
 
     # Check how long the script took to run
-    runf = open("timeLog_converter", "a") 
+    runf = open("timelog_converter", "a") 
     timeTaken = divmod(time.time() - startTime, 60.)
     runf.write("Script took "+ str( int(timeTaken[0]) ) + "m " + str( int(timeTaken[1]) ) + "s to complete.\n")
     runf.close

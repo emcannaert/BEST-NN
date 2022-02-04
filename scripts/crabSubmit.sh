@@ -2,16 +2,13 @@
 #=========================================================================================
 # crabSubmit.sh --------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott, Johan S. Bonilla ----------------------------------------
+# Author(s): Mark Samuel Abbott  ---------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
 # This script submits user chosen jobs and submits them to crab. 
 # This script will also call buildConfig.py to generate the crab config files to submit.
 # The script lives in the scripts directory and the symbolic links in each of the submit201X directories should be executed within their respective directories.
-
-################################## NOTES TO SELF ##################################
-# Submit jobs in parallel?
 
 #==================================================================================
 # Setup ///////////////////////////////////////////////////////////////////////////
@@ -155,9 +152,9 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
 
         # declare -a massPnts=()
         for part in ${myParticles[*]}; do # Loop over particles
-            # UPDATE THIS TO USE ARRAYS/DICT INSTEAD OF WHATS IN THE DIR? COULD BE A WAY TO AUTOCHECK IF EVERYTHING SUBMITS...
-            # Check if dir exists, then check if .requestcache exists? grep the crab.log for status instead of doing crab status * ?
-          
+            # Currently waits 2 seconds between each 'crab submit'. This takes longer, but ensures no jobs get skipped.
+            # Could run loop without waiting, but would need a check at the end of the script to ensure everything was submitted.
+            # Waiting the extra time is simpler and safer for now. However, some experimental code for checking submissions has been left in this file.
             listOfScripts=config/crab*$part*.py
             echo "${YEL}Submitting crab jobs in ${GRN}$yearDir ${YEL}for ${PURP}$part${NC}"
 
@@ -184,7 +181,7 @@ echo "jobs submitted"
 #==================================================================================
 
 # Currently, script submits jobs in series. This takes longer but eliminates risk of lost jobs.
-# If the jobs are submitted in the background with '&', they can be rapidly submitting to CRAB in parallel. 
+# If the jobs are submitted in the background with '&', they can be rapidly submitted to CRAB in parallel. 
 # However, this sometimes causes jobs to be 'lost', and not submit successfully.
 # Below is some test code (DOES NOT WORK YET) that would handle this issue.
 
@@ -218,7 +215,7 @@ echo "jobs submitted"
 #     done
 # done
 
-# # auto kill
+# # Use this to kill everything that was just submitted--useful for testing script
 # for d in */CrabBEST/*/ ; do
 #     # echo $d | cut -d '/' -f 2 
 #     crab kill -d $d

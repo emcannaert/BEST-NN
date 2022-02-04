@@ -1,11 +1,13 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # oldBEST.py //////////////////////////////////////////////////////////////////////
 #==================================================================================
+# Author(s): Reyer Band, Johan S. Bonilla, Brendan Regnary, Mark Samuel Abbott ////
 # This program trains BEST with flattened inputs //////////////////////////////////
-# One can train the network with only BESvars and images, or both /////////////////
-# One can also ask to run the ensemble which takes/creates BES-only and ///////////
-# image-only networks, and feeds the output predictions into a separate network ///
+# This uses the original oldBEST NN architecture //////////////////////////////////
 #==================================================================================
+
+################################## NOTES TO SELF ##################################
+# Check for conistency, add comments.
 
 from pyexpat import model
 import time
@@ -46,12 +48,6 @@ sess = tf.Session(config=config)
 h = tf.constant('hello world')
 print(sess.run(h))
 
-# Do BES and/or images
-doBES = False
-doImages = False
-doEnsemble = False
-mySuffix = ""
-
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 frameTypes = ["W","Z","Higgs","Top","Bottom"]
 
@@ -63,10 +59,6 @@ TrnValTstEvents = [ 500000, 50000, 50000 ]
 # TrnValTstEvents = [ 125000, 12500, 12500 ]
 # TrnValTstEvents = [ 50000, 10000, 10000 ]
 
-def loadData(h5Dir, year, setTypes):
-   return
-
-
 def train(h5Dir, modelFile, plotDir, suffix, userPatience, maskPath, TrnValTstEvents):
     #==================================================================================
     # Train the Neural Network ////////////////////////////////////////////////////////
@@ -77,7 +69,6 @@ def train(h5Dir, modelFile, plotDir, suffix, userPatience, maskPath, TrnValTstEv
     #    Batches? Don't load more data than needed
     # How can this be simplified?
     # How can this be split up into easy to read functions?
-    #    What's up with loadData? Replace?
     # Keep redo training?
     # Restructure how functions are called--consolodate. Will need to understand final file structure (how many training scripts?)
     #   Currently a mess. functions.py and plotConfustionMatrix.py should be combined. Unneeded things should be deleted.
@@ -162,9 +153,6 @@ def train(h5Dir, modelFile, plotDir, suffix, userPatience, maskPath, TrnValTstEv
     print("Globals validation shapes", globals()["jetBESvarsValidation"].shape, globals()["truthLabelsValidation"].shape, globals()["truthLabelsValidation"][0])
          
     print("Shuffle Train")
-    # r = np.random.RandomState(12345)
-    # rng_state = r.get_state()
-    # rng_state = np.random.RandomState(12345).get_state()
     rng_state = np.random.get_state()
     np.random.set_state(rng_state)
     np.random.shuffle(globals()["truthLabelsTrain"])
@@ -235,10 +223,6 @@ if __name__ == "__main__":
     #                     default="")
     parser.add_argument('-r','--redoTraining', dest='redoTraining', default=False, action='store_true')
     args = parser.parse_args()
-   
-    doBES = True
-    doImages = False
-    doEnsemble = False
 
     # Make directories you need
     if not os.path.isdir(args.h5Dir):
@@ -263,20 +247,9 @@ if __name__ == "__main__":
 
     if args.redoTraining:
         print("Redo all training")
-        # loadData(args.h5Dir, args.year, ["Train","Validation"])
         BEST_model = train(args.h5Dir, modelFile, plotDir, mySuffix, float(args.patience), args.maskPath, TrnValTstEvents)
 
     else:
-        # print("Finding models available, training what is missing")
-        # BEST_model = None
-        # # BEST_model = train(doBES, doImages, args.h5Dir, args.outDir, mySuffix+"_oldBEST", float(args.patience))
-        # if not os.path.isfile(args.outDir+"BEST_model_"+mySuffix+".h5"):
-        #     print(args.outDir+"BEST_model_"+mySuffix+".h5"+" model not found, training a new one")
-        #     if not "jetBESvarsTrain" in globals().keys():
-        #         loadData(args.h5Dir, args.year, ["Train","Validation"])
-        # if BEST_model == None:
-        #     BEST_model = train(args.h5Dir, modelFile, mySuffix, float(args.patience))
-
         print("Begin training new model...")
         if not os.path.isdir(modelDir):
             print("Creating directory for model and mask: " + modelDir )
@@ -298,7 +271,7 @@ if __name__ == "__main__":
             del globals()["jetBESvars"+mySet]
 
     testMaxEvents = TrnValTstEvents[2]
-    makeCM(BEST_model, args.h5Dir, plotDir, args.year, doBES, doImages, doEnsemble, mySuffix, args.maskPath, testMaxEvents, modelType)
+    makeCM(BEST_model, args.h5Dir, plotDir, mySuffix, args.maskPath, testMaxEvents, modelType)
 
     # Check how long the script took to run
     timelog = open("logs/timelog_" + modelType, "a") 

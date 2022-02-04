@@ -1,6 +1,16 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # merge.py /////////////////////////////////////////////////////
 #==================================================================================
+# Author(s): Mark Samuel Abbott ---------------------------------------------------
+# This script merges the RSGluon h5 files into the main Z h5 files. ///////////////
+# The script confirms that the merge was successful.  /////////////////////////////
+# Only needed this script since we added the RSGluon data later. ////////////////// 
+#----------------------------------------------------------------------------------
+
+################################## NOTES TO SELF ##################################
+# Figure out if we should keep this script in the final release.
+# If we keep it, it needs to be more general and needs more comments.
+
 
 # modules
 import numpy as np
