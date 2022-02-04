@@ -146,8 +146,8 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
         mkdir -p $yearDir # Make sure $yearDir exists
         echo "${YEL}Entering $yearDir...${NC}"
         cd $yearDir
-        mkdir -p logFiles # Make logFiles directory if it doesn't exist
-        echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
+        mkdir -p logCrabFiles # Make logCrabFiles directory if it doesn't exist
+        echo "${YEL}Crab log directory: ${yearDir}/logCrabFiles${NC}"
         newtxt="fail.txt"
 
         # declare -a massPnts=()
@@ -161,7 +161,7 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
             for job in $listOfScripts; do
                 trimstring=${job#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
-                crab submit $job >> logFiles/$crabName.txt 
+                crab submit $job >> logCrabFiles/$crabName.txt 
                 sleep 2s # If crab jobs are submitted too quickly, some don't go through
                 # massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
 
@@ -194,8 +194,8 @@ echo "jobs submitted"
 #         mkdir -p $yearDir # Make sure $yearDir exists
 #         echo "${YEL}Entering $yearDir...${NC}"
 #         cd $yearDir
-#         mkdir -p logFiles # Make logFiles directory if it doesn't exist
-#         echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
+#         mkdir -p logCrabFiles # Make logCrabFiles directory if it doesn't exist
+#         echo "${YEL}Crab log directory: ${yearDir}/logCrabFiles${NC}"
 #         newtxt="fail.txt"
 
 #         declare -a massPnts=()
@@ -209,7 +209,7 @@ echo "jobs submitted"
 #             if [[ ! -d $bestDir ]]; then
 #                 echo "sad dir"
 #                 echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
-#                 # crab submit $f >> logFiles/$crabName.txt &
+#                 # crab submit $f >> logCrabFiles/$crabName.txt &
 #             fi
 #         done
 #     done

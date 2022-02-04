@@ -13,7 +13,7 @@
 
 
 echo "\nKilling jobs..."
-logFile="logKill.txt"
+logFile="Logs/killLog.txt"
 pids=
 # Kill crab jobs
 for job in */CrabBEST/*/ ; do

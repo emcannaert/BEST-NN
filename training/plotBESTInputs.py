@@ -143,7 +143,7 @@ for splitSet in splitSets:
 
 
 # Check how long the script took to run
-timelog = open("logs/timelog_plotBESTInputs", "a") 
+timelog = open("Logs/plotBESTInputs_TimeLog.txt", "r+") 
 timeTaken = divmod(time.time() - startTime, 60.)
 timeMessage = "Script took "+ str( int(timeTaken[0]) ) + "m " + str( int(timeTaken[1]) ) + "s to complete.\n"
 print(timeMessage)

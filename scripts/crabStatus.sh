@@ -19,7 +19,7 @@
 YEL='\033[93m' # Yellow
 NC='\033[0m' # No Color
 
-logFile="logStatus.txt"
+logFile="Logs/statusLog.txt"
 echo -e "\n${YEL}Checking jobs...${NC}"
 pids= 
 

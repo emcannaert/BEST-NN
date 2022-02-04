@@ -192,7 +192,7 @@ for labvar, binInfo in labFrameDict.items(): # This iterates over the lab frame 
     canvas.Close() # Close canvas now that we are done
 
 # Check how long the script took to run
-runf = open("timeLog", "w") 
+runf = open("Logs/eosTimeLog.txt", "r+") 
 timeTaken = divmod(time.time() - startTime, 60.)
 runf.write("Script took "+ str( int(timeTaken[0]) ) + "m " + str( int(timeTaken[1]) ) + "s to complete.")
 runf.close

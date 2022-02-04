@@ -284,7 +284,7 @@ if __name__ == "__main__":
     makeCM(BEST_model, args.h5Dir, plotDir, mySuffix, args.maskPath, testMaxEvents, modelType)
 
     # Check how long the script took to run
-    timelog = open("logs/timelog_" + modelType, "a") 
+    timelog = open("Logs/" + modelType + "_TimeLog.txt", "r+") 
     timeTaken = divmod(time.time() - startTime, 60.)
     timeMessage = "Running " + mySuffix + ", script took "+ str( int(timeTaken[0]) ) + "m " + str( int(timeTaken[1]) ) + "s to complete.\n"
     print(timeMessage)

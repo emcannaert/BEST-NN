@@ -144,7 +144,7 @@ def makeCM(model_BEST, h5Dir, plotDir, suffix, maskPath, testMaxEvents, modelTyp
     plt.close()
 
     # Record classification rates
-    classifylog = open("logs/classifylog_" + modelType, "a") 
+    classifylog = open("Logs/" + modelType + "_classifyLog.txt", "r+") 
     classifylog.write("-----------------------------------\n")
     classifylog.write("Running " + suffix + ":\n")
     # totalTested = np.count_nonzero(globals()["truthLabelsTest"][:testMaxEvents] == 1, axis=0)

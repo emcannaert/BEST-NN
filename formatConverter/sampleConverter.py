@@ -294,7 +294,7 @@ if __name__ == "__main__":
     print("Done")
 
     # Check how long the script took to run
-    runf = open("timelog_converter", "a") 
+    runf = open("Logs/convertTimeLog.txt", "r+") 
     timeTaken = divmod(time.time() - startTime, 60.)
     runf.write("Script took "+ str( int(timeTaken[0]) ) + "m " + str( int(timeTaken[1]) ) + "s to complete.\n")
     runf.close
