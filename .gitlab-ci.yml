@@ -52,7 +52,7 @@ BEST_compile:
 BEST_preprocess:
   stage: preprocess
   image:
-    name: gitlab-registry.cern.ch/clange/cmssw-docker/cc7-cms:latest
+    name: gitlab-registry.cern.ch/cms-cloud/cmssw-docker/cc7-cms:latest
     entrypoint: [""]
   tags:
     - cvmfs
