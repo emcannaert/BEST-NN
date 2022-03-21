@@ -1,0 +1,9 @@
+0:PUPPI_Weights
+1:abspdgId
+2:charge
+3:isChargedHadron
+4:isElectron
+5:isMuon
+6:isNeutralHadron
+7:isPhoton
+8:pdgId

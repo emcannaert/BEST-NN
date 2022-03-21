@@ -1,88 +1,87 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # MakeStandardInputs.py ///////////////////////////////////////////////////////////
 #----------------------------------------------------------------------------------
-# Author(s): Reyer Band, Johan S. Bonilla, Brendan Regnary ////////////////////////
-# This program makes Standardize Inputs ///////////////////////////////////////////
+# Author(s): Reyer Band, Johan S. Bonilla, Brendan Regnary, Mark Samuel Abbott ////
+# This program makes Standardized Inputs //////////////////////////////////////////
 #----------------------------------------------------------------------------------
 
-# modules
+################################## NOTES TO SELF ##################################
+# Add more comments, improve explanation at the top.
+# Save model using joblib instead of saving the mean/variance.
+# Make consistent with other scripts.
+# Figure out what the issue with scaling is
+#       Test by scaling and unscaling in the same script, then plotting. 
+
 import numpy
 import h5py
-# get stuff from modules
 from sklearn import preprocessing
-from sklearn.externals import joblib
-import json
 import argparse, os
 
-listOfSamples = ["b","Higgs","QCD","Top","W","Z"]
+listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
 setTypes = ["","train","validation","test"]
 
-
 #==================================================================================
-# Standardize BES Vars /////////////////////////////////////////////////////////////////
+# Standardize BES Vars ////////////////////////////////////////////////////////////
 #==================================================================================
-def standardizeBESTVars(fileDir, outDir, sampleTypes = ["QCD","Higgs","Top","W","Z","b"], setTypes = [""], suffix = ""):
-   # put BES variables in data frames
-   for mySet in setTypes:
-      jetBESDF = {}
-      for mySample in sampleTypes:
-         print("Getting", mySample, mySet)
-         filePath = fileDir+mySample+"Sample_BESTinputs"
-         if not mySet == "":
-            filePath = filePath + "_" + mySet
-         if suffix == "":
+def standardizeBESTVars(fileDir = "../formatConverter/h5samples/", sampleTypes = ["QCD","HH","TT","WW","ZZ","BB"], setTypes = [""], suffix = "", year = "2017"):
+    # put BES variables in data frames
+    for mySet in setTypes:
+        jetBESDF = {}
+        besChunks = []
+        for mySample in sampleTypes:
+            print("Getting", mySample, mySet)
+            filePath = fileDir+mySample+"Sample_"+year+"_BESTinputs"
+            if not mySet == "":
+                filePath = filePath + "_" + mySet
+            if not suffix == "":
+                filePath = filePath + "_" + suffix
             filePath = filePath + ".h5"
-         else:
-            filePath = filePath + "_" + suffix + ".h5"
-         myF = h5py.File(filePath,"r")
-         jetBESDF[mySample] = myF['BES_vars'][()]
-         print(type(jetBESDF[mySample]), jetBESDF[mySample].shape)
-         myF.close()
-         print("Got", mySample, mySet)
 
-      print("Accessed BES variables for", mySet)
+            myF = h5py.File(filePath,"r")
+            jetBESDF[mySample] = myF['BES_vars'][()]
+            besChunks = myF['BES_vars'].chunks
+            print(type(jetBESDF[mySample]), jetBESDF[mySample].shape)
+            myF.close()
+            print("Got", mySample, mySet)
+        print("Accessed BES variables for", mySet)
 
-      allBESinputs = numpy.concatenate([jetBESDF[mySample] for mySample in sampleTypes])
-      print("Shape allBESinputs", allBESinputs.shape)
-      scaler = preprocessing.StandardScaler().fit(allBESinputs)
+        allBESinputs = numpy.concatenate([jetBESDF[mySample] for mySample in sampleTypes])
+        print("Shape allBESinputs", allBESinputs.shape)
+        scaler = preprocessing.StandardScaler().fit(allBESinputs)
 
-      with open('ScalerParameters_'+mySet+'.txt', 'w') as outputFile:
-         for mean,var in zip(scaler.mean_, scaler.var_):
-            outputFile.write('{},{}\n'.format(mean, var))
+        with open('ScalerParameters_'+mySet+'.txt', 'w') as outputFile:
+            for mean,var in zip(scaler.mean_, scaler.var_):
+                outputFile.write('{},{}\n'.format(mean, var))
 
-      print("JetBESDF", jetBESDF.keys())
-      for mySample in sampleTypes:
-         jetBESDF[mySample] = scaler.transform(jetBESDF[mySample])
-         print("Transformed", mySample)
-         #if infParticle == 'H' : infParticle = 'Higgs'
-         #if infParticle == 'T' : infParticle = 'Top'
-         #if infParticle == 'B' : infParticle = 'b'
-         outFilePath = outDir+mySample+"Sample_BESTinputs"
-         if not mySet == "":
-            outFilePath = outFilePath + "_" + mySet
-         if not suffix == "":
-            outFilePath = outFilePath + "_" + suffix
-         outFilePath = outFilePath + "_standardized.h5"
-         outF = h5py.File(outFilePath, "w")
-         print("Creating Standarized Dataset for ", mySample, len(jetBESDF[mySample]))
-         outF.create_dataset('BES_vars', data=jetBESDF[mySample], compression='lzf')
-
-         inFilePath = fileDir+mySample+"Sample_BESTinputs"
-         if not mySet == "":
-            inFilePath = inFilePath + "_" + mySet
-         if not suffix == "":
-            inFilePath = inFilePath + "_" + suffix
-         inFilePath = inFilePath + ".h5"
-         inF = h5py.File(inFilePath, "r")
-         #Copy the images to the new file
-         #Treat QCD separately because of dumb labeling scheme I introduced
-         for myFrame in ['HiggsFrame_images','TopFrame_images','ZFrame_images','WFrame_images']:
-            print("Copying", myFrame)
-            outF.create_dataset(myFrame, data=inF[myFrame], compression='lzf')
-         inF.close()
-         outF.close()
-         print("Done creating", outFilePath)
-      print("Finished making datasets for", mySet)
+        print("JetBESDF", jetBESDF.keys())
+        for mySample in sampleTypes:
+            jetBESDF[mySample] = scaler.transform(jetBESDF[mySample])
+            print("Transformed", mySample)
+            outFilePath = fileDir+mySample+"Sample_"+year+"_BESTinputs"
+            if not mySet == "":
+                outFilePath = outFilePath + "_" + mySet
+            if not suffix == "":
+                outFilePath = outFilePath + "_" + suffix
+            outFilePath = outFilePath + "_standardized.h5"
+            outF = h5py.File(outFilePath, "w")
+            print("Creating Standarized Dataset for ", mySample, len(jetBESDF[mySample]))
+            outF.create_dataset('BES_vars', data=jetBESDF[mySample], chunks=(besChunks[0], besChunks[1]), compression='lzf', shuffle=True)
+            inFilePath = fileDir+mySample+"Sample_"+year+"_BESTinputs"
+            if not mySet == "":
+                inFilePath = inFilePath + "_" + mySet
+            if not suffix == "":
+                inFilePath = inFilePath + "_" + suffix
+            inFilePath = inFilePath + ".h5"
+            inF = h5py.File(inFilePath, "r")
+            # Copy the other datasets (could replace this with soft link?)
+            for key in inF.keys():
+                if key == "BES_vars": continue
+                print("Copying", key)
+                inF.copy(inF[key],outF,key)
+            inF.close()
+            outF.close()
+            print("Done creating", outFilePath)
+        print("Finished making datasets for", mySet)
 
 # Main function should take in arguments and call the functions you want
 if __name__ == "__main__":
@@ -91,17 +90,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
     parser.add_argument('-s', '--samples',
                         dest='samples',
-                        help='<Required> Which (comma separated) samples to process. Examples: 1) --all; 2) W,Z,b',
+                        help='<Required> Which (comma separated) samples to process. Examples: 1) --all; 2) WW,ZZ,BB',
                         required=True)
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
-                        default="~/nobackup/h5samples/")
-    parser.add_argument('-o','--outDir',
-                        dest='outDir',
-                        default="~/nobackup/h5samples/")
+                        default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/")
     parser.add_argument('-sf','--suffix',
                         dest='suffix',
-                        default="")
+                        default="flattened")
+    parser.add_argument('-y','--year',
+                        dest='year',
+                        default="2017")
     parser.add_argument('-st','--setType',
                         dest='setType',
                         help='<Required> Which (comma separated) sets to process. Examples: 1) all; 2) train,validation,test',
@@ -112,10 +111,7 @@ if __name__ == "__main__":
 
     # Make directories you need
     if not os.path.isdir(args.h5Dir): print(args.h5Dir, "does not exist")
-
-    standardizeBESTVars(args.h5Dir, args.outDir, listOfSamples, setTypes, args.suffix)
-        
-    ## Plot total pT distributions
+    standardizeBESTVars(args.h5Dir, listOfSamples, setTypes, args.suffix, args.year)
     
     print("Done")
 

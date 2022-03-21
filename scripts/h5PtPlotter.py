@@ -7,14 +7,20 @@ import matplotlib.pyplot as plt
 import h5py
 import argparse, os
 
-# User definitons
-bins_list = [i*100 for i in range(0,40)]
+################################## NOTES TO SELF ##################################
+# Plots need titles, code needs more comments.
+# Might be made obsolete by training/plotBESTInputs.py.
 
+# User definitons
+# bins_list = [i*100 for i in range(0,40)]
+bins_list = [i*50 for i in range(10,40)]
 
 
 # Global variables
-listOfSamples = ["b","Higgs","QCD","Top","W","Z"]
-listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
+listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
+# listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
+# listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
+listOfFileTypes = ["_train_flattened.h5"]
 
 # Main function should take in arguments and call the functions you want
 if __name__ == "__main__":
@@ -27,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
                         help='Location of directory containing h5 files to plot',
-                        default="/uscms/home/bonillaj/nobackup/h5samples/")
+                        default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/")
     parser.add_argument('-o','--outDir',
                         dest='outDir',
                         help='Location of destination directory containing plots',
@@ -58,8 +64,8 @@ if __name__ == "__main__":
         print("Plotting suffix", suffix)
         myPtArrays = []
         for mySample in listOfSamples:
-            inputFile = h5py.File(args.h5Dir+mySample+"Sample_BESTinputs"+suffix,"r")
-            myPtArrays.append(np.array(inputFile["BES_vars"][...,28]))
+            inputFile = h5py.File(args.h5Dir+mySample+"Sample_2017_BESTinputs"+suffix,"r")
+            myPtArrays.append(np.array(inputFile["BES_vars"][...,548]))
         # --- Create histogram, legend and title ---
         plt.figure()
         if suffix == ".h5":

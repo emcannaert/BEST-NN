@@ -5,10 +5,6 @@ The programs in this directory train the BEST.
 ## Overview
 There are a few different training strategies that live in this directory.
 
-``trainHHESTIA.py`` can produce plots of the input variables and training results. These features can be turned on and off with the boolean variables at the beginning of the program.
-
-``trainWithGenerators.py`` uses batch-generation for feeding in data.
-
 ``johanTraining.py`` uses the shape-matching technique.
 
 ## Using the FermiLab GPUs
@@ -41,17 +37,6 @@ The pT of the samples have been decorrelated (shape-matched) in the formatConver
 python MakeStandardInputs.py -s all -sf flattened -st train,validation,test
 python johanTraining.py
 python plotConfusionMatrix.py
-```
-
-Note that there is a couple of boolean flags, doBES and doImages, to specifically turn on part of that training.
-
-## Training with only the Higgs Frame Images
-
-A smaller network can be trained on the images. Various network options are available in the files titled ``imageTraining.py``.
-Note this is for testing and has no pT flattening.
-
-```bash
-python imageTraining.py
 ```
 
 ## Warning About Functions in Python

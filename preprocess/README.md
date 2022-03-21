@@ -8,100 +8,133 @@ of interest to BEST.
 
 ## Overview
 
-The actual producer is located in the ``plugins/BESTProducer.cc`` and
-the run scripts are located in ``test/submit201X/run_*.py``.
+The actual producer is located in the ``plugins/BESTProducer.cc``. 
+Config file templates are found in ``crab/templates/``, 
+which is used by ``crab/buildConfig.py`` to generate the run and config files.
+This script is called by ``crab/crabSubmit.sh``, which generates and submits all crab jobs.
 
 # Instructions for Preprocessing
 
 The preprocessing program can be run locally or through CRAB.
 
-## Local Instructions
+## Local Submission Instructions
 
 To run, use the cms environment to run a ``run_*.py`` file. For example: 
 
 ```bash
 cmsenv
-cd test/
-cmsRun run_ZZ_test.py
+cd local/
+cmsRun run_ZZ.py
 ```
 
-Be sure to update any file locations in the ``run_*.py`` files!!
+Be sure to update any file locations in the ``run_*.py`` files!!!
 
-## CRAB Instructions
+## CRAB Submission Instructions
 
-First, set up the CRAB environment and obtain a proxy
+First, set up the CRAB environment and obtain a proxy. 
+Then, fetch the samples from DAS and submit the CRAB jobs.
+By default, the submission scripts submit all jobs:
 
 ```bash
-cd test/submit201X
 cmsenv
+cd crab/
 source /cvmfs/cms.cern.ch/crab3/crab.sh
 voms-proxy-init --voms cms --valid 168:00
+./fillSamples.sh
+./crabSubmit.sh
 ``` 
 
-Now submit any of the CRAB files.
+Pass arguments to ``fillSamples.sh`` to select which particles, years, or datatype to check DAS for.
+Pass 'all' to an option to select every arguement for that option.
+Note that quotes are neccessary to when passing multiple arguements for one option:
 
 ```bash
-crab submit crab_*.py
+./fillSamples.sh -y "2016_APV 2016 2017" -d data -p all    
 ```
 
-The output file should be ``BESTInputs.root`` in the eos location specified in the crab config script. DAS datasets can also be updated inside the ``crab_*.py`` files.
-
-If you want to submit all crab files of a particular (or set of) sample, use the submitCrab.sh symbolic link within test/submit201X/submitCrab.sh (it link to the file BEST/scripts/submitCrab.sh). 
-Include the samples, space separated, as positional arguments to the shell script. Use the --help function of the script for more details.
+To check DAS for all particles, years, and datatypes, simply run ``fillSamples.sh`` with no arguments:
 
 ```bash
-cd test/submit2017/
-./submitCrab.sh HH tt QCD
+./fillSamples.sh
 ```
 
-If instead you would like to submit all crab jobs for a particular year use 'all' as the singular argument
+Run ``./fillSamples.sh -help`` for more information.
+
+To select which particles, years, or datatypes to submit to CRAB, modify the first few lines of ``crabSubmit.sh``.
+(``crabSubmit.sh`` cannot take arguments, it interferes with the ``crab submit ...`` command.)
+These variables control which jobs are submitted:
 
 ```bash
-cd test/submit2017/
-./submitCrab.sh all
+declare -a myParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+declare -a myYears=("2016_APV" "2016" "2017" "2018")
+declare -a myDatatypes=("mc" "data")
 ```
 
-### Useful CRAB Commands
+The output files should be of the form ``BESTInputs_X.root`` in the eos location specified in the crab config script. DAS datasets can also be updated inside the ``crab_*.py`` files, and from the ``buildConfig.py`` script.
 
-To test, get estimates, and then submit do a crab dry run
+## Crab Commands and Included Scripts
+
+See below for a summary of some basic crab commands, and instructions for how to use some helper crab scripts to handle large amounts of jobs.
+
+### Basic CRAB Commands for Individual Jobs
+
+To test, get estimates, and then submit do a crab dryrun:
 
 ```bash
-cd test/submit2017/
+cd crab/submit2017/
 crab submit --dryrun crab_*.py
 crab proceed
 ```
 
-To check the jobs of a specific submission
+To check the status of a specific job:
 
 ```
-cd test/submit2017/
+cd crab/submit2017/
 crab status CrabBEST/<project_directory>
 ```
 
-To check all jobs, use the shell script
-
-```
-cd test/submit2017/
-./checkJobs.sh
-```
-
-To resubmit failed jobs
+To resubmit a specific job:
 
 ```bash
-cd test/submit2017/
+cd crab/submit2017/
 crab resubmit CrabBEST/<project_directory>
 ```
 
-To kill a specific set of jobs of a submission
+To kill a specific job of a submission:
 
 ```
-cd test/submit2017/
+cd crab/submit2017/
 crab kill CrabBEST/<project_directory>
 ```
 
-To kill all jobs, use the shell script
+### Helper CRAB Scripts for Handling Many Jobs
+
+To check all jobs, use the shell script:
 
 ```
-cd test/submit2017/
-./killJobs.sh
+cd crab/
+./crabStatus.sh
 ```
+
+The script can record the entire output of ``crab status ...``, or a trimmed version. Switch between the two by toggling the labeled commented lines in the script. 
+The output can be found at ``logStatus.txt``.
+
+To resubmit all valid jobs, use the shell script:
+
+```
+cd crab/
+./crabResubmit.sh
+```
+
+The script will attempt to resubmit every job; however, only jobs that can be resubmitted will be affected. 
+The output can be found at ``logResubmit.txt``.
+
+To kill all jobs, use the shell script:
+
+```
+cd crab
+./crabKill.sh
+```
+
+This will ``crab kill ...`` every job in the specified directory. Edit the directory in the for loop to select specific groups of jobs to kill.
+The output can be found at ``logKill.txt``.
