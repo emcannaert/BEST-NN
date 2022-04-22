@@ -1,0 +1,12 @@
+Ran 140Basic300WHT400: acc = 0.7113,  Max val_acc = 0.7112
+Ran 140Basic300Wak8HiggsTop400: acc = 0.7134,  Max val_acc = 0.7132
+Ran 140Basic300Wak8SDHT400: acc = 0.7132,  Max val_acc = 0.7129
+Ran 140Basic300Wbothak8HT400: acc = 0.7141,  Max val_acc = 0.7136
+Ran 140Basic300WHT: acc = 0.7091,  Max val_acc = 0.7091
+Ran 140Basic300Wak8HT: acc = 0.7119,  Max val_acc = 0.7119
+Ran 140Basic300Wak8SDHT: acc = 0.7095,  Max val_acc = 0.7095
+Ran 140Basic300Wbothak8HT: acc = 0.7128,  Max val_acc = 0.7124
+Ran 140Basic300ZHT400: acc = 0.7098,  Max val_acc = 0.7101
+Ran 140Basic300Zak8HT400: acc = 0.7132,  Max val_acc = 0.7130
+Ran 140Basic300Zak8SDHT400: acc = 0.7114,  Max val_acc = 0.7111
+Ran 140Basic300Zbothak8HT400: acc = 0.7133,  Max val_acc = 0.7131

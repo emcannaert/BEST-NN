@@ -462,6 +462,8 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         float deltaEta = daughtersOfJet[i]->eta() - jet->eta();
         float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
 
+        //UPDATE DELTA ETA-> IF <-PI, ADD 2PI; IF >PI, SUBTRACT 2PI 
+
         // Calculate pT and Energy logarithms for candidates
         float logpT     = TMath::Log(daughtersOfJet[i]->pt());
         float logEnergy = TMath::Log(daughtersOfJet[i]->energy());
@@ -502,7 +504,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         jetVecVars["AllFrame_PF_candidate_isPhoton"].push_back(isPhoton );
         jetVecVars["AllFrame_PF_candidate_isNeutralHadron"].push_back(isNeutralHadron );
         jetVecVars["AllFrame_PF_candidate_isChargedHadron"].push_back(isChargedHadron );
-
+        
         jetVecVars["LabFrame_PF_candidate_deltaEta"].push_back(deltaEta );
         jetVecVars["LabFrame_PF_candidate_deltaPhi"].push_back(deltaPhi );
         jetVecVars["LabFrame_PF_candidate_deltaR"].push_back( TMath::Sqrt( TMath::Sq(deltaEta) + TMath::Sq(deltaPhi) ) ); // Angular separation between the candidate and the jet axis

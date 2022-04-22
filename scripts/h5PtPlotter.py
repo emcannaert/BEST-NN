@@ -17,7 +17,7 @@ bins_list = [i*50 for i in range(10,40)]
 
 
 # Global variables
-listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
 # listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 listOfFileTypes = ["_train_flattened.h5"]
@@ -43,14 +43,14 @@ if __name__ == "__main__":
                         help='Which (comma separated) samples to process. Examples: 1) --all; 2) _train,_test',
                         default="all")
     args = parser.parse_args()
-    if not args.samples == "all": listOfSamples = args.samples.split(',')
+    if not args.samples == "all": sampleTypes = args.samples.split(',')
     if not args.fileTypes == "all": listOfFileTypes = args.fileTypes.split(',')
     outDir = args.outDir
     if not outDir[-1] == "/":
         outDir = outDir+"/"
     if not os.path.isdir(outDir):
       os.mkdir(outDir)
-    print("Samples to process: ", listOfSamples)
+    print("Samples to process: ", sampleTypes)
     print("File types to process: ", listOfFileTypes)
 
     # Make directories you need
@@ -63,24 +63,24 @@ if __name__ == "__main__":
     for suffix in listOfFileTypes:
         print("Plotting suffix", suffix)
         myPtArrays = []
-        for mySample in listOfSamples:
+        for mySample in sampleTypes:
             inputFile = h5py.File(args.h5Dir+mySample+"Sample_2017_BESTinputs"+suffix,"r")
             myPtArrays.append(np.array(inputFile["BES_vars"][...,548]))
         # --- Create histogram, legend and title ---
         plt.figure()
         if suffix == ".h5":
-            H = plt.hist(myPtArrays, bins = bins_list, histtype='step', log=True, label=listOfSamples, stacked=False, fill=False, normed=False)
+            H = plt.hist(myPtArrays, bins = bins_list, histtype='step', log=True, label=sampleTypes, stacked=False, fill=False, normed=False)
             plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
             plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
         else:
-            H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=listOfSamples, normed=False)
+            H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=False)
         leg = plt.legend(frameon=False)
         plt.show()
         plt.savefig(outDir+"PtDistribution"+suffix.split('.')[0]+'.png')
         plt.clf()
         # --- Normalized Create histogram, legend and title ---
         plt.figure()
-        H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=listOfSamples, normed=True)
+        H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
         leg = plt.legend(frameon=False)
         plt.show()
         plt.savefig(outDir+"PtDistribution"+suffix.split('.')[0]+'_Normalized.png')

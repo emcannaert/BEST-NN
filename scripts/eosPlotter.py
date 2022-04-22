@@ -1,7 +1,7 @@
 #=========================================================================================
 # eosPlotter.py --------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott ----------------------------------------------------------
+# Author(s): Sam Abbott ------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script was written for Python 2.7.5.
@@ -15,8 +15,8 @@ import os
 import time
 import numpy
 import subprocess
-# from datasetDictionary import datasetDict # Import the dictionary of sample files
-from tempDict import datasetDict # Import the dictionary of sample files
+from datasetDictionary import datasetDict # Import the dictionary of sample files
+# from tempDict import datasetDict # Import the dictionary of sample files
 import ROOT
 
 ######################################### NOTES TO SELF ###########################
@@ -40,20 +40,27 @@ ROOT.gStyle.SetTitleX(0.)
 plotPath = "plots/"
 
 # Create the vector of boosts used in BESTProducer:
+boosts = []
 # boosts.append("ak8SoftDrop")
-# boosts.append("ak8")
-# iterMass = 50
-# while iterMass <= 400: 
-#     boosts.append(iterMass) # Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
-#     iterMass += 50
-#     # if ( (110 <= iterMass < 160) or (180 <= iterMass < 220) ):  iterMass += 1
-#     # elif                (iterMass < 400):                       iterMass += 5
-#     # else:                                                       iterMass += 100
+boosts.append("Higgs")
+boosts.append("Z")
+boosts.append("W")
+boosts.append("Top")
+boosts.append("Bottom")
+boosts.append("ak8")
+iterMass = 50
+while iterMass <= 400: 
+    boosts.append(str(iterMass)+"GeV") # Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
+    iterMass += 50
+    # if ( (110 <= iterMass < 160) or (180 <= iterMass < 220) ):  iterMass += 1
+    # elif                (iterMass < 400):                       iterMass += 5
+    # else:                                                       iterMass += 100
 
 # Create particle dictionary: { particle:[rest mass, mass range, empty root file dictionary], ...}
 partDict = { "HH":[{},{}], "WW":[{},{}], "ZZ":[{},{}], "tt":[{},{}], "bb":[{},{}], "QCD":[{},{}] }
 
 # Create variable dictionaries: { variable:binInfo }
+varDict = {"nJets_":"50,0,50"}
 # varDict = { "FoxWolfH1_":"100,0,1", "FoxWolfH2_":"100,0,1", "FoxWolfH3_":"100,0,1", "FoxWolfH4_":"100,0,1", "isotropy_":"100,0,1",
 #             "sphericity_":"100,0,1", "aplanarity_":"100,0,0.2", "thrust_":"100,0.5,1", "nJets_":"50,0,50", "jet12_mass_":"100,0,300",
 #             "jet23_mass_":"100,0,150", "jet13_mass_":"100,0,200", "jet1234_mass_":"100,0,400", "jet12_CosTheta_":"100,-1,1",
@@ -61,7 +68,7 @@ partDict = { "HH":[{},{}], "WW":[{},{}], "ZZ":[{},{}], "tt":[{},{}], "bb":[{},{}
 #             "jet13_DeltaCosTheta_":"100,-1,1", "jet23_DeltaCosTheta_":"100,-1,1", "asymmetry_":"100,-1,1"
 #           }
 
-labFrameDict ={"jetAK8_pt":"100,500,4500"}
+# labFrameDict ={"jetAK8_pt":"100,500,4500"}
 # labFrameDict ={ "jetAK8_mass":"100,0,600", "jetAK8_SoftDropMass":"100,0,250", "jetAK8_charge":"100,-0.5,0.5", "jetAK8_pt":"100,0,4500", "nJets":"8,0,8",
 #                 "nSecondaryVertices":"15,0,15", "SV_pt":"100,0,500", "SV_eta":"100,-2.5,2.5", "SV_phi":"100,-3.2,3.2", "SV_mass":"100,0,20",
 #                 "SV_nTracks":"20,0,20", "SV_chi2":"100,0,20", "SV_Ndof":"25,0,25", "bDiscSubJet_Max":"100,0,1", "bDiscSubJet_Max_index":"6,0,6",
@@ -93,6 +100,8 @@ for part, subDicts in partDict.items():
     massPoints = subDicts[2]
     for massPoint in massPoints: # Iterate over each unique dataset by mass point
         crabInfo = datasetDict["mc"]["2017"][part][massPoint] 
+        if (part == "bb") and (massPoint == "8000"): continue
+        if (part == "ZZ") and (massPoint == "2000"): continue
         endIndex = crabInfo[1].find('Run') # Identify eos dir name
         eospath = ["/store/user/msabbott" + crabInfo[1][:endIndex] + "crab_" + crabInfo[0]] # Example: /store/user/msabbott/BulkGravToWWToWhadWhad_narrow_M-3000_TuneCP5_13TeV-madgraph-pythia/crab_GravitonWW_3000GeV_trees
         timeStamp = subprocess.check_output(eosls + eospath).split("\n") # This should give the timestamps, code works for only one timestamp (can edit)
@@ -109,10 +118,100 @@ for part, subDicts in partDict.items():
         for file in files:
             if "BEST" in file: chain.Add(file)
 
-    for labvar in labFrameDict.keys(): # This iterates over the lab frame variables in the root file
-        stackDict[labvar] = ROOT.THStack(part,part) # THStack object for this lab variable (fill with all mass points for this particle)
+    for var in varDict.keys(): # This iterates over the lab frame variables in the root file
+        for boost in boosts:
+            stackDict[var+boost] = ROOT.THStack(part,part) # THStack object for this lab variable (fill with all mass points for this particle)
+
+    # for labvar in labFrameDict.keys(): # This iterates over the lab frame variables in the root file
+    #     stackDict[labvar] = ROOT.THStack(part,part) # THStack object for this lab variable (fill with all mass points for this particle)
+
+#==================================================================================
+# Plot Boost Frame Variables ////////////////////////////////////////////////////////
+#==================================================================================
+
+print("Plotting boost frame variables...")
+
+for boost in boosts:
+    print("Boost: " + boost)
+
+    for var, binInfo in varDict.items(): # This iterates over the lab frame variables in the root file
+        boostVar = var+boost
+        finalStack = ROOT.THStack(boostVar,boostVar)
+        
+        allPath = plotPath+"all/"+boostVar+"/"
+        if not os.path.exists(allPath): os.makedirs(allPath) # If directory doesn't exist, create it        
+
+        for part, subDicts in partDict.items():
+            chainDict =  subDicts[0]
+            stack =      subDicts[1][boostVar]
+            massPoints = subDicts[2]
+
+            indvPath = plotPath+"indvidual/"+boostVar+"/"+part+"/"
+            if not os.path.exists(indvPath): os.makedirs(indvPath) # If directory doesn't exist, create it        
+
+            # hsum = ROOT.TH1F(var+"_"+part,var+"_"+part,binInfo)
+            # hsum = ROOT.TH1F(var+"_"+part,var+"_"+part,100,500.,4500.) # Cant get THStack to display just final sum of histos. Manually summing histos, to add the sums to a stack
+            hsum = ROOT.TH1F(boostVar+"_"+part,boostVar+"_"+part,50,0.,50.) # Cant get THStack to display just final sum of histos. Manually summing histos, to add the sums to a stack
+
+            ROOT.gStyle.SetPalette(ROOT.kCool) #109 kCool palette for indvidual plots
+            for massPoint in massPoints:
+                if (part == "bb") and (massPoint == "8000"): continue
+                if (part == "ZZ") and (massPoint == "2000"): continue
+                chain = chainDict[massPoint]
+
+                # chain.Draw(boostVar+">>htemp("+binInfo+")", "", "norm")
+                chain.Draw(boostVar+">>htemp("+binInfo+")", "")
+                htemp = ROOT.gROOT.FindObject("htemp") # Grab histogram, it is named "htemp" by default, and overwritten each time
+
+                hsum.Add(htemp)
+
+                # Save individual plots
+                title = part+"_"+boostVar+"_"+massPoint
+                canvas = ROOT.TCanvas(title)
+                canvas.cd()
+                htemp.SetTitle(title)
+                # htemp.SetStats(0) # Hide stats box
+                htemp.Draw("HIST") # HIST needed bc of normalization
+                canvas.SaveAs(indvPath+title+".png") # Save plot as png 
+                canvas.Close() # Close canvas now that we are done
+
+                htemp.SetTitle(massPoint) # Change hist title to the current mass point, which updates the legend entry later
+                stack.Add(htemp.Clone(massPoint)) # Clone histogram, add to Stack for current boostVar
+
+                del htemp # Delete htemp to keep memory usage low
+            
+            # Plot all particles together:
+            canvas = ROOT.TCanvas(boostVar) # Create canvas
+            canvas.cd() # Switch to new canvas
+
+            # Intermission: draw summed histo and add to final stack
+            hsum.Draw("HIST")
+            canvas.SaveAs(allPath+boostVar+"_"+part+"_sum.png") # Save plot as png 
+            hsum.SetTitle(part)
+            finalStack.Add(hsum.Clone(part))
+
+            # For each particle, plot all mass points separately on the same plot
+            ROOT.gStyle.SetPalette(ROOT.kRainBow) # kRainBow palette for all together plots; bad for 2D data but fine here 
+            # Now redraw, then plot all mass points separetely for this particle
+            stack.Draw("PMC PLC HIST NOSTACK") # Draw all histos in Stack at once. PMC/PLC for auto colors, NOSTACK to keep histos separate
+            legend = ROOT.gPad.BuildLegend(0.3,1.,1.) # Create legend at coords, top right of canvas
+            legend.SetNColumns(7) # Set legend columns
+            ROOT.gPad.Update() # Draw legend
+            canvas.SaveAs(allPath+boostVar+"_"+part+".png") # Save plot as png 
+            canvas.Close() # Close canvas now that we are done
+        
+        # Plot all summed histos together 
+        canvas = ROOT.TCanvas(boostVar) # Create canvas
+        canvas.cd() # Switch to new canvas    
+        finalStack.Draw("PMC PLC HIST NOSTACK") # Draw all histos in Stack at once. PMC/PLC for auto colors, NOSTACK to keep histos separate, HIST needed bc of normalization
+        legend = ROOT.gPad.BuildLegend(0.3,1.,1.) # Create legend at coords, top right
+        legend.SetNColumns(3) # Set legend columns
+        ROOT.gPad.Update() # Draw legend
+        canvas.SaveAs(allPath+boostVar+"_all.png") # Save plot as png 
+        canvas.Close() # Close canvas now that we are done
 
 
+"""
 
 #==================================================================================
 # Plot Lab Frame Variables ////////////////////////////////////////////////////////
@@ -191,7 +290,7 @@ for labvar, binInfo in labFrameDict.items(): # This iterates over the lab frame 
     ROOT.gPad.Update() # Draw legend
     canvas.SaveAs(allPath+labvar+"_all.png") # Save plot as png 
     canvas.Close() # Close canvas now that we are done
-
+"""
 # Check how long the script took to run
 runf = open("Logs/eosTimeLog.txt", "r+") 
 timeTaken = divmod(time.time() - startTime, 60.)

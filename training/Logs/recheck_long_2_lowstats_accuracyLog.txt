@@ -1,0 +1,2 @@
+Ran 140Basic300Wak8HiggsTop400: acc = 0.6929,  Max val_acc = 0.6473
+Ran 140Basic300Wbothak8HT400: acc = 0.8002,  Max val_acc = 0.6754

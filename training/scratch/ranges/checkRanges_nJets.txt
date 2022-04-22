@@ -1,0 +1,128 @@
+nJets:
+WW 7850006 events with <4 jets: 
+ZZ: 7188052 events with <4 jets: 
+HH: 7927242 events with <4 jets: 
+TT: 9932336 events with <4 jets:
+BB: 6504540 events with <4 jets: 
+QCD: 13602628 events with <4 jets: 
+
+nJets_100GeV:
+WW: 336 events with <4 jets
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets:
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_150GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_200GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets:
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_250GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_300GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets:
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_350GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_400GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets:
+
+nJets_50GeV:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_Bottom:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets:  
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets:  
+QCD: 575 events with <4 jets: 
+
+nJets_Higgs:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_Top:
+WW: 336 events with <4 jets:
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets:
+BB: 693 events with <4 jets:
+QCD: 575 events with <4 jets:
+
+nJets_W:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets:
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_Z:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets: 
+QCD: 575 events with <4 jets: 
+
+nJets_ak8:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets: 
+BB: 693 events with <4 jets:  
+QCD: 575 events with <4 jets: 
+
+nJets_ak8SoftDrop:
+WW: 336 events with <4 jets: 
+ZZ: 225 events with <4 jets: 
+HH: 266 events with <4 jets: 
+TT: 1001 events with <4 jets:
+BB: 696 events with <4 jets: 
+QCD: 585 events with <4 jets: 
+

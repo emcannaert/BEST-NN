@@ -1,0 +1,1610 @@
+-----------------------------------
+Running BigStandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5880 2227  240  517  269  578] 9711 out of 8441 (69.659%) truth events.
+	Z Category: Tagger predicted	[1533 4661  769  337  224  287] 7811 out of 8372 (55.673%) truth events.
+	H Category: Tagger predicted	[ 149  522 5763  575  471  324] 7804 out of 8376 (68.803%) truth events.
+	Top Category: Tagger predicted	[ 274  294  486 5942  505  461] 7962 out of 8330 (71.332%) truth events.
+	b Category: Tagger predicted	[ 226  312  808  478 5187 2240] 9251 out of 8246 (62.903%) truth events.
+	QCD Category: Tagger predicted	[ 379  356  310  481 1590 4345] 7461 out of 8235 (52.762%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigMinMax01Scaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5628 1677  165  367  219  473] 8529 out of 8375 (67.2%) truth events.
+	Z Category: Tagger predicted	[1789 5270  755  367  243  345] 8769 out of 8277 (63.670%) truth events.
+	H Category: Tagger predicted	[ 133  508 5805  551  508  269] 7774 out of 8182 (70.948%) truth events.
+	Top Category: Tagger predicted	[ 277  315  475 6288  506  506] 8367 out of 8398 (74.874%) truth events.
+	b Category: Tagger predicted	[ 191  197  666  352 5139 1929] 8474 out of 8333 (61.670%) truth events.
+	QCD Category: Tagger predicted	[ 357  310  316  473 1718 4913] 8087 out of 8435 (58.245%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigMinMax11Scaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[6011 2184  258  406  320  406] 9585 out of 8249 (72.869%) truth events.
+	Z Category: Tagger predicted	[1343 4950  774  324  215  289] 7895 out of 8400 (58.928%) truth events.
+	H Category: Tagger predicted	[  78  452 5917  590  421  269] 7727 out of 8401 (70.432%) truth events.
+	Top Category: Tagger predicted	[ 261  266  417 6212  458  487] 8101 out of 8426 (73.724%) truth events.
+	b Category: Tagger predicted	[ 170  217  667  406 5096 1887] 8443 out of 8302 (61.382%) truth events.
+	QCD Category: Tagger predicted	[ 386  331  368  488 1792 4884] 8249 out of 8222 (59.401%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigMaxAbsScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[6234 2430  241  413  252  444] 10014 out of 8437 (73.888%) truth events.
+	Z Category: Tagger predicted	[1191 4599  769  359  175  268] 7361 out of 8326 (55.236%) truth events.
+	H Category: Tagger predicted	[ 103  475 5809  502  412  260] 7561 out of 8340 (69.652%) truth events.
+	Top Category: Tagger predicted	[ 260  285  514 6253  504  441] 8257 out of 8399 (74.449%) truth events.
+	b Category: Tagger predicted	[ 198  216  729  374 5205 1981] 8703 out of 8153 (63.841%) truth events.
+	QCD Category: Tagger predicted	[ 451  321  278  498 1605 4951] 8104 out of 8345 (59.328%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigRobustScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5332 2197  259  479  298  457] 9022 out of 8192 (65.087%) truth events.
+	Z Category: Tagger predicted	[1668 4584  738  393  264  345] 7992 out of 8493 (53.973%) truth events.
+	H Category: Tagger predicted	[ 170  627 5620  660  521  286] 7884 out of 8302 (67.694%) truth events.
+	Top Category: Tagger predicted	[ 301  363  479 5815  499  510] 7967 out of 8405 (69.185%) truth events.
+	b Category: Tagger predicted	[ 243  275  780  495 4902 2110] 8805 out of 8297 (59.081%) truth events.
+	QCD Category: Tagger predicted	[ 478  447  426  563 1813 4603] 8330 out of 8311 (55.384%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigQuantileTransformerNormal2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5411 2155  254  403  245  481] 8949 out of 8368 (64.663%) truth events.
+	Z Category: Tagger predicted	[1727 4454  745  351  284  334] 7895 out of 8380 (53.150%) truth events.
+	H Category: Tagger predicted	[ 198  697 5589  599  580  297] 7960 out of 8372 (66.758%) truth events.
+	Top Category: Tagger predicted	[ 343  386  560 5848  558  544] 8239 out of 8192 (71.386%) truth events.
+	b Category: Tagger predicted	[ 266  314  822  547 4915 2101] 8965 out of 8377 (58.672%) truth events.
+	QCD Category: Tagger predicted	[ 423  374  402  444 1795 4554] 7992 out of 8311 (54.794%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigQuantileTransformerUniform2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5698 2215  229  394  270  432] 9238 out of 8201 (69.479%) truth events.
+	Z Category: Tagger predicted	[1451 4766  757  312  264  327] 7877 out of 8416 (56.630%) truth events.
+	H Category: Tagger predicted	[ 115  533 5700  558  490  274] 7670 out of 8217 (69.368%) truth events.
+	Top Category: Tagger predicted	[ 268  305  468 6083  453  460] 8037 out of 8315 (73.156%) truth events.
+	b Category: Tagger predicted	[ 255  274  759  480 5493 2163] 9424 out of 8501 (64.615%) truth events.
+	QCD Category: Tagger predicted	[ 414  323  304  488 1531 4694] 7754 out of 8350 (56.215%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedStandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5770 2146  213  447  275  499] 9350 out of 8337 (69.209%) truth events.
+	Z Category: Tagger predicted	[1450 4676  722  373  225  283] 7729 out of 8462 (55.258%) truth events.
+	H Category: Tagger predicted	[ 107  658 5538  686  478  196] 7663 out of 8297 (66.747%) truth events.
+	Top Category: Tagger predicted	[ 282  349  588 5916  496  515] 8146 out of 8272 (71.518%) truth events.
+	b Category: Tagger predicted	[ 301  305  982  447 5373 2536] 9944 out of 8347 (64.370%) truth events.
+	QCD Category: Tagger predicted	[ 427  328  254  403 1500 4256] 7168 out of 8285 (51.369%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedMinMax01Scaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5816 2210  238  504  326  555] 9649 out of 8423 (69.049%) truth events.
+	Z Category: Tagger predicted	[1485 4619  825  407  252  257] 7845 out of 8393 (55.033%) truth events.
+	H Category: Tagger predicted	[  94  556 5301  654  466  188] 7259 out of 8403 (63.084%) truth events.
+	Top Category: Tagger predicted	[ 312  385  759 5779  580  559] 8374 out of 8190 (70.561%) truth events.
+	b Category: Tagger predicted	[ 288  317  937  318 4909 3124] 9893 out of 8270 (59.359%) truth events.
+	QCD Category: Tagger predicted	[ 428  306  343  528 1737 3638] 6980 out of 8321 (43.720%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedMinMax11Scaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5857 2266  230  514  341  573] 9781 out of 8355 (70.101%) truth events.
+	Z Category: Tagger predicted	[1301 4481  779  371  241  310] 7483 out of 8307 (53.942%) truth events.
+	H Category: Tagger predicted	[ 115  581 5493  787  486  238] 7700 out of 8284 (66.308%) truth events.
+	Top Category: Tagger predicted	[ 335  369  627 5716  514  545] 8106 out of 8146 (70.169%) truth events.
+	b Category: Tagger predicted	[ 291  269  927  412 5462 2609] 9970 out of 8451 (64.631%) truth events.
+	QCD Category: Tagger predicted	[ 456  341  228  346 1407 4182] 6960 out of 8457 (49.450%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedMaxAbsScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5792 2131  243  442  292  495] 9395 out of 8422 (68.772%) truth events.
+	Z Category: Tagger predicted	[1481 4573  731  395  235  307] 7722 out of 8237 (55.517%) truth events.
+	H Category: Tagger predicted	[ 131  605 5415  606  508  223] 7488 out of 8287 (65.343%) truth events.
+	Top Category: Tagger predicted	[ 343  328  711 5969  554  498] 8403 out of 8315 (71.785%) truth events.
+	b Category: Tagger predicted	[ 243  270  901  439 5173 2523] 9549 out of 8325 (62.138%) truth events.
+	QCD Category: Tagger predicted	[ 432  330  286  464 1563 4368] 7443 out of 8414 (51.913%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedRobustScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5673 2042  196  386  280  481] 9058 out of 8415 (67.415%) truth events.
+	Z Category: Tagger predicted	[1529 4765  768  345  229  267] 7903 out of 8380 (56.861%) truth events.
+	H Category: Tagger predicted	[  93  517 5554  593  474  182] 7413 out of 8418 (65.977%) truth events.
+	Top Category: Tagger predicted	[ 358  402  648 6161  567  552] 8688 out of 8345 (73.828%) truth events.
+	b Category: Tagger predicted	[ 323  330  997  477 5455 2724] 10306 out of 8186 (66.638%) truth events.
+	QCD Category: Tagger predicted	[ 439  324  255  383 1181 4050] 6632 out of 8256 (49.055%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedQuantileTransformerNormal2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5958 2109  232  436  318  518] 9571 out of 8419 (70.768%) truth events.
+	Z Category: Tagger predicted	[1359 4514  712  364  206  265] 7420 out of 8221 (54.908%) truth events.
+	H Category: Tagger predicted	[ 117  573 5449  632  496  213] 7480 out of 8255 (66.008%) truth events.
+	Top Category: Tagger predicted	[ 312  384  669 6060  635  573] 8633 out of 8286 (73.135%) truth events.
+	b Category: Tagger predicted	[ 232  270  779  352 4820 2129] 8582 out of 8456 (57.000%) truth events.
+	QCD Category: Tagger predicted	[ 441  371  414  442 1981 4665] 8314 out of 8363 (55.781%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedQuantileTransformerUniform2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5574 1961  224  379  311  441] 8890 out of 8470 (65.808%) truth events.
+	Z Category: Tagger predicted	[1648 4638  663  364  206  256] 7775 out of 8321 (55.738%) truth events.
+	H Category: Tagger predicted	[  82  640 5520  547  435  189] 7413 out of 8329 (66.274%) truth events.
+	Top Category: Tagger predicted	[ 399  434  679 6130  627  599] 8868 out of 8270 (74.123%) truth events.
+	b Category: Tagger predicted	[ 279  269  880  392 4318 2267] 8405 out of 8328 (51.849%) truth events.
+	QCD Category: Tagger predicted	[ 488  379  363  458 2431 4530] 8649 out of 8282 (54.696%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigStandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5382 2100  221  459  266  421] 8849 out of 8296 (64.874%) truth events.
+	Z Category: Tagger predicted	[1715 4699  806  373  314  329] 8236 out of 8458 (55.556%) truth events.
+	H Category: Tagger predicted	[ 179  660 5594  551  555  246] 7785 out of 8353 (66.969%) truth events.
+	Top Category: Tagger predicted	[ 321  339  596 5778  471  513] 8018 out of 8311 (69.522%) truth events.
+	b Category: Tagger predicted	[ 237  279  825  562 5147 1310] 8360 out of 8450 (60.911%) truth events.
+	QCD Category: Tagger predicted	[ 462  381  311  588 1697 5313] 8752 out of 8132 (65.334%) truth events.
+-----------------------------------
+-----------------------------------
+Running BigStandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5214 1917  202  404  220  443] 8400 out of 8404 (62.041%) truth events.
+	Z Category: Tagger predicted	[2010 4631  791  450  284  373] 8539 out of 8311 (55.721%) truth events.
+	H Category: Tagger predicted	[ 180  735 5749  601  664  330] 8259 out of 8334 (68.982%) truth events.
+	Top Category: Tagger predicted	[ 268  344  506 5675  442  501] 7736 out of 8215 (69.080%) truth events.
+	b Category: Tagger predicted	[ 297  282  797  532 5210 1433] 8551 out of 8309 (62.703%) truth events.
+	QCD Category: Tagger predicted	[ 435  402  289  553 1489 5347] 8515 out of 8427 (63.450%) truth events.
+-----------------------------------
+-----------------------------------
+Running ChokedStandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[5786 2088  172  433  278  481] 9238 out of 8288 (69.811%) truth events.
+	Z Category: Tagger predicted	[1463 4654  728  291  223  327] 7686 out of 8208 (56.700%) truth events.
+	H Category: Tagger predicted	[  90  527 5779  558  490  174] 7618 out of 8407 (68.740%) truth events.
+	Top Category: Tagger predicted	[ 308  345  629 6285  513  553] 8633 out of 8370 (75.089%) truth events.
+	b Category: Tagger predicted	[ 223  311  897  400 5521 1796] 9148 out of 8416 (65.601%) truth events.
+	QCD Category: Tagger predicted	[ 418  283  202  403 1391 4980] 7677 out of 8311 (59.920%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265304  90136   9521  18939  13480  22688] 420068 out of 383294 (69.216%) truth events.
+	Z Category: Tagger predicted	[ 71495 228431  36425  16868  11453  14157] 378829 out of 383446 (59.573%) truth events.
+	H Category: Tagger predicted	[  4807  24034 266027  29461  24823  11176] 360328 out of 383280 (69.408%) truth events.
+	Top Category: Tagger predicted	[ 13886  15479  23216 282881  24179  24586] 384227 out of 383164 (73.827%) truth events.
+	b Category: Tagger predicted	[ 10618  11894  35103  17380 230315  95182] 400492 out of 383297 (60.087%) truth events.
+	QCD Category: Tagger predicted	[ 17184  13472  12988  17635  79047 215305] 355631 out of 383094 (56.201%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271236  92035  10068  18471  11382  19253] 422445 out of 383294 (70.764%) truth events.
+	Z Category: Tagger predicted	[ 64968 227029  33584  14460   8835  12469] 361345 out of 383446 (59.207%) truth events.
+	H Category: Tagger predicted	[  4593  23828 270744  24533  21112  11598] 356408 out of 383280 (70.638%) truth events.
+	Top Category: Tagger predicted	[ 14187  15079  22895 293747  25446  27509] 398863 out of 383164 (76.663%) truth events.
+	b Category: Tagger predicted	[  9387  10779  32019  17205 240191  88799] 398380 out of 383297 (62.664%) truth events.
+	QCD Category: Tagger predicted	[ 18923  14696  13970  14748  76331 223466] 362134 out of 383094 (58.331%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265068  86880   8141  17225  10459  18701] 406474 out of 383294 (69.155%) truth events.
+	Z Category: Tagger predicted	[ 72037 236146  38943  15094  11247  14584] 388051 out of 383446 (61.585%) truth events.
+	H Category: Tagger predicted	[  3063  18730 264596  22722  19936   8550] 337597 out of 383280 (69.034%) truth events.
+	Top Category: Tagger predicted	[ 14754  16634  25027 293952  25984  24552] 400903 out of 383164 (76.717%) truth events.
+	b Category: Tagger predicted	[  9250  10737  34035  16969 243485  61126] 375602 out of 383297 (63.523%) truth events.
+	QCD Category: Tagger predicted	[ 19122  14319  12538  17202  72186 255581] 390948 out of 383094 (66.714%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[275355  92124   8856  20039  11334  19765] 427473 out of 383294 (71.839%) truth events.
+	Z Category: Tagger predicted	[ 66250 232841  35113  14230   9957  12826] 371217 out of 383446 (60.723%) truth events.
+	H Category: Tagger predicted	[  3907  21634 273006  22481  21048   9122] 351198 out of 383280 (71.228%) truth events.
+	Top Category: Tagger predicted	[ 11444  12794  21969 292489  23990  23439] 386125 out of 383164 (76.335%) truth events.
+	b Category: Tagger predicted	[  8987  10267  33778  17206 259472  63954] 393664 out of 383297 (67.694%) truth events.
+	QCD Category: Tagger predicted	[ 17351  13786  10558  16719  57496 253988] 369898 out of 383094 (66.299%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20QuantileTransformerNormal2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[260307  87284   8815  17759  10231  17927] 402323 out of 383294 (67.913%) truth events.
+	Z Category: Tagger predicted	[ 71731 227409  33815  16752   9544  13216] 372467 out of 383446 (59.306%) truth events.
+	H Category: Tagger predicted	[  4801  26223 269477  28442  21216  11029] 361188 out of 383280 (70.308%) truth events.
+	Top Category: Tagger predicted	[ 14116  15090  22279 282941  25055  24736] 384217 out of 383164 (73.843%) truth events.
+	b Category: Tagger predicted	[ 10437  11462  33106  18081 237071  87424] 397581 out of 383297 (61.850%) truth events.
+	QCD Category: Tagger predicted	[ 21902  15978  15788  19189  80180 228762] 381799 out of 383094 (59.714%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20QuantileTransformerNormal2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268697  92824   9916  19087  11310  20291] 422125 out of 383294 (70.102%) truth events.
+	Z Category: Tagger predicted	[ 66119 225621  35783  15917   9139  12492] 365071 out of 383446 (58.840%) truth events.
+	H Category: Tagger predicted	[  5418  23395 266052  28424  21227  10750] 355266 out of 383280 (69.414%) truth events.
+	Top Category: Tagger predicted	[ 13153  14228  21826 279492  22133  22935] 373767 out of 383164 (72.943%) truth events.
+	b Category: Tagger predicted	[ 10338  11812  34161  19982 246491  95435] 418219 out of 383297 (64.308%) truth events.
+	QCD Category: Tagger predicted	[ 19569  15566  15542  20262  72997 221191] 365127 out of 383094 (57.738%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20QuantileTransformerUniform2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[259226  89298   9472  20581  11081  17550] 407208 out of 383294 (67.631%) truth events.
+	Z Category: Tagger predicted	[ 67734 213945  27944  14877   8406  11394] 344300 out of 383446 (55.795%) truth events.
+	H Category: Tagger predicted	[  5580  32062 266266  29701  23225  10603] 367437 out of 383280 (69.470%) truth events.
+	Top Category: Tagger predicted	[ 12409  14479  24276 272025  20586  20467] 364242 out of 383164 (70.994%) truth events.
+	b Category: Tagger predicted	[ 13938  15553  40795  23270 237758 101982] 433296 out of 383297 (62.029%) truth events.
+	QCD Category: Tagger predicted	[ 24407  18109  14527  22710  82241 221098] 383092 out of 383094 (57.713%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80QuantileTransformerNormal2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270512  90317  10267  18877  12292  20589] 422854 out of 383294 (70.575%) truth events.
+	Z Category: Tagger predicted	[ 69008 231320  35657  14791   9885  12828] 373489 out of 383446 (60.326%) truth events.
+	H Category: Tagger predicted	[  3923  21491 261734  19402  18172   8711] 333433 out of 383280 (68.287%) truth events.
+	Top Category: Tagger predicted	[ 12811  14408  27249 289384  23193  20615] 387660 out of 383164 (75.524%) truth events.
+	b Category: Tagger predicted	[  8748  10218  32688  17196 243696  90377] 402923 out of 383297 (63.578%) truth events.
+	QCD Category: Tagger predicted	[ 18292  15692  15685  23514  76059 229974] 379216 out of 383094 (60.030%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80QuantileTransformerUniform2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[272274  96868   9111  17559  10457  19668] 425937 out of 383294 (71.035%) truth events.
+	Z Category: Tagger predicted	[ 60599 219961  33380  14407   9202  12716] 350265 out of 383446 (57.364%) truth events.
+	H Category: Tagger predicted	[  5305  25186 272911  28531  21982  11961] 365876 out of 383280 (71.204%) truth events.
+	Top Category: Tagger predicted	[ 14822  15098  20979 285728  24217  23757] 384601 out of 383164 (74.570%) truth events.
+	b Category: Tagger predicted	[ 10747  11674  31269  18628 235470  87660] 395448 out of 383297 (61.432%) truth events.
+	QCD Category: Tagger predicted	[ 19547  14659  15630  18311  81969 227332] 377448 out of 383094 (59.341%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20QuantileTransformerNormal2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279587  99455   9261  20006  11287  21449] 441045 out of 383294 (72.943%) truth events.
+	Z Category: Tagger predicted	[ 57876 210811  26230  12678   8100  12020] 327715 out of 383446 (54.978%) truth events.
+	H Category: Tagger predicted	[  4937  31678 275890  22977  21337   9954] 366773 out of 383280 (71.981%) truth events.
+	Top Category: Tagger predicted	[ 13241  15523  24746 292961  24738  25084] 396293 out of 383164 (76.458%) truth events.
+	b Category: Tagger predicted	[ 11728  13344  38567  19924 271797  91749] 447109 out of 383297 (70.910%) truth events.
+	QCD Category: Tagger predicted	[ 15925  12635   8586  14618  46038 222838] 320640 out of 383094 (58.167%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20QuantileTransformerUniform2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[262520  86175   8584  18775  11651  19214] 406919 out of 383294 (68.490%) truth events.
+	Z Category: Tagger predicted	[ 70310 224102  28647  13471   9344  12266] 358140 out of 383446 (58.444%) truth events.
+	H Category: Tagger predicted	[  4472  28503 275200  26794  24842   9752] 369563 out of 383280 (71.801%) truth events.
+	Top Category: Tagger predicted	[ 13737  15005  22706 277682  20510  18019] 367659 out of 383164 (72.470%) truth events.
+	b Category: Tagger predicted	[ 10451  12560  37285  22415 246356  73019] 402086 out of 383297 (64.272%) truth events.
+	QCD Category: Tagger predicted	[ 21804  17101  10858  24027  70594 250824] 395208 out of 383094 (65.473%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80QuantileTransformerNormal2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278621  95220   9454  19764  11966  21279] 436304 out of 383294 (72.691%) truth events.
+	Z Category: Tagger predicted	[ 65043 233063  36726  15331  10281  13695] 374139 out of 383446 (60.781%) truth events.
+	H Category: Tagger predicted	[  2960  19355 269425  21027  18390   7861] 339018 out of 383280 (70.294%) truth events.
+	Top Category: Tagger predicted	[ 11321  12345  20943 290610  21038  22310] 378567 out of 383164 (75.844%) truth events.
+	b Category: Tagger predicted	[  8098  10174  34052  19017 247356  55246] 373943 out of 383297 (64.533%) truth events.
+	QCD Category: Tagger predicted	[ 17251  13289  12680  17415  74266 262703] 397604 out of 383094 (68.574%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80QuantileTransformerUniform2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270793  86321   9215  19904  13567  25103] 424903 out of 383294 (70.648%) truth events.
+	Z Category: Tagger predicted	[ 75209 237221  31569  14144  10516  14847] 383506 out of 383446 (61.865%) truth events.
+	H Category: Tagger predicted	[  4209  25504 275936  22589  21095   9646] 358979 out of 383280 (71.993%) truth events.
+	Top Category: Tagger predicted	[ 11405  13341  22721 294293  24712  24249] 390721 out of 383164 (76.806%) truth events.
+	b Category: Tagger predicted	[  8528  10113  34358  16589 256727  71296] 397611 out of 383297 (66.978%) truth events.
+	QCD Category: Tagger predicted	[ 13150  10946   9481  15645  56680 237953] 343855 out of 383094 (62.113%) truth events.
+-----------------------------------
+-----------------------------------
+Running 30StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[260486  84890   8760  18040  10845  19536] 402557 out of 383294 (67.959%) truth events.
+	Z Category: Tagger predicted	[ 76221 233940  35504  16424  10847  14056] 386992 out of 383446 (61.009%) truth events.
+	H Category: Tagger predicted	[  4825  24950 270364  27693  21925  12236] 361993 out of 383280 (70.539%) truth events.
+	Top Category: Tagger predicted	[ 13405  14581  22328 287579  25044  26822] 389759 out of 383164 (75.053%) truth events.
+	b Category: Tagger predicted	[ 10387  11543  33870  17776 248598 100599] 422773 out of 383297 (64.857%) truth events.
+	QCD Category: Tagger predicted	[ 17970  13542  12454  15652  66038 209845] 335501 out of 383094 (54.776%) truth events.
+-----------------------------------
+-----------------------------------
+Running 30StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278943 103411  11105  20672  12924  22806] 449861 out of 383294 (72.775%) truth events.
+	Z Category: Tagger predicted	[ 58710 211772  30149  13085   7804  11316] 332836 out of 383446 (55.228%) truth events.
+	H Category: Tagger predicted	[  5605  28396 273317  27209  22727  12105] 369359 out of 383280 (71.310%) truth events.
+	Top Category: Tagger predicted	[ 12260  14132  21540 285061  22543  22740] 378276 out of 383164 (74.396%) truth events.
+	b Category: Tagger predicted	[ 10730  12409  35343  19278 257488 109007] 444255 out of 383297 (67.177%) truth events.
+	QCD Category: Tagger predicted	[ 17046  13326  11826  17859  59811 205120] 324988 out of 383094 (53.542%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[262244  85124   9039  16674  10425  18704] 402210 out of 383294 (68.418%) truth events.
+	Z Category: Tagger predicted	[ 73207 231004  32774  14422   9537  14188] 375132 out of 383446 (60.244%) truth events.
+	H Category: Tagger predicted	[  4650  25086 267617  23676  19302   9709] 350040 out of 383280 (69.822%) truth events.
+	Top Category: Tagger predicted	[ 15101  16587  24423 292809  24208  24928] 398056 out of 383164 (76.418%) truth events.
+	b Category: Tagger predicted	[ 10011  11162  33398  17709 246228  95500] 414008 out of 383297 (64.239%) truth events.
+	QCD Category: Tagger predicted	[ 18081  14483  16029  17874  73597 220065] 360129 out of 383094 (57.444%) truth events.
+-----------------------------------
+-----------------------------------
+Running 60StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[275578  95197  11036  21197  13410  20878] 437296 out of 383294 (71.897%) truth events.
+	Z Category: Tagger predicted	[ 65319 229303  36831  14600   9606  13154] 368813 out of 383446 (59.800%) truth events.
+	H Category: Tagger predicted	[  3936  19811 260896  20505  17632   9381] 332161 out of 383280 (68.069%) truth events.
+	Top Category: Tagger predicted	[ 11134  13275  24662 286611  21762  20953] 378397 out of 383164 (74.801%) truth events.
+	b Category: Tagger predicted	[  8093  10263  33311  18769 239104  85693] 395233 out of 383297 (62.380%) truth events.
+	QCD Category: Tagger predicted	[ 19234  15597  16544  21482  81783 233035] 387675 out of 383094 (60.829%) truth events.
+-----------------------------------
+-----------------------------------
+Running 70StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278309  98074  10862  19288  12036  20906] 439475 out of 383294 (72.609%) truth events.
+	Z Category: Tagger predicted	[ 60553 221999  32637  13757   9402  12996] 351344 out of 383446 (57.895%) truth events.
+	H Category: Tagger predicted	[  4138  23063 264233  22260  16842   8855] 339391 out of 383280 (68.939%) truth events.
+	Top Category: Tagger predicted	[ 12627  14521  24205 291512  24118  23362] 390345 out of 383164 (76.080%) truth events.
+	b Category: Tagger predicted	[  9622  11015  34825  17947 246372  93249] 413030 out of 383297 (64.277%) truth events.
+	QCD Category: Tagger predicted	[ 18045  14774  16518  18400  74527 223726] 365990 out of 383094 (58.399%) truth events.
+-----------------------------------
+-----------------------------------
+Running 90StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280887  98485  11002  21657  13796  23024] 448851 out of 383294 (73.282%) truth events.
+	Z Category: Tagger predicted	[ 64457 229149  37584  16297  11464  15528] 374479 out of 383446 (59.760%) truth events.
+	H Category: Tagger predicted	[  3533  20791 266157  23182  19423   9418] 342504 out of 383280 (69.441%) truth events.
+	Top Category: Tagger predicted	[ 10875  12894  21675 289421  24020  24277] 383162 out of 383164 (75.534%) truth events.
+	b Category: Tagger predicted	[  7685   9052  31378  15968 238951  88290] 391324 out of 383297 (62.340%) truth events.
+	QCD Category: Tagger predicted	[ 15857  13075  15484  16639  75643 222557] 359255 out of 383094 (58.094%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[252847  77919   8020  16272   8652  15324] 379034 out of 383294 (65.966%) truth events.
+	Z Category: Tagger predicted	[ 79394 236255  32396  14935   9591  12947] 385518 out of 383446 (61.613%) truth events.
+	H Category: Tagger predicted	[  5786  27657 275939  26795  23355  12940] 372472 out of 383280 (71.994%) truth events.
+	Top Category: Tagger predicted	[ 13954  14560  21610 292985  25478  26631] 395218 out of 383164 (76.464%) truth events.
+	b Category: Tagger predicted	[  9666  10586  30733  16177 241310  90870] 399342 out of 383297 (62.956%) truth events.
+	QCD Category: Tagger predicted	[ 21647  16469  14582  16000  74911 224382] 367991 out of 383094 (58.571%) truth events.
+-----------------------------------
+-----------------------------------
+Running 110StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268636  88296   9213  19531  11319  20342] 417337 out of 383294 (70.086%) truth events.
+	Z Category: Tagger predicted	[ 70896 230490  32771  14984   9761  13320] 372222 out of 383446 (60.110%) truth events.
+	H Category: Tagger predicted	[  4280  25017 265555  19726  18160   9658] 342396 out of 383280 (69.284%) truth events.
+	Top Category: Tagger predicted	[ 12486  14786  27009 290779  22906  22291] 390257 out of 383164 (75.888%) truth events.
+	b Category: Tagger predicted	[  9900  11170  35096  19130 253063  99498] 427857 out of 383297 (66.022%) truth events.
+	QCD Category: Tagger predicted	[ 17096  13687  13636  19014  68088 217985] 349506 out of 383094 (56.901%) truth events.
+-----------------------------------
+-----------------------------------
+Running 120StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[264731  87661   8934  16830   9719  16474] 404349 out of 383294 (69.067%) truth events.
+	Z Category: Tagger predicted	[ 67627 228770  34010  14713   8721  12311] 366152 out of 383446 (59.661%) truth events.
+	H Category: Tagger predicted	[  4862  23804 268611  23346  21575  11101] 353299 out of 383280 (70.082%) truth events.
+	Top Category: Tagger predicted	[ 13179  14161  23962 289508  22035  22061] 384906 out of 383164 (75.557%) truth events.
+	b Category: Tagger predicted	[ 10684  12091  33071  19357 247883  95204] 418290 out of 383297 (64.671%) truth events.
+	QCD Category: Tagger predicted	[ 22211  16959  14692  19410  73364 225943] 372579 out of 383094 (58.978%) truth events.
+-----------------------------------
+-----------------------------------
+Running 130StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271593  92461   9745  19250  10419  17786] 421254 out of 383294 (70.857%) truth events.
+	Z Category: Tagger predicted	[ 64697 223954  31623  14166   8846  12536] 355822 out of 383446 (58.405%) truth events.
+	H Category: Tagger predicted	[  4211  24835 270311  23460  19362  10372] 352551 out of 383280 (70.525%) truth events.
+	Top Category: Tagger predicted	[ 11835  13807  22402 285722  22239  20202] 376207 out of 383164 (74.569%) truth events.
+	b Category: Tagger predicted	[  9930  11689  34149  17702 241571  90602] 405643 out of 383297 (63.024%) truth events.
+	QCD Category: Tagger predicted	[ 21028  16700  15050  22864  80860 231596] 388098 out of 383094 (60.454%) truth events.
+-----------------------------------
+-----------------------------------
+Running 140StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268598  88260   9787  17854  12139  22055] 418693 out of 383294 (70.076%) truth events.
+	Z Category: Tagger predicted	[ 71812 233358  34326  15098  10231  13621] 378446 out of 383446 (60.858%) truth events.
+	H Category: Tagger predicted	[  4847  24003 270755  24912  20752  11441] 356710 out of 383280 (70.641%) truth events.
+	Top Category: Tagger predicted	[ 13286  14389  21776 289489  22791  23467] 385198 out of 383164 (75.552%) truth events.
+	b Category: Tagger predicted	[  8976  10226  32978  17498 244877  93767] 408322 out of 383297 (63.887%) truth events.
+	QCD Category: Tagger predicted	[ 15775  13210  13658  18313  72507 218743] 352206 out of 383094 (57.099%) truth events.
+-----------------------------------
+-----------------------------------
+Running 150StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265975  86960   8878  17791  10628  18361] 408593 out of 383294 (69.391%) truth events.
+	Z Category: Tagger predicted	[ 70389 230210  32630  14841   9568  12937] 370575 out of 383446 (60.037%) truth events.
+	H Category: Tagger predicted	[  5341  26413 273934  26467  21111  11969] 365235 out of 383280 (71.470%) truth events.
+	Top Category: Tagger predicted	[ 12357  13160  19922 285244  22132  21501] 374316 out of 383164 (74.444%) truth events.
+	b Category: Tagger predicted	[  9199  10771  32792  17845 241124  89129] 400860 out of 383297 (62.907%) truth events.
+	QCD Category: Tagger predicted	[ 20033  15932  15124  20976  78734 229197] 379996 out of 383094 (59.827%) truth events.
+-----------------------------------
+-----------------------------------
+Running 160StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[272515  93449  11610  20325  12968  20584] 431451 out of 383294 (71.098%) truth events.
+	Z Category: Tagger predicted	[ 65603 222453  30289  12405   8183  12163] 351096 out of 383446 (58.014%) truth events.
+	H Category: Tagger predicted	[  5198  26787 274391  24527  23055  13245] 367203 out of 383280 (71.590%) truth events.
+	Top Category: Tagger predicted	[ 12652  15607  22148 292920  24479  25625] 393431 out of 383164 (76.447%) truth events.
+	b Category: Tagger predicted	[  8812  10514  31130  17441 241478  91900] 401275 out of 383297 (63.000%) truth events.
+	QCD Category: Tagger predicted	[ 18514  14636  13712  15546  73134 219577] 355119 out of 383094 (57.316%) truth events.
+-----------------------------------
+-----------------------------------
+Running 170StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[259162  82673   9263  16665  10725  19146] 397634 out of 383294 (67.614%) truth events.
+	Z Category: Tagger predicted	[ 78712 239296  36487  15814  10658  14658] 395625 out of 383446 (62.406%) truth events.
+	H Category: Tagger predicted	[  4302  21759 266234  22157  20206  11583] 346241 out of 383280 (69.462%) truth events.
+	Top Category: Tagger predicted	[ 14446  14787  24031 292830  23742  24470] 394306 out of 383164 (76.424%) truth events.
+	b Category: Tagger predicted	[ 10491  11713  34543  19152 253680 104266] 433845 out of 383297 (66.183%) truth events.
+	QCD Category: Tagger predicted	[ 16181  13218  12722  16546  64286 208971] 331924 out of 383094 (54.548%) truth events.
+-----------------------------------
+-----------------------------------
+Running 180StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[259351  80681   8708  18743  11198  19726] 398407 out of 383294 (67.663%) truth events.
+	Z Category: Tagger predicted	[ 81957 244956  39770  16877  11969  15525] 411054 out of 383446 (63.882%) truth events.
+	H Category: Tagger predicted	[  3833  19911 263299  21894  19014  10261] 338212 out of 383280 (68.696%) truth events.
+	Top Category: Tagger predicted	[ 11227  13004  23824 285106  22257  19561] 374979 out of 383164 (74.408%) truth events.
+	b Category: Tagger predicted	[  9173  10215  33215  17630 247010  96305] 413548 out of 383297 (64.443%) truth events.
+	QCD Category: Tagger predicted	[ 17753  14679  14464  22914  71849 221716] 363375 out of 383094 (57.875%) truth events.
+-----------------------------------
+-----------------------------------
+Running 190StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[275100  96611   9933  19957  12179  20504] 434284 out of 383294 (71.772%) truth events.
+	Z Category: Tagger predicted	[ 64154 229546  39673  16143  11424  14553] 375493 out of 383446 (59.863%) truth events.
+	H Category: Tagger predicted	[  4612  20312 265356  22955  20976  11877] 346088 out of 383280 (69.232%) truth events.
+	Top Category: Tagger predicted	[ 12495  12913  22288 289782  24021  25442] 386941 out of 383164 (75.628%) truth events.
+	b Category: Tagger predicted	[  8156   9626  30745  17284 236451  87209] 389471 out of 383297 (61.688%) truth events.
+	QCD Category: Tagger predicted	[ 18777  14438  15285  17043  78246 223509] 367298 out of 383094 (58.343%) truth events.
+-----------------------------------
+-----------------------------------
+Running 200StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265163  85831   9106  18380  11550  19179] 409209 out of 383294 (69.180%) truth events.
+	Z Category: Tagger predicted	[ 74900 239250  39417  16604  11657  14864] 396692 out of 383446 (62.394%) truth events.
+	H Category: Tagger predicted	[  4088  20484 267245  24527  20947  10970] 348261 out of 383280 (69.725%) truth events.
+	Top Category: Tagger predicted	[ 12516  13286  20912 288403  22653  24194] 381964 out of 383164 (75.268%) truth events.
+	b Category: Tagger predicted	[  7943   9654  31585  17192 234148  83815] 384337 out of 383297 (61.087%) truth events.
+	QCD Category: Tagger predicted	[ 18684  14941  15015  18058  82342 230072] 379112 out of 383094 (60.056%) truth events.
+-----------------------------------
+-----------------------------------
+Running 210StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270047  90557   8964  18863  10830  20676] 419937 out of 383294 (70.454%) truth events.
+	Z Category: Tagger predicted	[ 68390 226488  31118  13949   9862  14310] 364117 out of 383446 (59.066%) truth events.
+	H Category: Tagger predicted	[  6070  29297 276694  30023  21825  12282] 376191 out of 383280 (72.191%) truth events.
+	Top Category: Tagger predicted	[ 12512  13477  19325 288584  24073  25703] 383674 out of 383164 (75.316%) truth events.
+	b Category: Tagger predicted	[ 10832  11601  34162  16500 249090  98909] 421094 out of 383297 (64.986%) truth events.
+	QCD Category: Tagger predicted	[ 15443  12026  13017  15245  67617 211214] 334562 out of 383094 (55.133%) truth events.
+-----------------------------------
+-----------------------------------
+Running 220StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[276952  98267  10998  19739  12220  21802] 439978 out of 383294 (72.255%) truth events.
+	Z Category: Tagger predicted	[ 63451 224868  34165  15156  10731  15433] 363804 out of 383446 (58.643%) truth events.
+	H Category: Tagger predicted	[  4930  24361 267866  22623  21147  12049] 352976 out of 383280 (69.887%) truth events.
+	Top Category: Tagger predicted	[ 12720  13743  25330 290694  24122  23835] 390444 out of 383164 (75.866%) truth events.
+	b Category: Tagger predicted	[  8844   9934  31804  17989 246266  97553] 412390 out of 383297 (64.249%) truth events.
+	QCD Category: Tagger predicted	[ 16397  12273  13117  16963  68811 212422] 339983 out of 383094 (55.449%) truth events.
+-----------------------------------
+-----------------------------------
+Running 230StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281490 105098  10367  20131  11089  19302] 447477 out of 383294 (73.439%) truth events.
+	Z Category: Tagger predicted	[ 55213 207673  29055  13282   8870  12243] 326336 out of 383446 (54.159%) truth events.
+	H Category: Tagger predicted	[  6107  29466 273042  22716  22970  12935] 367236 out of 383280 (71.238%) truth events.
+	Top Category: Tagger predicted	[ 11616  14338  24516 286737  23141  21269] 381617 out of 383164 (74.834%) truth events.
+	b Category: Tagger predicted	[ 10247  11318  32732  17846 247155  98127] 417425 out of 383297 (64.481%) truth events.
+	QCD Category: Tagger predicted	[ 18621  15553  13568  22452  70072 219218] 359484 out of 383094 (57.223%) truth events.
+-----------------------------------
+-----------------------------------
+Running 240StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271453  94059  10475  18307  11203  18026] 423523 out of 383294 (70.821%) truth events.
+	Z Category: Tagger predicted	[ 64370 221774  30378  14017   9167  13478] 353184 out of 383446 (57.837%) truth events.
+	H Category: Tagger predicted	[  5348  27447 276333  29898  21343  11676] 372045 out of 383280 (72.096%) truth events.
+	Top Category: Tagger predicted	[ 12465  13540  17745 281081  19916  20235] 364982 out of 383164 (73.357%) truth events.
+	b Category: Tagger predicted	[  9126  10731  31488  18974 233534  82558] 386411 out of 383297 (60.927%) truth events.
+	QCD Category: Tagger predicted	[ 20532  15895  16861  20887  88134 237121] 399430 out of 383094 (61.896%) truth events.
+-----------------------------------
+-----------------------------------
+Running 250StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270139  93494  10617  20032  11911  20488] 426681 out of 383294 (70.478%) truth events.
+	Z Category: Tagger predicted	[ 67459 226622  35617  14161   9078  11830] 364767 out of 383446 (59.101%) truth events.
+	H Category: Tagger predicted	[  4591  20744 259262  20270  18346  10344] 333557 out of 383280 (67.642%) truth events.
+	Top Category: Tagger predicted	[ 12532  14970  26492 292007  23707  26246] 395954 out of 383164 (76.209%) truth events.
+	b Category: Tagger predicted	[ 11165  12771  37859  22012 255020 105713] 444540 out of 383297 (66.533%) truth events.
+	QCD Category: Tagger predicted	[ 17408  14845  13433  14682  65235 208473] 334076 out of 383094 (54.418%) truth events.
+-----------------------------------
+-----------------------------------
+Running 260StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271725  95846  10676  20798  11654  19499] 430198 out of 383294 (70.892%) truth events.
+	Z Category: Tagger predicted	[ 65831 226922  37737  16124   9327  13301] 369242 out of 383446 (59.179%) truth events.
+	H Category: Tagger predicted	[  3936  19683 265464  27517  19587  10731] 346918 out of 383280 (69.261%) truth events.
+	Top Category: Tagger predicted	[ 11171  12399  18219 277246  20400  20386] 359821 out of 383164 (72.357%) truth events.
+	b Category: Tagger predicted	[ 10010  12122  34026  19339 235497  83596] 394590 out of 383297 (61.439%) truth events.
+	QCD Category: Tagger predicted	[ 20621  16474  17158  22140  86832 235581] 398806 out of 383094 (61.494%) truth events.
+-----------------------------------
+-----------------------------------
+Running 270StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278811  99951  11402  21179  12853  23788] 447984 out of 383294 (72.740%) truth events.
+	Z Category: Tagger predicted	[ 62837 221238  32475  14647   9798  13995] 354990 out of 383446 (57.697%) truth events.
+	H Category: Tagger predicted	[  4601  25340 272019  25634  21717  12199] 361510 out of 383280 (70.971%) truth events.
+	Top Category: Tagger predicted	[ 13211  14716  22300 289062  24905  26553] 390747 out of 383164 (75.440%) truth events.
+	b Category: Tagger predicted	[  9008  10380  32370  17342 244429  96519] 410048 out of 383297 (63.770%) truth events.
+	QCD Category: Tagger predicted	[ 14826  11821  12714  15300  69595 210040] 334296 out of 383094 (54.827%) truth events.
+-----------------------------------
+-----------------------------------
+Running 280StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265103  87727  10139  21440  12308  21405] 418122 out of 383294 (69.164%) truth events.
+	Z Category: Tagger predicted	[ 75389 229151  31068  15197  10490  14455] 375750 out of 383446 (59.760%) truth events.
+	H Category: Tagger predicted	[  5757  28852 272468  26485  22000  12132] 367694 out of 383280 (71.088%) truth events.
+	Top Category: Tagger predicted	[ 11382  13018  21714 281921  21545  21197] 370777 out of 383164 (73.577%) truth events.
+	b Category: Tagger predicted	[  9236   9955  31484  18335 228172  81990] 379172 out of 383297 (59.528%) truth events.
+	QCD Category: Tagger predicted	[ 16427  14743  16407  19786  88782 231915] 388060 out of 383094 (60.537%) truth events.
+-----------------------------------
+-----------------------------------
+Running 290StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[276888  98060  10747  19750  12900  22724] 441069 out of 383294 (72.239%) truth events.
+	Z Category: Tagger predicted	[ 66768 226867  36130  17887  12154  16614] 376420 out of 383446 (59.165%) truth events.
+	H Category: Tagger predicted	[  4237  23512 268749  24868  20181  11283] 352830 out of 383280 (70.118%) truth events.
+	Top Category: Tagger predicted	[ 11463  12590  21034 282394  21973  21752] 371206 out of 383164 (73.700%) truth events.
+	b Category: Tagger predicted	[  8445   9943  32381  18532 236620  87528] 393449 out of 383297 (61.732%) truth events.
+	QCD Category: Tagger predicted	[ 15493  12474  14239  19733  79469 223193] 364601 out of 383094 (58.260%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[249606  78608   8708  17354   9611  17287] 381174 out of 383294 (65.121%) truth events.
+	Z Category: Tagger predicted	[ 83754 230434  29774  14662  10215  14333] 383172 out of 383446 (60.095%) truth events.
+	H Category: Tagger predicted	[  7062  32464 275633  26418  23901  13198] 378676 out of 383280 (71.914%) truth events.
+	Top Category: Tagger predicted	[ 12750  14190  22026 286972  22771  24750] 383459 out of 383164 (74.895%) truth events.
+	b Category: Tagger predicted	[ 12419  12540  34332  19932 255995 109053] 444271 out of 383297 (66.787%) truth events.
+	QCD Category: Tagger predicted	[ 17703  15210  12807  17826  60804 204473] 328823 out of 383094 (53.374%) truth events.
+-----------------------------------
+-----------------------------------
+Running 310StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[262450  89541   9478  16702   9582  17193] 404946 out of 383294 (68.472%) truth events.
+	Z Category: Tagger predicted	[ 70528 228154  34709  16551  10406  14383] 374731 out of 383446 (59.500%) truth events.
+	H Category: Tagger predicted	[  5954  25660 271826  27129  23386  12971] 366926 out of 383280 (70.920%) truth events.
+	Top Category: Tagger predicted	[ 13987  13584  21096 285700  23362  24024] 381753 out of 383164 (74.563%) truth events.
+	b Category: Tagger predicted	[  9946  11284  31216  17043 232397  85804] 387690 out of 383297 (60.631%) truth events.
+	QCD Category: Tagger predicted	[ 20429  15223  14955  20039  84164 228719] 383529 out of 383094 (59.703%) truth events.
+-----------------------------------
+-----------------------------------
+Running 320StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[264931  90172   9914  19084  11186  20170] 415457 out of 383294 (69.119%) truth events.
+	Z Category: Tagger predicted	[ 70417 224584  32084  15215   8751  13444] 364495 out of 383446 (58.569%) truth events.
+	H Category: Tagger predicted	[  5157  24638 257904  18861  17087   8803] 332450 out of 383280 (67.288%) truth events.
+	Top Category: Tagger predicted	[ 12922  14407  29043 286289  21329  21088] 385078 out of 383164 (74.717%) truth events.
+	b Category: Tagger predicted	[ 10973  13108  37108  22453 251353  99289] 434284 out of 383297 (65.576%) truth events.
+	QCD Category: Tagger predicted	[ 18894  16537  17227  21262  73591 220300] 367811 out of 383094 (57.505%) truth events.
+-----------------------------------
+-----------------------------------
+Running 330StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[257139  84814   9051  17552  10743  18396] 397695 out of 383294 (67.086%) truth events.
+	Z Category: Tagger predicted	[ 77813 228552  31607  14900  10071  14316] 377259 out of 383446 (59.604%) truth events.
+	H Category: Tagger predicted	[  6120  28555 271514  25010  23008  12149] 366356 out of 383280 (70.839%) truth events.
+	Top Category: Tagger predicted	[ 13936  14767  23275 285686  23524  23624] 384812 out of 383164 (74.559%) truth events.
+	b Category: Tagger predicted	[  9121  10751  32375  19203 237847  90262] 399559 out of 383297 (62.052%) truth events.
+	QCD Category: Tagger predicted	[ 19165  16007  15458  20813  78104 224347] 373894 out of 383094 (58.561%) truth events.
+-----------------------------------
+-----------------------------------
+Running 340StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[245564  76857   8276  15628   8807  15077] 370209 out of 383294 (64.066%) truth events.
+	Z Category: Tagger predicted	[ 89055 245775  40909  19107  12988  16783] 424617 out of 383446 (64.096%) truth events.
+	H Category: Tagger predicted	[  4312  20567 263972  26089  19702  10272] 344914 out of 383280 (68.871%) truth events.
+	Top Category: Tagger predicted	[ 13603  13223  19966 280790  21031  21624] 370237 out of 383164 (73.281%) truth events.
+	b Category: Tagger predicted	[  8784   9907  32167  20400 233675  87197] 392130 out of 383297 (60.964%) truth events.
+	QCD Category: Tagger predicted	[ 21976  17117  17990  21150  87094 232141] 397468 out of 383094 (60.596%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265103  91909   9596  17801  11164  20578] 416151 out of 383294 (69.164%) truth events.
+	Z Category: Tagger predicted	[ 73104 230009  37536  16440  10853  15508] 383450 out of 383446 (59.984%) truth events.
+	H Category: Tagger predicted	[  4606  21944 263944  21782  20796  11039] 344111 out of 383280 (68.864%) truth events.
+	Top Category: Tagger predicted	[ 13333  13898  23569 287618  21919  22642] 382979 out of 383164 (75.063%) truth events.
+	b Category: Tagger predicted	[  9727  11313  31747  19926 232343  83452] 388508 out of 383297 (60.616%) truth events.
+	QCD Category: Tagger predicted	[ 17421  14373  16888  19597  86222 229875] 384376 out of 383094 (60.004%) truth events.
+-----------------------------------
+-----------------------------------
+Running 360StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268404  92852  10818  19571  11325  19676] 422646 out of 383294 (70.025%) truth events.
+	Z Category: Tagger predicted	[ 67100 224912  33706  14617   9402  11972] 361709 out of 383446 (58.655%) truth events.
+	H Category: Tagger predicted	[  5159  24282 268873  26814  20044  10863] 356035 out of 383280 (70.150%) truth events.
+	Top Category: Tagger predicted	[ 12591  13292  18849 280795  20810  21993] 368330 out of 383164 (73.283%) truth events.
+	b Category: Tagger predicted	[ 10971  12289  36280  21716 254381 104947] 440584 out of 383297 (66.366%) truth events.
+	QCD Category: Tagger predicted	[ 19069  15819  14754  19651  67335 213643] 350271 out of 383094 (55.767%) truth events.
+-----------------------------------
+-----------------------------------
+Running 370StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268550  92700  10864  18643  13247  21408] 425412 out of 383294 (70.063%) truth events.
+	Z Category: Tagger predicted	[ 69968 225916  32579  15532  10454  14293] 368742 out of 383446 (58.917%) truth events.
+	H Category: Tagger predicted	[  5356  26241 268602  24153  20056  11313] 355721 out of 383280 (70.079%) truth events.
+	Top Category: Tagger predicted	[ 13918  14605  22151 287000  22772  22922] 383368 out of 383164 (74.902%) truth events.
+	b Category: Tagger predicted	[  7970   9699  33203  17664 229633  81721] 379890 out of 383297 (59.909%) truth events.
+	QCD Category: Tagger predicted	[ 17532  14285  15881  20172  87135 231437] 386442 out of 383094 (60.412%) truth events.
+-----------------------------------
+-----------------------------------
+Running 380StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269975  95740  10577  19489  12091  19979] 427851 out of 383294 (70.435%) truth events.
+	Z Category: Tagger predicted	[ 65093 219828  31783  13787   9444  12631] 352566 out of 383446 (57.329%) truth events.
+	H Category: Tagger predicted	[  6060  26571 272937  26425  22823  13061] 367877 out of 383280 (71.210%) truth events.
+	Top Category: Tagger predicted	[ 13693  15641  22670 287532  24136  24258] 387930 out of 383164 (75.041%) truth events.
+	b Category: Tagger predicted	[  9333  10419  32282  17226 247819 101700] 418779 out of 383297 (64.654%) truth events.
+	QCD Category: Tagger predicted	[ 19140  15247  13031  18705  66984 211465] 344572 out of 383094 (55.199%) truth events.
+-----------------------------------
+-----------------------------------
+Running 390StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[267599  96503  10444  20519  12131  21399] 428595 out of 383294 (69.815%) truth events.
+	Z Category: Tagger predicted	[ 67627 219101  33549  15684   9828  13412] 359201 out of 383446 (57.139%) truth events.
+	H Category: Tagger predicted	[  6387  26725 268722  28184  22073  12409] 364500 out of 383280 (70.111%) truth events.
+	Top Category: Tagger predicted	[ 12238  13259  20711 275265  20709  21033] 363215 out of 383164 (71.839%) truth events.
+	b Category: Tagger predicted	[ 10941  12269  35489  21240 250427 104169] 434535 out of 383297 (65.334%) truth events.
+	QCD Category: Tagger predicted	[ 18502  15589  14365  22272  68129 210672] 349529 out of 383094 (54.992%) truth events.
+-----------------------------------
+-----------------------------------
+Running 400StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268816  96968  10586  17354  11781  20900] 426405 out of 383294 (70.133%) truth events.
+	Z Category: Tagger predicted	[ 65070 218998  33582  13294   9217  13800] 353961 out of 383446 (57.113%) truth events.
+	H Category: Tagger predicted	[  5318  23633 257215  20523  17677  10027] 334393 out of 383280 (67.108%) truth events.
+	Top Category: Tagger predicted	[ 16651  17603  29188 294549  25005  26759] 409755 out of 383164 (76.872%) truth events.
+	b Category: Tagger predicted	[ 10234  11987  36554  20694 240562  92447] 412478 out of 383297 (62.761%) truth events.
+	QCD Category: Tagger predicted	[ 17205  14257  16155  16750  79055 219161] 362583 out of 383094 (57.208%) truth events.
+-----------------------------------
+-----------------------------------
+Running 410StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[276270 101891  11534  21955  13775  24260] 449685 out of 383294 (72.077%) truth events.
+	Z Category: Tagger predicted	[ 64994 218168  34043  16819  10034  14184] 358242 out of 383446 (56.896%) truth events.
+	H Category: Tagger predicted	[  5254  25031 266327  23108  21087  12384] 353191 out of 383280 (69.486%) truth events.
+	Top Category: Tagger predicted	[ 10971  13034  23430 283567  23339  23265] 377606 out of 383164 (74.006%) truth events.
+	b Category: Tagger predicted	[  9434  11533  34403  19270 242684  95310] 412634 out of 383297 (63.314%) truth events.
+	QCD Category: Tagger predicted	[ 16371  13789  13543  18445  72378 213691] 348217 out of 383094 (55.780%) truth events.
+-----------------------------------
+-----------------------------------
+Running 420StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[276073 103041  10691  21961  12027  22119] 445912 out of 383294 (72.026%) truth events.
+	Z Category: Tagger predicted	[ 60554 212153  31986  14224   9508  12317] 340742 out of 383446 (55.327%) truth events.
+	H Category: Tagger predicted	[  5382  25922 269834  25279  21626  11106] 359149 out of 383280 (70.401%) truth events.
+	Top Category: Tagger predicted	[ 11635  13446  21119 280213  21959  22167] 370539 out of 383164 (73.131%) truth events.
+	b Category: Tagger predicted	[ 10819  12188  34539  20686 245149  98175] 421556 out of 383297 (63.957%) truth events.
+	QCD Category: Tagger predicted	[ 18831  16696  15111  20801  73028 217210] 361677 out of 383094 (56.698%) truth events.
+-----------------------------------
+-----------------------------------
+Running 430StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[266206  98975  11852  21459  14718  24593] 437803 out of 383294 (69.452%) truth events.
+	Z Category: Tagger predicted	[ 71205 212250  29917  14624  11013  14973] 353982 out of 383446 (55.353%) truth events.
+	H Category: Tagger predicted	[  6825  31767 271885  26181  26490  15421] 378569 out of 383280 (70.936%) truth events.
+	Top Category: Tagger predicted	[ 14058  16691  24539 284374  23820  26215] 389697 out of 383164 (74.217%) truth events.
+	b Category: Tagger predicted	[  8704  10149  31048  18886 226706  87931] 383424 out of 383297 (59.146%) truth events.
+	QCD Category: Tagger predicted	[ 16296  13614  14039  17640  80550 213961] 356100 out of 383094 (55.850%) truth events.
+-----------------------------------
+-----------------------------------
+Running 440StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[261880  93520  10231  19447  10695  18489] 414262 out of 383294 (68.323%) truth events.
+	Z Category: Tagger predicted	[ 70895 221801  33835  18620  10924  15599] 371674 out of 383446 (57.844%) truth events.
+	H Category: Tagger predicted	[  6936  28184 269153  27328  22029  12607] 366237 out of 383280 (70.223%) truth events.
+	Top Category: Tagger predicted	[ 12958  12592  19996 272565  20336  20100] 358547 out of 383164 (71.135%) truth events.
+	b Category: Tagger predicted	[  9737  11003  32974  20290 224758  81926] 380688 out of 383297 (58.638%) truth events.
+	QCD Category: Tagger predicted	[ 20888  16346  17091  24914  94555 234373] 408167 out of 383094 (61.178%) truth events.
+-----------------------------------
+-----------------------------------
+Running 450StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269882  98517  10939  19234  12953  22653] 434178 out of 383294 (70.411%) truth events.
+	Z Category: Tagger predicted	[ 65717 213899  30120  14161   9499  13731] 347127 out of 383446 (55.783%) truth events.
+	H Category: Tagger predicted	[  7733  30672 272695  27108  23842  13029] 375079 out of 383280 (71.147%) truth events.
+	Top Category: Tagger predicted	[ 13413  15134  22742 284629  24102  25325] 385345 out of 383164 (74.283%) truth events.
+	b Category: Tagger predicted	[  9680  10794  32807  18976 241601  99070] 412928 out of 383297 (63.032%) truth events.
+	QCD Category: Tagger predicted	[ 16869  14430  13977  19056  71300 209286] 344918 out of 383094 (54.630%) truth events.
+-----------------------------------
+-----------------------------------
+Running 460StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265016  92923  10292  20441  12647  21697] 423016 out of 383294 (69.141%) truth events.
+	Z Category: Tagger predicted	[ 73506 228456  37495  17263  11243  14870] 382833 out of 383446 (59.579%) truth events.
+	H Category: Tagger predicted	[  5191  23392 267611  26434  23419  11993] 358040 out of 383280 (69.821%) truth events.
+	Top Category: Tagger predicted	[ 13040  13805  21408 279152  23395  21641] 372441 out of 383164 (72.854%) truth events.
+	b Category: Tagger predicted	[  8350   9455  30318  17446 233883  92326] 391778 out of 383297 (61.018%) truth events.
+	QCD Category: Tagger predicted	[ 18191  15415  16156  22428  78710 220567] 371467 out of 383094 (57.575%) truth events.
+-----------------------------------
+-----------------------------------
+Running 470StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268507 100677  11677  19841  11581  19505] 431788 out of 383294 (70.052%) truth events.
+	Z Category: Tagger predicted	[ 67357 215621  32833  16529  11801  16093] 360234 out of 383446 (56.232%) truth events.
+	H Category: Tagger predicted	[  5052  26290 264537  23535  19166  10738] 349318 out of 383280 (69.019%) truth events.
+	Top Category: Tagger predicted	[ 13427  14615  23622 285699  23721  26743] 387827 out of 383164 (74.563%) truth events.
+	b Category: Tagger predicted	[  9909  11449  36478  20521 244119  98629] 421105 out of 383297 (63.689%) truth events.
+	QCD Category: Tagger predicted	[ 19042  14794  14133  17039  72909 211386] 349303 out of 383094 (55.178%) truth events.
+-----------------------------------
+-----------------------------------
+Running 480StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[247661  82036   9375  17629  11250  19814] 387765 out of 383294 (64.613%) truth events.
+	Z Category: Tagger predicted	[ 86740 230055  32596  17628  12030  17099] 396148 out of 383446 (59.996%) truth events.
+	H Category: Tagger predicted	[  8156  32077 273835  28404  25959  14742] 383173 out of 383280 (71.445%) truth events.
+	Top Category: Tagger predicted	[ 12857  14101  21081 282071  23395  24991] 378496 out of 383164 (73.616%) truth events.
+	b Category: Tagger predicted	[ 10482  11325  32055  20616 238756  99974] 413208 out of 383297 (62.290%) truth events.
+	QCD Category: Tagger predicted	[ 17398  13852  14338  16816  71907 206474] 340785 out of 383094 (53.896%) truth events.
+-----------------------------------
+-----------------------------------
+Running 490StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271825 100361  10620  19898  11724  19989] 434417 out of 383294 (70.918%) truth events.
+	Z Category: Tagger predicted	[ 61896 215008  33327  13668   9610  12267] 345776 out of 383446 (56.072%) truth events.
+	H Category: Tagger predicted	[  5189  24588 267863  25770  22223  11517] 357150 out of 383280 (69.887%) truth events.
+	Top Category: Tagger predicted	[ 13261  15597  23763 285336  24328  25255] 387540 out of 383164 (74.468%) truth events.
+	b Category: Tagger predicted	[  9451  10741  31104  18663 227041  84026] 381026 out of 383297 (59.233%) truth events.
+	QCD Category: Tagger predicted	[ 21672  17151  16603  19829  88371 230040] 393666 out of 383094 (60.047%) truth events.
+-----------------------------------
+-----------------------------------
+Running 500StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[249132  85654   9177  18420  11034  18835] 392252 out of 383294 (64.997%) truth events.
+	Z Category: Tagger predicted	[ 84510 228057  35373  20880  12757  17351] 398928 out of 383446 (59.475%) truth events.
+	H Category: Tagger predicted	[  8127  30975 268211  30709  25470  14088] 377580 out of 383280 (69.977%) truth events.
+	Top Category: Tagger predicted	[ 11752  11817  19588 270329  20736  23267] 357489 out of 383164 (70.551%) truth events.
+	b Category: Tagger predicted	[  9607  10604  33472  21964 222635  86641] 384923 out of 383297 (58.084%) truth events.
+	QCD Category: Tagger predicted	[ 20166  16339  17459  20862  90665 222912] 388403 out of 383094 (58.187%) truth events.
+-----------------------------------
+-----------------------------------
+Running 30StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281915 101395   8826  20783  11476  20817] 445212 out of 383294 (73.550%) truth events.
+	Z Category: Tagger predicted	[ 57175 216183  31673  11989   8857  11912] 337789 out of 383446 (56.378%) truth events.
+	H Category: Tagger predicted	[  3540  23835 271252  23198  19950   8492] 350267 out of 383280 (70.771%) truth events.
+	Top Category: Tagger predicted	[ 12815  15743  24237 293569  25443  24662] 396469 out of 383164 (76.617%) truth events.
+	b Category: Tagger predicted	[  9292  11507  35089  16365 251653  56786] 380692 out of 383297 (65.654%) truth events.
+	QCD Category: Tagger predicted	[ 18557  14783  12203  17260  65918 260425] 389146 out of 383094 (67.979%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281397 100396   8809  18790  11433  20211] 441036 out of 383294 (73.415%) truth events.
+	Z Category: Tagger predicted	[ 57657 218551  31069  12849   9066  11772] 340964 out of 383446 (56.996%) truth events.
+	H Category: Tagger predicted	[  3953  24150 273850  22996  19431   8344] 352724 out of 383280 (71.449%) truth events.
+	Top Category: Tagger predicted	[ 12863  14297  21822 290405  21855  21250] 382492 out of 383164 (75.791%) truth events.
+	b Category: Tagger predicted	[  8941  11227  35883  19434 258536  60430] 394451 out of 383297 (67.450%) truth events.
+	QCD Category: Tagger predicted	[ 18483  14825  11847  18690  62976 261087] 387908 out of 383094 (68.152%) truth events.
+-----------------------------------
+-----------------------------------
+Running 60StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269050  87496   8105  18083  10552  17931] 411217 out of 383294 (70.194%) truth events.
+	Z Category: Tagger predicted	[ 69313 232360  32396  14069   9535  12501] 370174 out of 383446 (60.597%) truth events.
+	H Category: Tagger predicted	[  4178  24538 277315  24722  21980   9483] 362216 out of 383280 (72.353%) truth events.
+	Top Category: Tagger predicted	[ 12244  12927  20650 289689  23288  21683] 380481 out of 383164 (75.604%) truth events.
+	b Category: Tagger predicted	[  9017  10743  33672  17061 254649  58498] 383640 out of 383297 (66.436%) truth events.
+	QCD Category: Tagger predicted	[ 19492  15382  11142  19540  63293 262998] 391847 out of 383094 (68.651%) truth events.
+-----------------------------------
+-----------------------------------
+Running 70StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[272335  89760   8078  18423  10340  19921] 418857 out of 383294 (71.051%) truth events.
+	Z Category: Tagger predicted	[ 66919 228283  30646  12211   9575  12773] 360407 out of 383446 (59.534%) truth events.
+	H Category: Tagger predicted	[  4206  25388 273205  21136  18508   9062] 351505 out of 383280 (71.280%) truth events.
+	Top Category: Tagger predicted	[ 12862  15200  24000 296558  24085  24828] 397533 out of 383164 (77.397%) truth events.
+	b Category: Tagger predicted	[ 10974  12320  38234  19571 272107  73801] 427007 out of 383297 (70.991%) truth events.
+	QCD Category: Tagger predicted	[ 15998  12495   9117  15265  48682 242709] 344266 out of 383094 (63.354%) truth events.
+-----------------------------------
+-----------------------------------
+Running 90StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280169  97384   9375  18729  13260  21255] 440172 out of 383294 (73.095%) truth events.
+	Z Category: Tagger predicted	[ 62224 227921  34643  14770   9721  12516] 361795 out of 383446 (59.440%) truth events.
+	H Category: Tagger predicted	[  3742  21702 272949  24244  20304   8466] 351407 out of 383280 (71.213%) truth events.
+	Top Category: Tagger predicted	[ 12064  12668  20334 288365  21811  20829] 376071 out of 383164 (75.258%) truth events.
+	b Category: Tagger predicted	[  7292   9262  33041  17512 245728  51303] 364138 out of 383297 (64.109%) truth events.
+	QCD Category: Tagger predicted	[ 17803  14509  12938  19544  72473 268725] 405992 out of 383094 (70.145%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270993  87867   8328  19336  11630  21305] 419459 out of 383294 (70.701%) truth events.
+	Z Category: Tagger predicted	[ 72881 242094  39764  16368  11346  15877] 398330 out of 383446 (63.136%) truth events.
+	H Category: Tagger predicted	[  3132  18555 269377  24192  19060   8968] 343284 out of 383280 (70.282%) truth events.
+	Top Category: Tagger predicted	[ 11314  12125  19876 288316  21962  22433] 376026 out of 383164 (75.246%) truth events.
+	b Category: Tagger predicted	[  9994  11526  36843  18946 266898  69437] 413644 out of 383297 (69.632%) truth events.
+	QCD Category: Tagger predicted	[ 14980  11279   9092  16006  52401 245074] 348832 out of 383094 (63.972%) truth events.
+-----------------------------------
+-----------------------------------
+Running 110StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283661  99426   9585  20494  12714  23658] 449538 out of 383294 (74.006%) truth events.
+	Z Category: Tagger predicted	[ 61191 227228  34312  14437   9843  14004] 361015 out of 383446 (59.259%) truth events.
+	H Category: Tagger predicted	[  3154  21181 268999  21249  17879   7834] 340296 out of 383280 (70.183%) truth events.
+	Top Category: Tagger predicted	[ 11582  12853  22644 291582  23084  22946] 384691 out of 383164 (76.098%) truth events.
+	b Category: Tagger predicted	[  9536  11313  37256  18569 264905  67585] 409164 out of 383297 (69.112%) truth events.
+	QCD Category: Tagger predicted	[ 14170  11445  10484  16833  54872 247067] 354871 out of 383094 (64.492%) truth events.
+-----------------------------------
+-----------------------------------
+Running 120StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[263828  82133   7732  17412  11730  20516] 403351 out of 383294 (68.831%) truth events.
+	Z Category: Tagger predicted	[ 79778 245197  37453  16638  11852  15448] 406366 out of 383446 (63.945%) truth events.
+	H Category: Tagger predicted	[  3785  20960 271860  23964  19964   8629] 349162 out of 383280 (70.929%) truth events.
+	Top Category: Tagger predicted	[ 12026  12636  20971 289460  22561  22244] 379898 out of 383164 (75.544%) truth events.
+	b Category: Tagger predicted	[  8588  10028  34239  18697 258231  62803] 392586 out of 383297 (67.370%) truth events.
+	QCD Category: Tagger predicted	[ 15289  12492  11025  16993  58959 253454] 368212 out of 383094 (66.159%) truth events.
+-----------------------------------
+-----------------------------------
+Running 130StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278657  96283   9074  20581  11433  20767] 436795 out of 383294 (72.700%) truth events.
+	Z Category: Tagger predicted	[ 62937 226640  32948  13939   9177  13360] 359001 out of 383446 (59.106%) truth events.
+	H Category: Tagger predicted	[  4088  23101 272681  24767  18837   8507] 351981 out of 383280 (71.144%) truth events.
+	Top Category: Tagger predicted	[ 10823  11821  19482 281403  20223  18601] 362353 out of 383164 (73.441%) truth events.
+	b Category: Tagger predicted	[  9737  11688  37360  19744 262185  62503] 403217 out of 383297 (68.402%) truth events.
+	QCD Category: Tagger predicted	[ 17052  13913  11735  22730  61442 259356] 386228 out of 383094 (67.700%) truth events.
+-----------------------------------
+-----------------------------------
+Running 140StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[272134  90648   7980  18833  11331  20094] 421020 out of 383294 (70.998%) truth events.
+	Z Category: Tagger predicted	[ 67476 228023  32218  13791  10023  12074] 363605 out of 383446 (59.466%) truth events.
+	H Category: Tagger predicted	[  4357  25535 273723  22963  19528   8962] 355068 out of 383280 (71.415%) truth events.
+	Top Category: Tagger predicted	[ 12549  13752  22012 287018  21508  20192] 377031 out of 383164 (74.907%) truth events.
+	b Category: Tagger predicted	[  8700  10232  35057  18616 250583  54540] 377728 out of 383297 (65.375%) truth events.
+	QCD Category: Tagger predicted	[ 18078  15256  12290  21943  70324 267232] 405123 out of 383094 (69.756%) truth events.
+-----------------------------------
+-----------------------------------
+Running 150StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[275011  94704   9126  18835  12273  21963] 431912 out of 383294 (71.749%) truth events.
+	Z Category: Tagger predicted	[ 66335 231146  37496  15786  10820  13813] 375396 out of 383446 (60.281%) truth events.
+	H Category: Tagger predicted	[  3637  19961 264959  21061  17439   8176] 335233 out of 383280 (69.129%) truth events.
+	Top Category: Tagger predicted	[ 12570  12956  22829 286409  20423  19949] 375136 out of 383164 (74.748%) truth events.
+	b Category: Tagger predicted	[  9730  11319  38082  21592 265353  67448] 413524 out of 383297 (69.229%) truth events.
+	QCD Category: Tagger predicted	[ 16011  13360  10788  19481  56989 251745] 368374 out of 383094 (65.713%) truth events.
+-----------------------------------
+-----------------------------------
+Running 160StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283923 101527  10871  21148  14121  23929] 455519 out of 383294 (74.074%) truth events.
+	Z Category: Tagger predicted	[ 60648 226337  36244  13601  10238  13876] 360944 out of 383446 (59.027%) truth events.
+	H Category: Tagger predicted	[  3399  19197 266752  20277  21166   8708] 339499 out of 383280 (69.597%) truth events.
+	Top Category: Tagger predicted	[ 12354  14384  25599 294708  24488  23694] 395227 out of 383164 (76.914%) truth events.
+	b Category: Tagger predicted	[  7980   9819  32695  15962 247311  54759] 368526 out of 383297 (64.522%) truth events.
+	QCD Category: Tagger predicted	[ 14990  12182  11119  17468  65973 258128] 379860 out of 383094 (67.379%) truth events.
+-----------------------------------
+-----------------------------------
+Running 170StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[267918  88460   8166  18316  10108  18811] 411779 out of 383294 (69.898%) truth events.
+	Z Category: Tagger predicted	[ 69931 231230  33845  14219  10343  13745] 373313 out of 383446 (60.303%) truth events.
+	H Category: Tagger predicted	[  4441  23718 272010  22786  20855   9288] 353098 out of 383280 (70.969%) truth events.
+	Top Category: Tagger predicted	[ 11967  13301  21734 284557  20045  20082] 371686 out of 383164 (74.265%) truth events.
+	b Category: Tagger predicted	[ 10415  11902  36650  23356 264470  68311] 415104 out of 383297 (68.998%) truth events.
+	QCD Category: Tagger predicted	[ 18622  14835  10875  19930  57476 252857] 374595 out of 383094 (66.003%) truth events.
+-----------------------------------
+-----------------------------------
+Running 180StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273463  96335   9137  19431  11680  19477] 429523 out of 383294 (71.345%) truth events.
+	Z Category: Tagger predicted	[ 63645 221076  31648  13818   9243  12490] 351920 out of 383446 (57.655%) truth events.
+	H Category: Tagger predicted	[  4126  25487 270656  23556  18315   7919] 350059 out of 383280 (70.615%) truth events.
+	Top Category: Tagger predicted	[ 12765  13499  22267 287551  24308  21577] 381967 out of 383164 (75.046%) truth events.
+	b Category: Tagger predicted	[  9218  11113  36594  17191 250157  56802] 381075 out of 383297 (65.264%) truth events.
+	QCD Category: Tagger predicted	[ 20077  15936  12978  21617  69594 264829] 405031 out of 383094 (69.128%) truth events.
+-----------------------------------
+-----------------------------------
+Running 190StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[262640  84307   9051  19226  12959  23101] 411284 out of 383294 (68.521%) truth events.
+	Z Category: Tagger predicted	[ 81732 243050  37665  16188  12257  16215] 407107 out of 383446 (63.385%) truth events.
+	H Category: Tagger predicted	[  3377  21071 270038  24692  20403   8871] 348452 out of 383280 (70.454%) truth events.
+	Top Category: Tagger predicted	[ 12137  13373  21465 288712  23531  24643] 383861 out of 383164 (75.349%) truth events.
+	b Category: Tagger predicted	[  8576  10013  33855  18059 251678  59718] 381899 out of 383297 (65.661%) truth events.
+	QCD Category: Tagger predicted	[ 14832  11632  11206  16287  62469 250546] 366972 out of 383094 (65.400%) truth events.
+-----------------------------------
+-----------------------------------
+Running 200StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265081  86252   8700  17756  11717  20168] 409674 out of 383294 (69.158%) truth events.
+	Z Category: Tagger predicted	[ 75502 235511  35250  15771  11075  13837] 386946 out of 383446 (61.419%) truth events.
+	H Category: Tagger predicted	[  4172  23191 270330  24349  20192   8575] 350809 out of 383280 (70.530%) truth events.
+	Top Category: Tagger predicted	[ 12472  13539  21413 289722  23143  25573] 385862 out of 383164 (75.613%) truth events.
+	b Category: Tagger predicted	[  8610  10574  35842  19855 255894  62155] 392930 out of 383297 (66.761%) truth events.
+	QCD Category: Tagger predicted	[ 17457  14379  11745  15711  61276 252786] 373354 out of 383094 (65.985%) truth events.
+-----------------------------------
+-----------------------------------
+Running 210StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[276728  99965   8933  19761  11451  19602] 436440 out of 383294 (72.197%) truth events.
+	Z Category: Tagger predicted	[ 58955 213884  30365  14384   9500  11581] 338669 out of 383446 (55.779%) truth events.
+	H Category: Tagger predicted	[  6979  30671 283463  32004  28343  12690] 394150 out of 383280 (73.957%) truth events.
+	Top Category: Tagger predicted	[ 11404  11708  17581 276565  19316  21117] 357691 out of 383164 (72.179%) truth events.
+	b Category: Tagger predicted	[  9900  11040  33391  21407 264831  76888] 417457 out of 383297 (69.092%) truth events.
+	QCD Category: Tagger predicted	[ 19328  16178   9547  19043  49856 241216] 355168 out of 383094 (62.965%) truth events.
+-----------------------------------
+-----------------------------------
+Running 220StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[256798  83311   7967  18161   9982  18030] 394249 out of 383294 (66.997%) truth events.
+	Z Category: Tagger predicted	[ 79776 235041  34283  16773  11219  15788] 392880 out of 383446 (61.297%) truth events.
+	H Category: Tagger predicted	[  3988  24451 267409  20732  18724   8492] 343796 out of 383280 (69.768%) truth events.
+	Top Category: Tagger predicted	[ 13021  13687  24290 284888  20970  20490] 377346 out of 383164 (74.351%) truth events.
+	b Category: Tagger predicted	[ 10624  12348  37936  21428 260381  63974] 406691 out of 383297 (67.931%) truth events.
+	QCD Category: Tagger predicted	[ 19087  14608  11395  21182  62021 256320] 384613 out of 383094 (66.907%) truth events.
+-----------------------------------
+-----------------------------------
+Running 230StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[259230  85566   8645  20516  10625  18150] 402732 out of 383294 (67.632%) truth events.
+	Z Category: Tagger predicted	[ 79110 239257  38908  18001  12253  15438] 402967 out of 383446 (62.396%) truth events.
+	H Category: Tagger predicted	[  3869  20490 266408  24402  20132   8708] 344009 out of 383280 (69.507%) truth events.
+	Top Category: Tagger predicted	[ 10628  11285  20353 270481  18629  15983] 347359 out of 383164 (70.591%) truth events.
+	b Category: Tagger predicted	[  8718  10308  34925  21808 250286  58044] 384089 out of 383297 (65.298%) truth events.
+	QCD Category: Tagger predicted	[ 21739  16540  14041  27956  71372 266771] 418419 out of 383094 (69.635%) truth events.
+-----------------------------------
+-----------------------------------
+Running 240StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[274051  96309   9139  20254  12114  20915] 432782 out of 383294 (71.498%) truth events.
+	Z Category: Tagger predicted	[ 66752 224009  33407  14618  11473  13720] 363979 out of 383446 (58.419%) truth events.
+	H Category: Tagger predicted	[  5431  26559 276900  27017  26280  11335] 373522 out of 383280 (72.244%) truth events.
+	Top Category: Tagger predicted	[ 12389  13470  21224 287617  24024  25415] 384139 out of 383164 (75.063%) truth events.
+	b Category: Tagger predicted	[  7744   9205  31300  16908 243438  56485] 365080 out of 383297 (63.511%) truth events.
+	QCD Category: Tagger predicted	[ 16927  13894  11310  16750  65968 255224] 380073 out of 383094 (66.621%) truth events.
+-----------------------------------
+-----------------------------------
+Running 250StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265029  89777   8270  18980  10713  20194] 412963 out of 383294 (69.145%) truth events.
+	Z Category: Tagger predicted	[ 71491 224928  31226  15813  10122  13372] 366952 out of 383446 (58.659%) truth events.
+	H Category: Tagger predicted	[  5937  29435 277116  28445  22163  11549] 374645 out of 383280 (72.301%) truth events.
+	Top Category: Tagger predicted	[ 12327  13099  19165 280429  20965  23057] 369042 out of 383164 (73.187%) truth events.
+	b Category: Tagger predicted	[ 10142  11996  36866  22530 258184  65748] 405466 out of 383297 (67.358%) truth events.
+	QCD Category: Tagger predicted	[ 18368  14211  10637  16967  61150 249174] 370507 out of 383094 (65.042%) truth events.
+-----------------------------------
+-----------------------------------
+Running 260StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[262164  87374   8864  19569  12052  20257] 410280 out of 383294 (68.397%) truth events.
+	Z Category: Tagger predicted	[ 78242 231720  33510  16253  11457  14670] 385852 out of 383446 (60.430%) truth events.
+	H Category: Tagger predicted	[  4212  25132 271568  25394  20682   8758] 355746 out of 383280 (70.853%) truth events.
+	Top Category: Tagger predicted	[ 11633  13415  21595 282959  23150  24054] 376806 out of 383164 (73.848%) truth events.
+	b Category: Tagger predicted	[  8387  10204  34794  19939 249274  58748] 381346 out of 383297 (65.034%) truth events.
+	QCD Category: Tagger predicted	[ 18656  15601  12949  19050  66682 256607] 389545 out of 383094 (66.982%) truth events.
+-----------------------------------
+-----------------------------------
+Running 270StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[256763  85105   8827  17826  10789  19198] 398508 out of 383294 (66.988%) truth events.
+	Z Category: Tagger predicted	[ 78488 233320  37015  15980  10944  14347] 390094 out of 383446 (60.848%) truth events.
+	H Category: Tagger predicted	[  3899  21875 262872  22723  19272   8093] 338734 out of 383280 (68.584%) truth events.
+	Top Category: Tagger predicted	[ 14333  15385  24799 283364  22201  21687] 381769 out of 383164 (73.953%) truth events.
+	b Category: Tagger predicted	[  9542  11275  36008  22032 247145  56312] 382314 out of 383297 (64.478%) truth events.
+	QCD Category: Tagger predicted	[ 20269  16486  13759  21239  72946 263457] 408156 out of 383094 (68.770%) truth events.
+-----------------------------------
+-----------------------------------
+Running 280StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[255899  85245   8071  18470  11174  18421] 397280 out of 383294 (66.763%) truth events.
+	Z Category: Tagger predicted	[ 78451 233616  35592  16359  11529  16073] 391620 out of 383446 (60.925%) truth events.
+	H Category: Tagger predicted	[  4844  24066 272259  25450  23938  11178] 361735 out of 383280 (71.033%) truth events.
+	Top Category: Tagger predicted	[ 14491  15046  23195 284125  23249  24733] 384839 out of 383164 (74.152%) truth events.
+	b Category: Tagger predicted	[  9122  11096  33068  20812 245061  57282] 376441 out of 383297 (63.935%) truth events.
+	QCD Category: Tagger predicted	[ 20487  14377  11095  17948  68346 255407] 387660 out of 383094 (66.669%) truth events.
+-----------------------------------
+-----------------------------------
+Running 290StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[259748  85527   7732  18964  10274  19434] 401679 out of 383294 (67.767%) truth events.
+	Z Category: Tagger predicted	[ 76844 230812  34082  16341  11751  14016] 383846 out of 383446 (60.194%) truth events.
+	H Category: Tagger predicted	[  5523  26890 272171  24999  21414   9717] 360714 out of 383280 (71.011%) truth events.
+	Top Category: Tagger predicted	[ 13123  12944  20785 277244  21131  19516] 364743 out of 383164 (72.356%) truth events.
+	b Category: Tagger predicted	[  9958  11366  36779  22204 256822  64133] 401262 out of 383297 (67.003%) truth events.
+	QCD Category: Tagger predicted	[ 18098  15907  11731  23412  61905 256278] 387331 out of 383094 (66.896%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268520  96289   9565  18770  11983  20530] 425657 out of 383294 (70.055%) truth events.
+	Z Category: Tagger predicted	[ 68635 226454  39209  17012  10845  14844] 376999 out of 383446 (59.057%) truth events.
+	H Category: Tagger predicted	[  4052  20068 260708  23955  17850   8122] 334755 out of 383280 (68.020%) truth events.
+	Top Category: Tagger predicted	[ 13201  13327  21962 279033  20871  22350] 370744 out of 383164 (72.823%) truth events.
+	b Category: Tagger predicted	[ 11176  13137  39408  24591 262210  70525] 421047 out of 383297 (68.409%) truth events.
+	QCD Category: Tagger predicted	[ 17710  14171  12428  19803  59538 246723] 370373 out of 383094 (64.402%) truth events.
+-----------------------------------
+-----------------------------------
+Running 5StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[262760 111572   8778  20583  12643  25160] 441496 out of 383294 (68.553%) truth events.
+	Z Category: Tagger predicted	[ 67710 193110  41102  22203  14123  13793] 352041 out of 383446 (50.361%) truth events.
+	H Category: Tagger predicted	[  4439  32272 246751  31713  20745   9392] 345312 out of 383280 (64.378%) truth events.
+	Top Category: Tagger predicted	[ 15143  17029  28430 270937  24984  28739] 385262 out of 383164 (70.710%) truth events.
+	b Category: Tagger predicted	[  8317  12180  41674  14523 204941 118838] 400473 out of 383297 (53.467%) truth events.
+	QCD Category: Tagger predicted	[ 24925  17283  16545  23205 105861 187172] 374991 out of 383094 (48.857%) truth events.
+-----------------------------------
+-----------------------------------
+Running 10StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[264515  96654  10244  20941  13176  22320] 427850 out of 383294 (69.010%) truth events.
+	Z Category: Tagger predicted	[ 68627 214538  34020  17303  10663  13771] 358922 out of 383446 (55.949%) truth events.
+	H Category: Tagger predicted	[  5768  29019 262157  30517  24414  10141] 362016 out of 383280 (68.398%) truth events.
+	Top Category: Tagger predicted	[ 12865  15011  24805 275504  23905  22957] 375047 out of 383164 (71.902%) truth events.
+	b Category: Tagger predicted	[ 10315  12160  37806  18695 228805  94953] 402734 out of 383297 (59.693%) truth events.
+	QCD Category: Tagger predicted	[ 21204  16064  14248  20204  82334 218952] 373006 out of 383094 (57.153%) truth events.
+-----------------------------------
+-----------------------------------
+Running 15StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[263593  89341   9404  19615  11587  20590] 414130 out of 383294 (68.770%) truth events.
+	Z Category: Tagger predicted	[ 69177 220655  31981  14420   8945  11726] 356904 out of 383446 (57.545%) truth events.
+	H Category: Tagger predicted	[  4804  27968 264170  25552  20472  10320] 353286 out of 383280 (68.923%) truth events.
+	Top Category: Tagger predicted	[ 13567  16286  27628 283288  25546  22365] 388680 out of 383164 (73.933%) truth events.
+	b Category: Tagger predicted	[ 11265  12587  35993  18136 249002 104588] 431571 out of 383297 (64.963%) truth events.
+	QCD Category: Tagger predicted	[ 20888  16609  14104  22153  67745 213505] 355004 out of 383094 (55.731%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269664  96555  10003  21317  13327  20493] 431359 out of 383294 (70.354%) truth events.
+	Z Category: Tagger predicted	[ 67537 223818  37557  17511  11488  13420] 371331 out of 383446 (58.370%) truth events.
+	H Category: Tagger predicted	[  3989  21669 258805  26244  20793   9140] 340640 out of 383280 (67.523%) truth events.
+	Top Category: Tagger predicted	[ 11400  13773  24453 280039  23277  22759] 375701 out of 383164 (73.085%) truth events.
+	b Category: Tagger predicted	[ 10811  12165  38258  18413 232950  99834] 412431 out of 383297 (60.775%) truth events.
+	QCD Category: Tagger predicted	[ 19893  15466  14204  19640  81462 217448] 368113 out of 383094 (56.761%) truth events.
+-----------------------------------
+-----------------------------------
+Running 25StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268887  92470  10351  19888  12722  21701] 426019 out of 383294 (70.151%) truth events.
+	Z Category: Tagger predicted	[ 69829 225942  33541  15456  10341  14342] 369451 out of 383446 (58.924%) truth events.
+	H Category: Tagger predicted	[  5009  26797 271028  26894  23026  12242] 364996 out of 383280 (70.712%) truth events.
+	Top Category: Tagger predicted	[ 12773  14546  22831 283270  23244  22612] 379276 out of 383164 (73.929%) truth events.
+	b Category: Tagger predicted	[  9134  10277  32051  17789 242438  95522] 407211 out of 383297 (63.250%) truth events.
+	QCD Category: Tagger predicted	[ 17662  13414  13478  19867  71526 216675] 352622 out of 383094 (56.559%) truth events.
+-----------------------------------
+-----------------------------------
+Running 30StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268477  91465  11169  19744  13567  22893] 427315 out of 383294 (70.044%) truth events.
+	Z Category: Tagger predicted	[ 69903 222479  29493  12704   8383  12227] 355189 out of 383446 (58.020%) truth events.
+	H Category: Tagger predicted	[  5042  28585 272625  27126  21145  10866] 365389 out of 383280 (71.129%) truth events.
+	Top Category: Tagger predicted	[ 14358  16874  22674 290953  25351  26959] 397169 out of 383164 (75.934%) truth events.
+	b Category: Tagger predicted	[  7999   9639  29863  16251 225041  78965] 367758 out of 383297 (58.711%) truth events.
+	QCD Category: Tagger predicted	[ 17515  14404  17456  16386  89810 231184] 386755 out of 383094 (60.346%) truth events.
+-----------------------------------
+-----------------------------------
+Running 35StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270035  93058   9560  18487  11891  21132] 424163 out of 383294 (70.451%) truth events.
+	Z Category: Tagger predicted	[ 66308 224249  34146  14127   9446  12713] 360989 out of 383446 (58.482%) truth events.
+	H Category: Tagger predicted	[  4593  24059 266773  24906  19831  10233] 350395 out of 383280 (69.602%) truth events.
+	Top Category: Tagger predicted	[ 14421  16057  23731 288745  23937  24465] 391356 out of 383164 (75.358%) truth events.
+	b Category: Tagger predicted	[  9908  11151  34180  18563 249144 100517] 423463 out of 383297 (65.000%) truth events.
+	QCD Category: Tagger predicted	[ 18029  14872  14890  18336  69048 214034] 349209 out of 383094 (55.869%) truth events.
+-----------------------------------
+-----------------------------------
+Running 40StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[275608  96859  10809  20758  12477  21505] 438016 out of 383294 (71.905%) truth events.
+	Z Category: Tagger predicted	[ 65403 228023  37071  16789  10482  14929] 372697 out of 383446 (59.466%) truth events.
+	H Category: Tagger predicted	[  4197  22192 268393  27862  20664  10737] 354045 out of 383280 (70.025%) truth events.
+	Top Category: Tagger predicted	[ 11128  12533  19539 281994  22985  23106] 371285 out of 383164 (73.596%) truth events.
+	b Category: Tagger predicted	[  9511  10659  32592  17399 242835  96071] 409067 out of 383297 (63.354%) truth events.
+	QCD Category: Tagger predicted	[ 17447  13180  14876  18362  73854 216746] 354465 out of 383094 (56.577%) truth events.
+-----------------------------------
+-----------------------------------
+Running 45StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269033  89361  10160  20294  12992  23352] 425192 out of 383294 (70.189%) truth events.
+	Z Category: Tagger predicted	[ 71348 224828  28853  13525   8761  11959] 359274 out of 383446 (58.633%) truth events.
+	H Category: Tagger predicted	[  5948  31107 277994  28372  22857  12044] 378322 out of 383280 (72.530%) truth events.
+	Top Category: Tagger predicted	[ 11325  13164  20329 279513  20941  19315] 364587 out of 383164 (72.948%) truth events.
+	b Category: Tagger predicted	[  8717   9905  30765  17875 239113  89547] 395922 out of 383297 (62.383%) truth events.
+	QCD Category: Tagger predicted	[ 16923  15081  15179  23585  78633 226877] 376278 out of 383094 (59.222%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271824  92615   9580  19053  11441  20138] 424651 out of 383294 (70.917%) truth events.
+	Z Category: Tagger predicted	[ 66320 230551  37903  14705  10665  12814] 372958 out of 383446 (60.126%) truth events.
+	H Category: Tagger predicted	[  3832  20099 262561  23521  17199   8972] 336184 out of 383280 (68.503%) truth events.
+	Top Category: Tagger predicted	[ 13228  14507  23075 289210  23087  23956] 387063 out of 383164 (75.479%) truth events.
+	b Category: Tagger predicted	[  9406  10582  34622  19216 249506  96627] 419959 out of 383297 (65.094%) truth events.
+	QCD Category: Tagger predicted	[ 18684  15092  15539  17459  71399 220587] 358760 out of 383094 (57.580%) truth events.
+-----------------------------------
+-----------------------------------
+Running 55StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[263931  85871   9285  18579  10319  17059] 405044 out of 383294 (68.858%) truth events.
+	Z Category: Tagger predicted	[ 71188 233000  34889  15470   9955  12918] 377420 out of 383446 (60.764%) truth events.
+	H Category: Tagger predicted	[  3969  22770 266823  24269  17759   9205] 344795 out of 383280 (69.615%) truth events.
+	Top Category: Tagger predicted	[ 12219  13346  21108 286457  22982  22210] 378322 out of 383164 (74.760%) truth events.
+	b Category: Tagger predicted	[  9164  10580  32962  17604 238671  85404] 394385 out of 383297 (62.267%) truth events.
+	QCD Category: Tagger predicted	[ 22823  17879  18213  20785  83611 236298] 399609 out of 383094 (61.681%) truth events.
+-----------------------------------
+-----------------------------------
+Running 60StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[285833 105334  11609  21513  13634  23284] 461207 out of 383294 (74.572%) truth events.
+	Z Category: Tagger predicted	[ 57194 222814  38470  15378  10216  13426] 357498 out of 383446 (58.108%) truth events.
+	H Category: Tagger predicted	[  3677  19222 265718  24377  20622  11130] 344746 out of 383280 (69.327%) truth events.
+	Top Category: Tagger predicted	[ 11799  13207  22147 285644  23194  21871] 377862 out of 383164 (74.548%) truth events.
+	b Category: Tagger predicted	[  8175   9322  30403  15523 236422  86468] 386313 out of 383297 (61.681%) truth events.
+	QCD Category: Tagger predicted	[ 16616  13547  14933  20729  79209 226915] 371949 out of 383094 (59.232%) truth events.
+-----------------------------------
+-----------------------------------
+Running 65StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268077  89859  10172  18872  10881  18299] 416160 out of 383294 (69.940%) truth events.
+	Z Category: Tagger predicted	[ 68638 226043  31642  13264   9700  13173] 362460 out of 383446 (58.950%) truth events.
+	H Category: Tagger predicted	[  4663  26225 268233  21600  20879  11273] 352873 out of 383280 (69.983%) truth events.
+	Top Category: Tagger predicted	[ 12567  14925  26449 293837  24578  24236] 396592 out of 383164 (76.687%) truth events.
+	b Category: Tagger predicted	[  9890  10896  33292  17413 251726 100918] 424135 out of 383297 (65.673%) truth events.
+	QCD Category: Tagger predicted	[ 19459  15498  13492  18178  65533 215195] 347355 out of 383094 (56.172%) truth events.
+-----------------------------------
+-----------------------------------
+Running 70StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[276222  97192  10076  19462  10773  19246] 432971 out of 383294 (72.065%) truth events.
+	Z Category: Tagger predicted	[ 58518 215466  28775  11640   7368  11047] 332814 out of 383446 (56.192%) truth events.
+	H Category: Tagger predicted	[  4960  26556 270282  23025  19338  10358] 354519 out of 383280 (70.518%) truth events.
+	Top Category: Tagger predicted	[ 12928  15320  23558 287057  21835  19936] 380634 out of 383164 (74.917%) truth events.
+	b Category: Tagger predicted	[ 10660  12387  34226  18066 240829  87267] 403435 out of 383297 (62.830%) truth events.
+	QCD Category: Tagger predicted	[ 20006  16525  16363  23914  83154 235240] 395202 out of 383094 (61.405%) truth events.
+-----------------------------------
+-----------------------------------
+Running 75StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[266843  87226   9580  18268  11506  19420] 412843 out of 383294 (69.618%) truth events.
+	Z Category: Tagger predicted	[ 71976 236286  36935  16248   9840  13533] 384818 out of 383446 (61.621%) truth events.
+	H Category: Tagger predicted	[  4480  21479 269088  26209  20515  10955] 352726 out of 383280 (70.206%) truth events.
+	Top Category: Tagger predicted	[ 11752  12450  19397 282171  21216  20876] 367862 out of 383164 (73.642%) truth events.
+	b Category: Tagger predicted	[ 10517  11761  35414  19938 262955 112384] 452969 out of 383297 (68.603%) truth events.
+	QCD Category: Tagger predicted	[ 17726  14244  12866  20330  57265 205926] 328357 out of 383094 (53.753%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[277951  98181  10642  19202  12005  19920] 437901 out of 383294 (72.516%) truth events.
+	Z Category: Tagger predicted	[ 60507 225318  37379  14722   9285  12415] 359626 out of 383446 (58.761%) truth events.
+	H Category: Tagger predicted	[  4307  19861 262916  21958  19102   9882] 338026 out of 383280 (68.596%) truth events.
+	Top Category: Tagger predicted	[ 13048  14484  23931 291973  23594  24196] 391226 out of 383164 (76.200%) truth events.
+	b Category: Tagger predicted	[  8471  10142  30542  17067 229670  80102] 375994 out of 383297 (59.919%) truth events.
+	QCD Category: Tagger predicted	[ 19010  15460  17870  18242  89641 236579] 396802 out of 383094 (61.754%) truth events.
+-----------------------------------
+-----------------------------------
+Running 85StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280809 100834  11478  20931  13060  21516] 448628 out of 383294 (73.262%) truth events.
+	Z Category: Tagger predicted	[ 59695 223953  36777  14029   9445  12178] 356077 out of 383446 (58.405%) truth events.
+	H Category: Tagger predicted	[  3545  19165 261078  22270  17410   8867] 332335 out of 383280 (68.116%) truth events.
+	Top Category: Tagger predicted	[ 11587  13236  23383 285331  21495  20283] 375315 out of 383164 (74.467%) truth events.
+	b Category: Tagger predicted	[  9062  10719  34322  19065 249549  97572] 420289 out of 383297 (65.105%) truth events.
+	QCD Category: Tagger predicted	[ 18596  15539  16242  21538  72338 222678] 366931 out of 383094 (58.126%) truth events.
+-----------------------------------
+-----------------------------------
+Running 90StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271463  89876   9870  19614  12106  20191] 423120 out of 383294 (70.823%) truth events.
+	Z Category: Tagger predicted	[ 68810 230031  33264  14755  10140  13100] 370100 out of 383446 (59.990%) truth events.
+	H Category: Tagger predicted	[  4345  24273 268934  22626  19858  10020] 350056 out of 383280 (70.166%) truth events.
+	Top Category: Tagger predicted	[ 11792  13961  23660 287205  21519  21705] 379842 out of 383164 (74.956%) truth events.
+	b Category: Tagger predicted	[  8616   9937  32004  19907 244209  92923] 407596 out of 383297 (63.712%) truth events.
+	QCD Category: Tagger predicted	[ 18268  15368  15548  19057  75465 225155] 368861 out of 383094 (58.772%) truth events.
+-----------------------------------
+-----------------------------------
+Running 95StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265584  86283  10298  19122  13017  22260] 416564 out of 383294 (69.289%) truth events.
+	Z Category: Tagger predicted	[ 75075 235515  34578  14590   9920  13361] 383039 out of 383446 (61.420%) truth events.
+	H Category: Tagger predicted	[  3976  22652 263604  19836  18033   9765] 337866 out of 383280 (68.775%) truth events.
+	Top Category: Tagger predicted	[ 12552  14654  26880 287755  21274  20908] 384023 out of 383164 (75.099%) truth events.
+	b Category: Tagger predicted	[  9424  10667  34411  22673 249262  95919] 422356 out of 383297 (65.031%) truth events.
+	QCD Category: Tagger predicted	[ 16683  13675  13509  19188  71791 220881] 355727 out of 383094 (57.657%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[282053 100947  10585  19427  12723  23482] 449217 out of 383294 (73.586%) truth events.
+	Z Category: Tagger predicted	[ 58504 217777  31483  12742   9461  12443] 342410 out of 383446 (56.794%) truth events.
+	H Category: Tagger predicted	[  4700  25307 266989  21478  19456   9464] 347394 out of 383280 (69.658%) truth events.
+	Top Category: Tagger predicted	[ 13358  15241  25914 290278  22370  21859] 389020 out of 383164 (75.758%) truth events.
+	b Category: Tagger predicted	[  9506  10709  33416  19636 254896 104040] 432203 out of 383297 (66.500%) truth events.
+	QCD Category: Tagger predicted	[ 15173  13465  14893  19603  64391 211806] 339331 out of 383094 (55.288%) truth events.
+-----------------------------------
+-----------------------------------
+Running 105StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283526 101736  11097  22528  12975  23056] 454918 out of 383294 (73.970%) truth events.
+	Z Category: Tagger predicted	[ 60044 226459  38381  15040   9937  13357] 363218 out of 383446 (59.058%) truth events.
+	H Category: Tagger predicted	[  3497  18259 260017  22680  16277   8709] 329439 out of 383280 (67.839%) truth events.
+	Top Category: Tagger predicted	[  9972  12253  21992 285427  21951  22828] 374423 out of 383164 (74.492%) truth events.
+	b Category: Tagger predicted	[  9181  11152  36891  19615 246899  92483] 416221 out of 383297 (64.414%) truth events.
+	QCD Category: Tagger predicted	[ 17074  13587  14902  17874  75258 222661] 361356 out of 383094 (58.121%) truth events.
+-----------------------------------
+-----------------------------------
+Running 110StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271293  90146  10972  20296  13156  22344] 428207 out of 383294 (70.779%) truth events.
+	Z Category: Tagger predicted	[ 72489 236870  36388  16884  10368  14654] 387653 out of 383446 (61.774%) truth events.
+	H Category: Tagger predicted	[  4158  21110 269049  24241  21130  11579] 351267 out of 383280 (70.196%) truth events.
+	Top Category: Tagger predicted	[ 10723  12287  21488 286164  23163  22367] 376192 out of 383164 (74.684%) truth events.
+	b Category: Tagger predicted	[  8474  10032  31659  17054 242931  91827] 401977 out of 383297 (63.379%) truth events.
+	QCD Category: Tagger predicted	[ 16157  13001  13724  18525  72549 220323] 354279 out of 383094 (57.511%) truth events.
+-----------------------------------
+-----------------------------------
+Running 115StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268987  89484   9579  18515  11017  19259] 416841 out of 383294 (70.177%) truth events.
+	Z Category: Tagger predicted	[ 68670 226056  30646  14606   9149  12443] 361570 out of 383446 (58.953%) truth events.
+	H Category: Tagger predicted	[  4751  27749 275594  25346  22205  12442] 368087 out of 383280 (71.904%) truth events.
+	Top Category: Tagger predicted	[ 12387  14069  21469 287448  22830  22233] 380436 out of 383164 (75.019%) truth events.
+	b Category: Tagger predicted	[  8915  10488  30651  17486 236129  85391] 389060 out of 383297 (61.604%) truth events.
+	QCD Category: Tagger predicted	[ 19584  15600  15341  19763  81967 231326] 383581 out of 383094 (60.383%) truth events.
+-----------------------------------
+-----------------------------------
+Running 120StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[282871 102576  11275  21204  12262  21500] 451688 out of 383294 (73.800%) truth events.
+	Z Category: Tagger predicted	[ 57239 221360  36682  14527   8792  12274] 350874 out of 383446 (57.729%) truth events.
+	H Category: Tagger predicted	[  3599  19170 257505  19026  16408   9473] 325181 out of 383280 (67.184%) truth events.
+	Top Category: Tagger predicted	[ 11630  13721  27169 292576  24466  23584] 393146 out of 383164 (76.357%) truth events.
+	b Category: Tagger predicted	[ 10030  12133  36064  17705 245687  90393] 412012 out of 383297 (64.098%) truth events.
+	QCD Category: Tagger predicted	[ 17925  14486  14585  18126  75682 225870] 366674 out of 383094 (58.959%) truth events.
+-----------------------------------
+-----------------------------------
+Running 125StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[277015  98091   9502  19136  10259  19238] 433241 out of 383294 (72.272%) truth events.
+	Z Category: Tagger predicted	[ 61781 224986  35209  15836  11136  14700] 363648 out of 383446 (58.674%) truth events.
+	H Category: Tagger predicted	[  5209  24501 275995  31820  21842  11892] 371259 out of 383280 (72.008%) truth events.
+	Top Category: Tagger predicted	[ 11051  11648  16072 279088  20323  21782] 359964 out of 383164 (72.837%) truth events.
+	b Category: Tagger predicted	[ 10553  11135  33484  19596 250570  98573] 423911 out of 383297 (65.372%) truth events.
+	QCD Category: Tagger predicted	[ 17685  13085  13018  17688  69167 216909] 347552 out of 383094 (56.620%) truth events.
+-----------------------------------
+-----------------------------------
+Running 130StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278266  98826  10901  18843  12378  20335] 439549 out of 383294 (72.598%) truth events.
+	Z Category: Tagger predicted	[ 58932 218324  30661  12890   8344  11912] 341063 out of 383446 (56.937%) truth events.
+	H Category: Tagger predicted	[  4454  24779 265412  19058  20164  10292] 344159 out of 383280 (69.247%) truth events.
+	Top Category: Tagger predicted	[ 14777  16476  30253 299719  27368  27039] 415632 out of 383164 (78.222%) truth events.
+	b Category: Tagger predicted	[  8640  10071  31232  15308 238165  89001] 392417 out of 383297 (62.135%) truth events.
+	QCD Category: Tagger predicted	[ 18225  14970  14821  17346  76878 224515] 366755 out of 383094 (58.605%) truth events.
+-----------------------------------
+-----------------------------------
+Running 135StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268269  89214  10144  18402  12219  20395] 418643 out of 383294 (69.990%) truth events.
+	Z Category: Tagger predicted	[ 68867 224296  28975  12434   9035  12544] 356151 out of 383446 (58.494%) truth events.
+	H Category: Tagger predicted	[  5754  29731 276506  23759  24473  13809] 374032 out of 383280 (72.142%) truth events.
+	Top Category: Tagger predicted	[ 14647  16620  24723 294880  24841  24749] 400460 out of 383164 (76.959%) truth events.
+	b Category: Tagger predicted	[  7388   8737  27810  14614 221791  73950] 354290 out of 383297 (57.864%) truth events.
+	QCD Category: Tagger predicted	[ 18369  14848  15122  19075  90938 237647] 395999 out of 383094 (62.033%) truth events.
+-----------------------------------
+-----------------------------------
+Running 140StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283343 101705  11848  20957  13926  24935] 456714 out of 383294 (73.923%) truth events.
+	Z Category: Tagger predicted	[ 60083 218925  31264  14925   9984  13978] 349159 out of 383446 (57.094%) truth events.
+	H Category: Tagger predicted	[  4533  27583 273490  25248  20702  10926] 362482 out of 383280 (71.355%) truth events.
+	Top Category: Tagger predicted	[ 11968  13163  21181 288975  24923  24258] 384468 out of 383164 (75.418%) truth events.
+	b Category: Tagger predicted	[  9009  10202  32894  15924 246629  96657] 411315 out of 383297 (64.344%) truth events.
+	QCD Category: Tagger predicted	[ 14358  11868  12603  17135  67133 212340] 335437 out of 383094 (55.427%) truth events.
+-----------------------------------
+-----------------------------------
+Running 145StandardScaler2017_oldBESTMask_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269377  88698   9775  19647  11803  20452] 419752 out of 383294 (70.279%) truth events.
+	Z Category: Tagger predicted	[ 71548 232926  34004  16525  10638  13747] 379388 out of 383446 (60.745%) truth events.
+	H Category: Tagger predicted	[  4687  25619 272266  25109  21304  11452] 360437 out of 383280 (71.035%) truth events.
+	Top Category: Tagger predicted	[ 11168  11679  20791 284146  21759  21628] 371171 out of 383164 (74.157%) truth events.
+	b Category: Tagger predicted	[  8916  10206  31258  17699 236550  85852] 390481 out of 383297 (61.714%) truth events.
+	QCD Category: Tagger predicted	[ 17598  14318  15186  20038  81243 229963] 378346 out of 383094 (60.027%) truth events.
+-----------------------------------
+-----------------------------------
+Running 5StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[263269  94309   9238  20843  14262  22360] 424281 out of 383294 (68.685%) truth events.
+	Z Category: Tagger predicted	[ 68604 211675  31099  13237   8150  14417] 347182 out of 383446 (55.203%) truth events.
+	H Category: Tagger predicted	[  4602  32112 263200  29129  23105   7978] 360126 out of 383280 (68.670%) truth events.
+	Top Category: Tagger predicted	[ 13577  15143  24245 278604  23368  22501] 377438 out of 383164 (72.711%) truth events.
+	b Category: Tagger predicted	[ 11460  13915  43534  21980 234567  71823] 397279 out of 383297 (61.197%) truth events.
+	QCD Category: Tagger predicted	[ 21782  16292  11964  19371  79845 244015] 393269 out of 383094 (63.695%) truth events.
+-----------------------------------
+-----------------------------------
+Running 10StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[269486  95899   8445  19478  11656  19860] 424824 out of 383294 (70.307%) truth events.
+	Z Category: Tagger predicted	[ 64810 219480  34731  14361  10168  12909] 356459 out of 383446 (57.238%) truth events.
+	H Category: Tagger predicted	[  3819  23381 259393  24190  22013   8027] 340823 out of 383280 (67.677%) truth events.
+	Top Category: Tagger predicted	[ 13885  16728  29454 286963  25071  23115] 395216 out of 383164 (74.892%) truth events.
+	b Category: Tagger predicted	[ 10314  12094  39978  18769 235631  69880] 386666 out of 383297 (61.474%) truth events.
+	QCD Category: Tagger predicted	[ 20980  15864  11279  19403  78758 249303] 395587 out of 383094 (65.076%) truth events.
+-----------------------------------
+-----------------------------------
+Running 15StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[264303  88653   8391  18079  11503  22047] 412976 out of 383294 (68.955%) truth events.
+	Z Category: Tagger predicted	[ 72588 225394  32171  13722   9711  12593] 366179 out of 383446 (58.781%) truth events.
+	H Category: Tagger predicted	[  3627  24893 263000  21344  18552   7701] 339117 out of 383280 (68.618%) truth events.
+	Top Category: Tagger predicted	[ 14812  17573  28884 293904  24024  25014] 404211 out of 383164 (76.704%) truth events.
+	b Category: Tagger predicted	[  9970  12211  37861  19449 247046  60272] 386809 out of 383297 (64.452%) truth events.
+	QCD Category: Tagger predicted	[ 17994  14722  12973  16666  72461 255467] 390283 out of 383094 (66.685%) truth events.
+-----------------------------------
+-----------------------------------
+Running 20StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279376 101137   9538  19082  12704  21613] 443450 out of 383294 (72.888%) truth events.
+	Z Category: Tagger predicted	[ 59002 218127  33723  13539   9961  12043] 346395 out of 383446 (56.885%) truth events.
+	H Category: Tagger predicted	[  3425  22728 264676  20650  19837   8347] 339663 out of 383280 (69.055%) truth events.
+	Top Category: Tagger predicted	[ 13923  16010  27666 292332  24423  22276] 396630 out of 383164 (76.294%) truth events.
+	b Category: Tagger predicted	[  9566  11186  37247  18664 256880  68297] 401840 out of 383297 (67.018%) truth events.
+	QCD Category: Tagger predicted	[ 18002  14258  10430  18897  59492 250518] 371597 out of 383094 (65.393%) truth events.
+-----------------------------------
+-----------------------------------
+Running 25StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[274103  95065   8139  17619  10616  19896] 425438 out of 383294 (71.512%) truth events.
+	Z Category: Tagger predicted	[ 61833 220861  31513  12506   9124  12348] 348185 out of 383446 (57.598%) truth events.
+	H Category: Tagger predicted	[  3802  24807 271688  22229  20893   9071] 352490 out of 383280 (70.884%) truth events.
+	Top Category: Tagger predicted	[ 15897  17494  25621 297161  25409  26957] 408539 out of 383164 (77.554%) truth events.
+	b Category: Tagger predicted	[ 10115  11933  35825  19602 258486  64763] 400724 out of 383297 (67.437%) truth events.
+	QCD Category: Tagger predicted	[ 17544  13286  10494  14047  58769 250059] 364199 out of 383094 (65.273%) truth events.
+-----------------------------------
+-----------------------------------
+Running 30StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[266722  86993   8383  17298  11428  21032] 411856 out of 383294 (69.586%) truth events.
+	Z Category: Tagger predicted	[ 73761 233218  32185  14288  10892  14431] 378775 out of 383446 (60.821%) truth events.
+	H Category: Tagger predicted	[  4058  25479 272530  23996  20604   8952] 355619 out of 383280 (71.104%) truth events.
+	Top Category: Tagger predicted	[ 13903  14833  23471 290908  22448  22314] 387877 out of 383164 (75.922%) truth events.
+	b Category: Tagger predicted	[  8769  10215  35387  19089 254747  59941] 388148 out of 383297 (66.462%) truth events.
+	QCD Category: Tagger predicted	[ 16081  12708  11324  17585  63178 256424] 377300 out of 383094 (66.935%) truth events.
+-----------------------------------
+-----------------------------------
+Running 35StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[289950 110296  10322  22309  12959  21282] 467118 out of 383294 (75.646%) truth events.
+	Z Category: Tagger predicted	[ 50390 211412  33403  11101   8627  10304] 325237 out of 383446 (55.134%) truth events.
+	H Category: Tagger predicted	[  3113  20803 266800  20276  18732   7801] 337525 out of 383280 (69.609%) truth events.
+	Top Category: Tagger predicted	[ 11633  14660  25002 288922  21203  20633] 382053 out of 383164 (75.404%) truth events.
+	b Category: Tagger predicted	[  8458  10531  34644  20609 243635  49483] 367360 out of 383297 (63.562%) truth events.
+	QCD Category: Tagger predicted	[ 19750  15744  13109  19947  78141 273591] 420282 out of 383094 (71.416%) truth events.
+-----------------------------------
+-----------------------------------
+Running 40StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280425  98579   9207  20438  12507  22916] 444072 out of 383294 (73.161%) truth events.
+	Z Category: Tagger predicted	[ 61573 220900  30506  12876   8639  11933] 346427 out of 383446 (57.609%) truth events.
+	H Category: Tagger predicted	[  3956  26012 277479  28194  20477   9970] 366088 out of 383280 (72.395%) truth events.
+	Top Category: Tagger predicted	[ 11831  13237  18797 287302  22159  23722] 377048 out of 383164 (74.981%) truth events.
+	b Category: Tagger predicted	[  9932  12152  37482  20116 270319  73695] 423696 out of 383297 (70.524%) truth events.
+	QCD Category: Tagger predicted	[ 15577  12566   9809  14238  49196 240858] 342244 out of 383094 (62.871%) truth events.
+-----------------------------------
+-----------------------------------
+Running 45StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[277915  97630   8538  18550  10421  18430] 431484 out of 383294 (72.507%) truth events.
+	Z Category: Tagger predicted	[ 58818 219010  30238  12629   8532  12018] 341245 out of 383446 (57.116%) truth events.
+	H Category: Tagger predicted	[  4074  25806 275863  22603  21506   8789] 358641 out of 383280 (71.974%) truth events.
+	Top Category: Tagger predicted	[ 13123  15055  23793 296701  25290  25872] 399834 out of 383164 (77.434%) truth events.
+	b Category: Tagger predicted	[  9459  11388  32885  17389 248711  54288] 374120 out of 383297 (64.887%) truth events.
+	QCD Category: Tagger predicted	[ 19905  14557  11963  15292  68837 263697] 394251 out of 383094 (68.833%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[267435  86090   8237  19138  11465  19949] 412314 out of 383294 (69.772%) truth events.
+	Z Category: Tagger predicted	[ 72482 228853  27496  13087   9369  13168] 364455 out of 383446 (59.683%) truth events.
+	H Category: Tagger predicted	[  5705  32161 285868  27181  26540  11196] 388651 out of 383280 (74.584%) truth events.
+	Top Category: Tagger predicted	[ 12109  13552  20512 292301  24169  24580] 387223 out of 383164 (76.286%) truth events.
+	b Category: Tagger predicted	[  7917   9272  30232  16017 244038  53446] 360922 out of 383297 (63.668%) truth events.
+	QCD Category: Tagger predicted	[ 17646  13518  10935  15440  67716 260755] 386010 out of 383094 (68.065%) truth events.
+-----------------------------------
+-----------------------------------
+Running 55StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[277057  93286   9092  19769  12051  21927] 433182 out of 383294 (72.283%) truth events.
+	Z Category: Tagger predicted	[ 66050 232859  35879  13971  10573  13488] 372820 out of 383446 (60.727%) truth events.
+	H Category: Tagger predicted	[  3299  20476 270283  21728  19488   8543] 343817 out of 383280 (70.518%) truth events.
+	Top Category: Tagger predicted	[ 12238  13644  22231 290163  21612  21821] 381709 out of 383164 (75.728%) truth events.
+	b Category: Tagger predicted	[  9496  11010  35641  19643 263644  66007] 405441 out of 383297 (68.783%) truth events.
+	QCD Category: Tagger predicted	[ 15154  12171  10154  17890  55929 251308] 362606 out of 383094 (65.599%) truth events.
+-----------------------------------
+-----------------------------------
+Running 60StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[261796  81692   7221  16888   9556  18024] 395177 out of 383294 (68.301%) truth events.
+	Z Category: Tagger predicted	[ 76156 241226  37194  14905  10378  13755] 393614 out of 383446 (62.910%) truth events.
+	H Category: Tagger predicted	[  2990  19688 267986  20205  19308   8477] 338654 out of 383280 (69.919%) truth events.
+	Top Category: Tagger predicted	[ 13338  14331  24345 292341  22370  21432] 388157 out of 383164 (76.296%) truth events.
+	b Category: Tagger predicted	[ 10408  12079  35409  19866 260692  62941] 401395 out of 383297 (68.013%) truth events.
+	QCD Category: Tagger predicted	[ 18606  14430  11125  18959  60993 258465] 382578 out of 383094 (67.467%) truth events.
+-----------------------------------
+-----------------------------------
+Running 65StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273488  90860   8496  18277  11331  20395] 422847 out of 383294 (71.352%) truth events.
+	Z Category: Tagger predicted	[ 65968 228222  32032  11300   9385  11938] 358845 out of 383446 (59.518%) truth events.
+	H Category: Tagger predicted	[  3167  22304 268339  19312  16733   7138] 336993 out of 383280 (70.011%) truth events.
+	Top Category: Tagger predicted	[ 14837  17017  25352 299962  24709  25435] 407312 out of 383164 (78.285%) truth events.
+	b Category: Tagger predicted	[  9062  11010  36659  18184 259721  60613] 395249 out of 383297 (67.759%) truth events.
+	QCD Category: Tagger predicted	[ 16772  14033  12402  16129  61418 257575] 378329 out of 383094 (67.235%) truth events.
+-----------------------------------
+-----------------------------------
+Running 70StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271467  88933   8159  18131  11414  20309] 418413 out of 383294 (70.824%) truth events.
+	Z Category: Tagger predicted	[ 69127 234352  34310  13078  10184  13000] 374051 out of 383446 (61.117%) truth events.
+	H Category: Tagger predicted	[  4432  23587 280107  26633  24999  11268] 371026 out of 383280 (73.081%) truth events.
+	Top Category: Tagger predicted	[ 13179  14039  19847 292350  23535  24023] 386973 out of 383164 (76.298%) truth events.
+	b Category: Tagger predicted	[  8058   9209  29973  16157 248831  55260] 367488 out of 383297 (64.918%) truth events.
+	QCD Category: Tagger predicted	[ 17031  13326  10884  16815  64334 259234] 381624 out of 383094 (67.668%) truth events.
+-----------------------------------
+-----------------------------------
+Running 75StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[275572  91162   8673  20591  12307  22021] 430326 out of 383294 (71.895%) truth events.
+	Z Category: Tagger predicted	[ 68237 231361  31380  14327   9602  13485] 368392 out of 383446 (60.337%) truth events.
+	H Category: Tagger predicted	[  5233  26869 281583  26323  24786  11179] 375973 out of 383280 (73.466%) truth events.
+	Top Category: Tagger predicted	[ 10836  12108  19728 289297  24150  23136] 379255 out of 383164 (75.502%) truth events.
+	b Category: Tagger predicted	[  8806  10052  32723  16945 261540  67734] 397800 out of 383297 (68.234%) truth events.
+	QCD Category: Tagger predicted	[ 14610  11894   9193  15681  50912 245539] 347829 out of 383094 (64.093%) truth events.
+-----------------------------------
+-----------------------------------
+Running 80StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[266676  86338   7594  17194   8955  17263] 404020 out of 383294 (69.574%) truth events.
+	Z Category: Tagger predicted	[ 69944 237424  37796  14188  10055  13797] 383204 out of 383446 (61.918%) truth events.
+	H Category: Tagger predicted	[  3522  19354 267889  21874  18899   8256] 339794 out of 383280 (69.893%) truth events.
+	Top Category: Tagger predicted	[ 12946  14075  22420 293183  22203  24267] 389094 out of 383164 (76.516%) truth events.
+	b Category: Tagger predicted	[ 11262  12508  36938  21028 264697  66246] 412679 out of 383297 (69.057%) truth events.
+	QCD Category: Tagger predicted	[ 18944  13747  10643  15697  58488 253265] 370784 out of 383094 (66.110%) truth events.
+-----------------------------------
+-----------------------------------
+Running 85StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265071  83943   8307  18044  10309  17841] 403515 out of 383294 (69.156%) truth events.
+	Z Category: Tagger predicted	[ 73552 237085  33767  14232   9328  12850] 380814 out of 383446 (61.830%) truth events.
+	H Category: Tagger predicted	[  3744  22358 274162  24076  20202   9214] 353756 out of 383280 (71.530%) truth events.
+	Top Category: Tagger predicted	[ 12199  13525  20768 288967  22125  20972] 378556 out of 383164 (75.416%) truth events.
+	b Category: Tagger predicted	[  9657  11402  34935  17732 255271  58186] 387183 out of 383297 (66.598%) truth events.
+	QCD Category: Tagger predicted	[ 19071  15133  11341  20113  66062 264031] 395751 out of 383094 (68.920%) truth events.
+-----------------------------------
+-----------------------------------
+Running 90StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[270387  87641   8050  18598  11053  21102] 416831 out of 383294 (70.542%) truth events.
+	Z Category: Tagger predicted	[ 72566 239614  36771  15299  11536  14732] 390518 out of 383446 (62.489%) truth events.
+	H Category: Tagger predicted	[  3509  21027 273610  24993  20097   8820] 352056 out of 383280 (71.386%) truth events.
+	Top Category: Tagger predicted	[ 11830  12416  19343 289188  22911  22892] 378580 out of 383164 (75.473%) truth events.
+	b Category: Tagger predicted	[  9781  11167  36023  18373 263464  66627] 405435 out of 383297 (68.736%) truth events.
+	QCD Category: Tagger predicted	[ 15221  11581   9483  16713  54236 248921] 356155 out of 383094 (64.976%) truth events.
+-----------------------------------
+-----------------------------------
+Running 95StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[274268  92278   8499  18253  11879  20376] 425553 out of 383294 (71.555%) truth events.
+	Z Category: Tagger predicted	[ 67364 231604  33808  15450  10629  13721] 372576 out of 383446 (60.400%) truth events.
+	H Category: Tagger predicted	[  3970  23220 276348  24800  22000   9043] 359381 out of 383280 (72.100%) truth events.
+	Top Category: Tagger predicted	[ 11809  12608  20279 286769  21506  19985] 372956 out of 383164 (74.842%) truth events.
+	b Category: Tagger predicted	[  8359   9747  32998  17539 256230  61200] 386073 out of 383297 (66.848%) truth events.
+	QCD Category: Tagger predicted	[ 17524  13989  11348  20353  61053 258769] 383036 out of 383094 (67.547%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273841  91714   7597  18973  10743  19705] 422573 out of 383294 (71.444%) truth events.
+	Z Category: Tagger predicted	[ 68248 231097  33523  14743  11280  14163] 373054 out of 383446 (60.268%) truth events.
+	H Category: Tagger predicted	[  3933  23944 273830  21891  20282   8851] 352731 out of 383280 (71.443%) truth events.
+	Top Category: Tagger predicted	[ 11270  12680  21822 287248  20493  19515] 373028 out of 383164 (74.967%) truth events.
+	b Category: Tagger predicted	[  8928  10276  34986  20954 260911  64119] 400174 out of 383297 (68.070%) truth events.
+	QCD Category: Tagger predicted	[ 17074  13735  11522  19355  59588 256741] 378015 out of 383094 (67.017%) truth events.
+-----------------------------------
+-----------------------------------
+Running 105StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281424  98061   8933  20133  12411  21309] 442271 out of 383294 (73.422%) truth events.
+	Z Category: Tagger predicted	[ 60337 222983  32164  12850   8740  11484] 348558 out of 383446 (58.152%) truth events.
+	H Category: Tagger predicted	[  3918  23516 273020  22127  19595   8440] 350616 out of 383280 (71.232%) truth events.
+	Top Category: Tagger predicted	[ 11195  12906  22005 289030  21613  20912] 377661 out of 383164 (75.432%) truth events.
+	b Category: Tagger predicted	[  8549  11010  34971  19504 256757  59602] 390393 out of 383297 (66.986%) truth events.
+	QCD Category: Tagger predicted	[ 17871  14970  12187  19520  64181 261347] 390076 out of 383094 (68.220%) truth events.
+-----------------------------------
+-----------------------------------
+Running 110StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[267671  86142   8159  17644  10123  18500] 408239 out of 383294 (69.834%) truth events.
+	Z Category: Tagger predicted	[ 72395 239296  36527  15853  10620  15332] 390023 out of 383446 (62.406%) truth events.
+	H Category: Tagger predicted	[  3482  20195 270919  23985  18928   8765] 346274 out of 383280 (70.684%) truth events.
+	Top Category: Tagger predicted	[ 11989  12830  19979 287786  20986  21303] 374873 out of 383164 (75.107%) truth events.
+	b Category: Tagger predicted	[ 10116  11955  37123  20218 262154  62516] 404082 out of 383297 (68.394%) truth events.
+	QCD Category: Tagger predicted	[ 17641  13028  10573  17678  60486 256678] 376084 out of 383094 (67.001%) truth events.
+-----------------------------------
+-----------------------------------
+Running 115StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[277584  95403   9669  19247  11911  21219] 435033 out of 383294 (72.420%) truth events.
+	Z Category: Tagger predicted	[ 64459 231037  35271  14867  10395  13571] 369600 out of 383446 (60.252%) truth events.
+	H Category: Tagger predicted	[  2864  19513 263773  17905  17724   7339] 329118 out of 383280 (68.819%) truth events.
+	Top Category: Tagger predicted	[ 12682  13901  26967 297368  25616  24503] 401037 out of 383164 (77.608%) truth events.
+	b Category: Tagger predicted	[  8504  10052  34643  16458 245178  50649] 365484 out of 383297 (63.965%) truth events.
+	QCD Category: Tagger predicted	[ 17201  13540  12957  17319  72473 265813] 399303 out of 383094 (69.385%) truth events.
+-----------------------------------
+-----------------------------------
+Running 120StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278613  96584   9653  18182  12792  20780] 436604 out of 383294 (72.689%) truth events.
+	Z Category: Tagger predicted	[ 62792 227370  33904  14247  10656  13402] 362371 out of 383446 (59.296%) truth events.
+	H Category: Tagger predicted	[  3519  21951 272879  22911  20490   8923] 350673 out of 383280 (71.195%) truth events.
+	Top Category: Tagger predicted	[ 13702  14570  22727 292773  23451  22880] 390103 out of 383164 (76.409%) truth events.
+	b Category: Tagger predicted	[  7537   9195  31925  16714 246368  52591] 364330 out of 383297 (64.276%) truth events.
+	QCD Category: Tagger predicted	[ 17131  13776  12192  18337  69540 264518] 395494 out of 383094 (69.047%) truth events.
+-----------------------------------
+-----------------------------------
+Running 125StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271686  93028   8813  17212   9741  17148] 417628 out of 383294 (70.881%) truth events.
+	Z Category: Tagger predicted	[ 65048 226814  33184  13922   9583  13646] 362197 out of 383446 (59.151%) truth events.
+	H Category: Tagger predicted	[  3375  22120 266752  20594  16515   7562] 336918 out of 383280 (69.597%) truth events.
+	Top Category: Tagger predicted	[ 11674  12461  22821 285855  20042  18178] 371031 out of 383164 (74.603%) truth events.
+	b Category: Tagger predicted	[ 11347  13296  39795  22114 263767  63418] 413737 out of 383297 (68.815%) truth events.
+	QCD Category: Tagger predicted	[ 20164  15727  11915  23467  63649 263142] 398064 out of 383094 (68.688%) truth events.
+-----------------------------------
+-----------------------------------
+Running 130StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271328  91990   7994  16620   9352  17615] 414899 out of 383294 (70.788%) truth events.
+	Z Category: Tagger predicted	[ 64024 227574  33593  13893   9557  14031] 362672 out of 383446 (59.349%) truth events.
+	H Category: Tagger predicted	[  4158  23061 272615  23563  19582   9208] 352187 out of 383280 (71.126%) truth events.
+	Top Category: Tagger predicted	[ 13293  14233  21330 288431  21119  19637] 378043 out of 383164 (75.276%) truth events.
+	b Category: Tagger predicted	[ 11919  12817  37918  19517 269773  71493] 423437 out of 383297 (70.382%) truth events.
+	QCD Category: Tagger predicted	[ 18572  13771   9830  21140  53914 251110] 368337 out of 383094 (65.547%) truth events.
+-----------------------------------
+-----------------------------------
+Running 135StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279253 101986   9316  17676  11369  17998] 437598 out of 383294 (72.856%) truth events.
+	Z Category: Tagger predicted	[ 56339 214899  31195  12494   9846  12352] 337125 out of 383446 (56.044%) truth events.
+	H Category: Tagger predicted	[  4377  25595 274432  21287  21647   9531] 356869 out of 383280 (71.600%) truth events.
+	Top Category: Tagger predicted	[ 15170  16250  25100 299488  26370  26236] 408614 out of 383164 (78.161%) truth events.
+	b Category: Tagger predicted	[  8698  10240  33063  15974 252166  58951] 379092 out of 383297 (65.788%) truth events.
+	QCD Category: Tagger predicted	[ 19457  14476  10174  16245  61899 258026] 380277 out of 383094 (67.353%) truth events.
+-----------------------------------
+-----------------------------------
+Running 140StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[285430 103479   9739  19438  13192  22230] 453508 out of 383294 (74.467%) truth events.
+	Z Category: Tagger predicted	[ 55644 218568  33352  12181   9746  12107] 341598 out of 383446 (57.000%) truth events.
+	H Category: Tagger predicted	[  4183  22837 271735  22593  20300   8391] 350039 out of 383280 (70.897%) truth events.
+	Top Category: Tagger predicted	[ 13584  14647  23258 296335  25642  25981] 399447 out of 383164 (77.338%) truth events.
+	b Category: Tagger predicted	[  8209   9928  33452  16528 251983  58741] 378841 out of 383297 (65.740%) truth events.
+	QCD Category: Tagger predicted	[ 16244  13987  11744  16089  62434 255644] 376142 out of 383094 (66.731%) truth events.
+-----------------------------------
+-----------------------------------
+Running 145StandardScaler2017_newBESTMask_noDeepAK8noNJets_trimIso_tweakedOldBEST_BigChoke:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[268266  89285   8584  17309  10201  19728] 413373 out of 383294 (69.989%) truth events.
+	Z Category: Tagger predicted	[ 68983 231892  34621  14536   9682  12747] 372461 out of 383446 (60.475%) truth events.
+	H Category: Tagger predicted	[  3995  22039 271189  24113  19711   8429] 349476 out of 383280 (70.754%) truth events.
+	Top Category: Tagger predicted	[ 13790  13829  21081 287219  22216  21302] 379437 out of 383164 (74.959%) truth events.
+	b Category: Tagger predicted	[ 10279  11561  35310  20263 258573  63133] 399119 out of 383297 (67.460%) truth events.
+	QCD Category: Tagger predicted	[ 17981  14840  12495  19724  62914 257755] 385709 out of 383094 (67.282%) truth events.
+-----------------------------------

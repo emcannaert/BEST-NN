@@ -1,0 +1,40 @@
+-----------------------------------
+Running deepAK8:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[253840  51645   3135  19282  13722  17318] 358942 out of 383294 (66.225%) truth events.
+	Z Category: Tagger predicted	[ 96428 267061  25897  18518  18956   9767] 436627 out of 383446 (69.647%) truth events.
+	H Category: Tagger predicted	[ 11467  43274 319394  58460  54100  22780] 509475 out of 383280 (83.331%) truth events.
+	Top Category: Tagger predicted	[  4432   5056  13758 267242  30840  14611] 335939 out of 383164 (69.746%) truth events.
+	b Category: Tagger predicted	[   361   1043  12528   6629 111973  13472] 146006 out of 383297 (29.213%) truth events.
+	QCD Category: Tagger predicted	[ 16766  15367   8568  13033 153706 305146] 512586 out of 383094 (79.653%) truth events.
+-----------------------------------
+-----------------------------------
+Running deepAK8:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[149214  82308   5102  35270  21373  41156] 334423 out of 383294 (38.929%) truth events.
+	Z Category: Tagger predicted	[103276 127909  27495  19537  21055  15442] 314714 out of 383446 (33.357%) truth events.
+	H Category: Tagger predicted	[ 71653 119537 305421  98730 117310  60562] 773213 out of 383280 (79.686%) truth events.
+	Top Category: Tagger predicted	[ 16013  15888  34811 208214  89467  27389] 391782 out of 383164 (54.340%) truth events.
+	b Category: Tagger predicted	[  365   882  4049  3876 23187  5204] 37563 out of 383297 (6.0493%) truth events.
+	QCD Category: Tagger predicted	[ 42773  36922   6402  17537 110905 233341] 447880 out of 383094 (60.909%) truth events.
+-----------------------------------
+-----------------------------------
+Running deepAK8:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[253840  51645   3135  19282  13722  17318] 358942 out of 383294 (66.225%) truth events.
+	Z Category: Tagger predicted	[ 96428 267061  25897  18518  18956   9767] 436627 out of 383446 (69.647%) truth events.
+	H Category: Tagger predicted	[ 11467  43274 319394  58460  54100  22780] 509475 out of 383280 (83.331%) truth events.
+	Top Category: Tagger predicted	[  4432   5056  13758 267242  30840  14611] 335939 out of 383164 (69.746%) truth events.
+	b Category: Tagger predicted	[   361   1043  12528   6629 111973  13472] 146006 out of 383297 (29.213%) truth events.
+	QCD Category: Tagger predicted	[ 16766  15367   8568  13033 153706 305146] 512586 out of 383094 (79.653%) truth events.
+-----------------------------------
+-----------------------------------
+Running deepAK8:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[149214  82308   5102  35270  21373  41156] 334423 out of 383294 (38.929%) truth events.
+	Z Category: Tagger predicted	[103276 127909  27495  19537  21055  15442] 314714 out of 383446 (33.357%) truth events.
+	H Category: Tagger predicted	[ 71653 119537 305421  98730 117310  60562] 773213 out of 383280 (79.686%) truth events.
+	Top Category: Tagger predicted	[ 16013  15888  34811 208214  89467  27389] 391782 out of 383164 (54.340%) truth events.
+	b Category: Tagger predicted	[  365   882  4049  3876 23187  5204] 37563 out of 383297 (6.0493%) truth events.
+	QCD Category: Tagger predicted	[ 42773  36922   6402  17537 110905 233341] 447880 out of 383094 (60.909%) truth events.
+-----------------------------------
