@@ -30,9 +30,9 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
-# listOfSamples = ["HH"]
-# listOfSamples = ["RSG"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
+# sampleTypes = ["HH"]
+# sampleTypes = ["RSG"]
 years = ["2016","2017","2018"]
 treeName = "run/jetTree"
 
@@ -234,7 +234,8 @@ def storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug):
         # Create dataset if first batch, otherwise append to dataset
         if numIter == 0:
             pfsvDS[myDFKey] = h5f.create_dataset(myDFKey, data=jetDF[myDFKey], maxshape=(None, jetDF[myDFKey].shape[1],jetDF[myDFKey].shape[2]), 
-                                                 chunks = (chunkEvents, maxObjects, len(vars)), compression="lzf", shuffle=True)
+                                                #  chunks = (chunkEvents, maxObjects, len(vars)), compression="lzf", shuffle=True)
+                                                 chunks = (1, maxObjects, len(vars)), compression="lzf", shuffle=True)
         else:
             pfsvDS[myDFKey].resize(pfsvDS[myDFKey].shape[0] + jetDF[myDFKey].shape[0], axis=0)
             pfsvDS[myDFKey][-len(jetDF[myDFKey]) :] = jetDF[myDFKey] 
@@ -272,13 +273,13 @@ if __name__ == "__main__":
     parser.add_argument('-d','--debug',
                         action='store_true')
     args = parser.parse_args()
-    if not args.samples == "all": listOfSamples = args.samples.split(',')
+    if not args.samples == "all": sampleTypes = args.samples.split(',')
     if not args.years == "all": years = args.years.split(',')
     if args.stopAt > 0: stopAt = args.stopAt
 
     # Diagnostic debug
     if args.debug:
-        print("Samples to process:", listOfSamples)
+        print("Samples to process:", sampleTypes)
         print("Years to process:", years)
         print("Reading every nEvents:", stopAt)
 
@@ -286,7 +287,7 @@ if __name__ == "__main__":
     if not os.path.isdir(args.outDir): os.mkdir(args.outDir)
 
     # Loop over samples and convert each separately
-    for sampleType in listOfSamples:
+    for sampleType in sampleTypes:
         for year in years:
             print("Processing", sampleType, year)
             convert(args.eosDir, args.outDir, sampleType, year, args.debug)

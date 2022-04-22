@@ -18,7 +18,7 @@ import h5py
 # setTypes = ["test", "validation"]
 setTypes = ["test", "validation", "train"]
 # setTypes = ["test"]
-listOfSamples = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_ULv1/"
 
 eventDict = {
