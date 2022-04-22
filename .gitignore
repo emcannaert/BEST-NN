@@ -5,7 +5,7 @@
 *.pdf
 *crab_projects*
 *log*
-*/Logs/*
+# */Logs/*
 *.h5
 *.pkl
 *.out

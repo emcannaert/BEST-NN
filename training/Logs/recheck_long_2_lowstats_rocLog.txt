@@ -1,0 +1,2 @@
+140Basic300Wak8HiggsTop400:    Avg: nan, W: nan, Z: nan, Higgs: nan, Top: nan, Bottom: nan, QCD: nan, avg: 0.936665
+140Basic300Wbothak8HT400:      Avg: 0.928163, W: 0.937091, Z: 0.906258, Higgs: 0.930931, Top: 0.883855, Bottom: 0.937439, QCD: 0.973218, avg: 0.923066

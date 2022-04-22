@@ -1,0 +1,144 @@
+Ran newBEST_Basic, took 502m 53s to complete.
+Ran newBEST_Basic, newBESTMask_300_Z.txt, took 502m 53s to complete.
+Finished 100, took 505m 36s to complete.
+Finished script, total time was 518m 20s to complete.
+Ran newBEST_Basic, took 631m 35s to complete.
+Ran newBEST_Basic, newBESTMask_300_Z_noAKvar.txt, took 631m 35s to complete.
+Finished 100, took 632m 42s to complete.
+Finished script, total time was 640m 17s to complete.
+Ran newBEST_Basic, took 111m 37s to complete.
+Ran newBEST_Basic, took 142m 52s to complete.
+Ran newBEST_Basic, took 179m 43s to complete.
+Ran newBEST_Basic, newBESTMask_300_Soft.txt, took 111m 37s to complete.
+Ran newBEST_Basic, took 90m 1s to complete.
+Ran newBEST_Basic, newBESTMask_300_B_Soft.txt, took 90m 1s to complete.
+Ran newBEST_Basic, took 74m 37s to complete.
+Ran newBEST_Basic, newBESTMask_300_ZB_Soft.txt, took 142m 52s to complete.
+Ran newBEST_Basic, took 145m 45s to complete.
+Ran newBEST_Basic, newBESTMask_300.txt, took 179m 43s to complete.
+Ran newBEST_Basic, took 187m 10s to complete.
+Ran newBEST_Basic, newBESTMask_300_noSoft.txt, took 74m 37s to complete.
+Ran newBEST_Basic, took 137m 44s to complete.
+Ran newBEST_Basic, newBESTMask_300_B_noSoft.txt, took 137m 44s to complete.
+Finished 100, took 414m 59s to complete.
+Finished script, total time was 422m 57s to complete.
+Ran newBEST_Basic, newBESTMask_300_Z_Soft.txt, took 145m 45s to complete.
+Ran newBEST_Basic, took 150m 32s to complete.
+Ran newBEST_Basic, took 286m 18s to complete.
+Ran newBEST_Basic, newBESTMask_allFrames.txt, took 286m 18s to complete.
+Finished 100, took 287m 22s to complete.
+Finished script, total time was 296m 57s to complete.
+Ran newBEST_Basic, took 112m 46s to complete.
+Ran newBEST_Basic, took 153m 1s to complete.
+Ran newBEST_Basic, newBESTMask_300_ZB_noSoft.txt, took 150m 33s to complete.
+Ran newBEST_Basic, took 176m 21s to complete.
+Ran newBEST_Basic, newBESTMask_300_Z_noSoft.txt, took 176m 21s to complete.
+Finished 100, took 616m 27s to complete.
+Finished script, total time was 622m 49s to complete.
+Ran newBEST_Basic, newBESTMask_300_Z.txt, took 187m 10s to complete.
+Ran newBEST_Basic, took 268m 12s to complete.
+Ran newBEST_Basic, newBESTMask_ak8noSoft.txt, took 112m 46s to complete.
+Ran newBEST_Basic, took 112m 27s to complete.
+Ran newBEST_Basic, took 113m 27s to complete.
+Ran newBEST_Basic, newBESTMask.txt, took 153m 1s to complete.
+Ran newBEST_Basic, took 176m 47s to complete.
+Ran newBEST_Basic, newBESTMask_300_ZB.txt, took 268m 12s to complete.
+Ran newBEST_Basic, took 229m 0s to complete.
+Ran newBEST_Basic, newBESTMask_300_B.txt, took 229m 0s to complete.
+Finished 100, took 865m 12s to complete.
+Finished script, total time was 875m 14s to complete.
+Ran newBEST_Basic, newBESTMask_300.txt, took 113m 27s to complete.
+Ran newBEST_Basic, took 95m 38s to complete.
+Ran newBEST_Basic, newBESTMask_ak8Soft.txt, took 112m 27s to complete.
+Ran newBEST_Basic, took 192m 54s to complete.
+Ran newBEST_Basic, newBESTMask_ak8.txt, took 192m 54s to complete.
+Finished 100, took 419m 13s to complete.
+Finished script, total time was 425m 17s to complete.
+Ran newBEST_Basic, newBESTMask_250.txt, took 95m 38s to complete.
+Ran newBEST_Basic, took 100m 25s to complete.
+Ran newBEST_Basic, took 96m 42s to complete.
+Ran newBEST_Basic, newBESTMask_ZnoW.txt, took 176m 47s to complete.
+Ran newBEST_Basic, took 212m 49s to complete.
+Ran newBEST_Basic, took 174m 49s to complete.
+Ran newBEST_Basic, newBESTMask_350.txt, took 100m 25s to complete.
+Ran newBEST_Basic, took 100m 11s to complete.
+Ran newBEST_Basic, newBESTMask_400.txt, took 100m 11s to complete.
+Finished 100, took 410m 52s to complete.
+Finished script, total time was 417m 53s to complete.
+Ran newBEST_Basic, newBESTMask_150.txt, took 96m 42s to complete.
+Ran newBEST_Basic, took 131m 39s to complete.
+Ran newBEST_Basic, newBESTMask_100.txt, took 131m 39s to complete.
+Finished 100, took 229m 28s to complete.
+Finished script, total time was 238m 21s to complete.
+Ran newBEST_Basic, newBESTMask_200.txt, took 174m 49s to complete.
+Ran newBEST_Basic, took 105m 27s to complete.
+Ran newBEST_Basic, newBESTMask_50.txt, took 105m 27s to complete.
+Finished 100, took 281m 21s to complete.
+Finished script, total time was 293m 26s to complete.
+Ran newBEST_Basic, newBESTMask_Z.txt, took 212m 49s to complete.
+Ran newBEST_Basic, took 228m 23s to complete.
+Ran newBEST_Basic, newBESTMask_B.txt, took 228m 23s to complete.
+Ran newBEST_Basic, took 274m 49s to complete.
+Ran newBEST_Basic, newBESTMask_ZB.txt, took 274m 49s to complete.
+Finished 100, took 1048m 21s to complete.
+Finished script, total time was 1063m 42s to complete.
+Ran newBEST_Basic, took 101m 4s to complete.
+Ran newBEST_Basic, fixBESTMask_noAKvar.txt, took 101m 4s to complete.
+Finished 100, took 102m 11s to complete.
+Finished script, total time was 107m 41s to complete.
+Ran newBEST_Basic, took 114m 56s to complete.
+Ran newBEST_Basic, took 246m 6s to complete.
+Ran newBEST_Basic, took 255m 14s to complete.
+Ran newBEST_Basic, took 206m 46s to complete.
+Ran newBEST_Basic, fixBESTMask_200.txt, took 114m 56s to complete.
+Ran newBEST_Basic, took 130m 5s to complete.
+Ran newBEST_Basic, fixBESTMask_400.txt, took 130m 5s to complete.
+Ran newBEST_Basic, took 139m 48s to complete.
+Ran newBEST_Basic, fixBESTMask_200400.txt, took 139m 48s to complete.
+Finished 100, took 385m 57s to complete.
+Finished script, total time was 394m 18s to complete.
+Ran newBEST_Basic, fixBESTMask_noSoft.txt, took 246m 6s to complete.
+Ran newBEST_Basic, took 221m 14s to complete.
+Ran newBEST_Basic, fixBESTMask_Soft.txt, took 221m 14s to complete.
+Ran newBEST_Basic, fixBESTMask_ZB.txt, took 206m 47s to complete.
+Ran newBEST_Basic, took 195m 18s to complete.
+Ran newBEST_Basic, fixBESTMask_ak8.txt, took 195m 18s to complete.
+Finished 100, took 404m 12s to complete.
+Finished script, total time was 416m 24s to complete.
+Ran newBEST_Basic, fixBESTMask_Z.txt, took 255m 14s to complete.
+Ran newBEST_Basic, took 327m 28s to complete.
+Ran newBEST_Basic, fixBESTMask_B.txt, took 327m 28s to complete.
+Ran newBEST_Basic, took 225m 55s to complete.
+Ran newBEST_Basic, fixBESTMask.txt, took 225m 55s to complete.
+Ran newBEST_Basic, took 182m 36s to complete.
+Ran newBEST_Basic, fixBESTMask_noAKvar.txt, took 182m 36s to complete.
+Finished 100, took 410m 20s to complete.
+Finished script, total time was 429m 29s to complete.
+Ran newBEST_Basic, took 524m 0s to complete.
+Ran newBEST_Basic, took 579m 10s to complete.
+Ran newBEST_Basic, took 660m 34s to complete.
+Ran newBEST_Basic, took 737m 24s to complete.
+Ran newBEST_Basic, fixBESTMask_ak8.txt, took 524m 0s to complete.
+Ran newBEST_Basic, took 530m 30s to complete.
+Ran newBEST_Basic, fixBESTMask_ak8_noAKvar.txt, took 530m 30s to complete.
+Finished 100, took 1056m 18s to complete.
+Finished script, total time was 1075m 14s to complete.
+Ran newBEST_Basic, fixBESTMask_Z.txt, took 579m 10s to complete.
+Ran newBEST_Basic, took 535m 17s to complete.
+Ran newBEST_Basic, fixBESTMask_Z_noAKvar.txt, took 535m 17s to complete.
+Finished 100, took 1117m 19s to complete.
+Finished script, total time was 1133m 29s to complete.
+Ran newBEST_Basic, fixBESTMask_B.txt, took 660m 34s to complete.
+Ran newBEST_Basic, took 611m 10s to complete.
+Ran newBEST_Basic, fixBESTMask_B_noAKvar.txt, took 611m 10s to complete.
+Finished 100, took 1273m 58s to complete.
+Finished script, total time was 1288m 13s to complete.
+Ran newBEST_Basic, fixBESTMask_ZB.txt, took 737m 24s to complete.
+Ran newBEST_Basic, took 689m 31s to complete.
+Ran newBEST_Basic, fixBESTMask_ZB_noAKvar.txt, took 689m 31s to complete.
+Finished 100, took 1429m 31s to complete.
+Finished script, total time was 1444m 56s to complete.
+Ran newBEST_Basic, took 652m 17s to complete.
+Ran newBEST_Basic, fixBESTMask_ak8Z.txt, took 652m 17s to complete.
+Finished 100, took 654m 57s to complete.
+Finished script, total time was 665m 9s to complete.
