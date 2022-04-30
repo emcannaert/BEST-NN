@@ -237,7 +237,7 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
         if [[ $year == "2016" ]] && [[ $dataset =~ "RunIISummer20UL16MiniAODAPV" ]] ; then continue; fi
 
         # Skip QCD datasets with low pT, and also any MuEnriched datasets that may be present:
-        if [[ $particle == "QCD" ]] && [[ $dataset =~ ("15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"Enriched"|"bcToE") ]]; then continue; fi
+        if [[ $particle == "QCD" ]] && [[ $dataset =~ ("Flat"|"15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"Enriched"|"bcToE") ]]; then continue; fi
 
 
         # Special case for RSGluon TT samples
