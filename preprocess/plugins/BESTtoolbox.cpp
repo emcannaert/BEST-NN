@@ -305,12 +305,12 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // Turn this into case statement? Update after BEST testing
     if      ( mass == "ak8" )           thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)jet->mass() );
     else if ( mass == "ak8SoftDrop" )   thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), jet->userFloat("ak8PFJetsPuppiSoftDropMass") );
-    else if ( mass == "Bottom" )        thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 6.0 );
+    // else if ( mass == "Bottom" )        thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 6.0 );
     else if ( mass == "W" )             thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 80.4 );
-    else if ( mass == "Z" )             thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 91.2 );
+    // else if ( mass == "Z" )             thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 91.2 );
     else if ( mass == "Higgs" )         thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 125.0 );
     else if ( mass == "Top" )           thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 172.5 );
-    else if ( mass == "Lab")            thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), thisJet.M() );
+    // else if ( mass == "Lab")            thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), thisJet.M() );
     else                                thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), std::stof(mass) ); // The "GeV" automatically gets trimmed when converting to float
 
     
