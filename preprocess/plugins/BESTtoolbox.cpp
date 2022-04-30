@@ -537,9 +537,9 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
     */
     // loop over rest frames
     for(unsigned int iFrame = 0; iFrame < restMasses.size(); iFrame++){
+        std::string frame = restMasses[iFrame];
         /*
         // std::string frame = std::to_string(restMasses[iFrame]);
-        std::string frame = restMasses[iFrame];
         // loop over candidates in the rest frame
         for(auto icand = boostedDaughters[frame+"Frame"].begin(); icand != boostedDaughters[frame+"Frame"].end(); icand++){
             // Calculate delta eta and phi for the candidates to the center of the jet
