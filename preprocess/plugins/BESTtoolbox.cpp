@@ -454,6 +454,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
                     //    std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
                        std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> restMasses,
                        std::map<std::string, std::vector<float> > &jetVecVars, int jetColl ){
+    /*
     // loop over lab frame candidates
     for(unsigned int i = 0; i < daughtersOfJet.size(); i++){
 
@@ -532,9 +533,10 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         }
     }
 
+    */
     // loop over rest frames
     for(unsigned int iFrame = 0; iFrame < restMasses.size(); iFrame++){
-
+        /*
         // std::string frame = std::to_string(restMasses[iFrame]);
         std::string frame = restMasses[iFrame];
         // loop over candidates in the rest frame
@@ -579,14 +581,14 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
             //     jetVecVars[frame+"Frame_PF_candidate_PUPPI_Weights"].push_back( iparticle->puppiWeight() );
             // }
         }
-
+        */
         // loop over rest frame jets
         for(auto ijet = restJets[frame+"Frame"].begin(); ijet != restJets[frame+"Frame"].end(); ijet++){
             // store the rest frame jet information
-            jetVecVars[frame+"Frame_jet_px"].push_back(ijet->px());
-            jetVecVars[frame+"Frame_jet_py"].push_back(ijet->py());
-            jetVecVars[frame+"Frame_jet_pz"].push_back(ijet->pz());
-            jetVecVars[frame+"Frame_jet_energy"].push_back(ijet->e());
+            jetVecVars["jet_px_"+frame].push_back(ijet->px());
+            jetVecVars["jet_py_"+frame].push_back(ijet->py());
+            jetVecVars["jet_pz_"+frame].push_back(ijet->pz());
+            jetVecVars["jet_energy_"+frame].push_back(ijet->e());
         }
     }
 }

@@ -310,10 +310,10 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         if (frame != "Lab"){ // Variables not saved in lab frame:
 
             // rest frame subjet variables
-            listOfVecVars.push_back(frame+"Frame_jet_px");
-            listOfVecVars.push_back(frame+"Frame_jet_py");
-            listOfVecVars.push_back(frame+"Frame_jet_pz");
-            listOfVecVars.push_back(frame+"Frame_jet_energy");
+            listOfVecVars.push_back("jet_px_"+frame);
+            listOfVecVars.push_back("jet_py_"+frame);
+            listOfVecVars.push_back("jet_pz_"+frame);
+            listOfVecVars.push_back("jet_energy_"+frame);
             
             // Fox Wolfram Moments
             listOfVars.push_back("FoxWolfH1_"+frame);
