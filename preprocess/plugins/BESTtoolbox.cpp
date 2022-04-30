@@ -386,11 +386,12 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_E(cs.inclusive_jets(0.0));
     restJets[frame+"Frame"] = jetsFJ;
 
+    std::vector<TLorentzVector> rotationJets;
     // Store reclustered jet info
     for(unsigned int i = 0; i < jetsFJ.size(); i++){
         // make a TLorentzVector for the current clustered rest frame jet
         TLorentzVector iJetLV(jetsFJ[i].px(), jetsFJ[i].py(), jetsFJ[i].pz(), jetsFJ[i].e() );
-
+        rotationJets.push_back(iJetLV);
         // get rest frame jet four vector combinations
         switch(i){
             case 0:
