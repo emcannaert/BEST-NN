@@ -85,7 +85,8 @@ process.run = cms.EDProducer('BESTProducer',
                              inputJetColl = cms.string('slimmedJetsAK8'),
                              jetColl = cms.string('PUPPI'),                     
                              # This line will be replaced by createConfig.py: jetType = cms.string("PARTICLESTRINGFLAG")
-                             storeDaughters = cms.bool(True)
+                            #  storeDaughters = cms.bool(True)
+                             storeDaughters = cms.bool(False)
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string("BESTInputs.root") )
 
