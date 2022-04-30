@@ -266,20 +266,15 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
         if(jet.DeltaR(vert) < 0.8 ){
             numMatched++;
             // save secondary vertex info for the first three sec vertices
-            jetVecVars["SV_pt"].push_back(ivert->pt() );
-            jetVecVars["SV_eta"].push_back(ivert->eta() );
-            jetVecVars["SV_phi"].push_back(ivert->phi() );
-            jetVecVars["SV_mass"].push_back(ivert->mass() );
-            jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
-            jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
-            jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
+            // jetVecVars["SV_pt"].push_back(ivert->pt() );
+            // jetVecVars["SV_eta"].push_back(ivert->eta() );
+            // jetVecVars["SV_phi"].push_back(ivert->phi() );
+            // jetVecVars["SV_mass"].push_back(ivert->mass() );
+            // jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
+            // jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
+            // jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
         }
     }
-    // abbott start to process samples to prepare for BEST training
-    // big task: format converter->SV stuff disabled there
-    // SV number is variable, NN needs a fixed amount of inputs...what do?
-    // plot nSecondaryVertices, if managable choose 10 or 5 and pad out zeroes
-    // doo root tree scans, root -b file.root, get tree, tree->Scan("nSecVert:SV_pt","cut") <- check that we are seeing all the SV that are there
     besVars["nSecondaryVertices"] = numMatched;
 }
 

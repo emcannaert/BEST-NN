@@ -257,13 +257,13 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
-    listOfVecVars.push_back("SV_pt"); // Possible bug!
-    listOfVecVars.push_back("SV_eta");
-    listOfVecVars.push_back("SV_phi");
-    listOfVecVars.push_back("SV_mass");
-    listOfVecVars.push_back("SV_nTracks");
-    listOfVecVars.push_back("SV_chi2");
-    listOfVecVars.push_back("SV_Ndof");
+    // listOfVecVars.push_back("SV_pt"); // Possible bug!
+    // listOfVecVars.push_back("SV_eta");
+    // listOfVecVars.push_back("SV_phi");
+    // listOfVecVars.push_back("SV_mass");
+    // listOfVecVars.push_back("SV_nTracks");
+    // listOfVecVars.push_back("SV_chi2");
+    // listOfVecVars.push_back("SV_Ndof");
 
     // Deep Jet b Discriminants
     listOfVars.push_back("bDisc");
