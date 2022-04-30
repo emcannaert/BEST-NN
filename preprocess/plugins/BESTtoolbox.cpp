@@ -422,7 +422,9 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
                 break;
         }
     }
-    
+
+    if (rotationJets.size()<2) return false;
+
     // Store boosted candidates for rest frames
     boostedDaughters[frame+"Frame"] = particles;
 
@@ -460,9 +462,13 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
         // Calculate delta eta and phi for the candidates to the center of the jet
         float deltaEta = daughtersOfJet[i]->eta() - jet->eta();
-        float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
 
-        //UPDATE DELTA ETA-> IF <-PI, ADD 2PI; IF >PI, SUBTRACT 2PI 
+        float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
+        // want delta phi to be from -pi to pi, not -2pi to 2pi
+        // if < -PI, add 2PI; if > PI, subtract 2PI 
+        if      (deltaPhi < -TMath::Pi()): deltaPhi += 2*TMath::Pi()
+        else if (deltaPhi >  TMath::Pi()): deltaPhi -= 2*TMath::Pi()
+
 
         // Calculate pT and Energy logarithms for candidates
         float logpT     = TMath::Log(daughtersOfJet[i]->pt());
@@ -535,7 +541,12 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         for(auto icand = boostedDaughters[frame+"Frame"].begin(); icand != boostedDaughters[frame+"Frame"].end(); icand++){
             // Calculate delta eta and phi for the candidates to the center of the jet
             float deltaEta = icand->Eta() - jet->eta();
+
             float deltaPhi = icand->Phi() - jet->phi();
+            // want delta phi to be from -pi to pi, not -2pi to 2pi
+            // if < -PI, add 2PI; if > PI, subtract 2PI 
+            if      (deltaPhi < -TMath::Pi()): deltaPhi += 2*TMath::Pi()
+            else if (deltaPhi >  TMath::Pi()): deltaPhi -= 2*TMath::Pi()
 
             // Calculate pT and Energy logarithms for candidates
             float logpT     = TMath::Log(icand->Pt());
