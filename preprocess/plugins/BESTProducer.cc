@@ -322,13 +322,13 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             listOfVars.push_back("FoxWolfH4_"+frame);
 
             // Event Shape Variables
-            listOfVars.push_back("isotropy_"+frame);
+            if (frame == "Higgs") listOfVars.push_back("isotropy");
             listOfVars.push_back("sphericity_"+frame);
             listOfVars.push_back("aplanarity_"+frame);
             listOfVars.push_back("thrust_"+frame);
 
             // Jet Mass
-            listOfVars.push_back("nJets_"+frame);
+            if (frame == "Higgs") listOfVars.push_back("nJets");
 
             listOfVars.push_back("jet12_mass_"+frame);
             listOfVars.push_back("jet23_mass_"+frame);
