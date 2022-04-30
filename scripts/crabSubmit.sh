@@ -18,13 +18,13 @@
 
 # Declare particles, years, and datatypes to submit. 
 # These need to be edited manually, as passing an argument to ./crabSubmit.sh breaks the 'crab submit ...' command later.
-declare -a myParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+declare -a allParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
 # declare -a myParticles=("bb")
 # declare -a myParticles=("QCD")
-declare -a myYears=("2016_APV" "2016" "2017" "2018")
+declare -a allYears=("2016_APV" "2016" "2017" "2018")
 # declare -a myYears=("2017")
-# declare -a myDatatypes=("mc" "data")
-declare -a myDatatypes=("mc")
+# declare -a allDatatypes=("mc" "data")
+declare -a allDatatypes=("mc")
 
 # Define ANSI colors here for the output since I am extra:
 RED='\033[91m' # Red
