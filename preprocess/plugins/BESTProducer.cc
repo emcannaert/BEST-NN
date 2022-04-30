@@ -351,7 +351,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     
         // add the daughter and rest frame information
-        if(storeDaughters == true){
+        // if(storeDaughters == true){
 
             // Jet PF Candidate Variables
             // listOfVecVars.push_back(frame+"Frame_PF_candidate_px");
@@ -382,8 +382,8 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
                 
             //     // PUPPI weights
             //     listOfVecVars.push_back("AllFrame_PF_candidate_PUPPIweights");
-            }
-        }
+            // }
+        // }
     }     
     restMasses.clear();
 
