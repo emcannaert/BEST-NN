@@ -354,34 +354,34 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         if(storeDaughters == true){
 
             // Jet PF Candidate Variables
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_px");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_py");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_pz");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_energy");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_px");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_py");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_pz");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_energy");
 
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_deltaEta");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_deltaPhi");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_deltaR");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_logpT");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_logEnergy");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_logpTRatio");
-            listOfVecVars.push_back(frame+"Frame_PF_candidate_logEnergyRatio");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_deltaEta");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_deltaPhi");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_deltaR");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_logpT");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_logEnergy");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_logpTRatio");
+            // listOfVecVars.push_back(frame+"Frame_PF_candidate_logEnergyRatio");
 
             // // PUPPI weights
             // listOfVecVars.push_back(frame+"Frame_PF_candidate_PUPPI_Weights");
 
-            if (frame == "Lab"){ // Variables saved only in lab frame:
-                listOfVecVars.push_back("AllFrame_PF_candidate_charge");
-                listOfVecVars.push_back("AllFrame_PF_candidate_pdgId");
-                listOfVecVars.push_back("AllFrame_PF_candidate_abspdgId");
-                listOfVecVars.push_back("AllFrame_PF_candidate_isElectron");
-                listOfVecVars.push_back("AllFrame_PF_candidate_isMuon");
-                listOfVecVars.push_back("AllFrame_PF_candidate_isPhoton");
-                listOfVecVars.push_back("AllFrame_PF_candidate_isNeutralHadron");
-                listOfVecVars.push_back("AllFrame_PF_candidate_isChargedHadron");
+            // if (frame == "Lab"){ // Variables saved only in lab frame:
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_charge");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_pdgId");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_abspdgId");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_isElectron");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_isMuon");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_isPhoton");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_isNeutralHadron");
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_isChargedHadron");
                 
-                // PUPPI weights
-                listOfVecVars.push_back("AllFrame_PF_candidate_PUPPIweights");
+            //     // PUPPI weights
+            //     listOfVecVars.push_back("AllFrame_PF_candidate_PUPPIweights");
             }
         }
     }     
