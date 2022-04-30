@@ -227,7 +227,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     //------------------------------------------------------------------------------
 
     // AK8 jet variables
-    listOfVars.push_back("nJets");
+    // listOfVars.push_back("nJets");
 
     listOfVars.push_back("jetAK8_phi");
     listOfVars.push_back("jetAK8_eta");
@@ -559,7 +559,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (GenMatching || (jetType_ == 0)){
 
                 // Store Jet Variables
-                treeVars["nJets"] = ak8Jets.size();
+                // treeVars["nJets"] = ak8Jets.size();
                 storeJetVariables(treeVars, ijet, jetColl_);
 
                 // Secondary Vertex Variables

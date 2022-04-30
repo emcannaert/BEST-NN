@@ -369,7 +369,10 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // Event Shape Variables
     EventShapeVariables eventShapes( particles2 );
     Thrust thrustCalculator( particles3.begin(), particles3.end() );
-    besVars["isotropy_"+frame]   = eventShapes.isotropy();
+
+    // isotropy is invariant under our boosts. only save it once
+    if (frame == "Higgs") besVars["isotropy"] = eventShapes.isotropy();
+    
     besVars["sphericity_"+frame] = eventShapes.sphericity();
     besVars["aplanarity_"+frame] = eventShapes.aplanarity();
     besVars["thrust_"+frame]     = thrustCalculator.thrust();
@@ -432,7 +435,9 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     besVars["jet13_CosTheta_"+frame]    = jet13LV.CosTheta();
     besVars["jet23_CosTheta_"+frame]    = jet23LV.CosTheta();
     besVars["jet1234_CosTheta_"+frame]  = jet1234LV.CosTheta();
-    besVars["nJets_"+frame]             = jetsFJ.size();
+
+    // nJets here is invariant under our boosts. only save it once
+    if (frame == "Higgs") besVars["nJets"] = jetsFJ.size();
 
     return true;
 }
