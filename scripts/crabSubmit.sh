@@ -166,7 +166,7 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
                 trimstring=${job#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
                 crab submit $job >> logCrabFiles/$crabName.txt 
-                sleep 2s # If crab jobs are submitted too quickly, some don't go through
+                sleep 10s # If crab jobs are submitted too quickly, some don't go through
                 # massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
 
             done

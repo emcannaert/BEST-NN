@@ -12,7 +12,7 @@
 # Check error flags?
 
 
-echo "\nKilling jobs..."
+echo "Killing jobs..."
 logFile="Logs/killLog.txt"
 pids=
 # Kill crab jobs

@@ -152,7 +152,7 @@ for dat in myDatatypes:
                 contempf = open(configtemplateFile, "r") # Read in crab config template
                 for line in contempf:
                     if "CRABDIRFLAG" in line: 
-                        conf.write( 'config.General.requestName = "' + value[0] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding crab directory name (value[0])  
+                        conf.write( 'config.General.requestName = "' + yr + "_" + value[0] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding crab directory name (value[0])  
                     elif "RUNPARTICLEFLAG" in line:
                         conf.write( 'config.JobType.psetName = "config/run_' + part +'.py"\n' ) # Write the corresponding run config file to use 
                     elif "DATASETFLAG" in line:
