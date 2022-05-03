@@ -43,6 +43,7 @@ done < $jobFile
 # for job in */CrabBEST/*/ ; do
 for job in ${jobsToCheck[*]}; do
     ((allJobs++))
+    echo $job
     # echo "test"
     # echo $job
     # output=$(crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)')
@@ -55,6 +56,9 @@ for job in ${jobsToCheck[*]}; do
     else
         unfinishedJobs+=( "$job" )
         echo "$output" >> $logFile
+    fi
+    if [[ "$output" =~ "FAILED" ]]; then
+        /cvmfs/cms.cern.ch/common/crab resubmit $job
     fi
 
 
