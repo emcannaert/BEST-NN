@@ -33,19 +33,19 @@ stopAt = None
 sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
-years = ["2016","2017","2018"]
+years = ["2016_APV","2016","2017","2018"]
 treeName = "run/jetTree"
 
 # Each of these key lists represent a different type of h5py dataset:
 besKeys = []  # Standard BES variables, only 1 value per event(jet)
-depKeys = []  # PF variables that are frame dependent, several values per event(jet)
-invKeys = []  # PF variables that are frame invariant, several values per event(jet)
-svKeys  = []  # SV variables, several values per event(jet). Does not include 'nSecondaryVertices'
+# depKeys = []  # PF variables that are frame dependent, several values per event(jet)
+# invKeys = []  # PF variables that are frame invariant, several values per event(jet)
+# svKeys  = []  # SV variables, several values per event(jet). Does not include 'nSecondaryVertices'
 
 # Labels for PF variables (both frame dependent and invariant)
-pfFrameLabels   = [] # Labels for each Frame
-depPFInfoLabels = [] # Labels for frame dependent variables
-invPFInfoLabels = [] # Labels for frame invariant variables
+# pfFrameLabels   = [] # Labels for each Frame
+# depPFInfoLabels = [] # Labels for frame dependent variables
+# invPFInfoLabels = [] # Labels for frame invariant variables
 
 # Flag for code that only needs to happen once
 firstConvert = True 
@@ -74,7 +74,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
 
         numIter = 0
         besDS = None
-        pfsvDS  = {}
+        # pfsvDS  = {}
         batchSize = 1000
         for arrays in uproot.iterate(fileList, treeName, entrysteps = batchSize, namedecode='utf-8'):
             
@@ -85,28 +85,29 @@ def convert(eosDir, outDir, sampleType, year, debug):
                 keys = arrays.keys()
                 keys.sort()
                 for key in keys :
-                    if "PF_candidate" in key:
-                        # Store PFcand info: XFrame_PF_candidate_Yinfo
+                    # if "PF_candidate" in key:
+                    #     # Store PFcand info: XFrame_PF_candidate_Yinfo
 
-                        myFrameLabel = key.split("_")[0]  # This gives 'XFrame'
-                        if not myFrameLabel in pfFrameLabels: pfFrameLabels.append(myFrameLabel)
-                        myInfoLabel  = key.split("_")[-1] # This gives 'Yinfo'
+                    #     myFrameLabel = key.split("_")[0]  # This gives 'XFrame'
+                    #     if not myFrameLabel in pfFrameLabels: pfFrameLabels.append(myFrameLabel)
+                    #     myInfoLabel  = key.split("_")[-1] # This gives 'Yinfo'
                         
-                        if myFrameLabel == "AllFrame":
+                    #     if myFrameLabel == "AllFrame":
 
-                            if myInfoLabel == "Weights": myInfoLabel = u'PUPPI_Weights' # Remove this the next BEST compile
-                            if myInfoLabel == "PUPPIweights": myInfoLabel = u'PUPPI_Weights' # Remove this the next BEST compile
+                    #         if myInfoLabel == "Weights": myInfoLabel = u'PUPPI_Weights' # Remove this the next BEST compile
+                    #         if myInfoLabel == "PUPPIweights": myInfoLabel = u'PUPPI_Weights' # Remove this the next BEST compile
 
-                            invPFInfoLabels.append(myInfoLabel) # Only one of each of these variables, so no if statement needed
-                            invKeys.append(key)
-                        else:
-                            if not myInfoLabel  in depPFInfoLabels: depPFInfoLabels.append(myInfoLabel)
-                            depKeys.append(key) 
+                    #         invPFInfoLabels.append(myInfoLabel) # Only one of each of these variables, so no if statement needed
+                    #         invKeys.append(key)
+                    #     else:
+                    #         if not myInfoLabel  in depPFInfoLabels: depPFInfoLabels.append(myInfoLabel)
+                    #         depKeys.append(key) 
 
-                    elif "SV" in key:
-                        svKeys.append(key)
-                    elif 'Frame_jet' in key: # Reclustered boosted jet energy, px, py, pz. Take four leading jets by energy (converting a list to four single variables to work with BES h5py dataset type)
-                        if "Lab" in key: continue # Remove this after next BESTProducer.cc compile
+                    # elif "SV" in key:
+                    #     svKeys.append(key)
+                    # elif 'Frame_jet' in key: # Reclustered boosted jet energy, px, py, pz. Take four leading jets by energy (converting a list to four single variables to work with BES h5py dataset type)
+                    if ('jet_p' in key) or ("jet_e" in key): # Reclustered boosted jet energy, px, py, pz. Take four leading jets by energy (converting a list to four single variables to work with BES h5py dataset type)
+                        # if "Lab" in key: continue # Remove this after next BESTProducer.cc compile
                         besKeys.append(key+'0')
                         besKeys.append(key+'1')
                         besKeys.append(key+'2')
@@ -116,26 +117,27 @@ def convert(eosDir, outDir, sampleType, year, debug):
 
                 if listBESvars == True:
                     print("There will be ", len(besKeys), " Input features stored")
-                    print("There will be ", len(depKeys), " PF Frame Dependent features stored")
-                    print("There will be ", len(invKeys), " PF Frame Invariant features stored")
-                    print("There will be ", len(svKeys),  " SV features stored")                    
+                    # print("There will be ", len(depKeys), " PF Frame Dependent features stored")
+                    # print("There will be ", len(invKeys), " PF Frame Invariant features stored")
+                    # print("There will be ", len(svKeys),  " SV features stored")                    
                 if listBESvars == True:
                     print("Here are the stored BES vars ", besKeys)
-                    print("Here are the stored PFlow Frame Dependent cand vars ", depKeys)
-                    print("Here are the stored PFlow Frame Invariant cand vars ", invKeys)
-                    print("Here are the stored Secondary Vertex vars ", svKeys)
+                    # print("Here are the stored PFlow Frame Dependent cand vars ", depKeys)
+                    # print("Here are the stored PFlow Frame Invariant cand vars ", invKeys)
+                    # print("Here are the stored Secondary Vertex vars ", svKeys)
                 else:
                     print("If you would like to list the BES vars, set listBESvars = True at the beginning of the code")
                 
-                if debug:
-                    print("pfFrameLabels: ",   pfFrameLabels)
-                    print("depPFInfoLabels: ", depPFInfoLabels)
-                    print("invPFInfoLabels: ", invPFInfoLabels)
+                # if debug:
+                #     print("pfFrameLabels: ",   pfFrameLabels)
+                #     print("depPFInfoLabels: ", depPFInfoLabels)
+                #     print("invPFInfoLabels: ", invPFInfoLabels)
 
-                pfFrameLabels.append("SV") # Not really a frame, but doing this allows us to handle SV vars with already existing code later on
+                # pfFrameLabels.append("SV") # Not really a frame, but doing this allows us to handle SV vars with already existing code later on
 
                 # Save legend for each dataset type so we know which matrix entry corresponds to which variable:
-                savedVarsDict = {"BES":besKeys, "SV":svKeys, "pfDEP":depPFInfoLabels, "pfINV":invPFInfoLabels}
+                # savedVarsDict = {"BES":besKeys, "SV":svKeys, "pfDEP":depPFInfoLabels, "pfINV":invPFInfoLabels}
+                savedVarsDict = {"BES":besKeys}
                 for varType, savedVars in savedVarsDict.items(): 
                     varFile = outDir+varType+"varList.txt"
                     if os.path.exists(varFile): os.remove(varFile)
@@ -150,7 +152,8 @@ def convert(eosDir, outDir, sampleType, year, debug):
 
             thisBatchSize = min(batchSize,len(arrays[arrays.keys()[0]]))
             if ( (numIter % batchPrint) == 0 ): print(sampleType+": This batch (from, to, size):",numIter*thisBatchSize,(numIter+1)*thisBatchSize, thisBatchSize) # Display every 10,000 events
-            (besDS, pfsvDS) = storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug)
+            # (besDS, pfsvDS) = storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug)
+            besDS = storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug)
             
             # increment
             numIter += 1
@@ -167,13 +170,16 @@ def convert(eosDir, outDir, sampleType, year, debug):
 #==================================================================================
 # Store BEST Inputs ///////////////////////////////////////////////////////////////
 #==================================================================================
-def storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug):
+# def storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug):
+def storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug):
     jetDF = {} # Make a data frame to store the BES variables and PF Candidates
 
     # Store BES variables
     besList = []
     for besKey in besKeys :
-        if 'Frame_jet' in besKey:
+        # if 'Frame_jet' in besKey:
+        if ('jet_p' in besKey) or ("jet_e" in besKey): 
+
             newArr1 = arrays[besKey[:-1]]
             nA2 = []
 
@@ -204,7 +210,7 @@ def storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug):
 
     if debug: print("Done with BESvars info")
 
-
+    """
     # Store PFcand and SV info: 
     maxPFlowCands = 50 
     maxSecVerts = 10 
@@ -241,11 +247,11 @@ def storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug):
             pfsvDS[myDFKey][-len(jetDF[myDFKey]) :] = jetDF[myDFKey] 
 
     if debug: print("Done with PFcand info")
-
+    """
     if debug: print("Converted jets: ", besDS.shape[0] - len(jetDF['BES_vars']), " to ", besDS.shape[0])
 
     if debug: print("Finished storing BEST inputs")
-    return (besDS, pfsvDS)
+    return besDS
 
 
 ## Main function should take in arguments and call the functions you want
