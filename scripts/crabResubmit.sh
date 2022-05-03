@@ -13,9 +13,20 @@
 # Consider connecting to crabStatus.sh, and resubmit jobs that have failed?
 
 echo "Resubmitting jobs..."
+jobFile="Logs/jobsToCheck.txt"
 logFile="Logs/resubmitLog.txt"
 pids=
-for job in */CrabBEST/*/ ; do
+declare -a jobsToCheck=()
+while read -r job; do
+    # echo $job
+    jobsToCheck+=( "$job" )
+done < $jobFile
+
+
+# file=$jobFile
+# for job in */CrabBEST/*/ ; do
+for job in ${jobsToCheck[*]}; do
+
     # echo $job | cut -d '/' -f 2 
     crab resubmit -d $job >> $logFile 
     # pids+=" $!"
