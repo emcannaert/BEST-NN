@@ -1,0 +1,235 @@
+
+40BasicHiggs took 4:47:19 to complete.
+40Basicak8 took 4:57:01 to complete.
+40BasicW took 5:41:28 to complete.
+40BasicTopHiggs took 6:43:38 to complete.
+40BasicTop took 3:33:35 to complete.
+40Basicak8SoftDrop took 3:30:56 to complete.
+40BasicZ took 5:20:37 to complete.
+40Basic300GeV took 3:18:15 to complete.
+40BasicTopW took 5:41:42 to complete.
+40BasicbothAK8 took 4:50:15 to complete.
+Total 40 took 13:18:13 to complete.
+40BasicBottom took 1:55:36 to complete.
+Total 40 took 13:34:46 to complete.
+60BasicHiggs took 2:00:47 to complete.
+60Basicak8 took 2:31:50 to complete.
+40BasicWZ took 5:20:22 to complete.
+Total 40 took 16:22:28 to complete.
+40Basic300Top took 4:56:27 to complete.
+Total 40 took 17:21:48 to complete.
+60BasicTop took 1:54:23 to complete.
+60Basic300GeV took 1:48:20 to complete.
+60Basicak8SoftDrop took 5:17:09 to complete.
+60BasicBottom took 5:54:54 to complete.
+Total 60 took 5:54:54 to complete.
+60BasicW took 6:09:39 to complete.
+60Basic300Higgs took 6:45:25 to complete.
+60Basic300Top took 6:42:12 to complete.
+60BasicTopHiggs took 6:59:26 to complete.
+40BasicframeInvariantVariables took 3:28:01 to complete.
+Total 40 took 3:28:01 to complete.
+60BasicTopak8 took 2:58:29 to complete.
+60Basic300W took 3:07:19 to complete.
+60BasicbothAK8 took 5:01:07 to complete.
+Total 60 took 10:18:16 to complete.
+80BasicHiggs took 4:34:27 to complete.
+60BasicZ took 4:46:40 to complete.
+60BasicframeInvariantVariables took 3:57:30 to complete.
+Total 60 took 3:57:30 to complete.
+60BasicTopW took 5:54:59 to complete.
+60Basic300ak8 took 4:13:11 to complete.
+80Basicak8 took 6:06:26 to complete.
+80BasicTop took 5:58:27 to complete.
+60Basic300WHiggs took 7:21:34 to complete.
+Total 60 took 17:14:19 to complete.
+80BasicframeInvariantVariables took 5:05:28 to complete.
+Total 80 took 5:05:28 to complete.
+60BasicWZ took 6:53:36 to complete.
+Total 60 took 17:49:56 to complete.
+60BasicWHiggs took 6:37:24 to complete.
+80Basic300GeV took 3:46:51 to complete.
+80Basicak8SoftDrop took 4:05:00 to complete.
+100BasicframeInvariantVariables took 3:18:14 to complete.
+Total 100 took 3:18:14 to complete.
+testBESTScale.py took 15:53:47 to complete.
+80BasicW took 4:03:21 to complete.
+80BasicBottom took 3:22:23 to complete.
+Total 80 took 17:42:09 to complete.
+80BasicbothAK8 took 4:39:13 to complete.
+Total 80 took 14:50:39 to complete.
+60Basic300Topak8 took 11:06:46 to complete.
+Total 60 took 1 day, 1:00:40 to complete.
+60BasicHiggsTopW took 6:03:34 to complete.
+Total 60 took 1 day, 1:35:25 to complete.
+80Basic300Higgs took 8:58:06 to complete.
+80BasicZ took 4:53:09 to complete.
+100BasicHiggs took 6:45:15 to complete.
+80Basic300Top took 5:11:17 to complete.
+80Basic300W took 5:03:19 to complete.
+100Basicak8 took 10:12:17 to complete.
+80BasicTopak8 took 4:39:16 to complete.
+80Basic300WHiggs took 4:49:59 to complete.
+Total 80 took 18:51:26 to complete.
+80BasicTopHiggs took 11:36:06 to complete.
+80BasicWZ took 11:16:17 to complete.
+Total 80 took 20:12:48 to complete.
+80Basic300ak8 took 4:41:29 to complete.
+100BasicTop took 9:35:54 to complete.
+100Basic300Higgs took 4:36:15 to complete.
+100Basicak8SoftDrop took 6:27:33 to complete.
+100BasicW took 4:11:25 to complete.
+80BasicTopW took 5:50:36 to complete.
+100Basic300GeV took 3:38:36 to complete.
+100Basic300W took 3:49:02 to complete.
+80Basic300Topak8 took 5:16:10 to complete.
+Total 80 took 19:48:13 to complete.
+100BasicZ took 3:34:59 to complete.
+100BasicbothAK8 took 4:47:30 to complete.
+Total 100 took 21:27:20 to complete.
+testBESTScale.py took 1 day, 22:41:30 to complete.
+100BasicBottom took 3:34:46 to complete.
+Total 100 took 23:34:31 to complete.
+testBESTScale.py took 1 day, 23:18:52 to complete.
+80BasicWHiggs took 4:27:00 to complete.
+100Basic300WHiggs took 2:59:32 to complete.
+Total 100 took 11:24:49 to complete.
+testBESTScale.py took 1 day, 23:35:39 to complete.
+100Basic300Top took 2:44:41 to complete.
+100BasicWZ took 3:51:58 to complete.
+Total 100 took 11:38:23 to complete.
+testBESTScale.py took 2 days, 1:47:02 to complete.
+100BasicTopak8 took 2:07:53 to complete.
+80BasicHiggsTopW took 3:56:37 to complete.
+Total 80 took 1 day, 1:50:21 to complete.
+100Basic300ak8 took 2:12:09 to complete.
+100BasicTopHiggs took 3:15:54 to complete.
+100Basic300Topak8 took 2:46:52 to complete.
+Total 100 took 9:51:37 to complete.
+testBESTScale.py took 2 days, 6:46:14 to complete.
+100BasicTopW took 3:01:49 to complete.
+100BasicWHiggs took 2:49:54 to complete.
+100BasicHiggsTopW took 3:37:08 to complete.
+Total 100 took 12:44:47 to complete.
+testBESTScale.py took 2 days, 16:17:20 to complete.
+120BasicframeInvariantVariables took 1:24:57 to complete.
+Total 120 took 1:24:57 to complete.
+140BasicframeInvariantVariables took 1:25:35 to complete.
+Total 140 took 1:25:35 to complete.
+testBESTScale.py took 2:56:20 to complete.
+100Basic300Wak8 took 6:45:35 to complete.
+100Basic300Wak8Higgs took 7:53:11 to complete.
+100Basic300Wak8SD took 7:27:13 to complete.
+100Basic300Wak8Top took 8:46:58 to complete.
+100Basic300Wbothak8 took 8:03:06 to complete.
+Total 100 took 22:15:55 to complete.
+100Basic300Wak8HiggsTop took 7:37:26 to complete.
+Total 100 took 1 day, 0:17:37 to complete.
+100Basic100200300400 took 5:09:12 to complete.
+120Basic300Wak8 took 4:27:19 to complete.
+120Basic300Wak8Higgs took 4:53:28 to complete.
+100Basic100200300400ak8 took 6:08:05 to complete.
+Total 100 took 11:17:18 to complete.
+120Basic300Wak8SD took 6:35:44 to complete.
+120Basic300Wak8Top took 7:19:32 to complete.
+120Basic100200300400 took 5:09:48 to complete.
+120Basic300Wbothak8 took 8:01:31 to complete.
+Total 120 took 19:04:35 to complete.
+120Basic100200300400ak8 took 6:20:13 to complete.
+Total 120 took 11:30:01 to complete.
+120Basic300Wak8HiggsTop took 8:30:43 to complete.
+Total 120 took 20:43:44 to complete.
+140Basic300Wak8 took 7:34:31 to complete.
+140Basic100200300400 took 5:25:02 to complete.
+140Basic300Wak8Higgs took 10:02:18 to complete.
+140Basic100200300400ak8 took 6:19:01 to complete.
+Total 140 took 11:44:04 to complete.
+testBESTScale.py took 1 day, 10:38:47 to complete.
+140Basic300Wak8SD took 10:31:47 to complete.
+100Basic300Wak8SDHiggs took 3:04:28 to complete.
+100Basic300Wak8SDTop took 3:03:51 to complete.
+140Basic300Wak8Top took 13:42:58 to complete.
+140Basic300Wbothak8 took 12:22:30 to complete.
+Total 140 took 1 day, 6:28:49 to complete.
+testBESTScale.py took 2 days, 23:59:53 to complete.
+100Basic300Wak8SDHiggsTop took 6:42:07 to complete.
+Total 100 took 12:50:26 to complete.
+140Basic300Wak8Higgs400 took 6:28:35 to complete.
+120Basic300Wak8SDHiggs took 6:45:08 to complete.
+140Basic300Wak8HiggsTop took 11:12:21 to complete.
+Total 140 took 1 day, 10:57:38 to complete.
+testBESTScale.py took 3 days, 8:12:29 to complete.
+140Basic300Wbothak8Higgs took 10:31:50 to complete.
+140Basic300Wak8Higgs400 took 9:42:05 to complete.
+140Basic300Wak8Top400 took 6:35:56 to complete.
+120Basic300Wak8SDTop took 6:50:16 to complete.
+140Basic300Wbothak8Top took 7:14:27 to complete.
+140Basic300Wak8Top400 took 7:35:24 to complete.
+140Basic300Wak8HiggsTop400 took 7:24:36 to complete.
+Total 140 took 20:29:09 to complete.
+140Basic300Wbothak8HiggsTop took 7:20:31 to complete.
+Total 140 took 1 day, 1:06:50 to complete.
+140Basic300Wak8HiggsTop400 took 7:40:17 to complete.
+Total 140 took 1 day, 0:57:47 to complete.
+120Basic300Wbothak8Higgs took 9:16:40 to complete.
+120Basic300Wak8Higgs400 took 12:37:36 to complete.
+120Basic300Wbothak8Top took 9:23:02 to complete.
+120Basic300Wak8Top400 took 6:14:53 to complete.
+120Basic300Wbothak8HiggsTop took 7:01:15 to complete.
+Total 120 took 1 day, 1:40:58 to complete.
+120Basic300Wak8HiggsTop400 took 7:31:17 to complete.
+Total 120 took 1 day, 2:23:48 to complete.
+100Basic300Wbothak8Higgs took 6:26:50 to complete.
+100Basic300Wak8Higgs400 took 5:55:05 to complete.
+100Basic300Wbothak8Top took 6:22:18 to complete.
+100Basic300Wak8Top400 took 6:09:57 to complete.
+100Basic300Wbothak8HiggsTop took 7:19:17 to complete.
+Total 100 took 20:08:26 to complete.
+testBESTScale.py took 2 days, 23:12:48 to complete.
+100Basic300Wak8HiggsTop400 took 7:26:49 to complete.
+Total 100 took 19:31:52 to complete.
+testBESTScale.py took 2 days, 23:10:40 to complete.
+140Basic300WHT400 took 6:31:46 to complete.
+140Basic300Wak8SDHT400 took 7:15:09 to complete.
+140Basic300Wbothak8HT400 took 8:09:53 to complete.
+Total 140 took 21:56:49 to complete.
+testBESTScale.py took 22:07:33 to complete.
+140Basic300WHT400 took 4:31:34 to complete.
+140Basic300Wak8HiggsTop400 took 5:26:28 to complete.
+140Basic300Wak8SDHT400 took 4:35:44 to complete.
+140Basic300Wbothak8HT400 took 5:57:20 to complete.
+Total 140 took 20:31:07 to complete.
+testBESTScale.py took 20:39:06 to complete.
+140Basic300WHT took 4:45:19 to complete.
+140Basic300Wak8HT took 3:37:50 to complete.
+140Basic300Wak8SDHT took 6:47:47 to complete.
+140Basic300Wbothak8HT took 5:31:49 to complete.
+140Basic300ZHT400 took 4:56:13 to complete.
+140Basic300Zak8HT400 took 4:35:40 to complete.
+140Basic300Zak8SDHT400 took 10:58:49 to complete.
+140Basic300Zbothak8HT400 took 5:17:39 to complete.
+Total 140 took 1 day, 22:31:10 to complete.
+testBESTScale.py took 1 day, 22:40:22 to complete.
+140Basic300WHT400 took 10:15:20 to complete.
+140Basic300Wak8HiggsTop400 took 5:00:36 to complete.
+140Basic300Wak8SDHT400 took 6:22:47 to complete.
+Total 140 took 21:38:45 to complete.
+testBESTScale.py took 21:51:42 to complete.
+140Basic300WHT took 8:00:55 to complete.
+140Basic300Wak8HT took 9:30:54 to complete.
+140Basic300Wak8SDHT took 5:58:01 to complete.
+Total 140 took 23:29:50 to complete.
+testBESTScale.py took 23:43:19 to complete.
+140Basic300WHT took 6:34:01 to complete.
+140Basic300Wak8HT took 7:37:52 to complete.
+140Basic300Wak8SDHT took 6:17:52 to complete.
+Total 140 took 20:29:46 to complete.
+testBESTScale.py took 20:46:39 to complete.
+140Basic300ZHT400 took 9:49:10 to complete.
+140Basic300Zak8HT400 took 8:26:41 to complete.
+140Basic300Zak8SDHT400 took 5:32:03 to complete.
+Total 140 took 23:47:56 to complete.
+testBESTScale.py took 23:59:14 to complete.
+140Basic300Wbothak8HT400 took 0:21:35 to complete.
+Total 140 took 0:21:35 to complete.
+testBESTScale.py took 0:26:46 to complete.

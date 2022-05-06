@@ -117,7 +117,7 @@ cd crab/
 ```
 
 The script can record the entire output of ``crab status ...``, or a trimmed version. Switch between the two by toggling the labeled commented lines in the script. 
-The output can be found at ``logStatus.txt``.
+The output can be found at ``Logs/statusLog.txt``.
 
 To resubmit all valid jobs, use the shell script:
 
@@ -127,7 +127,7 @@ cd crab/
 ```
 
 The script will attempt to resubmit every job; however, only jobs that can be resubmitted will be affected. 
-The output can be found at ``logResubmit.txt``.
+The output can be found at ``Logs/resubmitLog.txt``.
 
 To kill all jobs, use the shell script:
 
@@ -137,4 +137,4 @@ cd crab
 ```
 
 This will ``crab kill ...`` every job in the specified directory. Edit the directory in the for loop to select specific groups of jobs to kill.
-The output can be found at ``logKill.txt``.
+The output can be found at ``Logs/killLog.txt``.

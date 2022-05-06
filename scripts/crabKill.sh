@@ -2,7 +2,7 @@
 #=========================================================================================
 # crabKill.sh ----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott ----------------------------------------------------------
+# Author(s): Sam Abbott ------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -12,8 +12,8 @@
 # Check error flags?
 
 
-echo "\nKilling jobs..."
-logFile="logKill.txt"
+echo "Killing jobs..."
+logFile="Logs/killLog.txt"
 pids=
 # Kill crab jobs
 for job in */CrabBEST/*/ ; do

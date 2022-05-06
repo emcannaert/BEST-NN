@@ -1,0 +1,400 @@
+-----------------------------------
+Running 300_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279020  85884   7708  16638  10850  19120] 419220 out of 383294 (72.795%) truth events.
+	Z Category: Tagger predicted	[ 68178 245739  35627  14191   9937  13568] 387240 out of 383446 (64.086%) truth events.
+	H Category: Tagger predicted	[  3375  19585 282015  21568  19597   8436] 354576 out of 383280 (73.579%) truth events.
+	Top Category: Tagger predicted	[ 10460  10990  16804 296036  18847  18979] 372116 out of 383164 (77.260%) truth events.
+	b Category: Tagger predicted	[  7675   9218  31409  18194 269356  61953] 397805 out of 383297 (70.273%) truth events.
+	QCD Category: Tagger predicted	[ 14586  12030   9717  16537  54710 261038] 368618 out of 383094 (68.139%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281669  91693   7655  17142  10049  18760] 426968 out of 383294 (73.486%) truth events.
+	Z Category: Tagger predicted	[ 63019 237142  35240  12665   9480  13003] 370549 out of 383446 (61.844%) truth events.
+	H Category: Tagger predicted	[  3801  20338 281788  23597  20374   9873] 359771 out of 383280 (73.520%) truth events.
+	Top Category: Tagger predicted	[ 11133  12331  17592 298523  21869  22004] 383452 out of 383164 (77.909%) truth events.
+	b Category: Tagger predicted	[  8619  10188  32288  17453 269564  65211] 403323 out of 383297 (70.327%) truth events.
+	QCD Category: Tagger predicted	[ 15053  11754   8717  13784  51961 254243] 355512 out of 383094 (66.365%) truth events.
+-----------------------------------
+-----------------------------------
+Running 250_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280215  86787   7705  17836  10744  19440] 422727 out of 383294 (73.107%) truth events.
+	Z Category: Tagger predicted	[ 66260 239145  31476  12152   9052  11835] 369920 out of 383446 (62.367%) truth events.
+	H Category: Tagger predicted	[  3488  22699 281967  19896  18136   8087] 354273 out of 383280 (73.566%) truth events.
+	Top Category: Tagger predicted	[ 10273  11966  19495 301373  22123  20789] 386019 out of 383164 (78.653%) truth events.
+	b Category: Tagger predicted	[  8023   9619  32229  15137 263442  56523] 384973 out of 383297 (68.730%) truth events.
+	QCD Category: Tagger predicted	[ 15035  13230  10408  16770  59800 266420] 381663 out of 383094 (69.544%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283335  90860   8127  17619  11242  19737] 430920 out of 383294 (73.921%) truth events.
+	Z Category: Tagger predicted	[ 63772 238490  32678  12936   9848  12641] 370365 out of 383446 (62.196%) truth events.
+	H Category: Tagger predicted	[  3308  21957 284834  22825  19130   8965] 361019 out of 383280 (74.314%) truth events.
+	Top Category: Tagger predicted	[ 10901  11137  16536 298513  20967  20334] 378388 out of 383164 (77.907%) truth events.
+	b Category: Tagger predicted	[  7111   8775  31014  15200 259383  53658] 375141 out of 383297 (67.671%) truth events.
+	QCD Category: Tagger predicted	[ 14867  12227  10091  16071  62727 267759] 383742 out of 383094 (69.893%) truth events.
+-----------------------------------
+-----------------------------------
+Running 250_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279177  89072   8207  17478  10403  17440] 421777 out of 383294 (72.836%) truth events.
+	Z Category: Tagger predicted	[ 65759 241748  34998  13877   9817  13849] 380048 out of 383446 (63.046%) truth events.
+	H Category: Tagger predicted	[  3302  19947 281714  22278  20076   9008] 356325 out of 383280 (73.500%) truth events.
+	Top Category: Tagger predicted	[ 10331  10811  17322 295303  19425  18929] 372121 out of 383164 (77.069%) truth events.
+	b Category: Tagger predicted	[  8123   9593  31324  17347 267008  61425] 394820 out of 383297 (69.660%) truth events.
+	QCD Category: Tagger predicted	[ 16602  12275   9715  16881  56568 262443] 374484 out of 383094 (68.506%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[289082  95501   9397  19754  12624  20564] 446922 out of 383294 (75.420%) truth events.
+	Z Category: Tagger predicted	[ 60244 236062  33690  14169  10334  12894] 367393 out of 383446 (61.563%) truth events.
+	H Category: Tagger predicted	[  3115  20728 281816  23027  18806   8342] 355834 out of 383280 (73.527%) truth events.
+	Top Category: Tagger predicted	[  8706  10058  16801 294075  21008  19504] 370152 out of 383164 (76.749%) truth events.
+	b Category: Tagger predicted	[  6853   8296  30823  14996 257004  53519] 371491 out of 383297 (67.050%) truth events.
+	QCD Category: Tagger predicted	[ 15294  12801  10753  17143  63521 268271] 387783 out of 383094 (70.027%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280844  88643   8513  17690  10005  17325] 423020 out of 383294 (73.271%) truth events.
+	Z Category: Tagger predicted	[ 62800 233620  28262  11460   8507  11629] 356278 out of 383446 (60.926%) truth events.
+	H Category: Tagger predicted	[  3461  25196 285276  19481  20211   8786] 362411 out of 383280 (74.430%) truth events.
+	Top Category: Tagger predicted	[ 11400  13148  20958 305555  25427  22406] 398894 out of 383164 (79.745%) truth events.
+	b Category: Tagger predicted	[  7133   8503  29357  12649 254899  51490] 364031 out of 383297 (66.501%) truth events.
+	QCD Category: Tagger predicted	[ 17656  14336  10914  16329  64248 271458] 394941 out of 383094 (70.859%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[284161  91634   8987  18408  11914  21570] 436674 out of 383294 (74.136%) truth events.
+	Z Category: Tagger predicted	[ 65072 243595  38024  14395  10309  13228] 384623 out of 383446 (63.527%) truth events.
+	H Category: Tagger predicted	[  2585  16763 276804  22943  17014   7786] 343895 out of 383280 (72.219%) truth events.
+	Top Category: Tagger predicted	[  9763  10188  15449 292812  19202  18686] 366100 out of 383164 (76.419%) truth events.
+	b Category: Tagger predicted	[  7995   9703  34261  17761 265289  58497] 393506 out of 383297 (69.212%) truth events.
+	QCD Category: Tagger predicted	[ 13718  11563   9755  16845  59569 263327] 374777 out of 383094 (68.736%) truth events.
+-----------------------------------
+-----------------------------------
+Running 400_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279748  87444   7448  17464   9647  18742] 420493 out of 383294 (72.985%) truth events.
+	Z Category: Tagger predicted	[ 65472 237017  29775  11663   9284  13003] 366214 out of 383446 (61.812%) truth events.
+	H Category: Tagger predicted	[  4302  25667 289044  21419  22809  11137] 374378 out of 383280 (75.413%) truth events.
+	Top Category: Tagger predicted	[ 11055  12748  18998 302935  22180  22603] 390519 out of 383164 (79.061%) truth events.
+	b Category: Tagger predicted	[  8767   9745  30471  15956 271290  67076] 403305 out of 383297 (70.778%) truth events.
+	QCD Category: Tagger predicted	[ 13950  10825   7544  13727  48087 250533] 344666 out of 383094 (65.397%) truth events.
+-----------------------------------
+-----------------------------------
+Running 250_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[286465  94828   8543  17920  11238  19857] 438851 out of 383294 (74.737%) truth events.
+	Z Category: Tagger predicted	[ 60430 235394  33792  13689   9120  13111] 365536 out of 383446 (61.389%) truth events.
+	H Category: Tagger predicted	[  2792  20015 279564  22027  16086   7169] 347653 out of 383280 (72.939%) truth events.
+	Top Category: Tagger predicted	[ 10002  10416  15924 289651  16918  16240] 359151 out of 383164 (75.594%) truth events.
+	b Category: Tagger predicted	[  8174  10678  34705  20541 264454  54665] 393217 out of 383297 (68.994%) truth events.
+	QCD Category: Tagger predicted	[ 15431  12115  10752  19336  65481 272052] 395167 out of 383094 (71.014%) truth events.
+-----------------------------------
+-----------------------------------
+Running 250_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281138  90381   8015  17496   9720  17322] 424072 out of 383294 (73.347%) truth events.
+	Z Category: Tagger predicted	[ 62190 235215  32281  12679   8997  11245] 362607 out of 383446 (61.342%) truth events.
+	H Category: Tagger predicted	[  3014  21531 279533  20544  16899   7965] 349486 out of 383280 (72.931%) truth events.
+	Top Category: Tagger predicted	[ 10354  11498  18769 296896  19943  18902] 376362 out of 383164 (77.485%) truth events.
+	b Category: Tagger predicted	[  8608  10435  34144  17957 269392  60582] 401118 out of 383297 (70.282%) truth events.
+	QCD Category: Tagger predicted	[ 17990  14386  10538  17592  58346 267078] 385930 out of 383094 (69.716%) truth events.
+-----------------------------------
+-----------------------------------
+Running 200_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[294109 101801   9646  18635  11263  20751] 456205 out of 383294 (76.731%) truth events.
+	Z Category: Tagger predicted	[ 52675 223949  28789  10768   8095  12192] 336468 out of 383446 (58.404%) truth events.
+	H Category: Tagger predicted	[  3162  23055 278520  17377  16756   7527] 346397 out of 383280 (72.667%) truth events.
+	Top Category: Tagger predicted	[ 10649  12412  22832 302463  21379  19610] 389345 out of 383164 (78.938%) truth events.
+	b Category: Tagger predicted	[  8855  10698  34101  17165 272923  64466] 408208 out of 383297 (71.204%) truth events.
+	QCD Category: Tagger predicted	[ 13844  11531   9392  16756  52881 258548] 362952 out of 383094 (67.489%) truth events.
+-----------------------------------
+-----------------------------------
+Running 400_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[279531  87553   8011  17575  10505  20476] 423651 out of 383294 (72.928%) truth events.
+	Z Category: Tagger predicted	[ 67439 241500  33146  12568   9801  13452] 377906 out of 383446 (62.981%) truth events.
+	H Category: Tagger predicted	[  3190  20834 282236  20711  19772   9394] 356137 out of 383280 (73.637%) truth events.
+	Top Category: Tagger predicted	[ 11504  13165  19414 303893  22953  24776] 395705 out of 383164 (79.311%) truth events.
+	b Category: Tagger predicted	[  8684   9763  31763  16283 266843  61953] 395289 out of 383297 (69.617%) truth events.
+	QCD Category: Tagger predicted	[ 12946  10631   8710  12134  53423 253043] 350887 out of 383094 (66.052%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[286028  91440   8998  19060  12251  21848] 439625 out of 383294 (74.623%) truth events.
+	Z Category: Tagger predicted	[ 64609 242185  34678  13542  10411  14454] 379879 out of 383446 (63.160%) truth events.
+	H Category: Tagger predicted	[  2921  19432 279578  19750  18302   8767] 348750 out of 383280 (72.943%) truth events.
+	Top Category: Tagger predicted	[ 10039  11554  19705 301602  22373  22027] 387300 out of 383164 (78.713%) truth events.
+	b Category: Tagger predicted	[  7638   9000  32397  15888 272738  67928] 405589 out of 383297 (71.155%) truth events.
+	QCD Category: Tagger predicted	[ 12059   9835   7924  13322  47222 248070] 338432 out of 383094 (64.754%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280844  89197   8381  18484  10465  17938] 425309 out of 383294 (73.271%) truth events.
+	Z Category: Tagger predicted	[ 64631 238700  32492  13241   9666  12035] 370765 out of 383446 (62.251%) truth events.
+	H Category: Tagger predicted	[  3174  21091 280175  20265  16844   7288] 348837 out of 383280 (73.099%) truth events.
+	Top Category: Tagger predicted	[  9449  10683  17850 296051  20486  18430] 372949 out of 383164 (77.264%) truth events.
+	b Category: Tagger predicted	[  8173   9668  33374  16277 267074  59523] 394089 out of 383297 (69.678%) truth events.
+	QCD Category: Tagger predicted	[ 17023  14107  11008  18846  58762 267880] 387626 out of 383094 (69.925%) truth events.
+-----------------------------------
+-----------------------------------
+Running 150_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273468  83612   8066  16594   9776  16996] 408512 out of 383294 (71.346%) truth events.
+	Z Category: Tagger predicted	[ 68729 237880  29516  12194   8585  11704] 368608 out of 383446 (62.037%) truth events.
+	H Category: Tagger predicted	[  3576  24649 284474  22279  18353   8123] 361454 out of 383280 (74.220%) truth events.
+	Top Category: Tagger predicted	[ 10745  11732  17289 295120  19979  18291] 373156 out of 383164 (77.021%) truth events.
+	b Category: Tagger predicted	[  9269  10864  33602  17584 270470  61807] 403596 out of 383297 (70.564%) truth events.
+	QCD Category: Tagger predicted	[ 17507  14709  10333  19393  56134 266173] 384249 out of 383094 (69.479%) truth events.
+-----------------------------------
+-----------------------------------
+Running 200_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[274247  85365   7923  16135   9619  16686] 409975 out of 383294 (71.550%) truth events.
+	Z Category: Tagger predicted	[ 66850 236010  29978  11701   8407  11152] 364098 out of 383446 (61.549%) truth events.
+	H Category: Tagger predicted	[  3554  24059 283159  21400  17800   8215] 358187 out of 383280 (73.877%) truth events.
+	Top Category: Tagger predicted	[ 11889  12975  18819 302577  22258  22498] 391016 out of 383164 (78.968%) truth events.
+	b Category: Tagger predicted	[  9085  10897  33559  16348 270017  62400] 402306 out of 383297 (70.445%) truth events.
+	QCD Category: Tagger predicted	[ 17669  14140   9842  15003  55196 262143] 373993 out of 383094 (68.427%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280607  87589   8734  18021  11921  19938] 426810 out of 383294 (73.209%) truth events.
+	Z Category: Tagger predicted	[ 67806 243777  33563  14248  10207  13248] 382849 out of 383446 (63.575%) truth events.
+	H Category: Tagger predicted	[  3101  20832 282462  22966  18437   7859] 355657 out of 383280 (73.695%) truth events.
+	Top Category: Tagger predicted	[  9702  10283  16353 294616  20261  18932] 370147 out of 383164 (76.890%) truth events.
+	b Category: Tagger predicted	[  7054   8545  31424  15637 257518  52282] 372460 out of 383297 (67.184%) truth events.
+	QCD Category: Tagger predicted	[ 15024  12420  10744  17676  64953 270835] 391652 out of 383094 (70.696%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100_ZB_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[265581  78864   6687  14613   8020  14107] 387872 out of 383294 (69.289%) truth events.
+	Z Category: Tagger predicted	[ 73469 243892  32397  12912   9306  12682] 384658 out of 383446 (63.605%) truth events.
+	H Category: Tagger predicted	[  3156  21970 280379  20345  17558   7705] 351113 out of 383280 (73.152%) truth events.
+	Top Category: Tagger predicted	[ 12293  12652  19607 298304  20647  18037] 381540 out of 383164 (77.852%) truth events.
+	b Category: Tagger predicted	[  9030  10683  32680  16283 261537  53673] 383886 out of 383297 (68.233%) truth events.
+	QCD Category: Tagger predicted	[ 19765  15385  11530  20707  66229 276890] 410506 out of 383094 (72.277%) truth events.
+-----------------------------------
+-----------------------------------
+Running 400_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278115  86405   8424  18191  11224  19186] 421545 out of 383294 (72.559%) truth events.
+	Z Category: Tagger predicted	[ 70221 245535  34725  13463  10534  13965] 388443 out of 383446 (64.033%) truth events.
+	H Category: Tagger predicted	[  2870  19680 279414  20024  17134   7964] 347086 out of 383280 (72.900%) truth events.
+	Top Category: Tagger predicted	[  9949  11371  18123 298598  20431  20057] 378529 out of 383164 (77.929%) truth events.
+	b Category: Tagger predicted	[  7328   8868  33019  16872 268731  61318] 396136 out of 383297 (70.110%) truth events.
+	QCD Category: Tagger predicted	[ 14811  11587   9575  16016  55243 260604] 367836 out of 383094 (68.026%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[286448  95390   8734  18596  11690  20241] 441099 out of 383294 (74.733%) truth events.
+	Z Category: Tagger predicted	[ 60639 234955  34515  12713   9473  11910] 364205 out of 383446 (61.274%) truth events.
+	H Category: Tagger predicted	[  3162  19752 279210  21708  17819   8285] 349936 out of 383280 (72.847%) truth events.
+	Top Category: Tagger predicted	[ 10368  11298  17960 296467  20812  18866] 375771 out of 383164 (77.373%) truth events.
+	b Category: Tagger predicted	[  7645   9353  32822  16125 265376  59451] 390772 out of 383297 (69.235%) truth events.
+	QCD Category: Tagger predicted	[ 15032  12698  10039  17555  58127 264341] 377792 out of 383094 (69.001%) truth events.
+-----------------------------------
+-----------------------------------
+Running 150_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[287852  97799   9502  19041  11632  20202] 446028 out of 383294 (75.099%) truth events.
+	Z Category: Tagger predicted	[ 58318 230297  32214  13063   8961  12450] 355303 out of 383446 (60.059%) truth events.
+	H Category: Tagger predicted	[  3388  21758 281551  23768  19219   8428] 358112 out of 383280 (73.458%) truth events.
+	Top Category: Tagger predicted	[  9922  10997  17232 291794  20040  18088] 368073 out of 383164 (76.153%) truth events.
+	b Category: Tagger predicted	[  8383   9917  33042  17591 269572  65749] 404254 out of 383297 (70.329%) truth events.
+	QCD Category: Tagger predicted	[ 15431  12678   9739  17907  53873 258177] 367805 out of 383094 (67.392%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350Basic_300_ZB_Soft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[286834  98369   8252  17670   9708  16664] 437497 out of 383294 (74.833%) truth events.
+	Z Category: Tagger predicted	[ 53043 220785  27842  10115   7995  10717] 330497 out of 383446 (57.579%) truth events.
+	H Category: Tagger predicted	[  3327  25937 283391  19995  17411   7766] 357827 out of 383280 (73.938%) truth events.
+	Top Category: Tagger predicted	[ 11821  13210  19645 299780  21157  19662] 385275 out of 383164 (78.238%) truth events.
+	b Category: Tagger predicted	[  8265   9903  33118  16636 266435  58470] 392827 out of 383297 (69.511%) truth events.
+	QCD Category: Tagger predicted	[ 20004  15242  11032  18968  60591 269815] 395652 out of 383094 (70.430%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[281335  92114   8843  17726  10332  18643] 428993 out of 383294 (73.399%) truth events.
+	Z Category: Tagger predicted	[ 63176 237661  36243  14368   9645  12063] 373156 out of 383446 (61.980%) truth events.
+	H Category: Tagger predicted	[  3296  18379 276839  22454  18311   8328] 347607 out of 383280 (72.228%) truth events.
+	Top Category: Tagger predicted	[ 10185  11014  17994 293256  20120  18785] 371354 out of 383164 (76.535%) truth events.
+	b Category: Tagger predicted	[  8159   9948  32388  17074 261276  56067] 384912 out of 383297 (68.165%) truth events.
+	QCD Category: Tagger predicted	[ 17143  14330  10973  18286  63613 269208] 393553 out of 383094 (70.272%) truth events.
+-----------------------------------
+-----------------------------------
+Running 400_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[271119  81280   8096  15263   9828  17232] 402818 out of 383294 (70.733%) truth events.
+	Z Category: Tagger predicted	[ 70239 236353  26306  11741   8110  12368] 365117 out of 383446 (61.639%) truth events.
+	H Category: Tagger predicted	[  4039  28548 286966  21539  19066   9053] 369211 out of 383280 (74.871%) truth events.
+	Top Category: Tagger predicted	[ 12820  13465  19631 299922  21531  19379] 386748 out of 383164 (78.275%) truth events.
+	b Category: Tagger predicted	[  8582  10381  32678  16895 269218  62938] 400692 out of 383297 (70.237%) truth events.
+	QCD Category: Tagger predicted	[ 16495  13419   9603  17804  55544 262124] 374989 out of 383094 (68.422%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350Basic_300_Z_Soft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[284227  93322   8169  17566  10076  18776] 432136 out of 383294 (74.153%) truth events.
+	Z Category: Tagger predicted	[ 59991 235411  33667  12089   9572  12853] 363583 out of 383446 (61.393%) truth events.
+	H Category: Tagger predicted	[  3209  20103 279329  18151  19520   8806] 349118 out of 383280 (72.878%) truth events.
+	Top Category: Tagger predicted	[ 11853  12862  21392 305287  23012  23267] 397673 out of 383164 (79.675%) truth events.
+	b Category: Tagger predicted	[  7899   9205  30827  15363 262375  58221] 383890 out of 383297 (68.452%) truth events.
+	QCD Category: Tagger predicted	[ 16115  12543   9896  14708  58742 261171] 373175 out of 383094 (68.174%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350Basic_300_Soft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[274860  84976   7687  17017   9989  18232] 412761 out of 383294 (71.709%) truth events.
+	Z Category: Tagger predicted	[ 69871 243104  33471  14520  10324  13434] 384724 out of 383446 (63.399%) truth events.
+	H Category: Tagger predicted	[  3162  21832 283663  24259  19438   8335] 360689 out of 383280 (74.009%) truth events.
+	Top Category: Tagger predicted	[ 10123  10631  16102 292151  20767  18416] 368190 out of 383164 (76.246%) truth events.
+	b Category: Tagger predicted	[  7937   9223  31004  16046 257435  54479] 376124 out of 383297 (67.163%) truth events.
+	QCD Category: Tagger predicted	[ 17341  13680  11353  19171  65344 270198] 397087 out of 383094 (70.530%) truth events.
+-----------------------------------
+-----------------------------------
+Running 200_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[280707  90572   8288  16945   9975  17296] 423783 out of 383294 (73.235%) truth events.
+	Z Category: Tagger predicted	[ 62186 234672  30614  12621   9038  12456] 361587 out of 383446 (61.200%) truth events.
+	H Category: Tagger predicted	[  3766  24037 286360  22068  20524   9470] 366225 out of 383280 (74.713%) truth events.
+	Top Category: Tagger predicted	[ 11567  11681  17721 298419  21436  19240] 380064 out of 383164 (77.882%) truth events.
+	b Category: Tagger predicted	[  8168   9317  30953  15377 267087  61788] 392690 out of 383297 (69.681%) truth events.
+	QCD Category: Tagger predicted	[ 16900  13167   9344  17734  55237 262844] 375226 out of 383094 (68.610%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300Basic_300_B_Soft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[286311  95255   9454  16928  12238  20016] 440202 out of 383294 (74.697%) truth events.
+	Z Category: Tagger predicted	[ 58488 232225  31659  12622   9016  11922] 355932 out of 383446 (60.562%) truth events.
+	H Category: Tagger predicted	[  3599  22036 283146  21317  21767   9365] 361230 out of 383280 (73.874%) truth events.
+	Top Category: Tagger predicted	[ 12151  12545  19873 300351  22606  21087] 388613 out of 383164 (78.387%) truth events.
+	b Category: Tagger predicted	[  6531   7906  28486  15391 254958  54068] 367340 out of 383297 (66.517%) truth events.
+	QCD Category: Tagger predicted	[ 16214  13479  10662  16555  62712 266636] 386258 out of 383094 (69.600%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350Basic_300_ZB_noSoft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273748  82253   7431  17889  10327  19334] 410982 out of 383294 (71.419%) truth events.
+	Z Category: Tagger predicted	[ 74921 254061  40740  15634  12356  15354] 413066 out of 383446 (66.257%) truth events.
+	H Category: Tagger predicted	[  3017  17014 278763  23701  19907   8682] 351084 out of 383280 (72.730%) truth events.
+	Top Category: Tagger predicted	[ 10082  10607  15549 295866  21512  21576] 375192 out of 383164 (77.216%) truth events.
+	b Category: Tagger predicted	[  7087   8377  30297  14999 257446  53747] 371953 out of 383297 (67.166%) truth events.
+	QCD Category: Tagger predicted	[ 14439  11134  10500  15075  61749 264401] 377298 out of 383094 (69.017%) truth events.
+-----------------------------------
+-----------------------------------
+Running 350Basic_300_Z_noSoft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273784  84999   9126  16819  12273  17811] 414812 out of 383294 (71.429%) truth events.
+	Z Category: Tagger predicted	[ 69529 240134  32106  12334   8920  11465] 374488 out of 383446 (62.625%) truth events.
+	H Category: Tagger predicted	[  3105  20889 275594  17761  18445   7201] 342995 out of 383280 (71.904%) truth events.
+	Top Category: Tagger predicted	[ 13056  13648  22042 302172  22244  20037] 393199 out of 383164 (78.862%) truth events.
+	b Category: Tagger predicted	[  5809   8022  30766  14893 251058  49529] 360077 out of 383297 (65.499%) truth events.
+	QCD Category: Tagger predicted	[ 18011  15754  13646  19185  70357 277051] 414004 out of 383094 (72.319%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300Basic_300_noSoft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[274057  83686   8311  18177  10751  18293] 413275 out of 383294 (71.500%) truth events.
+	Z Category: Tagger predicted	[ 73109 248402  36968  15474  10807  14200] 398960 out of 383446 (64.781%) truth events.
+	H Category: Tagger predicted	[  3139  18774 275351  20020  18702   7877] 343863 out of 383280 (71.840%) truth events.
+	Top Category: Tagger predicted	[  9405  10300  19196 290809  19128  15549] 364387 out of 383164 (75.896%) truth events.
+	b Category: Tagger predicted	[  7346   8878  31715  16396 263785  60570] 388690 out of 383297 (68.820%) truth events.
+	QCD Category: Tagger predicted	[ 16238  13406  11739  22288  60124 266605] 390400 out of 383094 (69.592%) truth events.
+-----------------------------------
+-----------------------------------
+Running 200_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[287647  97389   8864  17478  10466  18648] 440492 out of 383294 (75.046%) truth events.
+	Z Category: Tagger predicted	[ 56848 232774  35042  12562   8924  11987] 358137 out of 383446 (60.705%) truth events.
+	H Category: Tagger predicted	[  2573  17525 273794  17687  16109   7085] 334773 out of 383280 (71.434%) truth events.
+	Top Category: Tagger predicted	[ 11236  12391  21070 302098  22070  20528] 389393 out of 383164 (78.843%) truth events.
+	b Category: Tagger predicted	[  8405  10100  33043  16249 263136  55081] 386014 out of 383297 (68.650%) truth events.
+	QCD Category: Tagger predicted	[ 16585  13267  11467  17090  62592 269765] 390766 out of 383094 (70.417%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283292  92234   8406  18835  10760  18460] 431987 out of 383294 (73.909%) truth events.
+	Z Category: Tagger predicted	[ 62314 236122  32390  12817   8942  11642] 364227 out of 383446 (61.578%) truth events.
+	H Category: Tagger predicted	[  3010  21099 280669  20395  17435   7522] 350130 out of 383280 (73.228%) truth events.
+	Top Category: Tagger predicted	[  9804  10807  18245 296267  19978  18237] 373338 out of 383164 (77.321%) truth events.
+	b Category: Tagger predicted	[  8071   9730  32569  16507 262775  55423] 385075 out of 383297 (68.556%) truth events.
+	QCD Category: Tagger predicted	[ 16803  13454  11001  18343  63407 271810] 394818 out of 383094 (70.951%) truth events.
+-----------------------------------
+-----------------------------------
+Running 300Basic_300_B_noSoft:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[282878  93451   8757  17957   9925  18012] 430980 out of 383294 (73.801%) truth events.
+	Z Category: Tagger predicted	[ 60058 233972  34711  12059   9020  11437] 361257 out of 383446 (61.018%) truth events.
+	H Category: Tagger predicted	[  3080  18741 274773  19602  17882   7613] 341691 out of 383280 (71.689%) truth events.
+	Top Category: Tagger predicted	[ 11573  12951  20011 299416  20667  20476] 385094 out of 383164 (78.143%) truth events.
+	b Category: Tagger predicted	[  8980  10553  34001  18138 270924  65190] 407786 out of 383297 (70.682%) truth events.
+	QCD Category: Tagger predicted	[ 16725  13778  11027  15992  54879 260366] 372767 out of 383094 (67.963%) truth events.
+-----------------------------------
+-----------------------------------
+Running 50_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283165  90460   8187  18440  11463  20968] 432683 out of 383294 (73.876%) truth events.
+	Z Category: Tagger predicted	[ 66659 244791  38253  14214  11385  14594] 389896 out of 383446 (63.839%) truth events.
+	H Category: Tagger predicted	[  2708  17654 276907  20222  19128   8372] 344991 out of 383280 (72.246%) truth events.
+	Top Category: Tagger predicted	[  9723  10892  19510 295551  20249  17599] 373524 out of 383164 (77.134%) truth events.
+	b Category: Tagger predicted	[  6733   8191  30021  15762 255716  51750] 368173 out of 383297 (66.714%) truth events.
+	QCD Category: Tagger predicted	[ 14306  11458  10402  18975  65356 269811] 390308 out of 383094 (70.429%) truth events.
+-----------------------------------
+-----------------------------------
+Running 150_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[284436  94139   9558  17590  12251  19193] 437167 out of 383294 (74.208%) truth events.
+	Z Category: Tagger predicted	[ 60882 235516  34792  12976   9562  12919] 366647 out of 383446 (61.420%) truth events.
+	H Category: Tagger predicted	[  3403  19575 278247  21557  19940   8578] 351300 out of 383280 (72.596%) truth events.
+	Top Category: Tagger predicted	[ 11422  12750  19424 299647  21612  21565] 386420 out of 383164 (78.203%) truth events.
+	b Category: Tagger predicted	[  7035   8791  30918  16301 256272  54083] 373400 out of 383297 (66.859%) truth events.
+	QCD Category: Tagger predicted	[ 16116  12675  10341  15093  63660 266756] 384641 out of 383094 (69.631%) truth events.
+-----------------------------------
+-----------------------------------
+Running 150_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[283438  93781   8064  17186   9666  18397] 430532 out of 383294 (73.947%) truth events.
+	Z Category: Tagger predicted	[ 58952 230891  31666  10937   8683  11380] 352509 out of 383446 (60.214%) truth events.
+	H Category: Tagger predicted	[  3480  22044 281955  20906  18628   7935] 354948 out of 383280 (73.563%) truth events.
+	Top Category: Tagger predicted	[ 12291  13482  19134 300930  21593  19994] 387424 out of 383164 (78.538%) truth events.
+	b Category: Tagger predicted	[  8710   9909  31887  15906 263362  57330] 387104 out of 383297 (68.709%) truth events.
+	QCD Category: Tagger predicted	[ 16423  13339  10574  17299  61365 268058] 387058 out of 383094 (69.971%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100_B_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[273194  85533   7565  15118   9534  16737] 407681 out of 383294 (71.275%) truth events.
+	Z Category: Tagger predicted	[ 67303 238825  32948  13342   9233  12038] 373689 out of 383446 (62.283%) truth events.
+	H Category: Tagger predicted	[  4054  22546 283342  24048  20354   9728] 364072 out of 383280 (73.925%) truth events.
+	Top Category: Tagger predicted	[ 12186  12356  18147 298965  22084  21696] 385434 out of 383164 (78.025%) truth events.
+	b Category: Tagger predicted	[  8877  10179  31566  16087 262056  57278] 386043 out of 383297 (68.368%) truth events.
+	QCD Category: Tagger predicted	[ 17680  14007   9712  15604  60036 265617] 382656 out of 383094 (69.334%) truth events.
+-----------------------------------
+-----------------------------------
+Running 100_Z_Basic:
+										W	 Z	  H	  Top	b  QCD  Total
+	W Category: Tagger predicted	[278249  86748   7770  17964  10781  19939] 421451 out of 383294 (72.594%) truth events.
+	Z Category: Tagger predicted	[ 69769 244604  35285  13983  10835  13669] 388145 out of 383446 (63.790%) truth events.
+	H Category: Tagger predicted	[  3172  20319 281554  21887  19060   8318] 354310 out of 383280 (73.459%) truth events.
+	Top Category: Tagger predicted	[  9673  10538  17241 293667  18914  17635] 367668 out of 383164 (76.642%) truth events.
+	b Category: Tagger predicted	[  7863   9103  31391  17306 267388  60823] 393874 out of 383297 (69.760%) truth events.
+	QCD Category: Tagger predicted	[ 14568  12134  10039  18357  56319 262710] 374127 out of 383094 (68.575%) truth events.
+-----------------------------------

@@ -19,8 +19,8 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-# listOfSamples = ["BB","HH","QCD","TT","WW","ZZ"]
-listOfSamples = ["RSG"]
+# sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
+sampleTypes = ["RSG"]
 listOfYears = ["2016_APV","2016","2017","2018"]
 
 # Helper functions
@@ -123,10 +123,10 @@ if __name__ == "__main__":
     parser.add_argument('-d','--debug',
                         action='store_true')
     args = parser.parse_args()
-    if not args.samples == "all": listOfSamples = args.samples.split(',')
+    if not args.samples == "all": sampleTypes = args.samples.split(',')
     if not args.years == "all": listOfYears = args.years.split(',')
     if args.debug:
-        print("Samples to process: ", listOfSamples)
+        print("Samples to process: ", sampleTypes)
         print("Years to process: ", listOfYears)
 
     # Check existance of directories you need
@@ -137,7 +137,7 @@ if __name__ == "__main__":
         os.mkdir(args.outDir)
 
     for year in listOfYears:
-        for sampleType in listOfSamples:
+        for sampleType in sampleTypes:
             print("Processing", sampleType)
             inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
             splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize)

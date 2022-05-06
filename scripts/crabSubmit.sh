@@ -2,7 +2,7 @@
 #=========================================================================================
 # crabSubmit.sh --------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott  ---------------------------------------------------------
+# Author(s): Sam Abbott -------- ---------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -14,13 +14,17 @@
 # Setup ///////////////////////////////////////////////////////////////////////////
 #==================================================================================
 
+#screen 106 
+
 # Declare particles, years, and datatypes to submit. 
 # These need to be edited manually, as passing an argument to ./crabSubmit.sh breaks the 'crab submit ...' command later.
-declare -a myParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+declare -a allParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
+# declare -a myParticles=("bb")
 # declare -a myParticles=("QCD")
-declare -a myYears=("2016_APV" "2016" "2017" "2018")
+declare -a allYears=("2016_APV" "2016" "2017" "2018")
 # declare -a myYears=("2017")
-declare -a myDatatypes=("mc" "data")
+# declare -a allDatatypes=("mc" "data")
+declare -a allDatatypes=("mc")
 
 # Define ANSI colors here for the output since I am extra:
 RED='\033[91m' # Red
@@ -146,8 +150,8 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
         mkdir -p $yearDir # Make sure $yearDir exists
         echo "${YEL}Entering $yearDir...${NC}"
         cd $yearDir
-        mkdir -p logFiles # Make logFiles directory if it doesn't exist
-        echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
+        mkdir -p logCrabFiles # Make logCrabFiles directory if it doesn't exist
+        echo "${YEL}Crab log directory:${GRN} ${yearDir}/logCrabFiles${NC}"
         newtxt="fail.txt"
 
         # declare -a massPnts=()
@@ -161,8 +165,8 @@ for dat in ${myDatatypes[*]}; do # Loop over mc and data
             for job in $listOfScripts; do
                 trimstring=${job#*"/"} # Trims the config/ from front of string
                 crabName=${trimstring%"."*} # Trims .py from back of string
-                crab submit $job >> logFiles/$crabName.txt 
-                sleep 2s # If crab jobs are submitted too quickly, some don't go through
+                crab submit $job >> logCrabFiles/$crabName.txt 
+                sleep 10s # If crab jobs are submitted too quickly, some don't go through
                 # massPnts+=( ${crabName##"c"*"_"} ) # Trims the everything but the mass point/momentum
 
             done
@@ -194,8 +198,8 @@ echo "jobs submitted"
 #         mkdir -p $yearDir # Make sure $yearDir exists
 #         echo "${YEL}Entering $yearDir...${NC}"
 #         cd $yearDir
-#         mkdir -p logFiles # Make logFiles directory if it doesn't exist
-#         echo "${YEL}Log directory: ${yearDir}/logFiles${NC}"
+#         mkdir -p logCrabFiles # Make logCrabFiles directory if it doesn't exist
+#         echo "${YEL}Crab log directory: ${yearDir}/logCrabFiles${NC}"
 #         newtxt="fail.txt"
 
 #         declare -a massPnts=()
@@ -209,7 +213,7 @@ echo "jobs submitted"
 #             if [[ ! -d $bestDir ]]; then
 #                 echo "sad dir"
 #                 echo "Error: $bestDir did not submit. Submitting..." >> $newtxt
-#                 # crab submit $f >> logFiles/$crabName.txt &
+#                 # crab submit $f >> logCrabFiles/$crabName.txt &
 #             fi
 #         done
 #     done

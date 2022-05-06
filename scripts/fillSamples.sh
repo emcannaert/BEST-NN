@@ -2,7 +2,7 @@
 #=========================================================================================
 # fillSamples.sh -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott ----------------------------------------------------------
+# Author(s): Sam Abbott ------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -15,11 +15,10 @@
 # Implement data
 
 ###(NOTE: 2015 = 2016_APV)###
-# As of Dec. 10, 2021:
+# As of Apr. 30, 2022:
 #   Missing Mass Points:
-#       ZZ:  2018: 1000
-#       QCD: 2017: Flat
-#       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; All years: 5000, 5500, 6000, 6500, 7000, 7500, 8000
+#       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; 
+            #(All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000
 #   Dataset Versions:
 #       2015: All tt and QCD datasets are v2, the rest is v1.
 #       2016: All datasets are v2
@@ -27,7 +26,8 @@
 #       2018: All datasets are v2 (NOTE: No v1 dataset exists for QCD Flat)
 #   Notes:
 #       HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong)
-#       tt: Mass points on DAS not in the 21 mass points given: (2015 and 2016: 400, 700, 900) <- The script finds all samples, regardless of relation to the 21 mass points requested
+#       tt: Mass points on DAS not in the 21 mass points given: (2015 and 2016: 400, 700, 900),(2015,2016,2017: 9000 @ 30% and 10%) 
+#           ^The script finds all samples, regardless of relation to the 21 mass points requested
 #       tt: Using extra tt samples that were not originally requested. Can be identified by a capital "P" in dataset name (/ZPrimeToTT... instead of /ZprimetoTT...)
 #           Gives 2 extra v2 datasets per mass point (17 from 400 to 4500, 34 total each year) at 30% and 10% width, except that (2017: M900_W270) is v1
 
@@ -237,7 +237,7 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
         if [[ $year == "2016" ]] && [[ $dataset =~ "RunIISummer20UL16MiniAODAPV" ]] ; then continue; fi
 
         # Skip QCD datasets with low pT, and also any MuEnriched datasets that may be present:
-        if [[ $particle == "QCD" ]] && [[ $dataset =~ ("15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"Enriched"|"bcToE") ]]; then continue; fi
+        if [[ $particle == "QCD" ]] && [[ $dataset =~ ("Flat"|"15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"Enriched"|"bcToE") ]]; then continue; fi
 
 
         # Special case for RSGluon TT samples

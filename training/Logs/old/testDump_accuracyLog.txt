@@ -1,0 +1,8 @@
+Ran All60Basic: Max acc = 0.6792,  val_acc = 0.6577
+Ran All60Basic: Max acc = 0.6403,  val_acc = 0.6312
+Ran All60Basic: Max acc = 0.6444,  val_acc = 0.6376
+Ran All60Basic: Max acc = 0.6432,  val_acc = 0.6314
+Ran All60Basic: Max acc = 0.6381,  val_acc = 0.6297
+Ran All60Basic: Max acc = 0.6433,  val_acc = 0.6357
+Ran All60Basic: Max acc = 0.6416,  val_acc = 0.6371
+Ran All60Basic: Max acc = 0.6384,  val_acc = 0.6308

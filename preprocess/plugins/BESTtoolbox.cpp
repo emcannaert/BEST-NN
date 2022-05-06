@@ -132,45 +132,45 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     // std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
     // std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
     // std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
-    besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
-    besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
-    besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
-    besVars["jetAK8_deepAK8_rawW"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
-    besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
-    besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
-    besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});        
-    besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    // besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
+    // besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
+    // besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
+    // besVars["jetAK8_deepAK8_rawW"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
+    // besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
+    // besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
+    // besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
+    // besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});        
+    // besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
 
-    float epsilon = 1e-4;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawT"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawH"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawZ"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawW"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawB"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawC"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 6;
-    else besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
-    // MD Deep AK8
-    besVars["jetAK8_deepAK8MD_rawL"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
-    besVars["jetAK8_deepAK8MD_rawC"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
-    besVars["jetAK8_deepAK8MD_rawB"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
-    besVars["jetAK8_deepAK8MD_rawW"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
-    besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
-    besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
-    besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});        
-    besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawT"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawH"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawZ"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawW"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
-    else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+    // float epsilon = 1e-4;
+    // // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    // if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawT"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 1;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawH"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 2;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawZ"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 3;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawW"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 4;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawB"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 5;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawC"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 6;
+    // else besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    // // MD Deep AK8
+    // besVars["jetAK8_deepAK8MD_rawL"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
+    // besVars["jetAK8_deepAK8MD_rawC"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
+    // besVars["jetAK8_deepAK8MD_rawB"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
+    // besVars["jetAK8_deepAK8MD_rawW"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
+    // besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
+    // besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
+    // besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
+    // besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});        
+    // besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+    // // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    // if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawT"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 1;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawH"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 2;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawZ"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 3;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawW"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 4;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
+    // else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
 
     // Store Jet Charge = (1/sum{pT^0.6}) * sum{q * pT^0.6}
     float jetCharge = 0;
@@ -266,20 +266,15 @@ void storeSecVertexVariables(std::map<std::string, float> &besVars,
         if(jet.DeltaR(vert) < 0.8 ){
             numMatched++;
             // save secondary vertex info for the first three sec vertices
-            jetVecVars["SV_pt"].push_back(ivert->pt() );
-            jetVecVars["SV_eta"].push_back(ivert->eta() );
-            jetVecVars["SV_phi"].push_back(ivert->phi() );
-            jetVecVars["SV_mass"].push_back(ivert->mass() );
-            jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
-            jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
-            jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
+            // jetVecVars["SV_pt"].push_back(ivert->pt() );
+            // jetVecVars["SV_eta"].push_back(ivert->eta() );
+            // jetVecVars["SV_phi"].push_back(ivert->phi() );
+            // jetVecVars["SV_mass"].push_back(ivert->mass() );
+            // jetVecVars["SV_nTracks"].push_back(ivert->numberOfDaughters() );
+            // jetVecVars["SV_chi2"].push_back(ivert->vertexChi2() );
+            // jetVecVars["SV_Ndof"].push_back(ivert->vertexNdof() );
         }
     }
-    // abbott start to process samples to prepare for BEST training
-    // big task: format converter->SV stuff disabled there
-    // SV number is variable, NN needs a fixed amount of inputs...what do?
-    // plot nSecondaryVertices, if managable choose 10 or 5 and pad out zeroes
-    // doo root tree scans, root -b file.root, get tree, tree->Scan("nSecVert:SV_pt","cut") <- check that we are seeing all the SV that are there
     besVars["nSecondaryVertices"] = numMatched;
 }
 
@@ -305,12 +300,12 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // Turn this into case statement? Update after BEST testing
     if      ( mass == "ak8" )           thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)jet->mass() );
     else if ( mass == "ak8SoftDrop" )   thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), jet->userFloat("ak8PFJetsPuppiSoftDropMass") );
-    else if ( mass == "Bottom" )        thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 6.0 );
+    // else if ( mass == "Bottom" )        thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 6.0 );
     else if ( mass == "W" )             thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 80.4 );
-    else if ( mass == "Z" )             thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 91.2 );
+    // else if ( mass == "Z" )             thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 91.2 );
     else if ( mass == "Higgs" )         thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 125.0 );
     else if ( mass == "Top" )           thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), 172.5 );
-    else if ( mass == "Lab")            thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), thisJet.M() );
+    // else if ( mass == "Lab")            thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), thisJet.M() );
     else                                thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), std::stof(mass) ); // The "GeV" automatically gets trimmed when converting to float
 
     
@@ -374,7 +369,10 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // Event Shape Variables
     EventShapeVariables eventShapes( particles2 );
     Thrust thrustCalculator( particles3.begin(), particles3.end() );
-    besVars["isotropy_"+frame]   = eventShapes.isotropy();
+
+    // isotropy is invariant under our boosts. only save it once
+    if (frame == "Higgs") besVars["isotropy"] = eventShapes.isotropy();
+    
     besVars["sphericity_"+frame] = eventShapes.sphericity();
     besVars["aplanarity_"+frame] = eventShapes.aplanarity();
     besVars["thrust_"+frame]     = thrustCalculator.thrust();
@@ -388,11 +386,12 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     std::vector<fastjet::PseudoJet> jetsFJ = sorted_by_E(cs.inclusive_jets(0.0));
     restJets[frame+"Frame"] = jetsFJ;
 
+    std::vector<TLorentzVector> rotationJets;
     // Store reclustered jet info
     for(unsigned int i = 0; i < jetsFJ.size(); i++){
         // make a TLorentzVector for the current clustered rest frame jet
         TLorentzVector iJetLV(jetsFJ[i].px(), jetsFJ[i].py(), jetsFJ[i].pz(), jetsFJ[i].e() );
-
+        rotationJets.push_back(iJetLV);
         // get rest frame jet four vector combinations
         switch(i){
             case 0:
@@ -422,7 +421,9 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
                 break;
         }
     }
-    
+
+    if (rotationJets.size()<2) return false;
+
     // Store boosted candidates for rest frames
     boostedDaughters[frame+"Frame"] = particles;
 
@@ -435,7 +436,9 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     besVars["jet13_CosTheta_"+frame]    = jet13LV.CosTheta();
     besVars["jet23_CosTheta_"+frame]    = jet23LV.CosTheta();
     besVars["jet1234_CosTheta_"+frame]  = jet1234LV.CosTheta();
-    besVars["nJets_"+frame]             = jetsFJ.size();
+
+    // nJets here is invariant under our boosts. only save it once
+    if (frame == "Higgs") besVars["nJets"] = jetsFJ.size();
 
     return true;
 }
@@ -452,6 +455,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
                     //    std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
                        std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> restMasses,
                        std::map<std::string, std::vector<float> > &jetVecVars, int jetColl ){
+    /*
     // loop over lab frame candidates
     for(unsigned int i = 0; i < daughtersOfJet.size(); i++){
 
@@ -460,7 +464,13 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
         // Calculate delta eta and phi for the candidates to the center of the jet
         float deltaEta = daughtersOfJet[i]->eta() - jet->eta();
+
         float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
+        // want delta phi to be from -pi to pi, not -2pi to 2pi
+        // if < -PI, add 2PI; if > PI, subtract 2PI 
+        if      (deltaPhi < -TMath::Pi()): deltaPhi += 2*TMath::Pi()
+        else if (deltaPhi >  TMath::Pi()): deltaPhi -= 2*TMath::Pi()
+
 
         // Calculate pT and Energy logarithms for candidates
         float logpT     = TMath::Log(daughtersOfJet[i]->pt());
@@ -502,7 +512,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         jetVecVars["AllFrame_PF_candidate_isPhoton"].push_back(isPhoton );
         jetVecVars["AllFrame_PF_candidate_isNeutralHadron"].push_back(isNeutralHadron );
         jetVecVars["AllFrame_PF_candidate_isChargedHadron"].push_back(isChargedHadron );
-
+        
         jetVecVars["LabFrame_PF_candidate_deltaEta"].push_back(deltaEta );
         jetVecVars["LabFrame_PF_candidate_deltaPhi"].push_back(deltaPhi );
         jetVecVars["LabFrame_PF_candidate_deltaR"].push_back( TMath::Sqrt( TMath::Sq(deltaEta) + TMath::Sq(deltaPhi) ) ); // Angular separation between the candidate and the jet axis
@@ -524,16 +534,22 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         }
     }
 
+    */
     // loop over rest frames
     for(unsigned int iFrame = 0; iFrame < restMasses.size(); iFrame++){
-
-        // std::string frame = std::to_string(restMasses[iFrame]);
         std::string frame = restMasses[iFrame];
+        /*
+        // std::string frame = std::to_string(restMasses[iFrame]);
         // loop over candidates in the rest frame
         for(auto icand = boostedDaughters[frame+"Frame"].begin(); icand != boostedDaughters[frame+"Frame"].end(); icand++){
             // Calculate delta eta and phi for the candidates to the center of the jet
             float deltaEta = icand->Eta() - jet->eta();
+
             float deltaPhi = icand->Phi() - jet->phi();
+            // want delta phi to be from -pi to pi, not -2pi to 2pi
+            // if < -PI, add 2PI; if > PI, subtract 2PI 
+            if      (deltaPhi < -TMath::Pi()): deltaPhi += 2*TMath::Pi()
+            else if (deltaPhi >  TMath::Pi()): deltaPhi -= 2*TMath::Pi()
 
             // Calculate pT and Energy logarithms for candidates
             float logpT     = TMath::Log(icand->Pt());
@@ -566,14 +582,14 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
             //     jetVecVars[frame+"Frame_PF_candidate_PUPPI_Weights"].push_back( iparticle->puppiWeight() );
             // }
         }
-
+        */
         // loop over rest frame jets
         for(auto ijet = restJets[frame+"Frame"].begin(); ijet != restJets[frame+"Frame"].end(); ijet++){
             // store the rest frame jet information
-            jetVecVars[frame+"Frame_jet_px"].push_back(ijet->px());
-            jetVecVars[frame+"Frame_jet_py"].push_back(ijet->py());
-            jetVecVars[frame+"Frame_jet_pz"].push_back(ijet->pz());
-            jetVecVars[frame+"Frame_jet_energy"].push_back(ijet->e());
+            jetVecVars["jet_px_"+frame].push_back(ijet->px());
+            jetVecVars["jet_py_"+frame].push_back(ijet->py());
+            jetVecVars["jet_pz_"+frame].push_back(ijet->pz());
+            jetVecVars["jet_energy_"+frame].push_back(ijet->e());
         }
     }
 }

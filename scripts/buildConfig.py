@@ -1,7 +1,7 @@
 #=========================================================================================
 # buildConfig.py -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Mark Samuel Abbott ----------------------------------------------------------
+# Author(s): Sam Abbott ------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script was written for Python 2.7.5.
@@ -112,11 +112,12 @@ for dat in myDatatypes:
     if dat == "data": continue # Skip data, not implemented yet
 
     for yr in myYears:
+        # if not yr == "2017": continue
         crabPath = "submit" + yr + "/config" # Path to config directory
         if not os.path.exists(crabPath): os.makedirs(crabPath) # If config directory doesn't exist, create it
 
         for part in myParticles:
-
+            # if not part == "bb": continue
             # Create the run config files for each year, for each particle
             runFile = crabPath + "/run_" + part + ".py"
             if os.path.exists(runFile): os.remove(runFile) # Delete old run config file
@@ -143,7 +144,7 @@ for dat in myDatatypes:
                     if key == "Flat": continue
                     configFile = crabPath + "/crab_" + part +"_Pt_" + key + ".py" # Create unique config file name, like "crab_QCD_Pt_470to600.py"
                 else:
-                    # if not key == "4000": continue
+                    # if not key == "8000": continue
                     configFile = crabPath + "/crab_" + part +"_M_" + key + ".py" # Create unique config file name, like "crab_HH_M_500.py"
 
                 if os.path.exists(configFile): os.remove(configFile) # Delete old crab config file
@@ -151,7 +152,7 @@ for dat in myDatatypes:
                 contempf = open(configtemplateFile, "r") # Read in crab config template
                 for line in contempf:
                     if "CRABDIRFLAG" in line: 
-                        conf.write( 'config.General.requestName = "' + value[0] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding crab directory name (value[0])  
+                        conf.write( 'config.General.requestName = "' + yr + "_" + value[0] + '"\n' ) # Here the dictionary calls [key]th mass point's corresponding crab directory name (value[0])  
                     elif "RUNPARTICLEFLAG" in line:
                         conf.write( 'config.JobType.psetName = "config/run_' + part +'.py"\n' ) # Write the corresponding run config file to use 
                     elif "DATASETFLAG" in line:

@@ -1,0 +1,14 @@
+Ran 50newBEST_Basic2017_newBESTMask_newBEST_compareFrames_newArch: Max acc = 0.6188,  val_acc = 0.6481
+Ran 60newBEST_Basic2017_newBESTMask_newBEST_compareFrames_newArch: Max acc = 0.6262,  val_acc = 0.6525
+Ran 70newBEST_Basic2017_newBESTMask_newBEST_compareFrames_newArch: Max acc = 0.6287,  val_acc = 0.6560
+Ran 50newBEST_Basic2017_newBESTMask_noZ_newBEST_compareFrames_newArch: Max acc = 0.6167,  val_acc = 0.6459
+Ran 60newBEST_Basic2017_newBESTMask_noZ_newBEST_compareFrames_newArch: Max acc = 0.6232,  val_acc = 0.6451
+Ran 70newBEST_Basic2017_newBESTMask_noZ_newBEST_compareFrames_newArch: Max acc = 0.6301,  val_acc = 0.6518
+Ran 50newBEST_Basic2017_newBESTMask_bottom_newBEST_compareFrames_newArch: Max acc = 0.6111,  val_acc = 0.6318
+
+Ran 50newBEST_Basic2017_newBESTMask_newBEST_compareFrames_newArch: Max acc = 0.6327,  val_acc = 0.6664
+Ran 60newBEST_Basic2017_newBESTMask_newBEST_compareFrames_newArch: Max acc = 0.6387,  val_acc = 0.6654
+Ran 70newBEST_Basic2017_newBESTMask_newBEST_compareFrames_newArch: Max acc = 0.6426,  val_acc = 0.6666
+Ran 50newBEST_Basic2017_newBESTMask_noZ_newBEST_compareFrames_newArch: Max acc = 0.6340,  val_acc = 0.6611
+Ran 60newBEST_Basic2017_newBESTMask_noZ_newBEST_compareFrames_newArch: Max acc = 0.6386,  val_acc = 0.6620
+Ran 70newBEST_Basic2017_newBESTMask_noZ_newBEST_compareFrames_newArch: Max acc = 0.6439,  val_acc = 0.6700
