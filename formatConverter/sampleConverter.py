@@ -30,7 +30,7 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]
@@ -61,14 +61,18 @@ def convert(eosDir, outDir, sampleType, year, debug):
     # This file should (for now) live in your current directory (BEST/formatConverter/eosSamples/listOf<sampleType>filePath<year>.txt)
 
     # Open file and read lines (individual file paths)
-    if debug: print("Reading from", eosDir+"listOf"+sampleType+"FilePaths"+year+".txt")
-    with open(eosDir+"listOf"+sampleType+"FilePaths"+year+".txt", 'r') as myFile:
+    pathList = eosDir+"listOf"+sampleType+"FilePaths"+year+".txt"
+
+    if debug: print("Reading from", pathList)
+    with open(pathList, 'r') as myFile:
         # Read file paths from txt file
         fileList = myFile.read().splitlines()
         if debug: print (fileList)
         
         # Make h5f output file to store the images and BES variables
         h5fPath = outDir+sampleType+"Sample_"+year+"_BESTinputs.h5"
+        if sampleType == "RSG": h5fPath = outDir+"TT_ext_Sample_"+year+"_BESTinputs.h5"
+
         if debug: print ("Writing h5f file to",h5fPath)
         h5f = h5py.File(h5fPath,"w")
 
@@ -153,7 +157,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
             thisBatchSize = min(batchSize,len(arrays[arrays.keys()[0]]))
             if ( (numIter % batchPrint) == 0 ): print(sampleType+": This batch (from, to, size):",numIter*thisBatchSize,(numIter+1)*thisBatchSize, thisBatchSize) # Display every 10,000 events
             # (besDS, pfsvDS) = storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug)
-            besDS = storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug)
+            besDS = storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug, outDir)
             
             # increment
             numIter += 1
@@ -171,7 +175,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
 # Store BEST Inputs ///////////////////////////////////////////////////////////////
 #==================================================================================
 # def storeBESTinputs(h5f, numIter, arrays, besDS, pfsvDS, thisBatchSize, debug):
-def storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug):
+def storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug, outDir):
     jetDF = {} # Make a data frame to store the BES variables and PF Candidates
 
     # Store BES variables
@@ -202,9 +206,16 @@ def storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug):
 
     # Create dataset if first batch, otherwise append to dataset
     if numIter == 0: 
-        besDS = h5f.create_dataset('BES_vars', data=jetDF['BES_vars'], maxshape=(None, len(besKeys)), 
-                                    chunks = (10, len(besKeys)), compression="lzf", shuffle=True)
-    else: 
+        if sampleType == "RSG":
+            TTfile = outDir+"TTSample_"+year+"_BESTinputs.h5"
+            TTfile.copy(TTfile["BES_vars"], h5f, "BES_vars")
+            besDS = h5f["BES_vars"]
+            besDS.resize(besDS.shape[0] + len(jetDF['BES_vars']), axis=0)
+            besDS[-len(jetDF['BES_vars']) :] = jetDF['BES_vars']
+        else:
+            besDS = h5f.create_dataset('BES_vars', data=jetDF['BES_vars'], maxshape=(None, len(besKeys)), 
+                                        chunks = (10, len(besKeys)), compression="lzf", shuffle=True)
+    else:
         besDS.resize(besDS.shape[0] + len(jetDF['BES_vars']), axis=0)
         besDS[-len(jetDF['BES_vars']) :] = jetDF['BES_vars']
 
