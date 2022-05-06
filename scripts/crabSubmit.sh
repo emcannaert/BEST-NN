@@ -39,7 +39,7 @@ shopt -s expand_aliases
 alias echo='echo -e'
 
 
-This is where the options and arguments are parsed in.
+# This is where the options and arguments are parsed in.
 if [[ $# == 0 ]]; then # Default case, sets up to submit everything.
     echo "Default behavior triggered. ${BLUE}All${NC} crab jobs for each ${CYAN}particle${NC}, ${GRN}year${NC}, and ${PURP}datatype${NC}, will be submitted."
     myParticles=${allParticles[*]}
