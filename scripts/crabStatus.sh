@@ -57,10 +57,18 @@ for job in ${jobsToCheck[*]}; do
         unfinishedJobs+=( "$job" )
         echo "$output" >> $logFile
     fi
-    if [[ "$output" =~ "FAILED" ]]; then
+    if [[ ("$output" =~ "FAILED") && ("$output" =~ "failed") ]]; then
         /cvmfs/cms.cern.ch/common/crab resubmit $job
     fi
+    
+    if [[ "$output" =~ "dagman" ]]; then
+        /cvmfs/cms.cern.ch/common/crab kill $job
+        rm -r $job
+        # if [[ "$job" =~ "dagman" ]]; then
+        echo -e "\nSUBMIT AGAIN $job\n "
 
+        # /cvmfs/cms.cern.ch/common/crab submit $job
+    fi
 
     # Use this to record the most important info only: 
     # crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $logFile 
@@ -88,5 +96,5 @@ done
 
 # sort -o $logFile{,} # Sorting is difficult, since outputs come in randomly...
 echo -e "\nFinished checking jobs." 
-echo -e "\n${YEL}${finishedJobs}/${allJobs} jobs complete.${NC} $logFile" 
-echo -e "\n${YEL}Find unfinished jobs at${NC} $logFile" 
+echo -e "${YEL}${finishedJobs}/${allJobs} jobs complete${NC}" 
+echo -e "${YEL}Find unfinished jobs at${NC} $logFile" 
