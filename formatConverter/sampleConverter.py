@@ -49,6 +49,7 @@ besKeys = []  # Standard BES variables, only 1 value per event(jet)
 
 # Flag for code that only needs to happen once
 firstConvert = True 
+batchPrint = 10
 
 #==================================================================================
 # Convert /////////////////////////////////////////////////////////////////////////
@@ -148,7 +149,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
                     with open(varFile,"w") as myBESlistFile:
                         for i, var in enumerate(savedVars):
                             myBESlistFile.write(str(i)+":"+var+"\n")
-                batchPrint = 10
+                # batchPrint = 10
                 print("Prints every " + str(batchPrint) + " batches, which is every " + str( batchSize*batchPrint ) + " events." )    
                 # End of firstConvert if statement. From now on, we can skip this block of code
                 firstConvert = False 
