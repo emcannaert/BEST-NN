@@ -31,8 +31,9 @@ unset processes
 if [ $1 == "all" ]; then
     echo "Making list for all years and samples"
     # myYears=("2016_APV" "2016" "2017" "2018")
-    # myYears="2017"
+    # myYears="2016_APV"
     myYears="2016"
+    # myYears="2017"
     processes=("BB" "HH" "TT" "WW" "ZZ" "QCD" ) 
     # processes=("RSG" ) 
     # processes=("HH" ) 
@@ -57,16 +58,24 @@ for year in "${myYears[@]}"; do
         # eosBESTFiles=`xrdfsls -R $eosDirPath | grep '.*HH.*211124*.*BEST'`
 
         filesToAdd=`grep .*$process.*$year.*BEST <<< "$eosBESTFiles"`
-        # declare -a tempfiles
-        # for f in $filesToAdd; do
-        #     if [[ "$year" == "2016" ]] && [[ "$f" =~ "2016_APV" ]]; then continue; fi # year = 2016 will match all the 2016_APV files, so skip them
+        declare -a tempfiles
+        declare -a tempmasspoints
+        for f in $filesToAdd; do
+            if [[ "$year" == "2016" ]] && [[ "$f" =~ "2016_APV" ]]; then continue; fi # year = 2016 will match all the 2016_APV files, so skip them
 
-        #     tempstring=(${f%"/0000"*})   
-        #     if [[ ${tempfiles[*]} =~ $tempstring ]]; then continue; fi
-        #     echo $tempstring
-        #     tempfiles+=($tempstring)   
-        # done
-        # echo -e "\n"
+            tempstring=(${f%"/0000"*})   
+            if [[ ${tempfiles[*]} =~ $tempstring ]]; then continue; fi
+            # echo $tempstring
+            tempfiles+=($tempstring)   
+
+            tempstring2=(${tempstring%"/"*})   
+            if [[ ${tempmasspoints[*]} =~ $tempstring2 ]]; then 
+                echo "REAPEAT: $tempstring2"
+            fi
+            tempmasspoints+=($tempstring2)   
+
+        done
+        echo -e "\n"
 
         # filesToAdd=`grep .*$process.*BEST$year.*211124*.*BESTInputs.*.root <<< "$eosBESTFiles"`
         # filesToAdd=`grep .*$process.*BEST <<< "$eosBESTFiles"`
