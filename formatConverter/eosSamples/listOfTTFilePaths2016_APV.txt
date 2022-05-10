@@ -536,10 +536,6 @@ root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1000_W10_TuneCP2_PSwe
 root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1000_W10_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1000GeV_W_10GeV_trees/220502_092231/0000/BESTInputs_7.root
 root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1000_W10_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1000GeV_W_10GeV_trees/220502_092231/0000/BESTInputs_8.root
 root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1000_W10_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1000GeV_W_10GeV_trees/220502_092231/0000/BESTInputs_9.root
-root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_092334/0000/BESTInputs_1-4.root
-root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_092334/0000/BESTInputs_1-5.root
-root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_092334/0000/BESTInputs_1-6.root
-root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_092334/0000/BESTInputs_5.root
 root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_151847/0000/BESTInputs_1-1.root
 root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_151847/0000/BESTInputs_1-2.root
 root://cmsxrootd.fnal.gov//store/user/maabbott/ZprimeToTT_M1200_W12_TuneCP2_PSweights_13TeV-madgraph-pythiaMLM-pythia8/crab_2016_APV_ZprimeTT_M_1200GeV_W_12GeV_trees/220502_151847/0000/BESTInputs_1.root
