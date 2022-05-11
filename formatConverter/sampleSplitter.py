@@ -19,8 +19,8 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-# sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
-sampleTypes = ["RSG"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSG"]
+# sampleTypes = ["RSG"]
 listOfYears = ["2016_APV","2016","2017","2018"]
 
 # Helper functions
@@ -78,11 +78,12 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
                     besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=valid, maxshape=(None, dsetShape[1]), chunks = (dsetChunks[0], dsetChunks[1]), compression='lzf', shuffle=True)
                     besData["test"][myKey] = h5fTest.create_dataset(myKey, data=test, maxshape=(None, dsetShape[1]), chunks = (dsetChunks[0], dsetChunks[1]), compression='lzf', shuffle=True)
                     print("DS store time:", time.time()-keyTime)
-                else: # max shape by # of pfcands (or SV's) and # of vars
-                    besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=train, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
-                    besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=valid, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
-                    besData["test"][myKey] = h5fTest.create_dataset(myKey, data=test, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
-                    print("DS store time:", time.time()-keyTime)
+                # There are no PFCands in this submission
+                # else: # max shape by # of pfcands (or SV's) and # of vars
+                #     besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=train, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
+                #     besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=valid, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
+                #     besData["test"][myKey] = h5fTest.create_dataset(myKey, data=test, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
+                #     print("DS store time:", time.time()-keyTime)
             else:
                 # append the dataset
                 besData["train"][myKey].resize(besData["train"][myKey].shape[0] + len(train), axis=0)
@@ -140,8 +141,9 @@ if __name__ == "__main__":
         for sampleType in sampleTypes:
             print("Processing", sampleType)
             inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
+            if sampleType == "RSG": inputPath = args.h5Dir+"TT_ext_Sample_"+year+"_BESTinputs.h5"
             splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize)
-        
+
             
     print("Done")
 
