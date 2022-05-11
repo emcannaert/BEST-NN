@@ -1,7 +1,0 @@
-0:SV_Ndof
-1:SV_chi2
-2:SV_eta
-3:SV_mass
-4:SV_nTracks
-5:SV_phi
-6:SV_pt
