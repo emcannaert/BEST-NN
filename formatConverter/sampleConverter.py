@@ -30,9 +30,9 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-# sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
 # sampleTypes = ["HH"]
-sampleTypes = ["RSG"]
+# sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]
 treeName = "run/jetTree"
 
