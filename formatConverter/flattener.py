@@ -17,29 +17,29 @@ import numpy as np
 import numpy.ma as ma
 from sklearn.model_selection import train_test_split
 
-listOfYears = ["2016","2017","2018"]
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
-listOfSampleTypes = ["","train","validation","test"]
+years = ["2016_APV", "2016", "2017", "2018"]
+sampleTypes = ["BB","HH","QCD","WW","ZZ"]#"TT",
+setTypes = ["","train","validation","test"]
 
 ## Loop over all files and keep/reject events in batches. One uses train_test_split to do the heavy lifting.
 ## The random state in the function ensures the same mask across the keys. Since the probabilities are binned in pt,
 ## one must loop over all pt bins and evaluate keep/reject for each.
-def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, myYear, myType, bins, binSize, maxRange, flattenIndex, userBatchSize):
-    print("Begin flattening for", myType)
+def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex, userBatchSize):
+    print("Begin flattening for", setType)
     
     ## Loop over all samples and flatten each one by one. Probabilities have been previously calculated and passed in
     for mySample in sampleTypes:
-        filePath = h5Dir+mySample+'Sample_'+myYear+'_BESTinputs'
-        if myType == "":
+        filePath = h5Dir+mySample+'Sample_'+year+'_BESTinputs'
+        if setType == "":
             filePath = filePath+".h5"
         else:
-            filePath = filePath+"_"+myType+".h5"
+            filePath = filePath+"_"+setType+".h5"
         fIn = h5py.File(filePath, 'r')
         fOut = h5py.File(outDir+filePath.split('.')[-2].split('/')[-1]+"_flattened.h5","w")
         besData = {}
         counter = 0
         totalEvents = fIn[list(fIn.keys())[0]].shape[0]
-        print("Begin batching for sample", mySample, "in year", myYear,"total events", totalEvents)
+        print("Begin batching for sample", mySample, "in year", year,"total events", totalEvents)
         
         ## Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
         while (counter < totalEvents):
@@ -87,8 +87,8 @@ def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, myYear, myType, bins, bin
                         print("Making new datset")
                         if myKey == "BES_vars": # max shape by # of vars
                             besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
-                        else: # max shape by # of pfcands (or SV's) and # of vars
-                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
+                        # else: # max shape by # of pfcands (or SV's) and # of vars
+                        #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
                     else:
                         # append the dataset
                         print("Appending dataset")
@@ -97,19 +97,19 @@ def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, myYear, myType, bins, bin
             counter += batchSize
 
 ## Plot samples in pt (or variable of choice) and return a list of probabilities for keeping events
-def getProbabilities(h5Dir, sampleTypes, myYear, myType, bins, binSize, maxRange, flattenIndex):
+def getProbabilities(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex):
     print("Begin making probabilities array")
     probs = [] # First axis is sampleTypes, second axis is ptBins, values are probability to keep event in sample,ptBin
     binnedNEvents = [] # First axis is sampleTypes, second axis is ptBins, values are number of events in sample,ptBin
 
     ## The following block should populate the binnedNEvents list
     for mySample in sampleTypes:
-        print("Processing", myYear, mySample)
-        filePath = h5Dir+mySample+'Sample_'+myYear+'_BESTinputs'
-        if myType == "":
+        print("Processing", year, mySample)
+        filePath = h5Dir+mySample+'Sample_'+year+'_BESTinputs'
+        if setType == "":
             filePath = filePath+".h5"
         else:
-            filePath = filePath+"_"+myType+".h5"
+            filePath = filePath+"_"+setType+".h5"
         f = h5py.File(filePath, 'r')
         binnedNEvents.append([])
 
@@ -168,17 +168,17 @@ if __name__ == "__main__":
     
     # Take in arguments
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
-    parser.add_argument('-s', '--samples',
-                        dest='samples',
-                        help='<Required> Which (comma separated) samples to process. Examples: 1) all; 2) WW,ZZ,BB',
-                        required=True)
+    parser.add_argument('-tt', '--ttSample',
+                        dest='ttSample',
+                        help='Which TT Sample to flatten with. Default uses the combo TT file. Choices: "RSG" or "ZP".',
+                        default="")
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
                         required=True)
-    parser.add_argument('-st', '--sampleTypes',
-                        dest='sampleTypes',
-                        help='<Required> Which (comma separated) sample types to process. Examples: 1) --all (includes pre-split); 2) train,validation,test',
+    parser.add_argument('-st', '--setTypes',
+                        dest='setTypes',
+                        help='<Required> Which (comma separated) set types to process. Examples: 1) --all (includes pre-split); 2) train,validation,test',
                         required=True)
     parser.add_argument('-b', '--batchSize',
                         dest='batchSize',
@@ -187,7 +187,8 @@ if __name__ == "__main__":
     parser.add_argument('-fi', '--flattenIndex',
                         dest='flattenIndex',
                         type=int,
-                        default=548)
+                        default=142)
+                        # default=548)
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
@@ -212,12 +213,15 @@ if __name__ == "__main__":
     parser.add_argument('-d','--debug',
                         action='store_true')
     args = parser.parse_args()
-    if not args.samples == "all": sampleTypes = args.samples.split(',')
-    if not args.years == "all": listOfYears = args.years.split(',')
-    if not args.sampleTypes == "all": listOfSampleTypes = args.sampleTypes.split(',')
+
+    # Append appropriate TT sample to sample list (TT, RSGTT, or ZPTT)
+    sampleTypes.append(args.ttSample + "TT")
+    if not args.years == "all": years = args.years.split(',')
+    if not args.setTypes == "all": setTypes = args.setTypes.split(',')
     if args.debug:
         print("Samples to process: ", sampleTypes)
-        print("Years to process: ", listOfYears)
+        print("Sets to process: ", setTypes)
+        print("Years to process: ", years)
         print("Flattenning Index: ", args.flattenIndex)
         print("Reading Every nEvents: ", args.batchSize)
 
@@ -229,9 +233,9 @@ if __name__ == "__main__":
     if args.debug: print("Range: ", args.nBins," bins, from ", bins[0], " to ", bins[len(bins)-1]+binSize, " in steps of ", binSize) 
     if args.debug: print("Rejecting events above: ", args.rangeHigh)
 
-    for myYear in listOfYears:
-        for myType in listOfSampleTypes:
-            print("My Type", myType)
-            keepProbs = getProbabilities(args.h5Dir, sampleTypes, myYear, myType, bins, binSize, args.rangeHigh, args.flattenIndex)
-            flattenFile(keepProbs, args.h5Dir, args.outDir, sampleTypes, myYear, myType, bins, binSize, args.rangeHigh, args.flattenIndex, args.batchSize)
+    for year in years:
+        for setType in setTypes:
+            print("My Type", setType)
+            keepProbs = getProbabilities(args.h5Dir, sampleTypes, year, setType, bins, binSize, args.rangeHigh, args.flattenIndex)
+            flattenFile(keepProbs, args.h5Dir, args.outDir, sampleTypes, year, setType, bins, binSize, args.rangeHigh, args.flattenIndex, args.batchSize)
 

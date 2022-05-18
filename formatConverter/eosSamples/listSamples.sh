@@ -30,13 +30,10 @@ unset myYears
 unset processes
 if [ $1 == "all" ]; then
     echo "Making list for all years and samples"
-    # myYears=("2016_APV" "2016" "2017" "2018")
-    # myYears="2016_APV"
-    myYears="2016"
+    myYears=("2016_APV" "2016" "2017" "2018")
+    # myYears=("2016_APV" "2016")
     # myYears="2017"
     processes=("BB" "HH" "TT" "WW" "ZZ" "QCD" ) 
-    # processes=("RSG" ) 
-    # processes=("HH" ) 
 else
     for arg in "$@"; do
         if [ $arg == "2016_APV" ] || [ $arg == "2016" ] || [ $arg == "2017" ] || [ $arg == "2018" ]; then
@@ -83,28 +80,34 @@ for year in "${myYears[@]}"; do
         # Check if file exists, if so delete
         # fileToWrite="listOf$process""FilePaths$year.txt"
         
-        if [[ "$process" == "TT" ]]; then # Create an extra dataset for the TTbar with just RSG samples
-            fileToWrite="listOfRSGFilePaths${year}.txt"
+        if [[ "$process" == "TT" ]]; then # Create extra datasets for the TTbar with ZPrime and RSG split
+            fileTT="listOf${process}FilePaths${year}.txt"
+            if [ -f $fileTT ] ; then rm $fileTT; fi
+            fileRSG="listOfRSG${process}FilePaths${year}.txt"
+            if [ -f $fileRSG ] ; then rm $fileRSG; fi
+            fileZP="listOfZP${process}FilePaths${year}.txt"
+            if [ -f $fileZP ] ; then rm $fileZP; fi            
+            # Write each BESTInput-file's xrootd path to fileToWrite
+            for f in $filesToAdd; do
+                if [[ "$year" == "2016" ]] && [[ "$f" =~ "2016_APV" ]]; then continue; fi # year = 2016 will match all the 2016_APV files, so skip them
+                echo "root://cmsxrootd.fnal.gov/$f" >> $fileTT # include both RSGluon and Zprime files                
+                if [[ "$f" =~ "RSGluon" ]]; then
+                    echo "root://cmsxrootd.fnal.gov/$f" >> $fileRSG # only include RSGluon files in this set
+                else
+                    echo "root://cmsxrootd.fnal.gov/$f" >> $fileZP # only include Zprime files in this set
+                fi               
+            done      
+            echo "Checkout your new list of files at $fileTT, $fileRSG, and $fileZP"        
+        else 
+            fileToWrite="listOf$process""FilePaths$year.txt"
             if [ -f $fileToWrite ] ; then rm $fileToWrite; fi
             # Write each BESTInput-file's xrootd path to fileToWrite
             for f in $filesToAdd; do
                 if [[ "$year" == "2016" ]] && [[ "$f" =~ "2016_APV" ]]; then continue; fi # year = 2016 will match all the 2016_APV files, so skip them
-                if [[ ! "$f" =~ "RSGluon" ]]; then continue; fi # only include RSGluon files in this set
                 echo "root://cmsxrootd.fnal.gov/$f" >> $fileToWrite
-            done      
-            echo "Checkout your new list of files at $fileToWrite"        
+            done
+            echo "Checkout your new list of files at $fileToWrite"
         fi
-        fileToWrite="listOf$process""FilePaths$year.txt"
-
-        if [ -f $fileToWrite ] ; then rm $fileToWrite; fi
-        # Write each BESTInput-file's xrootd path to fileToWrite
-        for f in $filesToAdd; do
-            if [[ "$year" == "2016" ]] && [[ "$f" =~ "2016_APV" ]]; then continue; fi # year = 2016 will match all the 2016_APV files, so skip them
-            if [[ "$process" == "TT" ]] && [[ "$f" =~ "RSGluon" ]]; then continue; fi # do not include RSGluon files in this set
-
-            echo "root://cmsxrootd.fnal.gov/$f" >> $fileToWrite
-        done
         
-        echo "Checkout your new list of files at $fileToWrite"
     done
 done
