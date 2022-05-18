@@ -43,7 +43,7 @@ done < $jobFile
 # for job in */CrabBEST/*/ ; do
 for job in ${jobsToCheck[*]}; do
     ((allJobs++))
-    echo $job
+    # echo -e "\n$job"
     # echo "test"
     # echo $job
     # output=$(crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)')
@@ -56,19 +56,26 @@ for job in ${jobsToCheck[*]}; do
     else
         unfinishedJobs+=( "$job" )
         echo "$output" >> $logFile
+        # echo "$output"
+        echo "$output" | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)'
+        echo -e '\n'
+        # /cvmfs/cms.cern.ch/common/crab kill $job
     fi
+    # echo "$output" >> $logFile
+
     if [[ ("$output" =~ "FAILED") && ("$output" =~ "failed") ]]; then
         /cvmfs/cms.cern.ch/common/crab resubmit $job
+        echo -e '\n'
     fi
     
-    if [[ "$output" =~ "dagman" ]]; then
-        /cvmfs/cms.cern.ch/common/crab kill $job
-        rm -r $job
-        # if [[ "$job" =~ "dagman" ]]; then
-        echo -e "\nSUBMIT AGAIN $job\n "
+    # if [[ "$output" =~ "dagman" ]]; then
+    #     /cvmfs/cms.cern.ch/common/crab kill $job
+    #     rm -r $job
+    #     # if [[ "$job" =~ "dagman" ]]; then
+    #     echo -e "\nSUBMIT AGAIN $job\n "
 
-        # /cvmfs/cms.cern.ch/common/crab submit $job
-    fi
+    #     # /cvmfs/cms.cern.ch/common/crab submit $job
+    # fi
 
     # Use this to record the most important info only: 
     # crab status $job | grep -E '(CRAB project directory|Status on the CRAB server|Jobs status)' >> $logFile 
