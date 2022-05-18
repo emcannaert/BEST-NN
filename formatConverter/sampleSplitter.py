@@ -19,7 +19,7 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSG"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSGTT","ZPTT"]
 # sampleTypes = ["RSG"]
 listOfYears = ["2016_APV","2016","2017","2018"]
 
@@ -141,7 +141,6 @@ if __name__ == "__main__":
         for sampleType in sampleTypes:
             print("Processing", sampleType)
             inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
-            if sampleType == "RSG": inputPath = args.h5Dir+"TT_ext_Sample_"+year+"_BESTinputs.h5"
             splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize)
 
             
