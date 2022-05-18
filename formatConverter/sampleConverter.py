@@ -30,7 +30,7 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSGTT","ZPTT"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]
@@ -68,21 +68,12 @@ def convert(eosDir, outDir, sampleType, year, debug):
     with open(pathList, 'r') as myFile:
         # Read file paths from txt file
         fileList = myFile.read().splitlines()
-        if debug: print (fileList)
+        if debug: print(fileList)
         
         # Make h5f output file to store the images and BES variables
         h5fPath = outDir+sampleType+"Sample_"+year+"_BESTinputs.h5"
-        if sampleType == "RSG": 
-            h5fPath = outDir+"TT_ext_Sample_"+year+"_BESTinputs.h5"
-            if os.path.exists(h5fPath): os.remove(h5fPath)
-            TTfile = outDir+"TTSample_"+year+"_BESTinputs.h5"
-            print("copying TT file...")
-            os.system('cp ' + TTfile + ' ' + h5fPath)
-            h5f = h5py.File(h5fPath,"a")
-
         if debug: print ("Writing h5f file to",h5fPath)
-
-        # h5f = h5py.File(h5fPath,"w")
+        h5f = h5py.File(h5fPath,"w")
 
         numIter = 0
         besDS = None
@@ -214,13 +205,8 @@ def storeBESTinputs(h5f, numIter, arrays, besDS, thisBatchSize, debug, outDir):
 
     # Create dataset if first batch, otherwise append to dataset
     if numIter == 0: 
-        if sampleType == "RSG":
-            besDS = h5f["BES_vars"]
-            besDS.resize(besDS.shape[0] + len(jetDF['BES_vars']), axis=0)
-            besDS[-len(jetDF['BES_vars']) :] = jetDF['BES_vars']
-        else:
-            besDS = h5f.create_dataset('BES_vars', data=jetDF['BES_vars'], maxshape=(None, len(besKeys)), 
-                                        chunks = (10, len(besKeys)), compression="lzf", shuffle=True)
+        besDS = h5f.create_dataset('BES_vars', data=jetDF['BES_vars'], maxshape=(None, len(besKeys)), 
+                                chunks = (10, len(besKeys)), compression="lzf", shuffle=True)
     else:
         besDS.resize(besDS.shape[0] + len(jetDF['BES_vars']), axis=0)
         besDS[-len(jetDF['BES_vars']) :] = jetDF['BES_vars']
