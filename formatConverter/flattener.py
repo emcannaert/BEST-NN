@@ -87,8 +87,8 @@ def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binS
                         print("Making new datset")
                         if myKey == "BES_vars": # max shape by # of vars
                             besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
-                        else: # max shape by # of pfcands (or SV's) and # of vars
-                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
+                        # else: # max shape by # of pfcands (or SV's) and # of vars
+                        #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
                     else:
                         # append the dataset
                         print("Appending dataset")
