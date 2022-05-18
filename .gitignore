@@ -3,7 +3,7 @@
 *.png
 *.gif
 *.pdf
-*crab_projects*
+preprocess/crab/submit*
 *log*
 # */Logs/*
 *.h5
