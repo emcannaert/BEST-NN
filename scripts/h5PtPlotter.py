@@ -13,13 +13,13 @@ import argparse, os
 
 # User definitons
 # bins_list = [i*100 for i in range(0,40)]
-bins_list = [i*50 for i in range(10,40)]
+bins_list = [i*50 for i in range(10,60)]
 
 #cmslpc127
 # Global variables
 years = ["2016_APV","2016","2017","2018"]
-# sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSGTT","ZPTT"]
+# sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
 # listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train_flattened.h5"]
@@ -70,36 +70,45 @@ if __name__ == "__main__":
     ## So full samples, then train,validation,test, then train_flattened,validation_flattened,test_flattened
     for year in years:
         print("Plotting year", year)
-        for suffix in listOfFileTypes:
+        for mySuffix in listOfFileTypes:
+            if mySuffix == ".h5": suffix = ""
+            else:                 suffix = "_"+suffix.split('.')[0]
+           
             print("Plotting suffix", suffix)
             myPtArrays = []
             for sampleType in sampleTypes:
+                print(sampleType)
                 inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs"+suffix
-                if sampleType == "RSG": inputPath = args.h5Dir+"TT_ext_Sample_"+year+"_BESTinputs"+suffix
                 inputFile = h5py.File(inputPath,"r")
+                # print(inputFile.keys())
                 myPtArrays.append(np.array(inputFile["BES_vars"][...,args.ptIndex]))
-
             # --- Create histogram, legend and title ---
             plt.figure()
-            if suffix == ".h5":
+            if suffix == "":
                 H = plt.hist(myPtArrays, bins = bins_list, histtype='step', log=True, label=sampleTypes, stacked=False, fill=False, normed=False)
-                plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
-                plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
+                # plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
+                # plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
             else:
                 H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=False)
-            leg = plt.legend(frameon=False)
+            
+            title = "PtDistribution_"+year+suffix
+            plt.legend(frameon=True, ncol=2)
+            plt.xlabel('pT (GeV)')
+            plt.title(title)
             plt.show()
-            savePath = os.path.join(plotDir, "PtDistribution_"+year+"_"+suffix.split('.')[0]+'.png')
+            savePath = os.path.join(plotDir, title+'.png')
             plt.savefig(savePath)
             plt.clf()
+
             # --- Normalized Create histogram, legend and title ---
-            plt.figure()
             H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
-            leg = plt.legend(frameon=False)
+            plt.legend(frameon=True, ncol=2)
+            plt.xlabel('pT (GeV)')
+            plt.title(title + " Normalized")            
             plt.show()
-            savePath = os.path.join(plotDir, "PtDistribution_"+year+"_"+suffix.split('.')[0]+'_Normalized.png')
+            savePath = os.path.join(plotDir, title+'_Normalized.png')
             plt.savefig(savePath)
-            plt.clf()
+            plt.close()
 
     
     print("Done")
