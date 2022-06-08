@@ -70,20 +70,20 @@ if __name__ == "__main__":
     ## So full samples, then train,validation,test, then train_flattened,validation_flattened,test_flattened
     for year in years:
         print("Plotting year", year)
-        for mySuffix in listOfFileTypes:
-            if mySuffix == ".h5": suffix = ""
-            else:                 suffix = "_"+suffix.split('.')[0]
+        for fileType in listOfFileTypes:
            
-            print("Plotting suffix", suffix)
+            print("Plotting fileType", fileType)
             myPtArrays = []
             for sampleType in sampleTypes:
                 print(sampleType)
-                inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs"+suffix
+                inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs"+fileType
                 inputFile = h5py.File(inputPath,"r")
-                # print(inputFile.keys())
+                print(inputFile.keys())
                 myPtArrays.append(np.array(inputFile["BES_vars"][...,args.ptIndex]))
             # --- Create histogram, legend and title ---
             plt.figure()
+            if fileType == ".h5": suffix = ""
+            else:                 suffix = "_"+suffix.split('.')[0]
             if suffix == "":
                 H = plt.hist(myPtArrays, bins = bins_list, histtype='step', log=True, label=sampleTypes, stacked=False, fill=False, normed=False)
                 # plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
@@ -92,7 +92,7 @@ if __name__ == "__main__":
                 H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=False)
             
             title = "PtDistribution_"+year+suffix
-            plt.legend(frameon=True, ncol=2)
+            plt.legend(frameon=True, ncol=2, loc='lower left')
             plt.xlabel('pT (GeV)')
             plt.title(title)
             plt.show()
@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
             # --- Normalized Create histogram, legend and title ---
             H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
-            plt.legend(frameon=True, ncol=2)
+            plt.legend(frameon=True, ncol=2, loc='upper right')
             plt.xlabel('pT (GeV)')
             plt.title(title + " Normalized")            
             plt.show()

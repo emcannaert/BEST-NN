@@ -18,7 +18,7 @@
 # As of Apr. 30, 2022:
 #   Missing Mass Points:
 #       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; 
-            #(All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000
+            #(All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000
 #   Dataset Versions:
 #       2015: All tt and QCD datasets are v2, the rest is v1.
 #       2016: All datasets are v2
