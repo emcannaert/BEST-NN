@@ -125,12 +125,12 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     #==================================================================================
 
     # This form of the scaler is easy to load with python ( sklearn.externals.joblib.load(scalePath) )
-    scalePath = os.path.join(scaleDir,'BESTScalerParameters.joblib')
+    scalePath = os.path.join(scaleDir,'BESTScalerParameters_'+ year +'.joblib')
     print("Saving Model: " + scalePath)
     dump(ct, scalePath)
 
     # This form of the scaler is for manually recreating the scaler, specifically for the NTuplizer C++ code used later
-    scalePath = os.path.join(scaleDir,'BESTScalerParameters.txt')
+    scalePath = os.path.join(scaleDir,'BESTScalerParameters_'+ year +'.txt')
     print("Saving Parameters: " + scalePath)
     with open(scalePath, 'w') as f: # Comments below describe transformation applied
         for name, transformer, events in ct.transformers_: 
