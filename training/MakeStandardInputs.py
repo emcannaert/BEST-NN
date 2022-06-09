@@ -14,7 +14,8 @@ from sklearn.externals.joblib import dump
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler
 from sklearn.compose import ColumnTransformer
 
-sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+# sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleTypes = ["WW","ZZ","HH","ZPTT","BB","QCD"]
 
 # It is important that "train" is FIRST in this list!!!!
 setTypes = ["train", "validation", "test"]
@@ -31,7 +32,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     #==================================================================================
     # Prepare Scaler //////////////////////////////////////////////////////////////////
     #==================================================================================
-    num_BES_inputs = h5py.File(h5Dir+sampleTypes[0]+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"].shape[1]
+    # num_BES_inputs = h5py.File(h5Dir+sampleTypes[0]+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"].shape[1]
 
     # maskPath = "../formatConverter/masks/BESTMask.txt"
     # maskPath = "../formatConverter/h5samples/BESvarList.txt"
@@ -48,7 +49,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
             inds.append(index)
             vars.append(var)
 
-            if "jetAK8_pt" in var: # Scale pT from [500,1600] to [0,1]
+            if "jetAK8_pt" in var: # Scale pT from [500,2000] to [0,1]
                 scalerDict["minmax"][i] = (var) 
             elif "jet_p" in var: # Scale px,py,pz to 0 mean and unit variance
                 scalerDict["standard"][i] = (var)  
@@ -60,8 +61,9 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
                 scalerDict["maxabs"][i] = (var)
             else: # All other variables are not scaled (they are already close to [-1,1] or [0,1])
                 scalerDict["noscale"][i] = (var)
-
-    mask = [True if str(i) in inds else False for i in range(num_BES_inputs)]
+    
+    # Currently we do not generate unused vars
+    # mask = [True if str(i) in inds else False for i in range(num_BES_inputs)]
 
     # Create list of transformers to apply, in order of when the events appear.
     # Use checkRepeat to see how many events in a row use the same transformer.
@@ -89,7 +91,8 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
 
     # IMPORTANT: ONLY FIT THE SCALE MODEL ON THE TRAINING SET. THEN, APPLY THAT MODEL TO EVERYTHING ELSE.
     print("Loading pre scale h5py files")
-    preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
+    preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
+    # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
     print("Pre scale events shape:", [arr.shape for arr in preScaleEvents])
 
     print("Concatenating...")
@@ -188,10 +191,13 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
             scaledData = ct.transform(arr)
 
             print("Creating Standarized Dataset for ", mySample, len(scaledData))
-            outFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
+            # We are not keeping the RSG samples, so the ZPrime samples can just be named TTSamples from now on
+            if mySample == "ZPTT": outFilePath = h5Dir+"TTSample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
+            else:                  outFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
     
             with h5py.File(outFilePath, "w") as outF:
-                outF.create_dataset('BES_vars', data=scaledData, chunks=(10, num_BES_inputs), compression='lzf', shuffle=True)
+                # outF.create_dataset('BES_vars', data=scaledData, chunks=(10, num_BES_inputs), compression='lzf', shuffle=True)
+                outF.create_dataset('BES_vars', data=scaledData, compression='lzf', shuffle=True)
             del scaledData
 
             print("Done creating", outFilePath)
@@ -209,8 +215,8 @@ if __name__ == "__main__":
                         default="flattened",
                         help="Suffix, used to select correct h5 input file to standardize [default: 'flattened']")
     parser.add_argument('-y','--year', dest='year',
-                        default="2017",
-                        help="Year of data taking to use [default: 2017]")
+                        default=["2016_APV","2016","2017","2018"],
+                        help='Year of data taking to use [default: ["2016_APV","2016","2017","2018"]]')
     parser.add_argument('-sd','--scaleDir', dest='scaleDir',
                         default="ScalerParameters",
                         help="Dir to store scale params and scaler object to check later [default: ScalerParameters]")
@@ -231,6 +237,7 @@ if __name__ == "__main__":
         quit()
     if not os.path.isdir(args.scaleDir): os.makedirs(args.scaleDir)
 
-    standardizeBESTVars(args.h5Dir, args.scaleDir, args.maskPath, sampleTypes, suffix, args.year)
+    for year in args.year:
+        standardizeBESTVars(args.h5Dir, args.scaleDir, args.maskPath, sampleTypes, suffix, year)
 
     tools.logTime(startTime)
