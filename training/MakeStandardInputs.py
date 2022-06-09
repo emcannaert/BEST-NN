@@ -184,7 +184,8 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
 
     for mySet in setTypes: # MAKE SURE THAT TRAIN IS FIRST IN THE setTypes LIST!!!!!
         if not mySet == "train":
-            preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
+            preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
+            # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
         for i, arr in enumerate(preScaleEvents):
             print("Transforming ", mySample)
             mySample = sampleTypes[i]
