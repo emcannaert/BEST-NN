@@ -70,12 +70,13 @@ def flattenFile(minEvents, h5Dir, outDir, sampleTypes, year, setType, bins, binS
                     print("Shape of myDataBool", myDataBool.shape)
                     result = myKeyData[myDataBool]
                     print("Shape of result", result.shape)
-                    if result.shape[0] == 0:
+                    binEvents = result.shape[0]
+                    if binEvents == 0:
                         print("Result has no events in bin, continue to next bin")
                         continue
                     output = result
                     ## The random state needs to be the same for each key to ensure we keep the same events across keys
-                    output = train_test_split(result, train_size=minEvents, shuffle=True, random_state=29)[0]
+                    output = train_test_split(result, train_size=(minEvents/float(binEvents)), shuffle=True, random_state=29)[0]
                     print("Size of kept events", len(output))
                     if len(output) == 0:
                         print("Output has no events in bin, continue to next bin")
