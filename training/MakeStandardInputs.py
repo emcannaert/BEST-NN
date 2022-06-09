@@ -97,7 +97,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
 
     print("Concatenating...")
     preScaleAll = np.concatenate(preScaleEvents)
-    # del preScaleEvents
+    del preScaleEvents
     print("Pre scale events shape:", preScaleAll.shape)
 
     ct = ColumnTransformer(
@@ -183,14 +183,18 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     #==================================================================================
 
     for mySet in setTypes: # MAKE SURE THAT TRAIN IS FIRST IN THE setTypes LIST!!!!!
-        if not mySet == "train":
-            preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
+        # if not mySet == "train":
+            # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
             # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
-        for i, arr in enumerate(preScaleEvents):
-            print("Transforming ", mySample)
-            mySample = sampleTypes[i]
-            scaledData = ct.transform(arr)
+        # for i, arr in enumerate(preScaleEvents):
+            # mySample = sampleTypes[i]
+            # scaledData = ct.transform(arr)
 
+        for mySample in sampleTypes:
+            print("Transforming ", mySample)
+            preScaleEvents = np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[()]
+            scaledData = ct.transform(preScaleEvents)
+            
             print("Creating Standarized Dataset for ", mySample, len(scaledData))
             # We are not keeping the RSG samples, so the ZPrime samples can just be named TTSamples from now on
             if mySample == "ZPTT": outFilePath = h5Dir+"TTSample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
@@ -199,10 +203,11 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
             with h5py.File(outFilePath, "w") as outF:
                 # outF.create_dataset('BES_vars', data=scaledData, chunks=(10, num_BES_inputs), compression='lzf', shuffle=True)
                 outF.create_dataset('BES_vars', data=scaledData, compression='lzf', shuffle=True)
-            del scaledData
-
+            
             print("Done creating", outFilePath)
-        del preScaleEvents
+            del scaledData
+            del preScaleEvents
+
     del ct
 
 if __name__ == "__main__":
