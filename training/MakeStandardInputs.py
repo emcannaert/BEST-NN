@@ -103,7 +103,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     ct = ColumnTransformer(
         transformers, #transformer list
         remainder = "drop", # there should not be any remainders
-        n_jobs = 10
+        # n_jobs = 10
     )
 
     # print(ct)
