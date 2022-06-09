@@ -37,68 +37,109 @@ def flattenFile(minEvents, h5Dir, outDir, sampleTypes, year, setType, bins, binS
         fIn = h5py.File(filePath, 'r')
         fOut = h5py.File(outDir+filePath.split('.')[-2].split('/')[-1]+"_flatTop.h5","w")
         besData = {}
+
+        dataArr = np.array(fIn["BES_vars"][()])
+        dsetShape  = fIn["BES_vars"].shape
+        # dsetChunks = fIn["BES_vars"].chunks 
+        print("Shape of input data", dsetShape)
+        # Loop over bins (events in dataset may belong to any pt-bin)
+        for binIndex in range(0,len(bins)):
+            if minEvents == 0:
+                print("Min Events are 0, skipping saving part")
+                continue
+            currLowRange = bins[binIndex]
+            currHighRange = min(currLowRange+binSize, maxRange)
+            ## Pick out data in bin, myDataBool has shape (batchSize,1) with boolean values of whether the event is in the right bin
+            myDataBool = (currLowRange<dataArr[...,flattenIndex])*(dataArr[...,flattenIndex]<currHighRange)
+            print("Processing Bin:", currLowRange, currHighRange)
+            print("Shape of myDataBool", myDataBool.shape)
+            result = dataArr[myDataBool]
+            print("Shape of result", result.shape)
+            binEvents = result.shape[0]
+            if binEvents == 0:
+                print("Result has no events in bin, continue to next bin")
+                continue
+            output = result
+            ## The random state needs to be the same for each key to ensure we keep the same events across keys
+            output = train_test_split(result, train_size=(minEvents/float(binEvents)), shuffle=True, random_state=29)[0]
+            print("Size of kept events", len(output))
+            if len(output) == 0:
+                print("Output has no events in bin, continue to next bin")
+                continue
+            # Store kept data
+            if not "BES_vars" in besData.keys():
+                print("Making new datset")
+                besData["BES_vars"] = fOut.create_dataset("BES_vars", data=output, maxshape=(None,dsetShape[1]), compression='lzf', shuffle=True)
+            else:
+                # append the dataset
+                print("Appending dataset")
+                besData["BES_vars"].resize(besData["BES_vars"].shape[0] + len(output), axis=0)
+                besData["BES_vars"][-len(output) :] = output
+    """
         counter = 0
         totalEvents = fIn[list(fIn.keys())[0]].shape[0]
         print("Begin batching for sample", mySample, "in year", year,"total events", totalEvents)
         
-        ## Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
+        # Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
         while (counter < totalEvents):
             batchSize = userBatchSize if (totalEvents > counter+userBatchSize) else (totalEvents-counter)
             print("Batch size", batchSize, "at", counter)
             
-            # Grab pt part of dataset to evaluate whether to keep or reject event
+            Grab pt part of dataset to evaluate whether to keep or reject event
             myPtData = np.array(fIn["BES_vars"][counter:counter+batchSize,flattenIndex])
-            print("Shape of myPtData", myPtData.shape)
-            
-            # For each key in dataset, take partial dataset and copy or reject. Note the random state below ensures the same set of events are kept or rejected 
-            for myKey in fIn.keys():
-                print("Key", myKey)
-                myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
-                dsetShape  = fIn[myKey].shape
-                dsetChunks = fIn[myKey].chunks 
-                print("Shape of myKeyData", myKeyData.shape)
-                # Loop over bins (events in dataset may belong to any pt-bin)
-                for binIndex in range(0,len(bins)):
-                    if minEvents == 0:
-                        print("Min Events are 0, skipping saving part")
-                        continue
-                    currLowRange = bins[binIndex]
-                    currHighRange = min(currLowRange+binSize, maxRange)
-                    ## Pick out data in bin, myDataBool has shape (batchSize,1) with boolean values of whether the event is in the right bin
-                    myDataBool = (currLowRange<myPtData)*(myPtData<currHighRange)
-                    print("Processing Bin:", currLowRange, currHighRange)
-                    print("Shape of myDataBool", myDataBool.shape)
-                    result = myKeyData[myDataBool]
-                    print("Shape of result", result.shape)
-                    binEvents = result.shape[0]
-                    if binEvents == 0:
-                        print("Result has no events in bin, continue to next bin")
-                        continue
-                    output = result
-                    ## The random state needs to be the same for each key to ensure we keep the same events across keys
-                    output = train_test_split(result, train_size=(minEvents/float(binEvents)), shuffle=True, random_state=29)[0]
-                    print("Size of kept events", len(output))
-                    if len(output) == 0:
-                        print("Output has no events in bin, continue to next bin")
-                        continue
-                    # Store kept data
-                    if not myKey in besData.keys():
-                        print("Making new datset")
-                        if myKey == "BES_vars": # max shape by # of vars
-                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
-                        # else: # max shape by # of pfcands (or SV's) and # of vars
-                        #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
-                    else:
-                        # append the dataset
-                        print("Appending dataset")
-                        besData[myKey].resize(besData[myKey].shape[0] + len(output), axis=0)
-                        besData[myKey][-len(output) :] = output
+        myPtData = np.array(fIn["BES_vars"][...,flattenIndex])
+        print("Shape of myPtData", myPtData.shape)
+        
+        For each key in dataset, take partial dataset and copy or reject. Note the random state below ensures the same set of events are kept or rejected 
+        for myKey in fIn.keys():
+            print("Key", myKey)
+            # myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
+            myKeyData = np.array(fIn[myKey][()])
+            dsetShape  = fIn[myKey].shape
+            dsetChunks = fIn[myKey].chunks 
+            print("Shape of myKeyData", myKeyData.shape)
+            # Loop over bins (events in dataset may belong to any pt-bin)
+            for binIndex in range(0,len(bins)):
+                if minEvents == 0:
+                    print("Min Events are 0, skipping saving part")
+                    continue
+                currLowRange = bins[binIndex]
+                currHighRange = min(currLowRange+binSize, maxRange)
+                ## Pick out data in bin, myDataBool has shape (batchSize,1) with boolean values of whether the event is in the right bin
+                myDataBool = (currLowRange<myPtData)*(myPtData<currHighRange)
+                print("Processing Bin:", currLowRange, currHighRange)
+                print("Shape of myDataBool", myDataBool.shape)
+                result = myKeyData[myDataBool]
+                print("Shape of result", result.shape)
+                binEvents = result.shape[0]
+                if binEvents == 0:
+                    print("Result has no events in bin, continue to next bin")
+                    continue
+                output = result
+                ## The random state needs to be the same for each key to ensure we keep the same events across keys
+                output = train_test_split(result, train_size=(minEvents/float(binEvents)), shuffle=True, random_state=29)[0]
+                print("Size of kept events", len(output))
+                if len(output) == 0:
+                    print("Output has no events in bin, continue to next bin")
+                    continue
+                # Store kept data
+                if not myKey in besData.keys():
+                    print("Making new datset")
+                    if myKey == "BES_vars": # max shape by # of vars
+                        besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
+                    # else: # max shape by # of pfcands (or SV's) and # of vars
+                    #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
+                else:
+                    # append the dataset
+                    print("Appending dataset")
+                    besData[myKey].resize(besData[myKey].shape[0] + len(output), axis=0)
+                    besData[myKey][-len(output) :] = output
             counter += batchSize
-
+    """
 ## Plot samples in pt (or variable of choice) and return a list of probabilities for keeping events
 def getMinEvents(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex):
     print("Begin making probabilities array")
-    probs = [] # First axis is sampleTypes, second axis is ptBins, values are probability to keep event in sample,ptBin
+    # probs = [] # First axis is sampleTypes, second axis is ptBins, values are probability to keep event in sample,ptBin
     binnedNEvents = [] # First axis is sampleTypes, second axis is ptBins, values are number of events in sample,ptBin
 
     ## The following block should populate the binnedNEvents list
@@ -110,7 +151,7 @@ def getMinEvents(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, fla
         else:
             filePath = filePath+"_"+setType+"_flattened.h5"
         f = h5py.File(filePath, 'r')
-        binnedNEvents.append([])
+        # binnedNEvents.append([])
 
         ## Only needs to be done on smallest key, BEST_vars
         ## Output shape of myData is (NEvents,)
@@ -127,14 +168,14 @@ def getMinEvents(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, fla
             ## Shape of truncated data is (NEventsPass,)
             myTruncatedData = dataMask[~dataMask.mask]
             ## Append NEvents in bin to last element (list) of binnedNEvents, i.e. mySample
-            binnedNEvents[-1].append(len(myTruncatedData))
+            binnedNEvents.append(len(myTruncatedData))
     #print(binnedNEvents)
 
     ## Convert to numpy array to better manipulate
     ## binnedNEvents is shape (nSamples, nBins, 1) with values NEventsInBinForSample
     binnedNEvents = np.array(binnedNEvents)
     print(binnedNEvents.shape)
-    print("First entry", binnedNEvents[0])
+    print("First entry", binnedNEvents)
     
     ## Next, populate probs which is a list of shape (NSamples, NBins, 1) with value keepProbability
     minEvents = float(np.amin(binnedNEvents))
