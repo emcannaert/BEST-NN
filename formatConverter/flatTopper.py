@@ -59,8 +59,7 @@ def flattenFile(minEvents, h5Dir, outDir, sampleTypes, year, setType, bins, binS
                 print("Shape of myKeyData", myKeyData.shape)
                 # Loop over bins (events in dataset may belong to any pt-bin)
                 for binIndex in range(0,len(bins)):
-                    flatTopMinEvents = minEvents[binIndex]
-                    if flatTopMinEvents == 0:
+                    if minEvents == 0:
                         print("Min Events are 0, skipping saving part")
                         continue
                     currLowRange = bins[binIndex]
@@ -75,9 +74,8 @@ def flattenFile(minEvents, h5Dir, outDir, sampleTypes, year, setType, bins, binS
                         print("Result has no events in bin, continue to next bin")
                         continue
                     output = result
-                    if flatTopMinEvents < 1:
-                        ## The random state needs to be the same for each key to ensure we keep the same events across keys
-                        output = train_test_split(result, train_size=flatTopMinEvents, shuffle=True, random_state=29)[0]
+                    ## The random state needs to be the same for each key to ensure we keep the same events across keys
+                    output = train_test_split(result, train_size=minEvents, shuffle=True, random_state=29)[0]
                     print("Size of kept events", len(output))
                     if len(output) == 0:
                         print("Output has no events in bin, continue to next bin")
@@ -138,12 +136,8 @@ def getMinEvents(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, fla
     print("First entry", binnedNEvents[0])
     
     ## Next, populate probs which is a list of shape (NSamples, NBins, 1) with value keepProbability
-    print("Finding minimum events")
-
-    minEvents = []
-    for binIndex in range(0, len(bins)):
-        print(binnedNEvents[...,binIndex])
-        minEvents.append(float(min(binnedNEvents[...,binIndex])))
+    minEvents = float(np.amin(binnedNEvents))
+    print("Minimum events: " + str(minEvents))
 
     return minEvents
 
