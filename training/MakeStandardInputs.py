@@ -248,7 +248,7 @@ if __name__ == "__main__":
         quit()
     if not os.path.isdir(args.scaleDir): os.makedirs(args.scaleDir)
 
-    for year in args.year:
+    for year in years:
         standardizeBESTVars(args.h5Dir, args.scaleDir, args.maskPath, sampleTypes, suffix, year)
 
     tools.logTime(startTime)
