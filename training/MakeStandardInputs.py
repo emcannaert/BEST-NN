@@ -19,6 +19,9 @@ sampleTypes = ["WW","ZZ","HH","ZPTT","BB","QCD"]
 
 # It is important that "train" is FIRST in this list!!!!
 setTypes = ["train", "validation", "test"]
+
+years = ["2016_APV", "2016", "2017", "2018"]
+
     
 def checkRepeat(j, keys):
     repeatList = []
@@ -192,7 +195,8 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
 
         for mySample in sampleTypes:
             print("Transforming ", mySample)
-            preScaleEvents = np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5","r")["BES_vars"])[()]
+            inFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5"
+            preScaleEvents = np.array(h5py.File(inFilePath,"r")["BES_vars"])[()]
             scaledData = ct.transform(preScaleEvents)
             
             print("Creating Standarized Dataset for ", mySample, len(scaledData))
@@ -220,9 +224,9 @@ if __name__ == "__main__":
     parser.add_argument('-sf','--suffix', dest='suffix',
                         default="flattened",
                         help="Suffix, used to select correct h5 input file to standardize [default: 'flattened']")
-    parser.add_argument('-y','--year', dest='year',
-                        default=["2016_APV","2016","2017","2018"],
-                        help='Year of data taking to use [default: ["2016_APV","2016","2017","2018"]]')
+    parser.add_argument('-y','--years', dest='years',
+                        help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
+                        required=True)
     parser.add_argument('-sd','--scaleDir', dest='scaleDir',
                         default="ScalerParameters",
                         help="Dir to store scale params and scaler object to check later [default: ScalerParameters]")
@@ -233,6 +237,7 @@ if __name__ == "__main__":
 
     suffix = args.suffix
     if not suffix == "": suffix = "_" + suffix
+    if not args.years == "all": years = args.years.split(',')
 
     # Check inputs
     if not os.path.isdir(args.h5Dir):
