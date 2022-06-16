@@ -124,12 +124,12 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_eta"]   = jet->eta();
     besVars["jetAK8_pt"]    = jet->pt();
     besVars["jetAK8_mass"]  = jet->mass();
-    besVars["bDisc"]        = jet->bDiscriminator("pfDeepCSVJetTags:probb") + jet->bDiscriminator("pfDeepCSVJetTags:probbb");
-    besVars["bDisc_probb"]  = jet->bDiscriminator("pfDeepCSVJetTags:probb");
-    besVars["bDisc_probbb"] = jet->bDiscriminator("pfDeepCSVJetTags:probbb");
+    besVars["bDisc"]        = jet->bDiscriminator("pfDeepFlavourJetTags:probb") + jet->bDiscriminator("pfDeepFlavourJetTags:probbb");
+    besVars["bDisc_probb"]  = jet->bDiscriminator("pfDeepFlavourJetTags:probb");
+    besVars["bDisc_probbb"] = jet->bDiscriminator("pfDeepFlavourJetTags:probbb");
 
     // Deep AK8
-    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
+    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepFlavourJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
     std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
     std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
     besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
@@ -223,7 +223,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         double maxbDisc = 0;
         double imaxbDisc;
         for (unsigned int isubjet=0; isubjet < subjets.size(); isubjet++) {
-            double bDiscVal = subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probbb");
+            double bDiscVal = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probbb");
             
             // Find max bDisc value and index
             if (bDiscVal > maxbDisc) { 
@@ -235,8 +235,8 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
             if (isubjet <= 1) { // Only triggers for first 2 iterations of loop, the leading subjets
                 std::string leadingSubJet = std::to_string(isubjet + 1); // this is either 1 or 2, the leading subjets, which correspond to index 0 and 1 for isubjet
                 besVars["bDisc"+leadingSubJet]           = bDiscVal;
-                besVars["bDisc"+leadingSubJet+"_probb"]  = subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probb");
-                besVars["bDisc"+leadingSubJet+"_probbb"] = subjets[isubjet]->bDiscriminator("pfDeepCSVJetTags:probbb");
+                besVars["bDisc"+leadingSubJet+"_probb"]  = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probb");
+                besVars["bDisc"+leadingSubJet+"_probbb"] = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probbb");
             }       
         }
         besVars["bDiscSubJet_Max"] = maxbDisc;
@@ -244,8 +244,8 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         // separate these like the above abbott
         // maximum subjet CSV value -> loop through all subjets, always store 0 and 1, but do them all and store the index + value of largest probb + probbb
         // sep branch bDisc_Max and bDisc_Max_i
-        // besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[0]->bDiscriminator("pfDeepCSVJetTags:probbb");
-        // besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepCSVJetTags:probb") + subjets[1]->bDiscriminator("pfDeepCSVJetTags:probbb");
+        // besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[0]->bDiscriminator("pfDeepFlavourJetTags:probbb");
+        // besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[1]->bDiscriminator("pfDeepFlavourJetTags:probbb");
     }
 }
 

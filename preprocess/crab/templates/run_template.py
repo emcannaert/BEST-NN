@@ -60,6 +60,27 @@ updateJetCollection(
      printWarning = False # Making this false removes the "b tagging need to be run on uncorrected jets" warning, which would print for every job.
  )
 
+#=========================================================================================      
+# Add Deep Jet variables -----------------------------------------------------------------      
+#========================================================================================= 
+
+updateJetCollection(
+   process,
+   jetSource = cms.InputTag('selectedUpdatedPatJetsNewDFTraining'),
+   pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
+   svSource = cms.InputTag('slimmedSecondaryVertices'),
+   jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+   btagDiscriminators = [
+      'pfDeepFlavourJetTags:probb',
+      'pfDeepFlavourJetTags:probbb',
+      'pfDeepFlavourJetTags:problepb',
+      'pfDeepFlavourJetTags:probc',
+      'pfDeepFlavourJetTags:probuds',
+      'pfDeepFlavourJetTags:probg'
+      ],
+   postfix='NewDFTraining'
+)
+
 
 #=========================================================================================
 # Prepare and run producer ---------------------------------------------------------------
@@ -103,4 +124,5 @@ process.outpath = cms.EndPath(process.out)
 
 # Organize the running procedure
 process.p = cms.Path(process.selectedAK8Jets*process.countAK8Jets*process.run)
+process.p.associate(process.patAlgosToolsTask)
 
