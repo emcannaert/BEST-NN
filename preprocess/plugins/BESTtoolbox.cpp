@@ -129,48 +129,74 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["bDisc_probbb"] = jet->bDiscriminator("pfDeepFlavourJetTags:probbb");
 
     // Deep AK8
-    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepFlavourJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
+    //std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepFlavourJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
+    //std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
+    //std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
+    //besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
+    //besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
+    //besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
+    //besVars["jetAK8_deepAK8_rawW"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
+    //besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
+    //besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
+    //besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
+    //besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});        
+    //besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+
+    //float epsilon = 1e-4;
+    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    //if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
+    //else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawT"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 1;
+    //else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawH"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 2;
+    //else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawZ"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 3;
+    //else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawW"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 4;
+    //else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawB"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 5;
+    //else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawC"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 6;
+    //else besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    // MD Deep AK8
+    //besVars["jetAK8_deepAK8MD_rawL"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
+    //besVars["jetAK8_deepAK8MD_rawC"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
+    //besVars["jetAK8_deepAK8MD_rawB"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
+    //besVars["jetAK8_deepAK8MD_rawW"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
+    //besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
+    //besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
+    //besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
+    //besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});        
+    //besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    //if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
+    //else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawT"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 1;
+    //else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawH"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 2;
+    //else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawZ"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 3;
+    //else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawW"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 4;
+    //else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
+    //else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
+    //else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+
+    // ParticleNet
+    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
     std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
     std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
-    besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
-    besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
-    besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
-    besVars["jetAK8_deepAK8_rawW"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
-    besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
-    besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
-    besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});        
-    besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    besVars["jetAK8_ParticleNet_rawL"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDothers");
+    besVars["jetAK8_ParticleNet_rawC"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDcc") + jet->bDiscriminator("pfParticleNetJetTags:probQCDc");
+    besVars["jetAK8_ParticleNet_rawB"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDbb") + jet->bDiscriminator("pfParticleNetJetTags:probQCDb");
+    besVars["jetAK8_ParticleNet_rawW"] = jet->bDiscriminator("pfParticleNetJetTags:probWcq") + jet->bDiscriminator("pfParticleNetJetTags:probWqq");
+    besVars["jetAK8_ParticleNet_rawZ"] = jet->bDiscriminator("pfParticleNetJetTags:probZbb") + jet->bDiscriminator("pfParticleNetJetTags:probZcc") + jet->bDiscriminator("pfParticleNetJetTags:probZqq");
+    besVars["jetAK8_ParticleNet_rawH"] = jet->bDiscriminator("pfParticleNetJetTags:probHbb") + jet->bDiscriminator("pfParticleNetJetTags:probHcc") + jet->bDiscriminator("pfParticleNetJetTags:probHqqqq");
+    besVars["jetAK8_ParticleNet_rawT"] = jet->bDiscriminator("pfParticleNetJetTags:probTbcq") + jet->bDiscriminator("pfParticleNetJetTags:probTbqq");
+    besVars["jetAK8_ParticleNet_rawmax"] = std::max({besVars["jetAK8_ParticleNet_rawL"],besVars["jetAK8_ParticleNet_rawC"],besVars["jetAK8_ParticleNet_rawB"],besVars["jetAK8_ParticleNet_rawW"],besVars["jetAK8_ParticleNet_rawZ"],besVars["jetAK8_ParticleNet_rawH"],besVars["jetAK8_ParticleNet_rawT"]});        
+    besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
 
     float epsilon = 1e-4;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawT"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawH"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawZ"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawW"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawB"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawC"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 6;
-    else besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
-    // MD Deep AK8
-    besVars["jetAK8_deepAK8MD_rawL"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
-    besVars["jetAK8_deepAK8MD_rawC"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
-    besVars["jetAK8_deepAK8MD_rawB"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
-    besVars["jetAK8_deepAK8MD_rawW"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
-    besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
-    besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
-    besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});        
-    besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawT"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawH"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawZ"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawW"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
-    else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+    // // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawL"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 0;
+    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawT"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 1;
+    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawH"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 2;
+    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawZ"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 3;
+    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawW"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 4;
+    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawB"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 5;
+    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawC"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 6;
+    else besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
+
 
     // Store Jet Charge = (1/sum{pT^0.6}) * sum{q * pT^0.6}
     float jetCharge = 0;
