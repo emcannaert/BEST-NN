@@ -13,7 +13,7 @@ process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000))
 
 
 process.source = cms.Source("PoolSource",
@@ -32,7 +32,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 #=========================================================================================
 updateJetCollection(
    process,
-   jetSource = cms.InputTag('slimmedJetsAK8'),
+   jetSource = cms.InputTag('selectedUpdatedPatJetsNewDFTraining'),
    pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
    svSource = cms.InputTag('slimmedSecondaryVertices'),
    rParam = 0.8,
@@ -62,6 +62,43 @@ updateJetCollection(
     #postfix = 'AK8',
     printWarning = False # Making this false removes the "b tagging need to be run on uncorrected jets" warning, which would print for every job.
 )
+
+#=========================================================================================            
+# Add ParticleNet variables -----------------------------------------------------------------            
+#=========================================================================================            
+#updateJetCollection(
+#   process,
+#   jetSource = cms.InputTag('slimmedJetsAK8'),
+#   pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
+#   svSource = cms.InputTag('slimmedSecondaryVertices'),
+#   rParam = 0.8,
+#   jetCorrections = ('AK8PFPuppi', cms.vstring(['L2Relative', 'L3Absolute']), 'None'),
+#   btagDiscriminators = ['pfCombinedInclusiveSecondaryVertexV2BJetTags',
+#                         'pfParticleNetJetTags:probTbcq', 'pfParticleNetJetTags:probTbqq',
+#                         'pfParticleNetJetTags:probWcq', 'pfParticleNetJetTags:probWqq',
+#                         'pfParticleNetJetTags:probZbb', 'pfParticleNetJetTags:probZcc', 'pfParticleNetJetTags:probZqq',
+#                         'pfParticleNetJetTags:probHbb', 'pfParticleNetJetTags:probHcc', 'pfParticleNetJetTags:probHqqqq',
+#                         'pfParticleNetJetTags:probQCDbb', 'pfParticleNetJetTags:probQCDcc',
+#                         'pfParticleNetJetTags:probQCDb', 'pfParticleNetJetTags:probQCDc',
+#                         'pfParticleNetJetTags:probQCDothers',
+   #                      'pfDeepBoostedDiscriminatorsJetTags:TvsQCD', 'pfDeepBoostedDiscriminatorsJetTags:WvsQCD',
+   #                      'pfDeepBoostedDiscriminatorsJetTags:ZvsQCD', 'pfDeepBoostedDiscriminatorsJetTags:ZbbvsQCD',
+   #                      'pfDeepBoostedDiscriminatorsJetTags:HbbvsQCD', 'pfDeepBoostedDiscriminatorsJetTags:H4qvsQCD',
+   #                      'pfMassDecorrelatedParticleNetTags:probTbcq', 'pfMassDecorrelatedParticleNetTags:probTbqq',
+   #                      'pfMassDecorrelatedParticleNetTags:probWcq', 'pfMassDecorrelatedParticleNetTags:probWqq',
+   #                      'pfMassDecorrelatedParticleNetTags:probZbb', 'pfMassDecorrelatedParticleNetTags:probZcc', 'pfMassDecorrelatedParticleNetTags:probZqq',
+   #                      'pfMassDecorrelatedParticleNetTags:probHbb', 'pfMassDecorrelatedParticleNetTags:probHcc', 'pfMassDecorrelatedParticleNetTags:probHqqqq',
+   #                      'pfMassDecorrelatedParticleNetTags:probQCDbb', 'pfMassDecorrelatedParticleNetTags:probQCDcc',
+   #                      'pfMassDecorrelatedParticleNetTags:probQCDb', 'pfMassDecorrelatedParticleNetTags:probQCDc',
+   #                      'pfMassDecorrelatedDeepBoostedJetTags:probQCDothers',
+   #                      'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD',
+   #                      'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD',
+   #                      'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight'
+#   ],
+#    postfix = 'ParticleNet',
+    #postfix = 'AK8',                                                                                 
+#    printWarning = False # Making this false removes the "b tagging need to be run on uncorrected jets" warning, which would print for every job.                                                          
+#)
 
 
 #=========================================================================================

@@ -237,22 +237,22 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_charge");
 
     // Deep AK8
-    //listOfVars.push_back("jetAK8_deepAK8_rawL");
-    //listOfVars.push_back("jetAK8_deepAK8_rawC");
-    //listOfVars.push_back("jetAK8_deepAK8_rawB");
-    //listOfVars.push_back("jetAK8_deepAK8_rawW");
-    //listOfVars.push_back("jetAK8_deepAK8_rawZ");
-    //listOfVars.push_back("jetAK8_deepAK8_rawH");
-    //listOfVars.push_back("jetAK8_deepAK8_rawT");
-    //listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawL");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawC");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawB");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawW");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawH");
-    //listOfVars.push_back("jetAK8_deepAK8MD_rawT");
-    //listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+    listOfVars.push_back("jetAK8_deepAK8_rawL");
+    listOfVars.push_back("jetAK8_deepAK8_rawC");
+    listOfVars.push_back("jetAK8_deepAK8_rawB");
+    listOfVars.push_back("jetAK8_deepAK8_rawW");
+    listOfVars.push_back("jetAK8_deepAK8_rawZ");
+    listOfVars.push_back("jetAK8_deepAK8_rawH");
+    listOfVars.push_back("jetAK8_deepAK8_rawT");
+    listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawL");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawC");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawB");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawW");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawH");
+    listOfVars.push_back("jetAK8_deepAK8MD_rawT");
+    listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
 
     // Particle Net
     listOfVars.push_back("jetAK8_ParticleNet_rawL");                                          
@@ -262,7 +262,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_ParticleNet_rawZ");                                          
     listOfVars.push_back("jetAK8_ParticleNet_rawH");                                          
     listOfVars.push_back("jetAK8_ParticleNet_rawT");                                          
-    listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");                                   
+    listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");
 
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
