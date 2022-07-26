@@ -187,8 +187,9 @@ if __name__ == "__main__":
     parser.add_argument('-fi', '--flattenIndex',
                         dest='flattenIndex',
                         type=int,
-                        default=142)
-                        # default=548)
+                        #default=142)
+                        #default=548)
+                        default=166)
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
