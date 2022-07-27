@@ -19,7 +19,7 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSGTT","ZPTT"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
 # sampleTypes = ["RSG"]
 listOfYears = ["2016_APV","2016","2017","2018"]
 
