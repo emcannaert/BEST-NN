@@ -30,7 +30,7 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSGTT","ZPTT"]
+sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]

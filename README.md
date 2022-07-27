@@ -23,7 +23,7 @@ Then, make a fork, clone the repository, and compile the programs as modules for
 
 ```bash
 cd CMSSW_10_6_27/src/
-git clone https://gitlab.cern.ch/username/BEST.git
+git clone https://gitlab.cern.ch/BoostedEventShapeTagger/BEST.git
 scram b -j8
 ```
 

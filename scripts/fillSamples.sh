@@ -223,11 +223,11 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
     declare -a dasResults=( $(dasgoclient -query="dataset dataset=/${dasFront[$particle]}*${dasBack[$particle]}*/${dasYear}*-106X*/MINIAODSIM datatype=$datatype") )
     
     # Special case for RSGluon TT samples
-    declare -a dasExtra=()
-    if [[ $particle == "tt" ]]; then 
-        dasExtra=( $(dasgoclient -query="dataset dataset=/RSGluon*${dasBack[$particle]}*/${dasYear}*-106X*/MINIAODSIM datatype=$datatype") )
-        dasResults+=( "${dasExtra[@]}" )
-    fi
+#    declare -a dasExtra=()
+#    if [[ $particle == "tt" ]]; then 
+#        dasExtra=( $(dasgoclient -query="dataset dataset=/RSGluon*${dasBack[$particle]}*/${dasYear}*-106X*/MINIAODSIM datatype=$datatype") )
+#        dasResults+=( "${dasExtra[@]}" )
+#    fi
 
     v2Counter=0 # Counter to keep track of how many datasets need a v2 still
     k=0 # Index for $dasMasses

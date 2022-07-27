@@ -12,7 +12,8 @@
 # Edit this to match style of other scripts
 
 # List files from eos with BEST in name (typically /eos/path/BESTInputs_*.root)
-eosDirPath="/store/user/maabbott/"
+#eosDirPath="/store/user/maabbott/"
+eosDirPath="/store/user/sostrom/"
 echo "Listing files in $eosDirPath"
 if [ $# -gt 0 ]; then
     echo "Your command line contains $# arguments."
@@ -80,7 +81,7 @@ for year in "${myYears[@]}"; do
         # Check if file exists, if so delete
         # fileToWrite="listOf$process""FilePaths$year.txt"
         
-        if [[ "$process" == "TT" ]]; then # Create extra datasets for the TTbar with ZPrime and RSG split
+        if [[ "$process" == "RSG" ]]; then # Create extra datasets for the TTbar with ZPrime and RSG split
             fileTT="listOf${process}FilePaths${year}.txt"
             if [ -f $fileTT ] ; then rm $fileTT; fi
             fileRSG="listOfRSG${process}FilePaths${year}.txt"
