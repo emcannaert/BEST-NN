@@ -23,7 +23,8 @@ process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
 		# "/store/mc/RunIISummer20UL16MiniAODv2/BulkGravToZZToZhadZhad_narrow_M-500_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/260000/FDB63BDA-822F-3B4C-BDA9-82352D326B69.root"
         # "/store/mc/RunIISummer20UL16MiniAODAPV/BulkGravToZZToZhadZhad_narrow_M-1000_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v8-v2/140000/D4297079-2764-484E-8154-5A8DDCBB9111.root"
-        "/store/mc/RunIISummer20UL17MiniAODv2/BulkGravToZZToZhadZhad_narrow_M-4000_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mc2017_realistic_v9-v2/260000/FF6DA8D7-7B1A-D341-A226-19C12EF0621B.root"
+        "file:/afs/cern.ch/work/b/bregnery/public/BESTstudies/CMSSW_10_6_29/src/BEST/preprocess/local/FF6DA8D7-7B1A-D341-A226-19C12EF0621B.root"
+        #"/store/mc/RunIISummer20UL17MiniAODv2/BulkGravToZZToZhadZhad_narrow_M-4000_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mc2017_realistic_v9-v2/260000/FF6DA8D7-7B1A-D341-A226-19C12EF0621B.root"
         # "/store/mc/RunIISummer20UL16MiniAODv2/BulkGravToZZToZhadZhad_narrow_M-8000_TuneCP5_13TeV-madgraph-pythia/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/230000/A0ADDB1D-04E2-5246-B4D8-6368556763CB.root"
                                          )
 )
@@ -622,7 +623,8 @@ process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
 # # Run the producer
 process.run = cms.EDProducer('BESTProducer',
 #                             inputJetColl = cms.string(jetcollection_name),
-                              inputJetColl = cms.string("updatedPatJetsTransientCorrectedPatJetsAk8PuppiJetsSoftDropSubjets"),
+                              #inputJetColl = cms.string("updatedPatJetsTransientCorrectedPatJetsAk8PuppiJetsSoftDropSubjets"),
+                              inputJetColl = cms.string("updatedPatJetsTransientCorrectedRekeyPackedPatJetsAk8PuppiJetsNewDFTraining"),
 #                             inputJetColl = cms.string("slimmedJetsAK8"),
                              jetColl = cms.string('PUPPI'),                     
 							 jetType = cms.string("Z"),
