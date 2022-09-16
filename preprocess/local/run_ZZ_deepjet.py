@@ -607,7 +607,8 @@ jetcollection_name = "updatedPatJetsTransientCorrectedRekeyPackedPatJetsAk8Puppi
 #jetcollection_name = "patJetsAk8PuppiJetsFat"
 
 process.selectedAK8Jets = cms.EDFilter('PATJetSelector',
-                                        src = cms.InputTag("slimmedJetsAK8"),
+                                        #src = cms.InputTag("slimmedJetsAK8"),
+                                        src = cms.InputTag("updatedPatJetsTransientCorrectedRekeyPackedPatJetsAk8PuppiJetsNewDFTraining"),
                                         cut = cms.string('500.0 < pt && pt < 3500.0 && abs(eta) < 2.4'),
                                         filter = cms.bool(True)
 )
@@ -626,9 +627,9 @@ process.run = cms.EDProducer('BESTProducer',
                               #inputJetColl = cms.string("updatedPatJetsTransientCorrectedPatJetsAk8PuppiJetsSoftDropSubjets"),
                               inputJetColl = cms.string("updatedPatJetsTransientCorrectedRekeyPackedPatJetsAk8PuppiJetsNewDFTraining"),
 #                             inputJetColl = cms.string("slimmedJetsAK8"),
-                             jetColl = cms.string('PUPPI'),                     
-							 jetType = cms.string("Z"),
-                             storeDaughters = cms.bool(True),
+                              jetColl = cms.string('PUPPI'),                     
+			      jetType = cms.string("Z"),
+                              storeDaughters = cms.bool(True),
 )
 process.TFileService = cms.Service("TFileService", fileName = cms.string("ZZ_4000_BESTInputs.root") )
 
@@ -646,6 +647,6 @@ process.out = cms.OutputModule("PoolOutputModule",
 process.outpath = cms.EndPath(process.out)
 
 # Organize the running procedure
-process.p = cms.Path(process.selectedAK8Jets*process.countAK8Jets*process.run)
+process.p = cms.Path(process.selectedAK8Jets*process.countAK8Jets) #*process.run)
 process.p.associate(task)
 process.p.associate(process.patAlgosToolsTask)

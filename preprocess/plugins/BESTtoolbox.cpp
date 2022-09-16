@@ -116,7 +116,7 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 // the jet tree --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
-                       int jetColl){
+                       int jetColl, std::vector<pat::Jet> subJets){
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
     // Jet four vector and Soft Drop info
@@ -124,14 +124,15 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_eta"]   = jet->eta();
     besVars["jetAK8_pt"]    = jet->pt();
     besVars["jetAK8_mass"]  = jet->mass();
-    besVars["bDisc"]        = jet->bDiscriminator("pfDeepFlavourJetTags:probb") + jet->bDiscriminator("pfDeepFlavourJetTags:probbb");
+
+    // Deep Flavour
+    besVars["bDisc"]        = subJets.at(0).bDiscriminator("pfDeepFlavourJetTags:probb") + subJets.at(0).bDiscriminator("pfDeepFlavourJetTags:probbb");
+    std::cout << "Loading the values: " << besVars["bDisc"] << std::endl;
     besVars["bDisc_probb"]  = jet->bDiscriminator("pfDeepFlavourJetTags:probb");
     besVars["bDisc_probbb"] = jet->bDiscriminator("pfDeepFlavourJetTags:probbb");
+    std::cout<<"This Jet Scores: "<< subJets.at(0).bDiscriminator("pfDeepFlavourJetTags:probb") << std::endl;
 
     // Deep AK8
-    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepFlavourJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
-    std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
-    std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
     besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
     besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
     besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
@@ -139,7 +140,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
     besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
     besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});        
+    besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});
     besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
 
     float epsilon = 1e-4;
@@ -160,7 +161,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
     besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
     besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});        
+    besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});
     besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
     // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
     if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
@@ -173,9 +174,6 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
 
     // ParticleNet
-    std::cout<<"This Jet Scores: "<<jet->bDiscriminator("pfDeepCSVJetTags:probb")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<std::endl;
-    std::cout<<"This Jet Scores, Part 2: "<<jet->bDiscriminator("pfBoostedDoubleSecondaryVertexAK8BJetTags")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleBvLJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probQCD")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvLJetTags:probHcc")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHbb")<<", "<<jet->bDiscriminator("pfMassIndependentDeepDoubleCvBJetTags:probHcc")<<std::endl;
-    std::cout<<"This Jet Scores, Part 3: "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD")<<", "<<jet->bDiscriminator("pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD")<<std::endl;
     besVars["jetAK8_ParticleNet_rawL"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDothers");
     besVars["jetAK8_ParticleNet_rawC"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDcc") + jet->bDiscriminator("pfParticleNetJetTags:probQCDc");
     besVars["jetAK8_ParticleNet_rawB"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDbb") + jet->bDiscriminator("pfParticleNetJetTags:probQCDb");
@@ -183,7 +181,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_ParticleNet_rawZ"] = jet->bDiscriminator("pfParticleNetJetTags:probZbb") + jet->bDiscriminator("pfParticleNetJetTags:probZcc") + jet->bDiscriminator("pfParticleNetJetTags:probZqq");
     besVars["jetAK8_ParticleNet_rawH"] = jet->bDiscriminator("pfParticleNetJetTags:probHbb") + jet->bDiscriminator("pfParticleNetJetTags:probHcc") + jet->bDiscriminator("pfParticleNetJetTags:probHqqqq");
     besVars["jetAK8_ParticleNet_rawT"] = jet->bDiscriminator("pfParticleNetJetTags:probTbcq") + jet->bDiscriminator("pfParticleNetJetTags:probTbqq");
-    besVars["jetAK8_ParticleNet_rawmax"] = std::max({besVars["jetAK8_ParticleNet_rawL"],besVars["jetAK8_ParticleNet_rawC"],besVars["jetAK8_ParticleNet_rawB"],besVars["jetAK8_ParticleNet_rawW"],besVars["jetAK8_ParticleNet_rawZ"],besVars["jetAK8_ParticleNet_rawH"],besVars["jetAK8_ParticleNet_rawT"]});        
+    besVars["jetAK8_ParticleNet_rawmax"] = std::max({besVars["jetAK8_ParticleNet_rawL"],besVars["jetAK8_ParticleNet_rawC"],besVars["jetAK8_ParticleNet_rawB"],besVars["jetAK8_ParticleNet_rawW"],besVars["jetAK8_ParticleNet_rawZ"],besVars["jetAK8_ParticleNet_rawH"],besVars["jetAK8_ParticleNet_rawT"]});
     besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
 
     //float epsilon = 1e-4;
@@ -250,9 +248,9 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         double imaxbDisc;
         for (unsigned int isubjet=0; isubjet < subjets.size(); isubjet++) {
             double bDiscVal = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probbb");
-            
+
             // Find max bDisc value and index
-            if (bDiscVal > maxbDisc) { 
+            if (bDiscVal > maxbDisc) {
                 maxbDisc  = bDiscVal;
                 imaxbDisc = isubjet;
             }
@@ -263,7 +261,7 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
                 besVars["bDisc"+leadingSubJet]           = bDiscVal;
                 besVars["bDisc"+leadingSubJet+"_probb"]  = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probb");
                 besVars["bDisc"+leadingSubJet+"_probbb"] = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probbb");
-            }       
+            }
         }
         besVars["bDiscSubJet_Max"] = maxbDisc;
         besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
@@ -334,10 +332,10 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // else if ( mass == "Lab")            thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), thisJet.M() );
     else                                thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), std::stof(mass) ); // The "GeV" automatically gets trimmed when converting to float
 
-    
-    
+
+
     // thisJetLV.SetPtEtaPhiM(thisJet.Pt(), thisJet.Eta(), thisJet.Phi(), (float)mass );
-    // Possibly adjust pT as well? think about physics (and exp) like assume measuring higgs, see this mass, what correction to pT to get best fit? dif for dif signals 
+    // Possibly adjust pT as well? think about physics (and exp) like assume measuring higgs, see this mass, what correction to pT to get best fit? dif for dif signals
 
     std::vector<TLorentzVector> particles;
     std::vector<math::XYZVector> particles2;
@@ -380,7 +378,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
     // std::string frame = std::to_string(mass)+"GeV";
     // std::string frame = mass+"GeV";
     std::string frame = mass;
-    
+
     // Jet Asymmetry
     besVars["asymmetry_"+frame] = sumPz/sumP;
 
@@ -398,7 +396,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
 
     // isotropy is invariant under our boosts. only save it once
     if (frame == "Higgs") besVars["isotropy"] = eventShapes.isotropy();
-    
+
     besVars["sphericity_"+frame] = eventShapes.sphericity();
     besVars["aplanarity_"+frame] = eventShapes.aplanarity();
     besVars["thrust_"+frame]     = thrustCalculator.thrust();
@@ -493,7 +491,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
         float deltaPhi = daughtersOfJet[i]->phi() - jet->phi();
         // want delta phi to be from -pi to pi, not -2pi to 2pi
-        // if < -PI, add 2PI; if > PI, subtract 2PI 
+        // if < -PI, add 2PI; if > PI, subtract 2PI
         if      (deltaPhi < -TMath::Pi()): deltaPhi += 2*TMath::Pi()
         else if (deltaPhi >  TMath::Pi()): deltaPhi -= 2*TMath::Pi()
 
@@ -521,7 +519,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         case 130: // Check if candidate is K long
             isNeutralHadron = true; break;
         case 211: // Check if candidate is pion or antipion
-            isChargedHadron = true; break; 
+            isChargedHadron = true; break;
         }
 
         // Store the candidate
@@ -538,7 +536,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         jetVecVars["AllFrame_PF_candidate_isPhoton"].push_back(isPhoton );
         jetVecVars["AllFrame_PF_candidate_isNeutralHadron"].push_back(isNeutralHadron );
         jetVecVars["AllFrame_PF_candidate_isChargedHadron"].push_back(isChargedHadron );
-        
+
         jetVecVars["LabFrame_PF_candidate_deltaEta"].push_back(deltaEta );
         jetVecVars["LabFrame_PF_candidate_deltaPhi"].push_back(deltaPhi );
         jetVecVars["LabFrame_PF_candidate_deltaR"].push_back( TMath::Sqrt( TMath::Sq(deltaEta) + TMath::Sq(deltaPhi) ) ); // Angular separation between the candidate and the jet axis
@@ -573,7 +571,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
             float deltaPhi = icand->Phi() - jet->phi();
             // want delta phi to be from -pi to pi, not -2pi to 2pi
-            // if < -PI, add 2PI; if > PI, subtract 2PI 
+            // if < -PI, add 2PI; if > PI, subtract 2PI
             if      (deltaPhi < -TMath::Pi()): deltaPhi += 2*TMath::Pi()
             else if (deltaPhi >  TMath::Pi()): deltaPhi -= 2*TMath::Pi()
 

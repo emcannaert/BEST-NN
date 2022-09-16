@@ -90,7 +90,7 @@ namespace best {
     JetType jetTypeFromString(const std::string& label) {
         static const JetTypeStringToEnum jetTypeStringToEnumMap[] = {
             {'Q', Q},
-	        {'H', H},
+	    {'H', H},
             {'t', t},
             {'W', W},
             {'Z', Z},
@@ -181,6 +181,7 @@ class BESTProducer : public edm::stream::EDProducer<> {
         // Tokens
         //edm::EDGetTokenT<std::vector<pat::PackedCandidate> > pfCandsToken_;
         edm::EDGetTokenT<std::vector<pat::Jet> > ak8JetsToken_;
+        edm::EDGetTokenT<std::vector<pat::Jet> > subJetsToken_;
         //edm::EDGetTokenT<std::vector<pat::Jet> > ak4JetsToken_;
         edm::EDGetTokenT<std::vector<reco::GenParticle> > genPartToken_;
         edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate> > secVerticesToken_;
@@ -255,13 +256,13 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
 
     // Particle Net
-    listOfVars.push_back("jetAK8_ParticleNet_rawL");                                          
-    listOfVars.push_back("jetAK8_ParticleNet_rawC");                                         
-    listOfVars.push_back("jetAK8_ParticleNet_rawB");                                          
-    listOfVars.push_back("jetAK8_ParticleNet_rawW");                                          
-    listOfVars.push_back("jetAK8_ParticleNet_rawZ");                                          
-    listOfVars.push_back("jetAK8_ParticleNet_rawH");                                          
-    listOfVars.push_back("jetAK8_ParticleNet_rawT");                                          
+    listOfVars.push_back("jetAK8_ParticleNet_rawL");
+    listOfVars.push_back("jetAK8_ParticleNet_rawC");
+    listOfVars.push_back("jetAK8_ParticleNet_rawB");
+    listOfVars.push_back("jetAK8_ParticleNet_rawW");
+    listOfVars.push_back("jetAK8_ParticleNet_rawZ");
+    listOfVars.push_back("jetAK8_ParticleNet_rawH");
+    listOfVars.push_back("jetAK8_ParticleNet_rawT");
     listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");
 
     // Vertex Variables
@@ -286,7 +287,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("bDisc2_probbb");
     listOfVars.push_back("bDiscSubJet_Max");
     listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
-    
+
 
     // nsubjettiness
     listOfVars.push_back("jetAK8_Tau4");
@@ -299,18 +300,18 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
     std::vector<std::string> restMasses;
     restMasses.clear();
-    restMasses.push_back("300GeV"); restMasses.push_back("400GeV"); 
+    restMasses.push_back("300GeV"); restMasses.push_back("400GeV");
     // Frames that are not being used are commented out
     // unsigned int iterMass = 50;
-    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
-    //     restMasses.push_back(std::to_string(iterMass)+"GeV"); 
+    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true.
+    //     restMasses.push_back(std::to_string(iterMass)+"GeV");
     //     iterMass += 50;
     // }
 
     // restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z");
     restMasses.push_back("W"); restMasses.push_back("Higgs"); restMasses.push_back("Top");
-    restMasses.push_back("ak8"); restMasses.push_back("ak8SoftDrop"); 
-    // restMasses.push_back("Lab"); 
+    restMasses.push_back("ak8"); restMasses.push_back("ak8SoftDrop");
+    // restMasses.push_back("Lab");
 
     // Now use this vector to generate the variable names to add:
     for (unsigned int imass=0; imass < restMasses.size(); imass++) {
@@ -323,7 +324,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             listOfVecVars.push_back("jet_py_"+frame);
             listOfVecVars.push_back("jet_pz_"+frame);
             listOfVecVars.push_back("jet_energy_"+frame);
-            
+
             // Fox Wolfram Moments
             listOfVars.push_back("FoxWolfH1_"+frame);
             listOfVars.push_back("FoxWolfH2_"+frame);
@@ -358,7 +359,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             listOfVars.push_back("asymmetry_"+frame);
         }
 
-    
+
         // add the daughter and rest frame information
         // if(storeDaughters == true){
 
@@ -388,12 +389,12 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             //     listOfVecVars.push_back("AllFrame_PF_candidate_isPhoton");
             //     listOfVecVars.push_back("AllFrame_PF_candidate_isNeutralHadron");
             //     listOfVecVars.push_back("AllFrame_PF_candidate_isChargedHadron");
-                
+
             //     // PUPPI weights
             //     listOfVecVars.push_back("AllFrame_PF_candidate_PUPPIweights");
             // }
         // }
-    }     
+    }
     restMasses.clear();
 
     // Make Branches for each variable
@@ -413,9 +414,16 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     // AK8 Jets
     edm::InputTag ak8JetsTag_;
-    ak8JetsTag_ = edm::InputTag("slimmedJetsAK8", "", "PAT");
-    // ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "run"); // this may be needed as an option for 2016 mc
+    //ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "PAT");
+    ak8JetsTag_ = edm::InputTag(inputJetColl_, "", "run");
     ak8JetsToken_ = consumes<std::vector<pat::Jet> >(ak8JetsTag_);
+
+    // Sub Jets
+    edm::InputTag subJetsTag_;
+    subJetsTag_ = edm::InputTag("updatedPatJetsTransientCorrectedSoftDropSubjetsPFAK8DF", "", "run");
+    //subJetsTag_ = edm::InputTag("selectedUpdatedPatJetsSoftDropSubjetsPFAK8DF", "SubJets", "run");
+    //subJetsTag_ = edm::InputTag("selectedUpdatedPatJetsSoftDropSubjetsPFAK8DF", "", "PAT");
+    subJetsToken_ = consumes<std::vector<pat::Jet> >(subJetsTag_);
 
     // Gen Particles
     edm::InputTag genPartTag_;
@@ -456,6 +464,7 @@ BESTProducer::~BESTProducer()
 void
 BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+    std::cout << "Starting Producer" << std::endl;
     using namespace edm;
     using namespace fastjet;
     using namespace std;
@@ -467,9 +476,18 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     //------------------------------------------------------------------------------
 
     // Find objects corresponding to the token and link to the handle
+/*
+    Handle<pat::JetCollection> ak8JetsCollection;
+    iEvent.getByToken(ak8JetsToken_, ak8JetsCollection);
+    pat::JetCollection ak8Jets = *ak8JetsCollection.product();
+*/
     Handle< std::vector<pat::Jet> > ak8JetsCollection;
     iEvent.getByToken(ak8JetsToken_, ak8JetsCollection);
     vector<pat::Jet> ak8Jets = *ak8JetsCollection.product();
+
+    Handle< std::vector<pat::Jet> > subJetsCollection;
+    iEvent.getByToken(subJetsToken_, subJetsCollection);
+    vector<pat::Jet> subJets = *subJetsCollection.product();
 
     Handle< std::vector<reco::GenParticle> > genPartCollection;
     iEvent.getByToken(genPartToken_, genPartCollection);
@@ -531,18 +549,18 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
     std::vector<std::string> restMasses;
     restMasses.clear();
-    restMasses.push_back("300GeV"); restMasses.push_back("400GeV"); 
+    restMasses.push_back("300GeV"); restMasses.push_back("400GeV");
     // Frames that are not being used are commented out
     // unsigned int iterMass = 50;
-    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true. 
-    //     restMasses.push_back(std::to_string(iterMass)+"GeV"); 
+    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true.
+    //     restMasses.push_back(std::to_string(iterMass)+"GeV");
     //     iterMass += 50;
     // }
 
     // restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z");
     restMasses.push_back("W"); restMasses.push_back("Higgs"); restMasses.push_back("Top");
-    restMasses.push_back("ak8"); restMasses.push_back("ak8SoftDrop"); 
-    // restMasses.push_back("Lab"); 
+    restMasses.push_back("ak8"); restMasses.push_back("ak8SoftDrop");
+    // restMasses.push_back("Lab");
 
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
@@ -569,7 +587,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                storeJetVariables(treeVars, ijet, jetColl_);
+                storeJetVariables(treeVars, ijet, jetColl_, subJets);
 
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);
@@ -581,8 +599,8 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 for (unsigned int imass=0; imass < restMasses.size(); imass++) {
                     // Calculate all rest frame variables, skip both loops if frame doesn't work
                     if (calcBESvariables(treeVars, daughtersOfJet, boostedDaughters, ijet, restJets, restMasses[imass]) == false) goto endjetloop;
-                } 
-                
+                }
+
                 // store daughters, rest frame daughters, and rest frame jets
                 if(storeDaughters == true){
                     storeJetDaughters(daughtersOfJet, ijet, boostedDaughters, restJets, restMasses, jetVecVars, jetColl_ );
