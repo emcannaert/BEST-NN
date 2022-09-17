@@ -116,7 +116,7 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 // the jet tree --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
-                       int jetColl, std::vector<pat::Jet> subJets){
+                       int jetColl, std::vector<pat::Jet> upSubJets){
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
     // Jet four vector and Soft Drop info
@@ -124,13 +124,6 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_eta"]   = jet->eta();
     besVars["jetAK8_pt"]    = jet->pt();
     besVars["jetAK8_mass"]  = jet->mass();
-
-    // Deep Flavour
-    besVars["bDisc"]        = subJets.at(0).bDiscriminator("pfDeepFlavourJetTags:probb") + subJets.at(0).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    std::cout << "Loading the values: " << besVars["bDisc"] << std::endl;
-    besVars["bDisc_probb"]  = jet->bDiscriminator("pfDeepFlavourJetTags:probb");
-    besVars["bDisc_probbb"] = jet->bDiscriminator("pfDeepFlavourJetTags:probbb");
-    std::cout<<"This Jet Scores: "<< subJets.at(0).bDiscriminator("pfDeepFlavourJetTags:probb") << std::endl;
 
     // Deep AK8
     besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
@@ -243,28 +236,77 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
             std::cout << "This will exit, invalid subjet 1" << std::endl;
                 exit(1);
         }
-        // Fill leading subjet bDisc variables, and get maximum bDisc values
+        // Fill leading subjet bDisc variables, and get maximum bDisc values using Deep Flavour
+        // The testing code is still in here, just left commented out and can be removed
         double maxbDisc = 0;
+        double maxbProb = 0;
+        double maxbbProb = 0;
         double imaxbDisc;
-        for (unsigned int isubjet=0; isubjet < subjets.size(); isubjet++) {
-            double bDiscVal = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probbb");
+        double ileadSubJet;
+        double isubleadSubJet;
+        // make Lorentz Vector for easier deltaR matching
+        TLorentzVector leadSubJetLV(subjets.at(0)->px(), subjets.at(0)->py(), subjets.at(0)->pz(), subjets.at(0)->energy() );
+        TLorentzVector subleadSubJetLV(subjets.at(1)->px(), subjets.at(1)->py(), subjets.at(1)->pz(), subjets.at(1)->energy() );
+        TLorentzVector jetLV(jet->px(), jet->py(), jet->pz(), jet->energy() );
 
-            // Find max bDisc value and index
-            if (bDiscVal > maxbDisc) {
-                maxbDisc  = bDiscVal;
-                imaxbDisc = isubjet;
-            }
+        for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
 
-            // Fill BES var for leading two subjets
-            if (isubjet <= 1) { // Only triggers for first 2 iterations of loop, the leading subjets
-                std::string leadingSubJet = std::to_string(isubjet + 1); // this is either 1 or 2, the leading subjets, which correspond to index 0 and 1 for isubjet
-                besVars["bDisc"+leadingSubJet]           = bDiscVal;
-                besVars["bDisc"+leadingSubJet+"_probb"]  = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probb");
-                besVars["bDisc"+leadingSubJet+"_probbb"] = subjets[isubjet]->bDiscriminator("pfDeepFlavourJetTags:probbb");
+            // make Lorentz Vector for easier deltaR matching
+            TLorentzVector iupSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
+
+            if(jetLV.DeltaR(iupSubJetLV) < 0.8){
+                double bDiscVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+                double bprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb");
+                double bbprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+
+                // Find leading and subleading updated subjets
+                if(leadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
+                    ileadSubJet = iupSubjet;
+                    //std::cout << "leading subjet is : " << ileadSubJet << std::endl;
+                }
+                if(subleadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
+                    isubleadSubJet = iupSubjet;
+                    //std::cout << "subleading subjet is : " << isubleadSubJet << std::endl;
+                }
+
+                // Find max bDisc value and index
+                if (bDiscVal > maxbDisc) {
+                    maxbDisc  = bDiscVal;
+                    imaxbDisc = iupSubjet;
+                }
+                if (bprobVal > maxbProb) {
+                    maxbProb  = bprobVal;
+                }
+                if (bbprobVal > maxbbProb) {
+                    maxbbProb  = bbprobVal;
+                }
+
             }
         }
+        // leading updated subjet deep flavour b discriminants
+        besVars["bDisc1"]        = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+        besVars["bDisc1_probb"]  = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb");
+        besVars["bDisc1_probbb"] = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+
+        // subleading updated subjet deep flavour b discriminants
+        besVars["bDisc2"]        = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+        besVars["bDisc2_probb"]  = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb");
+        besVars["bDisc2_probbb"] = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+
+        // maximum subjet deep flavour b discriminants
+        besVars["bDisc"]        = maxbDisc;
+        besVars["bDisc_probb"]  = maxbProb;
+        besVars["bDisc_probbb"] = maxbbProb;
         besVars["bDiscSubJet_Max"] = maxbDisc;
         besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
+
+/*
+        std::cout << "Deep Flavour b dicriminant values: " << std::endl;
+        std::cout << "leading subjet: " << besVars["bDisc1"] << "  " << besVars["bDisc1_probb"] <<  "  " << besVars["bDisc1_probbb"] << std::endl;
+        std::cout << "subleading subjet: " << besVars["bDisc2"] << "  " << besVars["bDisc2_probb"] <<  "  " << besVars["bDisc2_probbb"] << std::endl;
+        std::cout << "max subjet: " << besVars["bDisc"] << "  " << besVars["bDisc_probb"] <<  "  " << besVars["bDisc_probbb"] << std::endl;
+*/
+
         // separate these like the above abbott
         // maximum subjet CSV value -> loop through all subjets, always store 0 and 1, but do them all and store the index + value of largest probb + probbb
         // sep branch bDisc_Max and bDisc_Max_i

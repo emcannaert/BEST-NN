@@ -167,6 +167,7 @@ class BESTProducer : public edm::stream::EDProducer<> {
 
         // Input variables
         std::string inputJetColl_;
+        std::string inputSubJetColl_;
         best::JetType jetType_;
         best::JetColl jetColl_;
         bool storeDaughters;
@@ -208,6 +209,7 @@ class BESTProducer : public edm::stream::EDProducer<> {
 
 BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     inputJetColl_ (iConfig.getParameter<std::string>("inputJetColl")),
+    inputSubJetColl_ (iConfig.getParameter<std::string>("inputSubJetColl")),
     jetType_ (best::jetTypeFromString(iConfig.getParameter<std::string>("jetType"))),
     jetColl_ (best::jetCollFromString(iConfig.getParameter<std::string>("jetColl"))),
     storeDaughters (iConfig.getParameter<bool>("storeDaughters"))
@@ -420,7 +422,8 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
 
     // Sub Jets
     edm::InputTag subJetsTag_;
-    subJetsTag_ = edm::InputTag("updatedPatJetsTransientCorrectedSoftDropSubjetsPFAK8DF", "", "run");
+    subJetsTag_ = edm::InputTag(inputSubJetColl_, "", "run");
+    //subJetsTag_ = edm::InputTag("updatedPatJetsTransientCorrectedSoftDropSubjetsPFAK8DF", "", "run");
     //subJetsTag_ = edm::InputTag("selectedUpdatedPatJetsSoftDropSubjetsPFAK8DF", "SubJets", "run");
     //subJetsTag_ = edm::InputTag("selectedUpdatedPatJetsSoftDropSubjetsPFAK8DF", "", "PAT");
     subJetsToken_ = consumes<std::vector<pat::Jet> >(subJetsTag_);

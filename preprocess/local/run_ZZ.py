@@ -1,3 +1,10 @@
+#=========================================================================================
+# run_ZZ.py ------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
+# Author(s): Brendan Regnery, Sam Abbott, Johan Bonilla, Sydney Ostrom, Reyer Band, ------
+#            Congqiao Li, Anna Benecke ---------------------------------------------------
+#-----------------------------------------------------------------------------------------
+
 import FWCore.ParameterSet.Config as cms
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -88,7 +95,7 @@ process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
 # Run the producer
 process.run = cms.EDProducer('BESTProducer',
                              inputJetColl = cms.string('selectedAK8Jets'),
-                             #inputJetColl = cms.string('slimmedJetsAK8'),
+                             inputSubJetColl = cms.string('updatedPatJetsTransientCorrectedSoftDropSubjetsPFAK8DF'),
                              jetColl = cms.string('PUPPI'),                     
 			     jetType = cms.string("Z"),
                              storeDaughters = cms.bool(True),
