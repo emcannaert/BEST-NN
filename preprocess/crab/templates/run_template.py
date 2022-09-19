@@ -1,3 +1,10 @@
+#=========================================================================================
+# run_template.py ------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
+# Author(s): Brendan Regnery, Sam Abbott, Johan Bonilla, Sydney Ostrom, Reyer Band, ------
+#            Congqiao Li, Anna Benecke ---------------------------------------------------
+#-----------------------------------------------------------------------------------------
+
 import FWCore.ParameterSet.Config as cms
 from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -11,6 +18,8 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load("JetMETCorrections.Configuration.JetCorrectionServices_cff")
 process.load("JetMETCorrections.Configuration.JetCorrectionServicesAllAlgos_cff")
+process.load('Configuration.StandardSequences.MagneticField_38T_cff')
+process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.GlobalTag = GlobalTag(process.GlobalTag, GT)
 
 # Option to set max events, used for local cmsRun jobs
@@ -25,73 +34,27 @@ process.source = cms.Source("PoolSource",
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 #=========================================================================================
-# Add Deep AK8 variables -----------------------------------------------------------------
+# Add deep flavour b discriminants -------------------------------------------------------
 #=========================================================================================
+_btagDiscriminators = [ 
+    'pfDeepFlavourJetTags:probb', 'pfDeepFlavourJetTags:probbb', 
+    'pfDeepFlavourJetTags:problepb', 'pfDeepFlavourJetTags:probc',
+    'pfDeepFlavourJetTags:probuds', 'pfDeepFlavourJetTags:probg'
+    ]
 updateJetCollection(
     process,
-    jetSource = cms.InputTag('slimmedJetsAK8'),
-    pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
-    svSource = cms.InputTag('slimmedSecondaryVertices'),
-    rParam = 0.8,
-    jetCorrections = ('AK8PFPuppi', cms.vstring(['L2Relative', 'L3Absolute']), 'None'),
-    btagDiscriminators = ['pfCombinedInclusiveSecondaryVertexV2BJetTags',
-                          'pfDeepBoostedJetTags:probTbcq', 'pfDeepBoostedJetTags:probTbqq',
-                          'pfDeepBoostedJetTags:probWcq', 'pfDeepBoostedJetTags:probWqq',
-                          'pfDeepBoostedJetTags:probZbb', 'pfDeepBoostedJetTags:probZcc', 'pfDeepBoostedJetTags:probZqq',
-                          'pfDeepBoostedJetTags:probHbb', 'pfDeepBoostedJetTags:probHcc', 'pfDeepBoostedJetTags:probHqqqq',
-                          'pfDeepBoostedJetTags:probQCDbb', 'pfDeepBoostedJetTags:probQCDcc',
-                          'pfDeepBoostedJetTags:probQCDb', 'pfDeepBoostedJetTags:probQCDc',
-                          'pfDeepBoostedJetTags:probQCDothers',
-                          'pfDeepBoostedDiscriminatorsJetTags:TvsQCD', 'pfDeepBoostedDiscriminatorsJetTags:WvsQCD',
-                          'pfDeepBoostedDiscriminatorsJetTags:ZvsQCD', 'pfDeepBoostedDiscriminatorsJetTags:ZbbvsQCD',
-                          'pfDeepBoostedDiscriminatorsJetTags:HbbvsQCD', 'pfDeepBoostedDiscriminatorsJetTags:H4qvsQCD',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probTbcq', 'pfMassDecorrelatedDeepBoostedJetTags:probTbqq',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probWcq', 'pfMassDecorrelatedDeepBoostedJetTags:probWqq',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probZbb', 'pfMassDecorrelatedDeepBoostedJetTags:probZcc', 'pfMassDecorrelatedDeepBoostedJetTags:probZqq',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probHbb', 'pfMassDecorrelatedDeepBoostedJetTags:probHcc', 'pfMassDecorrelatedDeepBoostedJetTags:probHqqqq',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probQCDbb', 'pfMassDecorrelatedDeepBoostedJetTags:probQCDcc',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probQCDb', 'pfMassDecorrelatedDeepBoostedJetTags:probQCDc',
-                          'pfMassDecorrelatedDeepBoostedJetTags:probQCDothers',
-                          'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:TvsQCD', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:WvsQCD',
-                          'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHbbvsQCD', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ZHccvsQCD',
-                          'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:bbvsLight', 'pfMassDecorrelatedDeepBoostedDiscriminatorsJetTags:ccvsLight'],
-     #postfix = 'WithDeepTags',
-     postfix = 'DeepAK8',
-     printWarning = False # Making this false removes the "b tagging need to be run on uncorrected jets" warning, which would print for every job.
- )
-
-
-#=========================================================================================      
-# Add ParticleNet variables --------------------------------------------------------------
-#=========================================================================================       
-updateJetCollection(
-   process,
-   jetSource = cms.InputTag('slimmedJetsAK8'),
-   pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
-   svSource = cms.InputTag('slimmedSecondaryVertices'),
-   jetCorrections = ('AK8PFPuppi', cms.vstring(['L2Relative', 'L3Absolute']), 'None')\
-,
-   btagDiscriminators = [
-      'pfParticleNetJetTags:probTbcq',
-      'pfParticleNetJetTags:probTbqq',
-      'pfParticleNetJetTags:probQCDbb',
-      'pfParticleNetJetTags:probQCDcc',
-      'pfParticleNetJetTags:probQCDb',
-      'pfParticleNetJetTags:probQCDc',
-      'pfParticleNetJetTags:probQCDothers',
-      'pfParticleNetJetTags:probWcq',
-      'pfParticleNetJetTags:probWqq',
-      'pfParticleNetJetTags:prob',
-      'pfParticleNetJetTags:probZbb',
-      'pfParticleNetJetTags:probZcc',
-      'pfParticleNetJetTags:probZqq',
-      'pfParticleNetJetTags:probHbb',
-      'pfParticleNetJetTags:probHcc',
-      'pfParticleNetJetTags:probHqqqq'
-      ],
-   postfix='WithParticleNet'
+    labelName='SoftDropSubjetsPF',
+    jetSource=cms.InputTag("slimmedJetsAK8PFPuppiSoftDropPacked", "SubJets"),
+    jetCorrections=('AK4PFPuppi',
+                    ['L2Relative', 'L3Absolute'], 'None'),
+    btagDiscriminators=list(_btagDiscriminators),
+    explicitJTA=True,  # needed for subjet b tagging
+    svClustering=False,  # needed for subjet b tagging (IMPORTANT: Needs to be set to False to disable ghost-association which does not work with slimmed jets)
+    fatJets=cms.InputTag('slimmedJetsAK8'),  # needed for subjet b tagging
+    rParam=0.8,  # needed for subjet b tagging
+    sortByPt=False, # Don't change order (would mess with subJetIdx for FatJets)
+    postfix='AK8DF'
 )
-
 
 #=========================================================================================
 # Prepare and run producer ---------------------------------------------------------------
@@ -107,18 +70,21 @@ process.selectedAK8Jets = cms.EDFilter('PATJetSelector',
 process.countAK8Jets = cms.EDFilter("PATCandViewCountFilter",
                                     minNumber = cms.uint32(1),
                                     maxNumber = cms.uint32(99999),
-                                    src = cms.InputTag('slimmedJetsAK8')
+                                    src = cms.InputTag('selectedAK8Jets')
                                     #filter = cms.bool(True)
 )
 
 
 # Run the producer
+# Run the producer
 process.run = cms.EDProducer('BESTProducer',
-                             inputJetColl = cms.string('slimmedJetsAK8'),
+                             inputJetColl = cms.string('selectedAK8Jets'),
+                             inputSubJetColl = cms.string('updatedPatJetsTransientCorrectedSoftDropSubjetsPFAK8DF'),
                              jetColl = cms.string('PUPPI'),                     
                              # This line will be replaced by createConfig.py: jetType = cms.string("PARTICLESTRINGFLAG")
-                             storeDaughters = cms.bool(True)
+                             storeDaughters = cms.bool(True),
 )
+
 process.TFileService = cms.Service("TFileService", fileName = cms.string("BESTInputs.root") )
 
 process.out = cms.OutputModule("PoolOutputModule",
