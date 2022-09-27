@@ -62,17 +62,18 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
     Normalization can be applied by setting `normalize=True`.
     """
     print("Plot confusion matrix")
-    if not os.path.isdir(plotDir): os.makedirs(plotDir)
+    saveDir = os.path.join(plotDir,"ConfusionMatrix/")
+    if not os.path.isdir(saveDir): os.makedirs(saveDir)
 
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         print("Confusion matrix, normalized")
         title = "Normalized Confusion Matrix"
-        saveFile = plotDir + 'ConfusionMatrix_BES' + suffix + '_normalized.png'
+        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_normalized.png')
     else:
         print('Confusion matrix, without normalization')
         title = "Confusion Matrix"
-        saveFile = plotDir + 'ConfusionMatrix_BES' + suffix + '.png'
+        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '.png')
 
     print(cm)
     title = suffix + " " + title
@@ -111,10 +112,15 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
 def plotAccLoss(historyFile, suffix, plotDir): 
     history = load(historyFile)
 
-    loss     = history.history["loss"]
-    val_loss = history.history["val_loss"]
-    acc      = history.history["acc"]
-    val_acc  = history.history["val_acc"]
+    # loss     = history.history["loss"]
+    # val_loss = history.history["val_loss"]
+    # acc      = history.history["acc"]
+    # val_acc  = history.history["val_acc"]
+
+    loss     = history["loss"]
+    val_loss = history["val_loss"]
+    acc      = history["acc"]
+    val_acc  = history["val_acc"]
 
     # plot loss vs epoch
     plt.figure()
@@ -126,7 +132,7 @@ def plotAccLoss(historyFile, suffix, plotDir):
     plt.ylabel('loss')
     if not os.path.isdir(plotDir): os.makedirs(plotDir)
     # plt.savefig(plotDir+suffix+"_loss.pdf")
-    plt.savefig(plotDir+suffix+"_loss.png")
+    plt.savefig(os.path.join(plotDir,suffix+"_loss.png"))
     plt.close()
 
     # plot accuracy vs epoch
@@ -138,7 +144,7 @@ def plotAccLoss(historyFile, suffix, plotDir):
     plt.xlabel('epoch')
     plt.ylabel('acc')
     # plt.savefig(plotDir+suffix+"_acc.pdf")
-    plt.savefig(plotDir+suffix+"_acc.png")
+    plt.savefig(os.path.join(plotDir,suffix+"_acc.png"))
     plt.close()
 
 #==================================================================================
@@ -148,17 +154,19 @@ def plotAccLoss(historyFile, suffix, plotDir):
 #    [ [probArray, label, color], .. ] ////////////////////////////////////////////
 #----------------------------------------------------------------------------------
 
-def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames):
+# def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames):
+def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
 
     print("Plotting Classification Probabilities")
-    saveDir = plotDir + "classification_probs/"
+    # saveDir = plotDir + "classification_probs/"
+    saveDir = os.path.join(plotDir,"classification_probs/")
     if not os.path.isdir(saveDir): os.makedirs(saveDir)
     
     plt.figure()
     for i, target in enumerate(targetNames):
 
         # --- Create Class. Prob. histogram, legend and title ---
-        title = "Probability of " + target + " Classification" 
+        title = "Probability of " + target + " Classification for " + year 
         for j, mylabel in enumerate(targetNames):
             tempMask = [True if j == k else False for k in truthTest]
             plt.hist(eventPredictions[tempMask,i], label = mylabel, bins = 20, range = (0,1), histtype='step', log = True)
@@ -172,6 +180,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames):
         plt.gca().tick_params(axis = 'x', direction = 'in', top = True, bottom = True)
         plt.show()
         plt.savefig(saveDir + title + ".png")
+        # plt.savefig(saveDir + title + ".pdf")
         plt.clf()
     plt.close()
 
@@ -181,18 +190,25 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames):
 # Loads Mask text file and returns Boolean masking array //////////////////////////
 #----------------------------------------------------------------------------------
 
-def loadMask(maskPath, max = 551):
+# def loadMask(maskPath, max = 551):
+# def loadMask(maskPath, max = 270):
+def loadMask(maskPath, max = 294):
     print("Loading mask: " + maskPath)
     maskIndex = []
+    varDict = {}
     with open(maskPath, "r") as f:
         for line in f:
-            maskIndex.append(line.split(':')[0])
+            # maskIndex.append(line.split(':')[0])
+            index, var = line.split(':')
+            maskIndex.append(index)
+            varDict[index] = var.strip()    
     print("Mask size: " + str(len(maskIndex)))
     myMask = [True if str(ind) in maskIndex else False for ind in range(max)]
     # myMask = [True if str(ind) in maskIndex else False for ind in range(596)]
     # myMask = [True if str(ind) in maskIndex else False for ind in range(551)]
 
-    return myMask
+    return myMask, varDict
+
 
 #==================================================================================
 # Load h5 Data ////////////////////////////////////////////////////////////////////
@@ -201,9 +217,10 @@ def loadMask(maskPath, max = 551):
 #  concatenated data arrays and concatenated truth arrays.      ///////////////////
 #----------------------------------------------------------------------------------
 
-def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents):
+def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents, year='', testSet="flattened"):
     h5Dir = args.h5Dir
     scale = args.scale
+    if year == '': year = args.year
 
     if not scale == "": scale = "_" + scale
 
@@ -212,7 +229,9 @@ def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents):
         numEvents = maxEvents[mySet]
 
         print("Loading h5 files for " + mySet)
-        h5Path = "Sample_2017_BESTinputs_" + mySet + "_flattened" + scale + ".h5" # This just makes the next few lines a bit more readable
+        h5Path = "Sample_"+year+"_BESTinputs_" + mySet + "_" + args.suffix + scale + ".h5" # This just makes the next few lines a bit more readable
+        # if mySet == "test": h5Path = "Sample_"+year+"_BESTinputs_" + mySet + "_" + testSet + ".h5"
+        print(h5Path)
       
         # Check if loading all variables. Quicker to NOT use mask in this case
         if np.all(mask): eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,:]     for mySample in sampleTypes]
@@ -346,16 +365,18 @@ def recordClassification(cm, truthTest, targetNames, modelType, suffix):
 #   Also creates suffix string, which is unique to each model. ////////////////////
 #----------------------------------------------------------------------------------
 
-def dirStrings(args):
+def dirStrings(args, year=''):
     # Create useful strings
     maskName = args.maskPath[1 + args.maskPath.rfind("/"):] # Strip everything after the final '/', giving just the name of the mask
-    mySuffix = args.suffix + args.scale + maskName[11:-4] 
+    # mySuffix = args.suffix + args.scale + maskName[11:-4] 
+    if year == '': year = args.year
+    mySuffix = args.suffix + "_" + year
 
     plotDir  = "plots/" + args.modelType + "/" + mySuffix + "/"
     modelDir = args.outDir + args.modelType + "/" + mySuffix + "/"
     
-    # modelFile = modelDir + "BEST_model_" + mySuffix + ".h5"
-    modelFile = modelDir + "BEST_model_" + mySuffix + ".pb"
+    modelFile = modelDir + "BEST_model_" + mySuffix + ".h5"
+    # modelFile = modelDir + "BEST_model_" + mySuffix + ".pb"
     maskSave  = modelDir + maskName    
     historyFile  = modelDir + "history_" + mySuffix + ".joblib" 
 
@@ -380,7 +401,7 @@ def dirStrings(args):
         os.system('cp ' + args.maskPath + ' ' + maskSave)
         
     else: # Plot performance of an already trained model
-        if not os.path.isdir(modelFile): 
+        if not os.path.isfile(modelFile): 
                 print(modelFile, "does not exist")
                 quit()
         if os.path.isdir(plotDir):
@@ -396,7 +417,8 @@ def dirStrings(args):
     
     # Pack strings into dictionary for compact readability
     strings = { "modelFile":modelFile, "historyFile":historyFile, 
-                "plotDir":plotDir, "suffix":mySuffix } 
+                "plotDir":plotDir, "suffix":mySuffix,
+                "modelDir":modelDir } 
     return strings
 
 #==================================================================================
@@ -407,8 +429,10 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
 
     print("Plotting ROC curves")
     # samples = ["W", "Z", "Higgs", "Top", "Bottom", "QCD"]
-    saveDir = plotDir + "roc/" 
-    if not os.path.isdir(saveDir): os.makedirs(saveDir)
+    # saveDir = plotDir + "roc/" 
+    saveDir = os.path.join(plotDir,"roc/")
+    if not os.path.isdir(saveDir+"pdf/"): os.makedirs(saveDir+"pdf/")
+    if not os.path.isdir(saveDir+"png/"): os.makedirs(saveDir+"png/")
 
     # Compute ROC curve and area for each class
     n_classes = truthLabels.shape[1] 
@@ -465,7 +489,6 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
 
         # Assign these for readability:
         title = suffix + " " + labelDict[key][0] + " ROC Curve" 
-        path  = saveDir + labelDict[key][1] + '_ROCplot'
 
         plt.figure(1)
         plt.plot(fprBES[key], tprBES[key],
@@ -480,7 +503,12 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
         plt.ylabel('True Positive Rate')
         plt.title(title)
         plt.legend(loc="lower right")
-        plt.savefig(path + '.png')
+
+        path  = saveDir + "png/" + labelDict[key][1] + '_ROCplot.png'
+        plt.savefig(path)
+        # path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot.pdf'
+        # plt.savefig(path)
+        plt.clf()
         plt.close()
 
 #==================================================================================
@@ -491,67 +519,109 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
 #   to the normal pipeline in plotAll. 
 # Once the final arch/vars are decided, can maybe add option for which var
 #   to plot the dependence for. Could be completely general.
-def plotpTCM(BESpredict, truthLabels, pTArray, plotDir, suffix):
+# def plotpTCM(BESpredict, truthLabels, pTArray, plotDir, suffix):
+def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
 
-    print("Plotting pT Performance")
-    saveDir = plotDir + "tagging/" 
-    if not os.path.isdir(saveDir): os.makedirs(saveDir)
+    print("Plotting mistag rates and efficiency")
+    sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 
-    cm = {}
-    binsize = 25
-    bins_list = [i*binsize for i in range(20,64)]
-    # binsize = 5
-    # bins_list = [i*binsize for i in range(0,60)]
-    # suffix = suffix + "_mass"
-    # bins_list = [i*binsize for i in range(0,45)]
-    # suffix = suffix + "_SoftDrop"
+    # var:[binsize, xmin, xmax, xlabel, fileSuffix]
+    plotDict = {"jetAK8_pt":[20,25,100,"pT","pt"],
+                "jetAK8_mass":[5,0,60,"Mass","mass"],
+                "jetAK8_SoftDropMass":[5,0,60,"SoftDrop Mass","softdrop"] }
 
+    saveDir = os.path.join(plotDir,"tagging/") 
+    if not os.path.isdir(saveDir+"pdf/"): os.makedirs(saveDir+"pdf/")
+    if not os.path.isdir(saveDir+"png/"): os.makedirs(saveDir+"png/")
+    # if not os.path.isdir(saveDir): os.makedirs(saveDir)
 
+    # h5Path = "Sample_" + year + "_BESTinputs_test_" + args.suffix + ".h5" # This just makes the next few lines a bit more readable
+    h5Path = "Sample_" + year + "_BESTinputs_test_" + testSet + ".h5" # This just makes the next few lines a bit more readable
+    # _, varDict = loadMask(args.maskPath)
+    allBesVarsList = "../formatConverter/h5samples/BESvarList.txt"
+    _, varDict = loadMask(allBesVarsList)
 
-    for pTbin in bins_list:       
-        # Select events within certain pT range, create CM, save to dictionary
-        ptIndex =  np.where(np.logical_and(pTArray >= pTbin, pTArray < (pTbin + binsize)))
-        # print(truthLabels.shape, BESpredict.shape, len(ptIndex), ptIndex)
-        cmTemp = metrics.confusion_matrix(truthLabels[ptIndex], np.argmax(BESpredict[ptIndex], axis=1), labels=[0,1,2,3,4,5] )
-        # Normalize
-        cm[pTbin] = cmTemp.astype('float') / cmTemp.sum(axis=1)[:, np.newaxis]
+    # for plotVar in plotDict.keys():
+    for index, var in varDict.items():
+        if not var in plotDict.keys(): continue
+
+        binsize, xmin, xmax, xlabel, suff = plotDict[var]
+
+        print("Loading " + var + " data")
+
+        ptmassArray = np.concatenate([np.array(
+            h5py.File(args.h5Dir + mySample + h5Path, "r")["BES_vars"])[...,int(index)] 
+            for mySample in sampleTypes])
         
-    targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
-    for i, target in enumerate(targetNames):
-        myPtArrays = [cm[pTbin][:,i] for pTbin in bins_list]
-        # print(len(bins_list), len(myPtArrays))
-        # print(bins_list, myPtArrays)
+        # pT, mass, softdropmass, make dict, iterate over it, load arrays one at a time
+        # need to grab from flattened/flattop, preScale
 
-        # --- Create histogram, legend and title ---
-        plt.figure()
-        plt.plot(bins_list, myPtArrays)
-        plt.legend(targetNames, title = "True Particle")
-        plt.title("Tagging Rate for " + target )
-        plt.xlabel("Jet pT (GeV)")
-        # plt.xlabel("Jet Mass (GeV)")
-        # plt.xlabel("Jet SoftDrop Mass (GeV)")
-        plt.ylabel("Tagged Rate")
-        plt.show()
-        plt.savefig(saveDir + suffix + '_tagRate_' + target + '.png')
-        plt.clf()
+        cm = {}
+        # bins_list = [i*binsize for i in range(xmin,xmax)]
+        all_bins = [i*binsize for i in range(xmin,xmax)]
+        suffix = args.suffix + "_" + year + "_" + suff
 
-        myPtArrays = [cm[pTbin][i,:] for pTbin in bins_list]
-        plt.figure()
-        plt.plot(bins_list, myPtArrays)
-        plt.legend(targetNames, title = "Tagged As")
-        plt.title("Tagging Efficiency for " + target )
-        plt.xlabel("Jet pT (GeV)")
-        # plt.xlabel("Jet Mass (GeV)")
-        # plt.xlabel("Jet SoftDrop Mass (GeV)")
-        plt.ylabel("Tagging Efficiency")
-        plt.show()
-        plt.savefig(saveDir + suffix + '_efficiency_' + target + '.png')
-        plt.clf()
+        # binsize = 25
+        # bins_list = [i*binsize for i in range(20,64)]
+        # # binsize = 5
+        # # bins_list = [i*binsize for i in range(0,60)]
+        # # suffix = suffix + "_mass"
+        # # bins_list = [i*binsize for i in range(0,45)]
+        # # suffix = suffix + "_SoftDrop"
 
+        bins_list = []
+        for pTmassbin in all_bins:       
+            # print(pTmassbin)
+            # Select events within certain pT range, create CM, save to dictionary
+            ptmassIndex =  np.where(np.logical_and(ptmassArray >= pTmassbin, ptmassArray < (pTmassbin + binsize)))
+            # print(ptmassIndex)
+            # print(len(ptmassIndex))
+            # print(np.array(ptmassIndex).shape)
+            if len(ptmassIndex[0]) < 100: continue            
+            bins_list.append(pTmassbin)
+            cmTemp = metrics.confusion_matrix(truthLabels[ptmassIndex], np.argmax(BESpredict[ptmassIndex], axis=1), labels=[0,1,2,3,4,5] )
+            # Normalize
+            cm[pTmassbin] = cmTemp.astype('float') / cmTemp.sum(axis=1)[:, np.newaxis]
+        
+        targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
+        for i, target in enumerate(targetNames):
+            myPtArrays = [cm[pTmassbin][:,i] for pTmassbin in bins_list]
+            # print(len(bins_list), len(myPtArrays))
+            # print(bins_list, myPtArrays)
+
+            # --- Create histogram, legend and title ---
+            plt.figure()
+            plt.plot(bins_list, myPtArrays)
+            plt.legend(targetNames, title = "True Particle")
+            plt.title("Percentage of X Classified as " + target + " Jets by " + xlabel + " for " + year)
+            plt.xlabel("Jet " + xlabel + " (GeV)")
+            plt.ylabel("Percentage of X Jets")
+            plt.show()
+            plt.savefig(os.path.join(saveDir, "png", suffix + '_Xas_' + target + '.png'))
+            # plt.savefig(os.path.join(saveDir, "pdf", suffix + '_Xas_' + target + '.pdf'))
+            plt.clf()
+            plt.close()
+
+            myPtArrays = [cm[pTmassbin][i,:] for pTmassbin in bins_list]
+            plt.figure()
+            plt.plot(bins_list, myPtArrays)
+            plt.legend(targetNames, title = "Classified As")
+            plt.title("Percentage of " + target + " Jets Classified as X by " + xlabel + " for " + year)
+            plt.xlabel("Jet " + xlabel + " (GeV)")
+            plt.ylabel("Percentage of " + target + " Jets")
+            plt.show()
+            plt.savefig(os.path.join(saveDir, "png", suffix + '_' + target + '_asX.png'))
+            # plt.savefig(os.path.join(saveDir, "pdf", suffix + '_' + target + '_asX.pdf'))
+            plt.clf()
+            plt.close()
+
+        del cm
+        del myPtArrays
     print("Finished, check out your new plots at:")
-    print(plotDir)
+    print(saveDir)
 
-def plotAll(strings, dataDict, modelType, mask):
+# def plotAll(args, strings, year, testSet):
+def plotAll(args, strings, truthData, modelType, BESpredict, year):
     print("Plotting BEST Performance")
 
     # Unpack strings for readability
@@ -560,29 +630,50 @@ def plotAll(strings, dataDict, modelType, mask):
     plotDir = strings["plotDir"] 
     suffix = strings["suffix"] 
 
-    samples = ['W', 'Z', 'Higgs', 'Top', 'Bottom', 'QCD']
+    # plotDir = os.path.join(plotDir,testSet+'/')
+    if not os.path.isdir(plotDir): os.makedirs(plotDir)
+
+    # scalePath = "ScalerParameters_" + args.suffix + "/BESTScalerParameters_" + year + ".joblib"    
+    # scalePath = "ScalerParameters_" + args.suffix + "/BESTScalerParameters_" + year + ".txt"    
+    # mask, varDict = loadMask(args.maskPath)    
+    # r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
 
     # Accuracy and Loss plots
     plotAccLoss(historyFile, suffix, plotDir)
     
-    eventData = dataDict["testEvents"][:,mask]
-    # eventData = dataDict["testEvents"][()]
-    truthData = dataDict["testTruth"]
+    samples = ['W', 'Z', 'Higgs', 'Top', 'Bottom', 'QCD']
+    # sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 
-    # Load model
-    print("Using BEST to predict...")
-    model_BEST = load_model(modelFile)
-    BESpredict  = model_BEST.predict(eventData)
-    del model_BEST
+    # dataDict = loadH5Data(args, mask, sampleTypes, ["test"], {"test":None}, year, testSet)
+    # scaler = loadScalerModel(args.suffix, year, mask)
+    # dataDict["testEvents"] = scaler.transform(dataDict["testEvents"])
+    # del scaler
+    
+    # if np.all(mask): eventData = dataDict["testEvents"]
+    # else:            eventData = dataDict["testEvents"][:,mask]
+    
+    # eventData = manualScale(dataDict["testEvents"], scalePath, r_varDict)
+
+    # # Load model
+    # print("Using BEST to predict...")
+    # model_BEST = load_model(modelFile)
+    # # BESpredict  = model_BEST.predict(eventData)
+    # BESpredict  = model_BEST.predict(dataDict["testEvents"])
+    # del model_BEST
+
+    # truthData = dataDict["testTruth"]
+    # del dataDict
 
     # Plot ROC Curve
-    plotROC(BESpredict, truthData, plotDir, samples, modelType, suffix)
+    # plotROC(BESpredict, truthData, plotDir, samples, modelType, suffix)
+    plotROC(BESpredict, truthData, plotDir, samples, args.modelType, suffix)
 
     # Collapse truth labels into 1D (length N_events) array containing truth index (0-5) for each event 
     truthData = np.argmax(truthData, axis=1) 
 
     # Plot Classification Probabilities
-    plotProbabilities(plotDir, BESpredict, truthData, samples)
+    # plotProbabilities(plotDir, BESpredict, truthData, samples)
+    plotProbabilities(plotDir, BESpredict, truthData, samples, year)
     
     print("Making CM")
     print("My predictions shape:",      BESpredict.shape)
@@ -593,13 +684,17 @@ def plotAll(strings, dataDict, modelType, mask):
     # Plot Confusion Matrix, both normalized and not normalized
     plot_confusion_matrix(cm, samples, plotDir, suffix)
     plot_confusion_matrix(cm, samples, plotDir, suffix, normalize=True)
+    # plot_confusion_matrix(cm, samples, plotDir, suffix, normalize=True, compare=True, args=args, year=year, testSet=testSet)
 
     # Record classification rates 
-    recordClassification(cm, truthData, samples, modelType, suffix)
+    # recordClassification(cm, truthData, samples, modelType, suffix)
+    recordClassification(cm, truthData, samples, args.modelType, suffix)
 
     # Plot Efficiency
+    plotpTCM(BESpredict, truthData, plotDir, args, year)
+    # plotpTCM(BESpredict, truthData, plotDir, args, year, testSet)
     # plotpTCM(scaledTestEvents, truthData, testDataDict["testEvents"][:,548], plotDir, suffix)
-    # plotpTCM(BESpredict, truthData, plotDir, suffix)
+
 
     print("Finished Plotting BEST Performance. Check plots out at:")
     print(plotDir)

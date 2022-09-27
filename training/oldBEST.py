@@ -148,7 +148,7 @@ if __name__ == "__main__":
     strings = tools.dirStrings(args)
 
     # Load Mask
-    mask = tools.loadMask(args.maskPath)
+    mask, _ = tools.loadMask(args.maskPath)
 
     # To skip training and plot the performance of an already trained model, use -t flag.
     if args.train: # Train the model 

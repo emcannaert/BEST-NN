@@ -17,12 +17,18 @@ import keras.backend as K
 #Note, this needs to be run on the GPU with the same version of keras as you trained with
 K.set_learning_phase(0)
 
-model = load_model('BEST_model.h5')
+# model = load_model('BEST_model.h5')
+# modelPath = '/uscms/home/msabbott/submitBEST/training/models/nnBEST_nopt/flattened_2018/BEST_model_flattened_2018.h5'
+modelPath = '../models/nnBEST_nopt/flattened_2018/BEST_model_flattened_2018.h5'
+model = load_model(modelPath)
+
 print (model.inputs)
 print (model.outputs)
 
 with K.get_session() as sess:
-    outputs = ["dense_20/Softmax"]
+    # outputs = ["dense_20/Softmax"]
+    outputs = ["dense_4/Softmax"]
+    
     constant_graph = tf.graph_util.convert_variables_to_constants(sess, sess.graph.as_graph_def(), outputs)
     tf.train.write_graph(constant_graph, 'GraphExport/', "constantgraph.pb", as_text=False)
     if os.path.exists('BuilderExport/'): shutil.rmtree('BuilderExport/')
