@@ -240,33 +240,83 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_charge");
 
     // Deep AK8
-    listOfVars.push_back("jetAK8_deepAK8_rawL");
-    listOfVars.push_back("jetAK8_deepAK8_rawC");
-    listOfVars.push_back("jetAK8_deepAK8_rawB");
-    listOfVars.push_back("jetAK8_deepAK8_rawW");
-    listOfVars.push_back("jetAK8_deepAK8_rawZ");
-    listOfVars.push_back("jetAK8_deepAK8_rawH");
-    listOfVars.push_back("jetAK8_deepAK8_rawT");
-    listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawL");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawC");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawB");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawW");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawH");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawT");
-    listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+    // listOfVars.push_back("jetAK8_deepAK8_rawL");
+    // listOfVars.push_back("jetAK8_deepAK8_rawC");
+    // listOfVars.push_back("jetAK8_deepAK8_rawB");
+    // listOfVars.push_back("jetAK8_deepAK8_rawW");
+    // listOfVars.push_back("jetAK8_deepAK8_rawZ");
+    // listOfVars.push_back("jetAK8_deepAK8_rawH");
+    // listOfVars.push_back("jetAK8_deepAK8_rawT");
+    // listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawL");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawC");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawB");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawW");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawH");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawT");
+    // listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+
+    listOfVars.push_back("jetAK8_deepAK8_probQCDothers");
+    listOfVars.push_back("jetAK8_deepAK8_probQCDcc");
+    listOfVars.push_back("jetAK8_deepAK8_probQCDbb");
+    listOfVars.push_back("jetAK8_deepAK8_probWcq");
+    listOfVars.push_back("jetAK8_deepAK8_probHbb"); 
+    listOfVars.push_back("jetAK8_deepAK8_probQCDc");
+    listOfVars.push_back("jetAK8_deepAK8_probQCDb");
+    listOfVars.push_back("jetAK8_deepAK8_probWqq");
+    listOfVars.push_back("jetAK8_deepAK8_probZcc");
+    listOfVars.push_back("jetAK8_deepAK8_probHcc");
+    listOfVars.push_back("jetAK8_deepAK8_probTbqq");
+    listOfVars.push_back("jetAK8_deepAK8_probZbb");
+    listOfVars.push_back("jetAK8_deepAK8_probZqq");
+    listOfVars.push_back("jetAK8_deepAK8_probHqqqq");
+    listOfVars.push_back("jetAK8_deepAK8_probTbcq");
+
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDothers");
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDcc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDbb");
+    listOfVars.push_back("jetAK8_deepAK8MD_probWcq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probHbb"); 
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDb");
+    listOfVars.push_back("jetAK8_deepAK8MD_probWqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probZcc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probHcc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probTbqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probZbb");
+    listOfVars.push_back("jetAK8_deepAK8MD_probZqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probHqqqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probTbcq");
 
     // Particle Net
-    listOfVars.push_back("jetAK8_ParticleNet_rawL");
-    listOfVars.push_back("jetAK8_ParticleNet_rawC");
-    listOfVars.push_back("jetAK8_ParticleNet_rawB");
-    listOfVars.push_back("jetAK8_ParticleNet_rawW");
-    listOfVars.push_back("jetAK8_ParticleNet_rawZ");
-    listOfVars.push_back("jetAK8_ParticleNet_rawH");
-    listOfVars.push_back("jetAK8_ParticleNet_rawT");
-    listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawL");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawC");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawB");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawW");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawZ");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawH");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawT");
+    // listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");
 
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDothers");
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDcc");
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDbb");
+    listOfVars.push_back("jetAK8_ParticleNet_probWcq");
+    listOfVars.push_back("jetAK8_ParticleNet_probHbb"); 
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDc");
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDb");
+    listOfVars.push_back("jetAK8_ParticleNet_probWqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probZcc");
+    listOfVars.push_back("jetAK8_ParticleNet_probHcc");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probZbb");
+    listOfVars.push_back("jetAK8_ParticleNet_probZqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probHqqqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbcq");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbc");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbq");
+    
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
     // listOfVecVars.push_back("SV_pt"); // Possible bug!
