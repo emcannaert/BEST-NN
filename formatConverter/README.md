@@ -38,5 +38,5 @@ Then flatten (shape-match by pT) each of those output files. See each file for f
 
 ```bash
 python sampleSplitter.py -s all -hd </path/to/h5samples/> -o </path/to/outputH5samples> -bs <batchSize=(example)600000>
-python flattener.py -s all -st train,validation,test -hd </path/to/Inputh5samples/> -o </path/to/Outputh5samples/> -b <batchSize=(example)250000>
+python sampleFlattener.py -s all -st train,validation,test -hd </path/to/Inputh5samples/> -o </path/to/Outputh5samples/> -b <batchSize=(example)250000>
 ```

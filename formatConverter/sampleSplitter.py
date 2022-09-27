@@ -19,7 +19,7 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
+sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # sampleTypes = ["RSG"]
 listOfYears = ["2016_APV","2016","2017","2018"]
 
@@ -114,10 +114,10 @@ if __name__ == "__main__":
                         required=True)
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
-                        default="~/nobackup/h5Dir/")
+                        default="h5samples/")
     parser.add_argument('-o','--outDir',
                         dest='outDir',
-                        default='~/nobackup/h5Dir/')
+                        default='h5samples/')
     parser.add_argument('-bs', '--batchSize',
                         type=int,
                         required=True)
