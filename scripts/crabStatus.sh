@@ -8,14 +8,6 @@
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
 # This script checks the status of each crab job in each directory.
 
-################################## NOTES TO SELF ##################################
-# Needs to be updated to handle multiple years
-# Edit crabStatus for new format, check number of submissions? Pipe output to text file? Curate a summary? Auto resubmit?
-# Put in flags that do things?
-#   grep status, check it, assign TRUE/FALSE flag to dictionary that contains crab file directory? Then resubmit or display just those or output to terminal
-##### assign output to var. check for 'finished 100%'. if yes just print dir or nothing. if no print more info
-
-
 YEL='\033[93m' # Yellow
 NC='\033[0m' # No Color
 
@@ -29,19 +21,19 @@ pids=
 allJobs=0
 finishedJobs=0
 
-file=$jobFile
-# OLDIFS=$IFS # Preserve the old IFS to reinstate it later
-# IFS='\n'
-while read -r job; do
-    # echo $job
-    jobsToCheck+=( "$job" )
-done < $jobFile
-# IFS=$OLDIFS # Resets $IFS so the rest of the code works
-# exit
-# echo "read"
+# file=$jobFile
+# # OLDIFS=$IFS # Preserve the old IFS to reinstate it later
+# # IFS='\n'
+# while read -r job; do
+#     # echo $job
+#     jobsToCheck+=( "$job" )
+# done < $jobFile
+# # IFS=$OLDIFS # Resets $IFS so the rest of the code works
+
+
 # Check job status of crab jobs:
-# for job in */CrabBEST/*/ ; do
-for job in ${jobsToCheck[*]}; do
+for job in */CrabBEST/*/ ; do
+# for job in ${jobsToCheck[*]}; do
     ((allJobs++))
     # echo -e "\n$job"
     # echo "test"

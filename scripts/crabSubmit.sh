@@ -10,6 +10,8 @@
 # This script will also call buildConfig.py to generate the crab config files to submit.
 # The script lives in the scripts directory and the symbolic links in each of the submit201X directories should be executed within their respective directories.
 
+# Note to self: have script check if eosspace is empty before starting
+
 #==================================================================================
 # Setup ///////////////////////////////////////////////////////////////////////////
 #==================================================================================
