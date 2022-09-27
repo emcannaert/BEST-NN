@@ -642,8 +642,8 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                storeJetVariables(treeVars, ijet, jetColl_, subJets);
-
+                if (storeJetVariables(treeVars, ijet, jetColl_, subJets) == false) goto endjetloop;
+                
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);
 

@@ -115,7 +115,7 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 // This takes various jet quantaties and stores them on the map used to fill -------------
 // the jet tree --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
+bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
                        int jetColl, std::vector<pat::Jet> upSubJets){
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
@@ -278,18 +278,12 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8Puppi:tau3") / jet->userFloat("NjettinessAK8Puppi:tau2");
         besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
         auto subjets = jet->subjets("SoftDropPuppi");
-        if (subjets.size() < 2){
-            std::cout << "This will exit, not enough subjets" << std::endl;
-            exit(1);
-        }
-        if (!subjets[0]){
-            std::cout << "This will exit, invalid subjet 0" << std::endl;
-            exit(1);
-        }
-        if (!subjets[1]){
-            std::cout << "This will exit, invalid subjet 1" << std::endl;
-                exit(1);
-        }
+
+        // Check if this AK8 jet is valid, skip if not 
+        if (subjets.size() < 2) return false; // Require at least 2 subjets
+        if (!subjets[0]) return false; // Check that the leading subjet is there
+        if (!subjets[1]) return false; // Check that the subleading subjet is there
+
         // Fill leading subjet bDisc variables, and get maximum bDisc values using Deep Flavour
         // The testing code is still in here, just left commented out and can be removed
         double maxbDisc = 0;
@@ -354,19 +348,8 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         besVars["bDiscSubJet_Max"] = maxbDisc;
         besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
 
-/*
-        std::cout << "Deep Flavour b dicriminant values: " << std::endl;
-        std::cout << "leading subjet: " << besVars["bDisc1"] << "  " << besVars["bDisc1_probb"] <<  "  " << besVars["bDisc1_probbb"] << std::endl;
-        std::cout << "subleading subjet: " << besVars["bDisc2"] << "  " << besVars["bDisc2_probb"] <<  "  " << besVars["bDisc2_probbb"] << std::endl;
-        std::cout << "max subjet: " << besVars["bDisc"] << "  " << besVars["bDisc_probb"] <<  "  " << besVars["bDisc_probbb"] << std::endl;
-*/
-
-        // separate these like the above abbott
-        // maximum subjet CSV value -> loop through all subjets, always store 0 and 1, but do them all and store the index + value of largest probb + probbb
-        // sep branch bDisc_Max and bDisc_Max_i
-        // besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[0]->bDiscriminator("pfDeepFlavourJetTags:probbb");
-        // besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[1]->bDiscriminator("pfDeepFlavourJetTags:probbb");
     }
+    return true;
 }
 
 //========================================================================================
