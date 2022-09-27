@@ -289,7 +289,7 @@ bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         double maxbDisc = 0;
         double maxbProb = 0;
         double maxbbProb = 0;
-        double imaxbDisc;
+        // double imaxbDisc;
         double ileadSubJet;
         double isubleadSubJet;
         // make Lorentz Vector for easier deltaR matching
@@ -302,33 +302,25 @@ bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
             // make Lorentz Vector for easier deltaR matching
             TLorentzVector iupSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
 
+            // Examine the updated subjets within R<0.8 of AK8 Jet, match to AK8 subjets
             if(jetLV.DeltaR(iupSubJetLV) < 0.8){
-                double bDiscVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
                 double bprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb");
                 double bbprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+                double bDiscVal = bprobVal + bbprobVal;
+
 
                 // Find leading and subleading updated subjets
                 if(leadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
                     ileadSubJet = iupSubjet;
-                    //std::cout << "leading subjet is : " << ileadSubJet << std::endl;
                 }
                 if(subleadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
                     isubleadSubJet = iupSubjet;
-                    //std::cout << "subleading subjet is : " << isubleadSubJet << std::endl;
                 }
 
                 // Find max bDisc value and index
-                if (bDiscVal > maxbDisc) {
-                    maxbDisc  = bDiscVal;
-                    imaxbDisc = iupSubjet;
-                }
-                if (bprobVal > maxbProb) {
-                    maxbProb  = bprobVal;
-                }
-                if (bbprobVal > maxbbProb) {
-                    maxbbProb  = bbprobVal;
-                }
-
+                if (bDiscVal > maxbDisc)   maxbDisc  = bDiscVal;
+                if (bprobVal > maxbProb)   maxbProb  = bprobVal;
+                if (bbprobVal > maxbbProb) maxbbProb = bbprobVal;
             }
         }
         // leading updated subjet deep flavour b discriminants
@@ -342,12 +334,17 @@ bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         besVars["bDisc2_probbb"] = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
 
         // maximum subjet deep flavour b discriminants
+        // note: in the past, these besVars referred to the bDisc scores associated with the AK8 Jet object.
+        //          now, these three vars refer to the max bDisc values in the set of subjets within the AK8 Jet
         besVars["bDisc"]        = maxbDisc;
         besVars["bDisc_probb"]  = maxbProb;
         besVars["bDisc_probbb"] = maxbbProb;
-        besVars["bDiscSubJet_Max"] = maxbDisc;
-        besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
 
+        // This var is replaced by bDisc
+        // besVars["bDiscSubJet_Max"] = maxbDisc;
+
+        // This var no longer makes sense to include
+        // besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
     }
     return true;
 }
