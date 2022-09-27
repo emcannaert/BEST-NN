@@ -624,7 +624,9 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         // if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4 &&ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 10) {
         // if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4) {
-        if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && ijet->pt() <= 3500 && fabs(ijet->eta()) < 2.4) {
+        if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 
+            && ijet->pt() >= 500 && ijet->pt() <= 3500 && fabs(ijet->eta()) < 2.4 
+            && ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 0.25) {
 
             // gen particle loop, only relevant for non-QCD jets
             if (jetType_ !=0){

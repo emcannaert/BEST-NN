@@ -542,7 +542,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
         }
     }
 
-    if (rotationJets.size()<2) return false;
+    if (rotationJets.size()<4) return false;
 
     // Store boosted candidates for rest frames
     boostedDaughters[frame+"Frame"] = particles;
