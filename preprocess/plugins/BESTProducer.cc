@@ -457,6 +457,12 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
         // }
     }
 
+    // This variable is also part of the Temporary Debugging Code from below, 
+    // but it is just simpler to include it in the main tree
+    // Will be either 0, 1, or 2. SHOULD always be 0.
+    // Will keep this var for 2017 run just in case
+    listOfVars.push_back("nMultipleMatches"); 
+
     // Make Branches for each variable
     for (unsigned i = 0; i < listOfVars.size(); i++){
         treeVars[ listOfVars[i] ] = -999.99;
@@ -606,7 +612,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     map<string, vector<TLorentzVector> > boostedDaughters;
     map<string, vector<fastjet::PseudoJet> > restJets;
 
-
+    std::vector<int> matchedSubJetIndices;
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
         daughtersOfJet.clear();
@@ -634,7 +640,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                if (storeJetVariables(treeVars, ijet, jetColl_, subJets) == false) goto endjetloop;
+                if (storeJetVariables(treeVars, jetColl_, ijet, subJets, matchedSubJetIndices) == false) goto endjetloop;
                 
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);

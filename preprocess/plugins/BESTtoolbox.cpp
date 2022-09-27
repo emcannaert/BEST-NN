@@ -115,8 +115,12 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 // This takes various jet quantaties and stores them on the map used to fill -------------
 // the jet tree --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
-                       int jetColl, std::vector<pat::Jet> upSubJets){
+// bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, 
+bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, 
+                       std::vector<pat::Jet>::const_iterator jet, 
+                       std::vector<pat::Jet> upSubJets,
+                       std::vector<int> &matchedSubJetIndices)
+                       {
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
     // Jet four vector and Soft Drop info
@@ -292,12 +296,20 @@ bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         // double imaxbDisc;
         double ileadSubJet;
         double isubleadSubJet;
+
+        int nMultipleMatches = 0;
+
         // make Lorentz Vector for easier deltaR matching
         TLorentzVector leadSubJetLV(subjets.at(0)->px(), subjets.at(0)->py(), subjets.at(0)->pz(), subjets.at(0)->energy() );
         TLorentzVector subleadSubJetLV(subjets.at(1)->px(), subjets.at(1)->py(), subjets.at(1)->pz(), subjets.at(1)->energy() );
         TLorentzVector jetLV(jet->px(), jet->py(), jet->pz(), jet->energy() );
 
+        double leadMinDelRPt = 100.0;
+        double subleadMinDelRPt = 100.0;
+
         for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
+            // Skip this subJet if we have matched it already
+            // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
 
             // make Lorentz Vector for easier deltaR matching
             TLorentzVector iupSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
@@ -308,12 +320,17 @@ bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
                 double bbprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
                 double bDiscVal = bprobVal + bbprobVal;
 
+                double leadDelRPt = ( leadSubJetLV.DeltaR(iupSubJetLV) )*( abs(leadSubJetLV.Pt() - iupSubJetLV.Pt()) );
+                double subleadDelRPt = ( subleadSubJetLV.DeltaR(iupSubJetLV) )*( abs(subleadSubJetLV.Pt() - iupSubJetLV.Pt()) );
 
-                // Find leading and subleading updated subjets
-                if(leadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
+                // Find minimum del R value
+                if (leadDelRPt < leadMinDelRPt) {
+                    leadMinDelRPt  = leadDelRPt;
                     ileadSubJet = iupSubjet;
                 }
-                if(subleadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
+                
+                if (subleadDelRPt < subleadMinDelRPt) {
+                    subleadMinDelRPt = subleadDelRPt;
                     isubleadSubJet = iupSubjet;
                 }
 
@@ -323,6 +340,16 @@ bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
                 if (bbprobVal > maxbbProb) maxbbProb = bbprobVal;
             }
         }
+
+        // This checks if we are matching any subjets more than once (Bad!)
+        // Good to have for when we run on 2017 soon, but is NOT something to give to the NN
+        // Will remove if 2017 runs with no problems
+        if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), ileadSubJet)) ++nMultipleMatches;
+        matchedSubJetIndices.push_back(ileadSubJet);
+        if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), isubleadSubJet)) ++nMultipleMatches;
+        matchedSubJetIndices.push_back(isubleadSubJet);
+        besVars["nMultipleMatches"] = nMultipleMatches;
+
         // leading updated subjet deep flavour b discriminants
         besVars["bDisc1"]        = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
         besVars["bDisc1_probb"]  = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb");
