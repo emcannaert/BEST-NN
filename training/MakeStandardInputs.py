@@ -4,6 +4,10 @@
 # Author(s): Sam Abbott ///////////////////////////////////////////////////////////
 # This program Standardizes the BEST Inputs ///////////////////////////////////////
 #----------------------------------------------------------------------------------
+
+##############Note to self:
+#fix arguments, default should be all
+
 import tools.functions as tools
 startTime = tools.logTime() # Tracks how long script takes
 
@@ -14,8 +18,7 @@ from sklearn.externals.joblib import dump
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler
 from sklearn.compose import ColumnTransformer
 
-# sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
-sampleTypes = ["WW","ZZ","HH","ZPTT","BB","QCD"]
+sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 
 # It is important that "train" is FIRST in this list!!!!
 setTypes = ["train", "validation", "test"]
@@ -179,7 +182,8 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
                 param2 = [0]*numEvents # scale_ and max_abs_ are the same parameter
 
             for i, event in enumerate(events):
-                f.write('{},{},{},{}\n'.format(event, nameKey, param1[i], param2[i]))
+                # f.write('{},{},{},{}\n'.format(event, nameKey, param1[i], param2[i]))
+                f.write('{},{},{},{}\n'.format(vars[event], nameKey, param1[i], param2[i]))
 
     #==================================================================================
     # Transform and save data /////////////////////////////////////////////////////////
@@ -219,8 +223,8 @@ if __name__ == "__main__":
     # Take in arguments
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to standardize data for training.')
     parser.add_argument('-hd','--h5Dir', dest='h5Dir',
-                        default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/",
-                        help="Input File Dir [default: /uscms/home/bonillaj/nobackup/h5samples_ULv1/]")
+                        default="../formatConverter/h5samples/",
+                        help="Input File Dir [default: ../formatConverter/h5samples/]")
     parser.add_argument('-sf','--suffix', dest='suffix',
                         default="flattened",
                         help="Suffix, used to select correct h5 input file to standardize [default: 'flattened']")
@@ -231,7 +235,8 @@ if __name__ == "__main__":
                         default="ScalerParameters",
                         help="Dir to store scale params and scaler object to check later [default: ScalerParameters]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
-                        default = "../formatConverter/masks/BESTMask.txt",
+                        # default = "../formatConverter/masks/BESTMask.txt",
+                        default = "../formatConverter/h5samples/BESvarList.txt",
                         help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
     args = parser.parse_args()
 

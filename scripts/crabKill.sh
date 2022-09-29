@@ -12,8 +12,10 @@
 # Check error flags?
 
 
-echo "Killing jobs..."
 logFile="Logs/killLog.txt"
+echo >> $logFile
+
+echo "Killing jobs..."
 pids=
 # Kill crab jobs
 for job in */CrabBEST/*/ ; do
@@ -23,4 +25,4 @@ for job in */CrabBEST/*/ ; do
 done
 
 wait $pids # Wait until all crab status commands are done
-echo "\nKilling complete. Check output at $logFile"
+echo -e "\nKilling complete. Check output at $logFile"

@@ -179,6 +179,9 @@ class BESTProducer : public edm::stream::EDProducer<> {
         std::map<std::string, std::vector<float> > jetVecVars;
         std::vector<std::string> listOfVecVars;
 
+        // List of strings of the rest masses for each frame that BEST boosts to
+        std::vector<std::string> restMasses; 
+
         // Tokens
         //edm::EDGetTokenT<std::vector<pat::PackedCandidate> > pfCandsToken_;
         edm::EDGetTokenT<std::vector<pat::Jet> > ak8JetsToken_;
@@ -212,13 +215,35 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     inputSubJetColl_ (iConfig.getParameter<std::string>("inputSubJetColl")),
     jetType_ (best::jetTypeFromString(iConfig.getParameter<std::string>("jetType"))),
     jetColl_ (best::jetCollFromString(iConfig.getParameter<std::string>("jetColl"))),
-    storeDaughters (iConfig.getParameter<bool>("storeDaughters"))
-{
+    storeDaughters (iConfig.getParameter<bool>("storeDaughters")) {
+
+    //------------------------------------------------------------------------------
+    // Prepare Rest Masses ---------------------------------------------------------
+    //------------------------------------------------------------------------------
+
+    // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
+    restMasses.push_back("300GeV");
+    restMasses.push_back("400GeV");
+    restMasses.push_back("W");
+    restMasses.push_back("Higgs");
+    restMasses.push_back("Top");
+    restMasses.push_back("ak8");
+    restMasses.push_back("ak8SoftDrop");
+
+    // Frames that are not being used are commented out:
+    // unsigned int iterMass = 50;
+    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true.
+    //     restMasses.push_back(std::to_string(iterMass)+"GeV");
+    //     iterMass += 50;
+    // }
+    // restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z");
+    // restMasses.push_back("Lab");
 
     //------------------------------------------------------------------------------
     // Prepare TFile Service -------------------------------------------------------
     //------------------------------------------------------------------------------
 
+    // Create the root TTree
     edm::Service<TFileService> fs;
     jetTree = fs->make<TTree>("jetTree","jetTree");
 
@@ -240,33 +265,83 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_charge");
 
     // Deep AK8
-    listOfVars.push_back("jetAK8_deepAK8_rawL");
-    listOfVars.push_back("jetAK8_deepAK8_rawC");
-    listOfVars.push_back("jetAK8_deepAK8_rawB");
-    listOfVars.push_back("jetAK8_deepAK8_rawW");
-    listOfVars.push_back("jetAK8_deepAK8_rawZ");
-    listOfVars.push_back("jetAK8_deepAK8_rawH");
-    listOfVars.push_back("jetAK8_deepAK8_rawT");
-    listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawL");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawC");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawB");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawW");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawH");
-    listOfVars.push_back("jetAK8_deepAK8MD_rawT");
-    listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+    // listOfVars.push_back("jetAK8_deepAK8_rawL");
+    // listOfVars.push_back("jetAK8_deepAK8_rawC");
+    // listOfVars.push_back("jetAK8_deepAK8_rawB");
+    // listOfVars.push_back("jetAK8_deepAK8_rawW");
+    // listOfVars.push_back("jetAK8_deepAK8_rawZ");
+    // listOfVars.push_back("jetAK8_deepAK8_rawH");
+    // listOfVars.push_back("jetAK8_deepAK8_rawT");
+    // listOfVars.push_back("jetAK8_deepAK8_dnn_Largest");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawL");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawC");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawB");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawW");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawZ");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawH");
+    // listOfVars.push_back("jetAK8_deepAK8MD_rawT");
+    // listOfVars.push_back("jetAK8_deepAK8MD_dnn_Largest");
+
+    listOfVars.push_back("jetAK8_deepAK8_probQCDothers");
+    listOfVars.push_back("jetAK8_deepAK8_probQCDcc");
+    listOfVars.push_back("jetAK8_deepAK8_probQCDbb");
+    listOfVars.push_back("jetAK8_deepAK8_probWcq");
+    listOfVars.push_back("jetAK8_deepAK8_probHbb"); 
+    listOfVars.push_back("jetAK8_deepAK8_probQCDc");
+    listOfVars.push_back("jetAK8_deepAK8_probQCDb");
+    listOfVars.push_back("jetAK8_deepAK8_probWqq");
+    listOfVars.push_back("jetAK8_deepAK8_probZcc");
+    listOfVars.push_back("jetAK8_deepAK8_probHcc");
+    listOfVars.push_back("jetAK8_deepAK8_probTbqq");
+    listOfVars.push_back("jetAK8_deepAK8_probZbb");
+    listOfVars.push_back("jetAK8_deepAK8_probZqq");
+    listOfVars.push_back("jetAK8_deepAK8_probHqqqq");
+    listOfVars.push_back("jetAK8_deepAK8_probTbcq");
+
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDothers");
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDcc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDbb");
+    listOfVars.push_back("jetAK8_deepAK8MD_probWcq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probHbb"); 
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probQCDb");
+    listOfVars.push_back("jetAK8_deepAK8MD_probWqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probZcc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probHcc");
+    listOfVars.push_back("jetAK8_deepAK8MD_probTbqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probZbb");
+    listOfVars.push_back("jetAK8_deepAK8MD_probZqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probHqqqq");
+    listOfVars.push_back("jetAK8_deepAK8MD_probTbcq");
 
     // Particle Net
-    listOfVars.push_back("jetAK8_ParticleNet_rawL");
-    listOfVars.push_back("jetAK8_ParticleNet_rawC");
-    listOfVars.push_back("jetAK8_ParticleNet_rawB");
-    listOfVars.push_back("jetAK8_ParticleNet_rawW");
-    listOfVars.push_back("jetAK8_ParticleNet_rawZ");
-    listOfVars.push_back("jetAK8_ParticleNet_rawH");
-    listOfVars.push_back("jetAK8_ParticleNet_rawT");
-    listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawL");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawC");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawB");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawW");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawZ");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawH");
+    // listOfVars.push_back("jetAK8_ParticleNet_rawT");
+    // listOfVars.push_back("jetAK8_ParticleNet_dnn_Largest");
 
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDothers");
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDcc");
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDbb");
+    listOfVars.push_back("jetAK8_ParticleNet_probWcq");
+    listOfVars.push_back("jetAK8_ParticleNet_probHbb"); 
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDc");
+    listOfVars.push_back("jetAK8_ParticleNet_probQCDb");
+    listOfVars.push_back("jetAK8_ParticleNet_probWqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probZcc");
+    listOfVars.push_back("jetAK8_ParticleNet_probHcc");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probZbb");
+    listOfVars.push_back("jetAK8_ParticleNet_probZqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probHqqqq");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbcq");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbc");
+    listOfVars.push_back("jetAK8_ParticleNet_probTbq");
+    
     // Vertex Variables
     listOfVars.push_back("nSecondaryVertices");
     // listOfVecVars.push_back("SV_pt"); // Possible bug!
@@ -287,8 +362,8 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("bDisc2");
     listOfVars.push_back("bDisc2_probb");
     listOfVars.push_back("bDisc2_probbb");
-    listOfVars.push_back("bDiscSubJet_Max");
-    listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
+    // listOfVars.push_back("bDiscSubJet_Max");
+    // listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
 
 
     // nsubjettiness
@@ -298,22 +373,6 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     listOfVars.push_back("jetAK8_Tau1");
     listOfVars.push_back("jetAK8_Tau32");
     listOfVars.push_back("jetAK8_Tau21");
-
-    // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
-    std::vector<std::string> restMasses;
-    restMasses.clear();
-    restMasses.push_back("300GeV"); restMasses.push_back("400GeV");
-    // Frames that are not being used are commented out
-    // unsigned int iterMass = 50;
-    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true.
-    //     restMasses.push_back(std::to_string(iterMass)+"GeV");
-    //     iterMass += 50;
-    // }
-
-    // restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z");
-    restMasses.push_back("W"); restMasses.push_back("Higgs"); restMasses.push_back("Top");
-    restMasses.push_back("ak8"); restMasses.push_back("ak8SoftDrop");
-    // restMasses.push_back("Lab");
 
     // Now use this vector to generate the variable names to add:
     for (unsigned int imass=0; imass < restMasses.size(); imass++) {
@@ -397,7 +456,12 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             // }
         // }
     }
-    restMasses.clear();
+
+    // This variable is also part of the Temporary Debugging Code from below, 
+    // but it is just simpler to include it in the main tree
+    // Will be either 0, 1, or 2. SHOULD always be 0.
+    // Will keep this var for 2017 run just in case
+    listOfVars.push_back("nMultipleMatches"); 
 
     // Make Branches for each variable
     for (unsigned i = 0; i < listOfVars.size(); i++){
@@ -467,7 +531,6 @@ BESTProducer::~BESTProducer()
 void
 BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-    std::cout << "Starting Producer" << std::endl;
     using namespace edm;
     using namespace fastjet;
     using namespace std;
@@ -549,22 +612,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     map<string, vector<TLorentzVector> > boostedDaughters;
     map<string, vector<fastjet::PseudoJet> > restJets;
 
-    // Define vector of rest masses (in GeV) to boost to (rather than the individual H, t, W, Z masses).
-    std::vector<std::string> restMasses;
-    restMasses.clear();
-    restMasses.push_back("300GeV"); restMasses.push_back("400GeV");
-    // Frames that are not being used are commented out
-    // unsigned int iterMass = 50;
-    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true.
-    //     restMasses.push_back(std::to_string(iterMass)+"GeV");
-    //     iterMass += 50;
-    // }
-
-    // restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z");
-    restMasses.push_back("W"); restMasses.push_back("Higgs"); restMasses.push_back("Top");
-    restMasses.push_back("ak8"); restMasses.push_back("ak8SoftDrop");
-    // restMasses.push_back("Lab");
-
+    std::vector<int> matchedSubJetIndices;
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
         bool GenMatching = false;
         daughtersOfJet.clear();
@@ -574,7 +622,9 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         // if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4 &&ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 10) {
         // if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && fabs(ijet->eta()) < 2.4) {
-        if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 && ijet->pt() >= 500 && ijet->pt() <= 3500 && fabs(ijet->eta()) < 2.4) {
+        if(ijet->subjets("SoftDropPuppi").size() >=2 && ijet->numberOfDaughters() > 2 
+            && ijet->pt() >= 500 && ijet->pt() <= 3500 && fabs(ijet->eta()) < 2.4 
+            && ijet->userFloat("ak8PFJetsPuppiSoftDropMass") > 0.25) {
 
             // gen particle loop, only relevant for non-QCD jets
             if (jetType_ !=0){
@@ -590,8 +640,8 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                storeJetVariables(treeVars, ijet, jetColl_, subJets);
-
+                if (storeJetVariables(treeVars, jetColl_, ijet, subJets, matchedSubJetIndices) == false) goto endjetloop;
+                
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);
 
@@ -614,6 +664,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 endjetloop:; // When goto is triggered in the imass loop, the code jumps to here. This is like using "continue" twice, to skip this iteration of the ijet loop.
             }
         }
+
         //-------------------------------------------------------------------------------
         // Clear and Reset all tree variables -------------------------------------------
         //-------------------------------------------------------------------------------
@@ -624,12 +675,10 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             jetVecVars[ listOfVecVars[i] ].clear();
         }
     }
-
     // Delete vector
     daughtersOfJet.clear();
     boostedDaughters.clear();
     restJets.clear();
-    restMasses.clear();
 }
 
 

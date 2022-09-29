@@ -6,6 +6,7 @@
 preprocess/crab/submit*
 *log*
 # */Logs/*
+*Log.txt
 *.h5
 *.pkl
 *.out

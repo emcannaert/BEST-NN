@@ -314,7 +314,7 @@ def rocCurveComparator(PCTFiles, PCTlegendNames, PCTcolors):
     # Load Mask
     # maskFile = "fixBESTMask_ak8.txt"
     maskFile = "300Wbothak8HT400.txt"
-    mask = tools.loadMask(modelDir +  maskFile)
+    mask, _ = tools.loadMask(modelDir +  maskFile)
 
     scale = "newBEST_Basic" 
     # scale =  "newBEST_Qmpxy"

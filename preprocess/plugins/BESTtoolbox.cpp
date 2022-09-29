@@ -115,8 +115,12 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 // This takes various jet quantaties and stores them on the map used to fill -------------
 // the jet tree --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
-                       int jetColl, std::vector<pat::Jet> upSubJets){
+// bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, 
+bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, 
+                       std::vector<pat::Jet>::const_iterator jet, 
+                       std::vector<pat::Jet> upSubJets,
+                       std::vector<int> &matchedSubJetIndices)
+                       {
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
     // Jet four vector and Soft Drop info
@@ -126,67 +130,121 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
     besVars["jetAK8_mass"]  = jet->mass();
 
     // Deep AK8
-    besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
-    besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
-    besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
-    besVars["jetAK8_deepAK8_rawW"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
-    besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
-    besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
-    besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});
-    besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    // besVars["jetAK8_deepAK8_rawL"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
+    // besVars["jetAK8_deepAK8_rawC"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
+    // besVars["jetAK8_deepAK8_rawB"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
+    // besVars["jetAK8_deepAK8_rawW"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
+    // besVars["jetAK8_deepAK8_rawZ"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
+    // besVars["jetAK8_deepAK8_rawH"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
+    // besVars["jetAK8_deepAK8_rawT"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
+    
+    besVars["jetAK8_deepAK8_probQCDothers"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDothers");
+    besVars["jetAK8_deepAK8_probQCDcc"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDcc");
+    besVars["jetAK8_deepAK8_probQCDbb"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDbb");
+    besVars["jetAK8_deepAK8_probWcq"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWcq");
+    besVars["jetAK8_deepAK8_probHbb"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHbb");
+    besVars["jetAK8_deepAK8_probQCDc"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDc");
+    besVars["jetAK8_deepAK8_probQCDb"] = jet->bDiscriminator("pfDeepBoostedJetTags:probQCDb");
+    besVars["jetAK8_deepAK8_probWqq"] = jet->bDiscriminator("pfDeepBoostedJetTags:probWqq");
+    besVars["jetAK8_deepAK8_probZcc"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZcc");
+    besVars["jetAK8_deepAK8_probHcc"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHcc");
+    besVars["jetAK8_deepAK8_probTbqq"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbqq");
+    besVars["jetAK8_deepAK8_probZbb"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZbb");
+    besVars["jetAK8_deepAK8_probZqq"] = jet->bDiscriminator("pfDeepBoostedJetTags:probZqq");
+    besVars["jetAK8_deepAK8_probHqqqq"] = jet->bDiscriminator("pfDeepBoostedJetTags:probHqqqq");
+    besVars["jetAK8_deepAK8_probTbcq"] = jet->bDiscriminator("pfDeepBoostedJetTags:probTbcq");
+    
+    // besVars["jetAK8_deepAK8_rawmax"] = std::max({besVars["jetAK8_deepAK8_rawL"],besVars["jetAK8_deepAK8_rawC"],besVars["jetAK8_deepAK8_rawB"],besVars["jetAK8_deepAK8_rawW"],besVars["jetAK8_deepAK8_rawZ"],besVars["jetAK8_deepAK8_rawH"],besVars["jetAK8_deepAK8_rawT"]});
+    // besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
 
-    float epsilon = 1e-4;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawT"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawH"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawZ"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawW"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawB"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawC"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 6;
-    else besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+    // float epsilon = 1e-4;
+    // // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    // if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawL"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 0;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawT"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 1;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawH"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 2;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawZ"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 3;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawW"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 4;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawB"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 5;
+    // else if (besVars["jetAK8_deepAK8_rawmax"] - besVars["jetAK8_deepAK8_rawC"] < epsilon) besVars["jetAK8_deepAK8_dnn_Largest"] = 6;
+    // else besVars["jetAK8_deepAK8_dnn_Largest"] = 10;
+
     // MD Deep AK8
-    besVars["jetAK8_deepAK8MD_rawL"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
-    besVars["jetAK8_deepAK8MD_rawC"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
-    besVars["jetAK8_deepAK8MD_rawB"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
-    besVars["jetAK8_deepAK8MD_rawW"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
-    besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
-    besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
-    besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
-    besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});
-    besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawT"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawH"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawZ"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawW"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
-    else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+    // besVars["jetAK8_deepAK8MD_rawL"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
+    // besVars["jetAK8_deepAK8MD_rawC"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
+    // besVars["jetAK8_deepAK8MD_rawB"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
+    // besVars["jetAK8_deepAK8MD_rawW"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
+    // besVars["jetAK8_deepAK8MD_rawZ"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
+    // besVars["jetAK8_deepAK8MD_rawH"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
+    // besVars["jetAK8_deepAK8MD_rawT"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq") + jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
+    
+    besVars["jetAK8_deepAK8MD_probQCDothers"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDothers");
+    besVars["jetAK8_deepAK8MD_probQCDcc"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDcc");
+    besVars["jetAK8_deepAK8MD_probQCDbb"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDbb");
+    besVars["jetAK8_deepAK8MD_probWcq"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWcq");
+    besVars["jetAK8_deepAK8MD_probHbb"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHbb");
+    besVars["jetAK8_deepAK8MD_probQCDc"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDc");
+    besVars["jetAK8_deepAK8MD_probQCDb"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probQCDb");
+    besVars["jetAK8_deepAK8MD_probWqq"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probWqq");
+    besVars["jetAK8_deepAK8MD_probZcc"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZcc");
+    besVars["jetAK8_deepAK8MD_probHcc"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHcc");
+    besVars["jetAK8_deepAK8MD_probTbqq"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbqq");
+    besVars["jetAK8_deepAK8MD_probZbb"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZbb");
+    besVars["jetAK8_deepAK8MD_probZqq"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probZqq");
+    besVars["jetAK8_deepAK8MD_probHqqqq"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probHqqqq");
+    besVars["jetAK8_deepAK8MD_probTbcq"] = jet->bDiscriminator("pfMassDecorrelatedDeepBoostedJetTags:probTbcq");
+    
+    // besVars["jetAK8_deepAK8MD_rawmax"] = std::max({besVars["jetAK8_deepAK8MD_rawL"],besVars["jetAK8_deepAK8MD_rawC"],besVars["jetAK8_deepAK8MD_rawB"],besVars["jetAK8_deepAK8MD_rawW"],besVars["jetAK8_deepAK8MD_rawZ"],besVars["jetAK8_deepAK8MD_rawH"],besVars["jetAK8_deepAK8MD_rawT"]});
+    // besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
+    // // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    // if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawL"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 0;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawT"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 1;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawH"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 2;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawZ"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 3;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawW"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 4;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawB"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 5;
+    // else if (besVars["jetAK8_deepAK8MD_rawmax"] - besVars["jetAK8_deepAK8MD_rawC"] < epsilon) besVars["jetAK8_deepAK8MD_dnn_Largest"] = 6;
+    // else besVars["jetAK8_deepAK8MD_dnn_Largest"] = 10;
 
     // ParticleNet
-    besVars["jetAK8_ParticleNet_rawL"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDothers");
-    besVars["jetAK8_ParticleNet_rawC"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDcc") + jet->bDiscriminator("pfParticleNetJetTags:probQCDc");
-    besVars["jetAK8_ParticleNet_rawB"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDbb") + jet->bDiscriminator("pfParticleNetJetTags:probQCDb");
-    besVars["jetAK8_ParticleNet_rawW"] = jet->bDiscriminator("pfParticleNetJetTags:probWcq") + jet->bDiscriminator("pfParticleNetJetTags:probWqq");
-    besVars["jetAK8_ParticleNet_rawZ"] = jet->bDiscriminator("pfParticleNetJetTags:probZbb") + jet->bDiscriminator("pfParticleNetJetTags:probZcc") + jet->bDiscriminator("pfParticleNetJetTags:probZqq");
-    besVars["jetAK8_ParticleNet_rawH"] = jet->bDiscriminator("pfParticleNetJetTags:probHbb") + jet->bDiscriminator("pfParticleNetJetTags:probHcc") + jet->bDiscriminator("pfParticleNetJetTags:probHqqqq");
-    besVars["jetAK8_ParticleNet_rawT"] = jet->bDiscriminator("pfParticleNetJetTags:probTbcq") + jet->bDiscriminator("pfParticleNetJetTags:probTbqq");
-    besVars["jetAK8_ParticleNet_rawmax"] = std::max({besVars["jetAK8_ParticleNet_rawL"],besVars["jetAK8_ParticleNet_rawC"],besVars["jetAK8_ParticleNet_rawB"],besVars["jetAK8_ParticleNet_rawW"],besVars["jetAK8_ParticleNet_rawZ"],besVars["jetAK8_ParticleNet_rawH"],besVars["jetAK8_ParticleNet_rawT"]});
-    besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
+    // besVars["jetAK8_ParticleNet_rawL"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDothers");
+    // besVars["jetAK8_ParticleNet_rawC"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDcc") + jet->bDiscriminator("pfParticleNetJetTags:probQCDc");
+    // besVars["jetAK8_ParticleNet_rawB"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDbb") + jet->bDiscriminator("pfParticleNetJetTags:probQCDb");
+    // besVars["jetAK8_ParticleNet_rawW"] = jet->bDiscriminator("pfParticleNetJetTags:probWcq") + jet->bDiscriminator("pfParticleNetJetTags:probWqq");
+    // besVars["jetAK8_ParticleNet_rawZ"] = jet->bDiscriminator("pfParticleNetJetTags:probZbb") + jet->bDiscriminator("pfParticleNetJetTags:probZcc") + jet->bDiscriminator("pfParticleNetJetTags:probZqq");
+    // besVars["jetAK8_ParticleNet_rawH"] = jet->bDiscriminator("pfParticleNetJetTags:probHbb") + jet->bDiscriminator("pfParticleNetJetTags:probHcc") + jet->bDiscriminator("pfParticleNetJetTags:probHqqqq");
+    // besVars["jetAK8_ParticleNet_rawT"] = jet->bDiscriminator("pfParticleNetJetTags:probTbcq") + jet->bDiscriminator("pfParticleNetJetTags:probTbqq");
+    
+    besVars["jetAK8_ParticleNet_probQCDothers"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDothers");
+    besVars["jetAK8_ParticleNet_probQCDcc"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDcc");
+    besVars["jetAK8_ParticleNet_probQCDbb"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDbb");
+    besVars["jetAK8_ParticleNet_probWcq"] = jet->bDiscriminator("pfParticleNetJetTags:probWcq");
+    besVars["jetAK8_ParticleNet_probHbb"] = jet->bDiscriminator("pfParticleNetJetTags:probHbb");
+    besVars["jetAK8_ParticleNet_probQCDc"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDc");
+    besVars["jetAK8_ParticleNet_probQCDb"] = jet->bDiscriminator("pfParticleNetJetTags:probQCDb");
+    besVars["jetAK8_ParticleNet_probWqq"] = jet->bDiscriminator("pfParticleNetJetTags:probWqq");
+    besVars["jetAK8_ParticleNet_probZcc"] = jet->bDiscriminator("pfParticleNetJetTags:probZcc");
+    besVars["jetAK8_ParticleNet_probHcc"] = jet->bDiscriminator("pfParticleNetJetTags:probHcc");
+    besVars["jetAK8_ParticleNet_probTbqq"] = jet->bDiscriminator("pfParticleNetJetTags:probTbqq");
+    besVars["jetAK8_ParticleNet_probZbb"] = jet->bDiscriminator("pfParticleNetJetTags:probZbb");
+    besVars["jetAK8_ParticleNet_probZqq"] = jet->bDiscriminator("pfParticleNetJetTags:probZqq");
+    besVars["jetAK8_ParticleNet_probHqqqq"] = jet->bDiscriminator("pfParticleNetJetTags:probHqqqq");
+    besVars["jetAK8_ParticleNet_probTbcq"] = jet->bDiscriminator("pfParticleNetJetTags:probTbcq");
+    besVars["jetAK8_ParticleNet_probTbc"] = jet->bDiscriminator("pfParticleNetJetTags:probTbc");
+    besVars["jetAK8_ParticleNet_probTbq"] = jet->bDiscriminator("pfParticleNetJetTags:probTbq");
+    
+    // besVars["jetAK8_ParticleNet_rawmax"] = std::max({besVars["jetAK8_ParticleNet_rawL"],besVars["jetAK8_ParticleNet_rawC"],besVars["jetAK8_ParticleNet_rawB"],besVars["jetAK8_ParticleNet_rawW"],besVars["jetAK8_ParticleNet_rawZ"],besVars["jetAK8_ParticleNet_rawH"],besVars["jetAK8_ParticleNet_rawT"]});
+    // besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
 
-    //float epsilon = 1e-4;
-    // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
-    if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawL"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 0;
-    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawT"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 1;
-    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawH"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 2;
-    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawZ"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 3;
-    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawW"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 4;
-    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawB"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 5;
-    else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawC"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 6;
-    else besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
+    // //float epsilon = 1e-4;
+    // // J, T, H, Z, W, B, C = 0, 1, 2, 3, 4, 5, 6
+    // if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawL"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 0;
+    // else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawT"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 1;
+    // else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawH"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 2;
+    // else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawZ"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 3;
+    // else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawW"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 4;
+    // else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawB"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 5;
+    // else if (besVars["jetAK8_ParticleNet_rawmax"] - besVars["jetAK8_ParticleNet_rawC"] < epsilon) besVars["jetAK8_ParticleNet_dnn_Largest"] = 6;
+    // else besVars["jetAK8_ParticleNet_dnn_Largest"] = 10;
 
 
     // Store Jet Charge = (1/sum{pT^0.6}) * sum{q * pT^0.6}
@@ -224,65 +282,74 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8Puppi:tau3") / jet->userFloat("NjettinessAK8Puppi:tau2");
         besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
         auto subjets = jet->subjets("SoftDropPuppi");
-        if (subjets.size() < 2){
-            std::cout << "This will exit, not enough subjets" << std::endl;
-            exit(1);
-        }
-        if (!subjets[0]){
-            std::cout << "This will exit, invalid subjet 0" << std::endl;
-            exit(1);
-        }
-        if (!subjets[1]){
-            std::cout << "This will exit, invalid subjet 1" << std::endl;
-                exit(1);
-        }
+
+        // Check if this AK8 jet is valid, skip if not 
+        if (subjets.size() < 2) return false; // Require at least 2 subjets
+        if (!subjets[0]) return false; // Check that the leading subjet is there
+        if (!subjets[1]) return false; // Check that the subleading subjet is there
+
         // Fill leading subjet bDisc variables, and get maximum bDisc values using Deep Flavour
         // The testing code is still in here, just left commented out and can be removed
         double maxbDisc = 0;
         double maxbProb = 0;
         double maxbbProb = 0;
-        double imaxbDisc;
+        // double imaxbDisc;
         double ileadSubJet;
         double isubleadSubJet;
+
+        int nMultipleMatches = 0;
+
         // make Lorentz Vector for easier deltaR matching
         TLorentzVector leadSubJetLV(subjets.at(0)->px(), subjets.at(0)->py(), subjets.at(0)->pz(), subjets.at(0)->energy() );
         TLorentzVector subleadSubJetLV(subjets.at(1)->px(), subjets.at(1)->py(), subjets.at(1)->pz(), subjets.at(1)->energy() );
         TLorentzVector jetLV(jet->px(), jet->py(), jet->pz(), jet->energy() );
 
+        double leadMinDelRPt = 100.0;
+        double subleadMinDelRPt = 100.0;
+
         for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
+            // Skip this subJet if we have matched it already
+            // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
 
             // make Lorentz Vector for easier deltaR matching
             TLorentzVector iupSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
 
+            // Examine the updated subjets within R<0.8 of AK8 Jet, match to AK8 subjets
             if(jetLV.DeltaR(iupSubJetLV) < 0.8){
-                double bDiscVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
                 double bprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb");
                 double bbprobVal = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
+                double bDiscVal = bprobVal + bbprobVal;
 
-                // Find leading and subleading updated subjets
-                if(leadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
+                double leadDelRPt = ( leadSubJetLV.DeltaR(iupSubJetLV) )*( abs(leadSubJetLV.Pt() - iupSubJetLV.Pt()) );
+                double subleadDelRPt = ( subleadSubJetLV.DeltaR(iupSubJetLV) )*( abs(subleadSubJetLV.Pt() - iupSubJetLV.Pt()) );
+
+                // Find minimum del R value
+                if (leadDelRPt < leadMinDelRPt) {
+                    leadMinDelRPt  = leadDelRPt;
                     ileadSubJet = iupSubjet;
-                    //std::cout << "leading subjet is : " << ileadSubJet << std::endl;
                 }
-                if(subleadSubJetLV.DeltaR(iupSubJetLV) < 0.01 ){
+                
+                if (subleadDelRPt < subleadMinDelRPt) {
+                    subleadMinDelRPt = subleadDelRPt;
                     isubleadSubJet = iupSubjet;
-                    //std::cout << "subleading subjet is : " << isubleadSubJet << std::endl;
                 }
 
                 // Find max bDisc value and index
-                if (bDiscVal > maxbDisc) {
-                    maxbDisc  = bDiscVal;
-                    imaxbDisc = iupSubjet;
-                }
-                if (bprobVal > maxbProb) {
-                    maxbProb  = bprobVal;
-                }
-                if (bbprobVal > maxbbProb) {
-                    maxbbProb  = bbprobVal;
-                }
-
+                if (bDiscVal > maxbDisc)   maxbDisc  = bDiscVal;
+                if (bprobVal > maxbProb)   maxbProb  = bprobVal;
+                if (bbprobVal > maxbbProb) maxbbProb = bbprobVal;
             }
         }
+
+        // This checks if we are matching any subjets more than once (Bad!)
+        // Good to have for when we run on 2017 soon, but is NOT something to give to the NN
+        // Will remove if 2017 runs with no problems
+        if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), ileadSubJet)) ++nMultipleMatches;
+        matchedSubJetIndices.push_back(ileadSubJet);
+        if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), isubleadSubJet)) ++nMultipleMatches;
+        matchedSubJetIndices.push_back(isubleadSubJet);
+        besVars["nMultipleMatches"] = nMultipleMatches;
+
         // leading updated subjet deep flavour b discriminants
         besVars["bDisc1"]        = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
         besVars["bDisc1_probb"]  = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb");
@@ -294,25 +361,19 @@ void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::J
         besVars["bDisc2_probbb"] = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
 
         // maximum subjet deep flavour b discriminants
+        // note: in the past, these besVars referred to the bDisc scores associated with the AK8 Jet object.
+        //          now, these three vars refer to the max bDisc values in the set of subjets within the AK8 Jet
         besVars["bDisc"]        = maxbDisc;
         besVars["bDisc_probb"]  = maxbProb;
         besVars["bDisc_probbb"] = maxbbProb;
-        besVars["bDiscSubJet_Max"] = maxbDisc;
-        besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
 
-/*
-        std::cout << "Deep Flavour b dicriminant values: " << std::endl;
-        std::cout << "leading subjet: " << besVars["bDisc1"] << "  " << besVars["bDisc1_probb"] <<  "  " << besVars["bDisc1_probbb"] << std::endl;
-        std::cout << "subleading subjet: " << besVars["bDisc2"] << "  " << besVars["bDisc2_probb"] <<  "  " << besVars["bDisc2_probbb"] << std::endl;
-        std::cout << "max subjet: " << besVars["bDisc"] << "  " << besVars["bDisc_probb"] <<  "  " << besVars["bDisc_probbb"] << std::endl;
-*/
+        // This var is replaced by bDisc
+        // besVars["bDiscSubJet_Max"] = maxbDisc;
 
-        // separate these like the above abbott
-        // maximum subjet CSV value -> loop through all subjets, always store 0 and 1, but do them all and store the index + value of largest probb + probbb
-        // sep branch bDisc_Max and bDisc_Max_i
-        // besVars["bDisc1"] = subjets[0]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[0]->bDiscriminator("pfDeepFlavourJetTags:probbb");
-        // besVars["bDisc2"] = subjets[1]->bDiscriminator("pfDeepFlavourJetTags:probb") + subjets[1]->bDiscriminator("pfDeepFlavourJetTags:probbb");
+        // This var no longer makes sense to include
+        // besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
     }
+    return true;
 }
 
 //========================================================================================
@@ -488,7 +549,7 @@ bool calcBESvariables(std::map<std::string, float> &besVars, std::vector<reco::C
         }
     }
 
-    if (rotationJets.size()<2) return false;
+    if (rotationJets.size()<4) return false;
 
     // Store boosted candidates for rest frames
     boostedDaughters[frame+"Frame"] = particles;

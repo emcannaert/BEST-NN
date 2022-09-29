@@ -39,7 +39,8 @@ int FWMoments(std::vector<TLorentzVector> particles, double (&outputs)[5] );
 void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet);
 
 // store the jet variables
-void storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet, int jetColl, std::vector<pat::Jet> upSubJets);
+bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, std::vector<pat::Jet>::const_iterator jet,
+                       std::vector<pat::Jet> upSubJets, std::vector<int> &matchedSubJetIndices);
 
 // store the secondary vertex variables
 void storeSecVertexVariables(std::map<std::string, float> &besVars, std::map< std::string, std::vector<float> > &jetVecVars,

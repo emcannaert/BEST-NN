@@ -13,14 +13,19 @@ import argparse, os
 
 # User definitons
 # bins_list = [i*100 for i in range(0,40)]
-bins_list = [i*50 for i in range(10,60)]
+# bins_list = [i*50 for i in range(10,60)]
+bins_list = [i*20 for i in range(25,125)]
+# bins_list = [i*20 for i in range(25,100)]
 
 #cmslpc127
 # Global variables
 years = ["2016_APV","2016","2017","2018"]
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ","RSGTT","ZPTT"]
-# sampleTypes = ["BB","HH","QCD","WW","ZZ","ZPTT"]
-# sampleTypes = ["BB","HH","QCD","TT","WW","ZZ", "RSG"]
+# years = ["2018","2017","2016_APV","2016"]
+# years = ["2016","2016_APV"]
+# years = ["2017","2018"]
+# years = ["2017"]
+sampleFileTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train_flattened.h5"]
@@ -38,8 +43,10 @@ if __name__ == "__main__":
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
                         help='Location of directory containing h5 files to plot',
-                        default="/uscms/home/bonillaj/nobackup/h5samples_OR/")
+                        # default="/uscms/home/bonillaj/nobackup/h5samples_OR/")
                         # default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/")
+                        # default="/uscms/home/sostrom/nobackup/BEST/CMSSW_10_6_27/src/BEST/formatConverter/h5samples/")
+                        default="../formatConverter/h5samples/")
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2017',
@@ -59,8 +66,8 @@ if __name__ == "__main__":
     if not args.fileTypes == "all": listOfFileTypes = args.fileTypes.split(',')
     if not args.years == "all": years = args.years.split(',')
     # plotDir = "plots/"
-    plotDir = "plots/raw/"
-    if not os.path.isdir(plotDir): os.mkdir(plotDir)
+    # plotDir = "plots/raw/"
+    # if not os.path.isdir(plotDir): os.mkdir(plotDir)
 
     print("Samples to process: ", sampleTypes)
     print("File types to process: ", listOfFileTypes)
@@ -78,10 +85,11 @@ if __name__ == "__main__":
            
             print("Plotting fileType", fileType)
             # plotDir = "plots/" + fileType[1:-3] + "/"
-            # print(plotDir)
-            # if not os.path.isdir(plotDir): os.mkdir(plotDir)
+            plotDir = "plots/prettypT/" + fileType[1:-3] + "/"
+            print(plotDir)
+            if not os.path.isdir(plotDir): os.makedirs(plotDir)
             myPtArrays = []
-            for sampleType in sampleTypes:
+            for sampleType in sampleFileTypes:
                 print(sampleType)
                 inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs"+fileType
                 inputFile = h5py.File(inputPath,"r")
@@ -93,33 +101,57 @@ if __name__ == "__main__":
             if fileType == ".h5": suffix = ""
             else:                 suffix = "_"+fileType.split('.')[0]
             if suffix == "":
-                H = plt.hist(myPtArrays, bins = bins_list, histtype='step', log=True, label=sampleTypes, stacked=False, fill=False, normed=False)
+                H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes, 
+                                stacked=False, fill=False, normed=False, log=True)
                 # plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
                 plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
             else:
-                H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=False)
-            workPoints = [1500, 1600, 2000]
-            for i, wp in enumerate(workPoints): 
-                plt.axvline(wp, linestyle=':', color="red")
-                plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
+                H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes,
+                                stacked=False, fill=False, normed=False)
+            # workPoints = [1500, 1600, 2000]
+            # for i, wp in enumerate(workPoints): 
+            #     plt.axvline(wp, linestyle=':', color="red")
+            #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
+
+            # hlines = [100000, 200000, 300000]
+            # for i, wp in enumerate(hlines): 
+            #     plt.axvline(wp, linestyle=':', color="black")
+            #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
+            #             plt.axhline(100000)
             title = "PtDistribution_"+year+suffix
             plt.legend(frameon=True, ncol=2, loc='lower left')
             plt.xlabel('pT (GeV)')
             plt.title(title)
             plt.show()
+            savePath = os.path.join(plotDir, title+'_2500.png')
+            plt.savefig(savePath)
+            # savePath = os.path.join(plotDir, title+'_2500.pdf')
+            # plt.savefig(savePath)
+            plt.xlim([500,2000])
             savePath = os.path.join(plotDir, title+'.png')
             plt.savefig(savePath)
+            # savePath = os.path.join(plotDir, title+'.pdf')
+            # plt.savefig(savePath)            
             plt.clf()
-
-            # --- Normalized Create histogram, legend and title ---
-            H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
-            plt.legend(frameon=True, ncol=2, loc='upper right')
-            plt.xlabel('pT (GeV)')
-            plt.title(title + " Normalized")            
-            plt.show()
-            savePath = os.path.join(plotDir, title+'_Normalized.png')
-            plt.savefig(savePath)
             plt.close()
+
+            # # --- Normalized Create histogram, legend and title ---
+            # H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
+            # plt.legend(frameon=True, ncol=2, loc='upper right')
+            # plt.xlabel('pT (GeV)')
+            # plt.title(title + " Normalized")            
+            # plt.show()
+            # savePath = os.path.join(plotDir, title+'_Normalized_2500.png')
+            # plt.savefig(savePath)
+            # # savePath = os.path.join(plotDir, title+'_Normalized_2500.pdf')
+            # # plt.savefig(savePath)
+            # plt.xlim([500,2000])
+            # savePath = os.path.join(plotDir, title+'_Normalized.png')
+            # plt.savefig(savePath)
+            # # savePath = os.path.join(plotDir, title+'_Normalized.pdf')
+            # # plt.savefig(savePath)            
+            # plt.clf()
+            # plt.close()
 
     
     print("Done")

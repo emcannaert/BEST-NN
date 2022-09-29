@@ -12,16 +12,17 @@
 # This script also checks for and keeps track of a version two, or "v2", for each dataset, as these updated datasets are still being produced as of writing this code.
 
 ################################## NOTES TO SELF ##################################
-# Implement data
+# Fix bug where if a dataset is missing a v1, number of v2's is not tracked correctly.
+#       Use associative arrays to clean this whole thing up
 
 ###(NOTE: 2015 = 2016_APV)###
-# As of Apr. 30, 2022:
+# As of Aug. 30, 2022:
 #   Missing Mass Points:
 #       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; 
             #(All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000
 #   Dataset Versions:
-#       2015: All tt and QCD datasets are v2, the rest is v1.
-#       2016: All datasets are v2
+#       2016_APV: All tt and QCD datasets are v2, the rest is v1.
+#       2016: All datasets are v2 (10 datasets dont have v1's)
 #       2017: All datasets are v2, except for one extra tt dataset (detailed below)
 #       2018: All datasets are v2 (NOTE: No v1 dataset exists for QCD Flat)
 #   Notes:
@@ -240,9 +241,12 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
         if [[ $particle == "QCD" ]] && [[ $dataset =~ ("Flat"|"15to30"|"30to50"|"50to80"|"80to120"|"120to170"|"170to300"|"300to470"|"Enriched"|"bcToE") ]]; then continue; fi
 
 
+        # NOTE: Not currently using RSG datasets
         # Special case for RSGluon TT samples
-        if [[ $dataset =~ "RSGluon" ]] && [[ $dataset =~ ("M-500_TuneCP5"|"M-1000_TuneCP5"|"M-1500_TuneCP5"|"M-2000_TuneCP5"|"M-2500_TuneCP5"|"M-3000_TuneCP5") ]]; then continue; fi
-        if [[ $dataset =~ "RSGluon" ]]; then trimString=${dataset#*"RSGluonToTT_M-"}
+        # if [[ $dataset =~ "RSGluon" ]] && [[ $dataset =~ ("M-500_TuneCP5"|"M-1000_TuneCP5"|"M-1500_TuneCP5"|"M-2000_TuneCP5"|"M-2500_TuneCP5"|"M-3000_TuneCP5") ]]; then continue; fi
+        # if [[ $dataset =~ "RSGluon" ]]; then trimString=${dataset#*"RSGluonToTT_M-"}
+        if [[ $dataset =~ "RSGluon" ]]; then continue
+
         # Now trim the dataset string to get the mass point and build the crab directory name:
         else                                 trimString=${dataset#*${dasFront[$particle]}}; fi # Trims the corresponding $dasFront string from the front of the $dasResults string 
         massPoint=${trimString%${dasBack[$particle]}*} # Trims the rest of the back of $trimString; now $massPoint is the mass point of the dataset

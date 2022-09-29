@@ -1,5 +1,5 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# combonationROCplotter.py ////////////////////////////////////////////////////////
+# best_roc_compare.py ////////////////////////////////////////////////////////
 #==================================================================================
 # This program evaluates BEST: HH Event Shape Topology Indentification Algorithm 
 #==================================================================================
@@ -7,7 +7,7 @@
 # modules
 #import ROOT as root
 import os
-import numpy
+import numpy as np
 import h5py
 import matplotlib
 matplotlib.use('Agg') #prevents opening displays, must use before pyplot
@@ -35,9 +35,459 @@ import tools.functions as tools
 
 
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleFileTypesScaled = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleFileTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 samples = ["W", "Z", "Higgs", "Top", "Bottom", "QCD"]
-h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_ULv1/"
-plotDir  = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/plots/BEScompare/"
+# h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_ULv1/"
+h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_OR/"
+plotDir  = "plots/BEScompare/"
+maskPath = "../formatConverter/h5samples/BESvarList.txt"
+years = ["2016_APV", "2016", "2017", "2018"]
+
+def plotROCyearcompare(setType="flattened"):
+
+    # _, varDict = tools.loadMask(maskPath)    
+    # r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
+
+    modelDir  = "models/nnBEST/"
+
+    rocDict = dict()
+
+    for year in years:
+        thisModel = setType+"_"+year
+        # Load BES model and predict
+        modelPath = os.path.join(modelDir,thisModel,"BEST_model_" + thisModel + ".h5")
+        # modelPath = modelDir + "BEST_model_" + modelKey + ".h5"
+        # modelPath = myModelDir + "BEST_model_" + modelKey + "_finalRuntime.h5"
+        print(modelPath)
+        model_BESonly = load_model(modelPath)
+        # scalePath = "ScalerParameters_" + setType + "/BESTScalerParameters_" + year + ".txt"    
+
+            # thisTest = thisModel + "_" + testSet
+        # h5Path = "Sample_"+year+"_BESTinputs_test_" + setType + ".h5"
+        h5Path = "Sample_"+year+"_BESTinputs_test_" + setType + "_standardized.h5"
+
+        print("Loading data...")
+        eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypesScaled]
+
+        print("My " + thisModel + " events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
+
+        # Create Truth arrays; shape: N_events x 6
+        truthArrays = [np.zeros( (len(eventArrays[i]), len(sampleTypes)) ) for i in range(len(eventArrays))] 
+
+        # Arrays are filled with zeros. Now set 1's to record Truth particle info
+        for i in range(len(sampleTypes)):
+            truthArrays[i][:,i] = 1.
+
+        print("My " + thisModel + " truth shape: ", [ truthArrays[i].shape for i in range(len(truthArrays)) ] )
+        
+        print("Concatenating...")
+        eventArrays = np.concatenate(eventArrays)
+        truthArrays  = np.concatenate(truthArrays)
+
+        print("My " + thisModel + " concatenated event shape: ", eventArrays.shape)
+        print("My " + thisModel + " concatenated truth shape: ", truthArrays.shape)
+
+        # eventArrays = tools.manualScale(eventArrays, scalePath, r_varDict)
+
+        BESpredict = model_BESonly.predict(eventArrays)
+
+        # Compute ROC curve and area for each class
+        n_classes = len(samples) 
+        fprBES = dict()
+        tprBES = dict()
+        roc_auc_BES = dict()
+        for i, sample in enumerate(samples):
+            fprBES[sample], tprBES[sample], _ = roc_curve(truthArrays[:, i], BESpredict[:, i])
+            roc_auc_BES[sample] = auc(fprBES[sample], tprBES[sample])
+
+        # Compute micro-average ROC curve and ROC area
+        fprBES["micro"], tprBES["micro"], _ = roc_curve(truthArrays.ravel(), BESpredict.ravel() )
+        # del dataDict
+        del BESpredict
+        roc_auc_BES["micro"] = auc(fprBES["micro"], tprBES["micro"] )
+
+        # Compute macro-average ROC curve and ROC area:
+        # First aggregate all false positive rates
+        all_fprBES = np.unique(np.concatenate([fprBES[sample] for sample in samples]) )
+
+        # Interpolate all roc curves
+        mean_tprBES = np.zeros_like(all_fprBES)
+        for sample in samples:
+            mean_tprBES += interp(all_fprBES, fprBES[sample], tprBES[sample] )
+
+        # Average and compute macro AUC
+        mean_tprBES /= n_classes
+
+        fprBES["macro"] = all_fprBES
+        tprBES["macro"] = mean_tprBES
+        roc_auc_BES["macro"] = auc(fprBES["macro"], tprBES["macro"])
+
+        rocDict[thisModel] = { "fpr":fprBES, "tpr":tprBES, "auc":roc_auc_BES }
+
+    # modelKeys = rocDict.keys()
+    # modelKeys.sort()
+
+    # rocKeys = rocDict[modelKeys[0]]["auc"].keys()
+    rocKeys = rocDict[thisModel]["auc"].keys()
+    # print(rocDict)
+    # Fill dictionary with plot label information
+    labelDict = {} # { key: [plot label, plot title, plot path name], ... }
+    for key in rocKeys:
+        if   key == "micro": labelDict[key] = ["Micro Average", "average_micro"]
+        elif key == "macro": labelDict[key] = ["Macro Average", "average_macro"]
+        else:                labelDict[key] = [key + " Category", key]
+
+    # Plot ROC Curves
+    print("Plotting...")
+    saveDir = plotDir + 'flatFlatTop/'+year+"/"
+    if not os.path.isdir(saveDir): os.makedirs(saveDir)
+    # print(rocKeys)
+    for key in rocKeys:
+        # print(key)
+        # Assign these for readability:
+        title = labelDict[key][0] + " ROC Curve Comparison " + year 
+        path  = saveDir + labelDict[key][1] + '_ROCplot'
+        
+        plt.figure(1)
+        for modelKey, thisDict in rocDict.items():
+            fpr = thisDict["fpr"][key]
+            tpr = thisDict["tpr"][key]
+            roc_auc = thisDict["auc"][key]
+
+            plt.plot(fpr, tpr, 
+                    # label= 'BES only ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
+                    # label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                    label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                     linewidth=2)
+        # range=(0.00001, 1.),
+        plt.plot([0, 1], [0, 1], 'k--', lw=2)
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title(title)
+        plt.legend(loc="lower right")
+        plt.show()
+        plt.savefig(path + '.png')
+        plt.savefig(path + '.pdf')
+
+        # plt.yscale('log')
+        # plt.title( title + "_yLogScale")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_ylog.png")
+
+        # plt.xscale('log')
+        # plt.title( title + "_xyLogScale")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_xylog.png")
+
+        # plt.yscale('linear')
+        # plt.title( title + "_xLogScale")
+        # plt.legend(loc="upper left")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_xlog.png")
+
+        plt.clf()
+        plt.close()
+
+    print("Check out completed plots at:\n" + saveDir)
+
+def plotROCpTcompare(year):
+
+    # Load in data
+    print("Loading data...")
+    h5Path = "Sample_"+year+"_BESTinputs_test_flattened_standardized.h5"
+    eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypesScaled]
+
+    print("My test events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
+
+    # Create Truth arrays; shape: N_events x 6
+    truthArrays = [np.zeros( (len(eventArrays[i]), len(sampleTypes)) ) for i in range(len(eventArrays))] 
+
+    # Arrays are filled with zeros. Now set 1's to record Truth particle info
+    for i in range(len(sampleTypes)):
+        truthArrays[i][:,i] = 1.
+
+    print("My test truth shape: ", [ truthArrays[i].shape for i in range(len(truthArrays)) ] )
+
+    print("Concatenating...")
+    eventArrays = np.concatenate(eventArrays)
+    truthArrays = np.concatenate(truthArrays)
+
+    print("My test concatenated event shape: ", eventArrays.shape)
+    print("My test concatenated truth shape: ", truthArrays.shape)
+    # load in full data for correct year
+    # load in model, eval, do it again
+    # plot
+
+
+
+    # Load BES model and predict
+    modelPath = os.path.join("models/nnBEST","flattened_"+year,"BEST_model_flattened_"+year+".h5")
+    print(modelPath)
+    model = load_model(modelPath)
+
+    BESpredict = model.predict(eventArrays)
+    del model
+
+    modelPathnopt = os.path.join("models/nnBEST_nopt","flattened_"+year,"BEST_model_flattened_"+year+".h5")
+    print(modelPathnopt)
+    modelnopt = load_model(modelPathnopt)
+
+    maskPathnopt = "../formatConverter/h5samples/BESvarList_nopt.txt"
+    mask, _ = tools.loadMask(maskPathnopt)    
+    BESpredictnopt = modelnopt.predict(eventArrays[:,mask])
+    del modelnopt; del mask
+
+    del eventArrays
+
+    predictDict = {"BES":BESpredict, "BES_nopT":BESpredictnopt}
+    rocDict = dict()
+    for ptstring, predict in predictDict.items():
+        # Compute ROC curve and area for each class
+        n_classes = len(samples) 
+        fprBES = dict()
+        tprBES = dict()
+        roc_auc_BES = dict()
+        for i, sample in enumerate(samples):
+            fprBES[sample], tprBES[sample], _ = roc_curve(truthArrays[:, i], predict[:, i])
+            roc_auc_BES[sample] = auc(fprBES[sample], tprBES[sample])
+
+        # Compute micro-average ROC curve and ROC area
+        fprBES["micro"], tprBES["micro"], _ = roc_curve(truthArrays.ravel(), predict.ravel() )
+
+        roc_auc_BES["micro"] = auc(fprBES["micro"], tprBES["micro"] )
+
+        # Compute macro-average ROC curve and ROC area:
+        # First aggregate all false positive rates
+        all_fprBES = np.unique(np.concatenate([fprBES[sample] for sample in samples]) )
+
+        # Interpolate all roc curves
+        mean_tprBES = np.zeros_like(all_fprBES)
+        for sample in samples:
+            mean_tprBES += interp(all_fprBES, fprBES[sample], tprBES[sample] )
+
+        # Average and compute macro AUC
+        mean_tprBES /= n_classes
+
+        fprBES["macro"] = all_fprBES
+        tprBES["macro"] = mean_tprBES
+        roc_auc_BES["macro"] = auc(fprBES["macro"], tprBES["macro"])
+
+        rocDict[ptstring] = { "fpr":fprBES, "tpr":tprBES, "auc":roc_auc_BES }
+
+    rocKeys = rocDict[ptstring]["auc"].keys()
+
+    # Fill dictionary with plot label information
+    labelDict = {} # { key: [plot label, plot title, plot path name], ... }
+    for key in rocKeys:
+        if   key == "micro": labelDict[key] = ["Micro Average", "average_micro"]
+        elif key == "macro": labelDict[key] = ["Macro Average", "average_macro"]
+        else:                labelDict[key] = [key + " Category", key]
+
+    # Plot ROC Curves
+    print("Plotting...")
+    saveDir = plotDir + 'ptcompare/'+year+"/"
+    if not os.path.isdir(saveDir): os.makedirs(saveDir)
+
+    for key in rocKeys:
+        # Assign these for readability:
+        title = labelDict[key][0] + " ROC Curve Comparison " + year 
+        path  = saveDir + labelDict[key][1] + '_ROCplot'
+        
+        plt.figure(1)
+        for modelKey, thisDict in rocDict.items():
+            fpr = thisDict["fpr"][key]
+            tpr = thisDict["tpr"][key]
+            roc_auc = thisDict["auc"][key]
+
+            plt.plot(fpr, tpr, 
+                    # label= 'BES only ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
+                    # label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                    label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                     linewidth=2)
+        # range=(0.00001, 1.),
+        plt.plot([0, 1], [0, 1], 'k--', lw=2)
+        # plt.xlim([0.0, 1.0])
+        # plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title(title)
+        plt.legend(loc="lower right")
+        plt.show()
+        plt.savefig(path + '.png')
+
+        plt.yscale('log')
+        plt.title( title + "_yLogScale")
+        plt.show()
+        plt.savefig(saveDir + title + "_ylog.png")
+
+        plt.xscale('log')
+        plt.title( title + "_xyLogScale")
+        plt.show()
+        plt.savefig(saveDir + title + "_xylog.png")
+
+        plt.yscale('linear')
+        plt.title( title + "_xLogScale")
+        plt.legend(loc="upper left")
+        plt.show()
+        plt.savefig(saveDir + title + "_xlog.png")
+
+
+        plt.close()
+
+    print("Check out completed plots at:\n" + saveDir)
+
+def plotROCflatcompare(year):
+
+    _, varDict = tools.loadMask(maskPath)    
+    r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
+ 
+    testSets = ["flattened", "flatTop"]
+
+    modelDir  = "models/nnBEST/"
+
+    rocDict = dict()
+
+    for modelSet in testSets:
+        thisModel = modelSet+"_"+year
+        # Load BES model and predict
+        modelPath = os.path.join(modelDir,thisModel,"BEST_model_" + thisModel + ".h5")
+        # modelPath = modelDir + "BEST_model_" + modelKey + ".h5"
+        # modelPath = myModelDir + "BEST_model_" + modelKey + "_finalRuntime.h5"
+        print(modelPath)
+        model_BESonly = load_model(modelPath)
+        scalePath = "ScalerParameters_" + modelSet + "/BESTScalerParameters_" + year + ".txt"    
+
+        for testSet in testSets:
+            thisTest = thisModel + "_" + testSet
+            h5Path = "Sample_"+year+"_BESTinputs_test_" + testSet + ".h5"
+
+            print("Loading data...")
+            eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypes]
+
+            print("My " + testSet + " events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
+
+            # Create Truth arrays; shape: N_events x 6
+            truthArrays = [np.zeros( (len(eventArrays[i]), len(sampleTypes)) ) for i in range(len(eventArrays))] 
+
+            # Arrays are filled with zeros. Now set 1's to record Truth particle info
+            for i in range(len(sampleTypes)):
+                truthArrays[i][:,i] = 1.
+
+            print("My " + testSet + " truth shape: ", [ truthArrays[i].shape for i in range(len(truthArrays)) ] )
+            
+            print("Concatenating...")
+            eventArrays = np.concatenate(eventArrays)
+            truthArrays  = np.concatenate(truthArrays)
+
+            print("My " + testSet + " concatenated event shape: ", eventArrays.shape)
+            print("My " + testSet + " concatenated truth shape: ", truthArrays.shape)
+
+            eventArrays = tools.manualScale(eventArrays, scalePath, r_varDict)
+
+            BESpredict = model_BESonly.predict(eventArrays)
+
+            # Compute ROC curve and area for each class
+            n_classes = len(samples) 
+            fprBES = dict()
+            tprBES = dict()
+            roc_auc_BES = dict()
+            for i, sample in enumerate(samples):
+                fprBES[sample], tprBES[sample], _ = roc_curve(truthArrays[:, i], BESpredict[:, i])
+                roc_auc_BES[sample] = auc(fprBES[sample], tprBES[sample])
+
+            # Compute micro-average ROC curve and ROC area
+            fprBES["micro"], tprBES["micro"], _ = roc_curve(truthArrays.ravel(), BESpredict.ravel() )
+            # del dataDict
+            del BESpredict
+            roc_auc_BES["micro"] = auc(fprBES["micro"], tprBES["micro"] )
+
+            # Compute macro-average ROC curve and ROC area:
+            # First aggregate all false positive rates
+            all_fprBES = np.unique(np.concatenate([fprBES[sample] for sample in samples]) )
+
+            # Interpolate all roc curves
+            mean_tprBES = np.zeros_like(all_fprBES)
+            for sample in samples:
+                mean_tprBES += interp(all_fprBES, fprBES[sample], tprBES[sample] )
+
+            # Average and compute macro AUC
+            mean_tprBES /= n_classes
+
+            fprBES["macro"] = all_fprBES
+            tprBES["macro"] = mean_tprBES
+            roc_auc_BES["macro"] = auc(fprBES["macro"], tprBES["macro"])
+
+            rocDict[thisTest] = { "fpr":fprBES, "tpr":tprBES, "auc":roc_auc_BES }
+
+    # modelKeys = rocDict.keys()
+    # modelKeys.sort()
+
+    # rocKeys = rocDict[modelKeys[0]]["auc"].keys()
+    rocKeys = rocDict[thisTest]["auc"].keys()
+    # print(rocDict)
+    # Fill dictionary with plot label information
+    labelDict = {} # { key: [plot label, plot title, plot path name], ... }
+    for key in rocKeys:
+        if   key == "micro": labelDict[key] = ["Micro Average", "average_micro"]
+        elif key == "macro": labelDict[key] = ["Macro Average", "average_macro"]
+        else:                labelDict[key] = [key + " Category", key]
+
+    # Plot ROC Curves
+    print("Plotting...")
+    saveDir = plotDir + 'flatFlatTop/'+year+"/"
+    if not os.path.isdir(saveDir): os.makedirs(saveDir)
+    # print(rocKeys)
+    for key in rocKeys:
+        # print(key)
+        # Assign these for readability:
+        title = labelDict[key][0] + " ROC Curve Comparison " + year 
+        path  = saveDir + labelDict[key][1] + '_ROCplot'
+        
+        plt.figure(1)
+        for modelKey, thisDict in rocDict.items():
+            fpr = thisDict["fpr"][key]
+            tpr = thisDict["tpr"][key]
+            roc_auc = thisDict["auc"][key]
+
+            plt.plot(fpr, tpr, 
+                    # label= 'BES only ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
+                    # label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                    label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                     linewidth=2)
+        # range=(0.00001, 1.),
+        plt.plot([0, 1], [0, 1], 'k--', lw=2)
+        # plt.xlim([0.0, 1.0])
+        # plt.ylim([0.0, 1.05])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title(title)
+        plt.legend(loc="lower right")
+        plt.show()
+        plt.savefig(path + '.png')
+
+        plt.yscale('log')
+        plt.title( title + "_yLogScale")
+        plt.show()
+        plt.savefig(saveDir + title + "_ylog.png")
+
+        plt.xscale('log')
+        plt.title( title + "_xyLogScale")
+        plt.show()
+        plt.savefig(saveDir + title + "_xylog.png")
+
+        plt.yscale('linear')
+        plt.title( title + "_xLogScale")
+        plt.legend(loc="upper left")
+        plt.show()
+        plt.savefig(saveDir + title + "_xlog.png")
+
+
+        plt.close()
+
+    print("Check out completed plots at:\n" + saveDir)
 
 def plotROCCompare(h5Dir, plotDir, samples):
 
@@ -88,9 +538,9 @@ def plotROCCompare(h5Dir, plotDir, samples):
         myModelDir = modelDir + modelType + modelKey + "/"
 
         # Load h5 data, set up truth arrays
-        # mask = tools.loadMask(myModelDir + "newBESTMask_" + suffix + ".txt")
-        # mask = tools.loadMask(myModelDir + "fixBESTMask" + suffix + ".txt")
-        mask = tools.loadMask(myModelDir + suffix + ".txt")
+        # mask, _ = tools.loadMask(myModelDir + "newBESTMask_" + suffix + ".txt")
+        # mask, _ = tools.loadMask(myModelDir + "fixBESTMask" + suffix + ".txt")
+        mask, _ = tools.loadMask(myModelDir + suffix + ".txt")
         # dataDict = tools.loadH5Data(h5Dir, mask, sampleTypes, ["test"], scale) 
         
         # Load BES model and predict
@@ -127,10 +577,10 @@ def plotROCCompare(h5Dir, plotDir, samples):
 
         # Compute macro-average ROC curve and ROC area:
         # First aggregate all false positive rates
-        all_fprBES = numpy.unique(numpy.concatenate([fprBES[sample] for sample in samples]) )
+        all_fprBES = np.unique(np.concatenate([fprBES[sample] for sample in samples]) )
 
         # Interpolate all roc curves
-        mean_tprBES = numpy.zeros_like(all_fprBES)
+        mean_tprBES = np.zeros_like(all_fprBES)
         for sample in samples:
             mean_tprBES += interp(all_fprBES, fprBES[sample], tprBES[sample] )
 
@@ -206,4 +656,10 @@ def plotROCCompare(h5Dir, plotDir, samples):
     print("Check out completed plots at:\n" + saveDir)
 
 # Run the ROC curve plot maker
-plotROCCompare(h5Dir, plotDir, samples)
+# plotROCCompare(h5Dir, plotDir, samples)
+
+# for year in years: plotROCflatcompare(year)
+
+# plotROCyearcompare()
+
+for year in years: plotROCpTcompare(year)

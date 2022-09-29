@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # sampleConverter.py //////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Mark Samuel Abbott, Johan S Bonilla, Brendan Regnery -----------------
+# Author(s): Sam Abbott, Johan S Bonilla, Brendan Regnery -------------------------
 # This program converts root ntuples to the python format necessary for training //
 # Inputs should be root files from preprocess
 # Output should be three sets of hd5f files: trainingSet, validationSet, testignSet
@@ -10,6 +10,7 @@
 ################################## NOTES TO SELF ##################################
 # Make firstConvert its own function
 # Add more comments
+# speed this up
 
 import time
 
@@ -30,7 +31,7 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = False
 stopAt = None
-sampleTypes = ["BB","HH","QCD","TT","WW","ZZ"]
+sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]
@@ -304,7 +305,7 @@ if __name__ == "__main__":
     print("Done")
 
     # Check how long the script took to run
-    runf = open("Logs/convertTimeLog.txt", "r+") 
+    runf = open("Logs/convertTimeLog.txt", "a") 
     timeTaken = divmod(time.time() - startTime, 60.)
     runf.write("Script took "+ str( int(timeTaken[0]) ) + "m " + str( int(timeTaken[1]) ) + "s to complete.\n")
     runf.close

@@ -125,14 +125,16 @@ if __name__ == "__main__":
     # Take in arguments
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to train neural network.')
     parser.add_argument('-hd','--h5Dir', dest='h5Dir',
-                        default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/",
-                        help="Input File Dir [default: /uscms/home/bonillaj/nobackup/h5samples_ULv1/]")
+                        default="../formatConverter/h5samples/",
+                        help="Input File Dir [default: ../formatConverter/h5samples/]")
     parser.add_argument('-o','--outDir', dest='outDir',
                         default="models/",
                         help="Output Dir where models are saved [default: models/]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
-                        default = "../formatConverter/masks/BESTMask.txt",
-                        help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
+                        default = "../formatConverter/h5samples/BESvarList_nopt.txt",
+                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList.txt]")
+                        # default = "../formatConverter/masks/BESTMask.txt",
+                        # help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
     parser.add_argument('-sf','--suffix', dest='suffix',
                         default="",
                         help="Suffix, used to uniquely identify model [default: '']")
@@ -142,14 +144,16 @@ if __name__ == "__main__":
     parser.add_argument('-mt','--modelType', dest='modelType',
                         default="nnBEST",
                         help="Name of directory within models/ and plots/ [default: nnBEST]")
-    parser.add_argument('-y','--year', dest='year',
-                        default="2017",
-                        help="Year of data taking to use [default: 2017]")
+    parser.add_argument('-y','--years', dest='years',
+                        default="all")#,
+    #                     help="Year of data taking to use [2016_APV, 2016, 2017, or 2018]",
+    #                     required=True)                        
     parser.add_argument('-p','--patience', dest='patience',
                         default="20",
                         help="Number of Epochs to wait for improvement before EarlyStopping [default: 20]")
     parser.add_argument('-tol','--tolerance', dest='tolerance',      
-                        default="0.01",
+                        # default="0.01",
+                        default="0.001",
                         help="Improvement tolerance for EarlyStopping; smaller tolerance means longer training [default: 0.01]")
     parser.add_argument('-n','--nodes', dest='nodes',
                         default="140",                     
@@ -162,26 +166,48 @@ if __name__ == "__main__":
                         help="Boolean, use flag to load an already trained model and plot it. [default: True]")    
     args = parser.parse_args()
 
-    # Generate appropriate helper strings, check dirs
-    strings = tools.dirStrings(args)
+    if not args.years == "all": years = args.years.split(',')
 
-    # Load Mask
-    mask = tools.loadMask(args.maskPath)
+    stringYearDict = {}
+    for year in years:
+        startTimeYear = tools.logTime() # Tracks how long this year takes
 
-    if args.train: # Run with -t to only plot the performance of the model
-        # Load h5 Data, set up truth arrays
-        dataDict = tools.loadH5Data(args, mask, sampleTypes, ["train", "validation"], maxEvents) 
+        # Generate appropriate helper strings, check dirs
+        strings = tools.dirStrings(args, year)
+        # stringYearDict[year] = strings
 
-        # Shuffle arrays
-        tools.shuffleArray(dataDict)
+        # Load Mask
+        mask, _ = tools.loadMask(args.maskPath)
 
-        # Train using nnBEST
-        trainNNBEST(args, strings, mask, dataDict)
+        if args.train: # Run with -t to only plot the performance of the model
+            # Load h5 Data, set up truth arrays
+            dataDict = tools.loadH5Data(args, mask, sampleTypes, ["train", "validation"], maxEvents, year) 
 
-    # Load test data, evaluate model performance
-    dataDict = tools.loadH5Data(args, mask, sampleTypes, ["test"], maxEvents)
+            # Shuffle arrays
+            tools.shuffleArray(dataDict)
 
-    # Make all performance plots
-    tools.plotAll(strings, dataDict, args.modelType, mask)
+            # Train using nnBEST
+            trainNNBEST(args, strings, mask, dataDict)
+            del dataDict
+
+        # Load test data, evaluate model performance
+        # dataDict = tools.loadH5Data(args, mask, sampleTypes, ["test"], maxEvents, year)
+        dataDict = tools.loadH5Data(args, [True], sampleTypes, ["test"], maxEvents, year)
+
+        # Load model
+        print("Using BEST to predict...")
+        # BESpredict  = load_model(strings["modelFile"]).predict(dataDict["testEvents"])
+        BESpredict  = load_model(strings["modelFile"]).predict(dataDict["testEvents"][:,mask])
+
+        # Make all performance plots
+        tools.plotAll(args, strings, dataDict["testTruth"], args.modelType, BESpredict, year)
+        # tools.plotAll(args, strings, dataDict, mask, year)
+        # tools.plotAll(args, strings, year, "flattened")
+        # tools.plotAll(args, strings, year, "flatTop")
+
+        tools.logTime(startTimeYear, strings["suffix"])
+
+    # # Save as .pb model for analysis
+    # for year in years: prepareSavedModel(stringYearDict[year])
     
     tools.logTime(startTime)

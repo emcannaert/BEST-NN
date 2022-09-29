@@ -53,10 +53,12 @@ def logTime(startTime=None, name=sys.argv[0]):
 # classes are the names of the classes that the classifier distributes among //////
 #----------------------------------------------------------------------------------
 
-def plot_confusion_matrix(cm, classes, plotDir, suffix,
+def plot_confusion_matrix(cm_in, classes, plotDir, suffix,
                           normalize=False,
+                          compare=False,
                           title='Confusion Matrix',
-                          cmap=plt.cm.Blues):
+                          cmap=plt.cm.Blues,#): 
+                          args=None, year='', testSet=''):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -65,12 +67,24 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
     saveDir = os.path.join(plotDir,"ConfusionMatrix/")
     if not os.path.isdir(saveDir): os.makedirs(saveDir)
 
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    if compare:
+        print("Confusion matrix, standard")
+        title = "Standard Confusion Matrix"
+        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_standard.png')
+        standardCM = getStandardCM()
+
+        print("Confusion matrix, compared")
+        cm_temp = cm_in.astype('float') / cm_in.sum(axis=1)[:, np.newaxis]
+        title = "Compared Confusion Matrix"
+        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_compared.png')
+        cm = np.subtract(cm_temp,standardCM)
+    elif normalize:
+        cm = cm_in.astype('float') / cm_in.sum(axis=1)[:, np.newaxis]
         print("Confusion matrix, normalized")
         title = "Normalized Confusion Matrix"
         saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_normalized.png')
     else:
+        cm = cm_in
         print('Confusion matrix, without normalization')
         title = "Confusion Matrix"
         saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '.png')
@@ -97,10 +111,94 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
     plt.tight_layout() #make all the axis labels not get cutoff
 
     print("Saving to: " + saveFile)
-    plt.savefig(saveFile)
+    plt.savefig(saveFile, bbox_inches='tight')
 
+    saveFile = saveFile[:-3] + 'pdf'
+    print("Saving to: " + saveFile)
+    plt.savefig(saveFile, bbox_inches='tight')
+    
     plt.clf()
     plt.close()
+
+
+def getStandardCM():
+# def getStandardCM(args, year, testSet):
+    cm = np.array([
+        [0.71,0.18,0.01,0.03,0.02,0.05],
+        [0.21,0.64,0.05,0.03,0.02,0.04],
+        [0.02,0.09,0.74,0.04,0.08,0.03],
+        [0.04,0.03,0.05,0.78,0.04,0.05],
+        [0.02,0.02,0.05,0.05,0.68,0.17],
+        [0.04,0.03,0.02,0.05,0.14,0.72]
+    ])
+
+    print(cm)
+
+    return cm
+    """
+    scaleParamFile = "ScalerParameters_flattened/old/BESTParameters.txt" 
+    mask, varDict = loadMask(args.maskPath)    
+    r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
+
+    sampleTypes = ["WW","ZZ","HH","ZPTT","BB","QCD"]
+    # sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+
+    dataDict = loadH5Data(args, mask, sampleTypes, ["test"], {"test":None}, year, testSet)
+
+    # Collapse truth labels into 1D (length N_events) array containing truth index (0-5) for each event 
+    truthData = np.argmax(dataDict["testTruth"], axis=1) 
+
+    scaledData = manualScale(dataDict["testEvents"], scaleParamFile, r_varDict)
+    
+    # scaledData = np.zeros((len(truthData),len(mask)))
+    # # Manually scale
+    # with open(scaleParamFile, "r") as f:
+    #     for line in f:
+    #         # maskIndex.append(line.split(':')[0])
+    #         var, scale, param1, param2 = line.split(',')
+    #         param1 = float(param1)
+    #         param2 = float(param2.strip())
+    #         index = int(r_varDict[var])
+    #         val = dataDict["testEvents"][...,index]
+    #         if   scale == "NoScale":  result = val
+    #         elif scale == "MinMax":   result = (val-param1)/(param2-param1)                
+    #         elif scale == "Standard": result = (val-param2)/param1
+    #         elif scale == "MaxAbs":   result = val/param1
+    #         scaledData[...,index] = result
+
+    del dataDict
+
+    # Load model
+    modelPath = "/uscms/home/msabbott/abbottBEST/training/models/recheck_long/140Basic300Wbothak8HT400/BEST_model_140Basic300Wbothak8HT400.h5"
+    model = load_model(modelPath)
+    BESpredict  = model.predict(scaledData)
+    del model
+    del scaledData
+
+    cm = metrics.confusion_matrix(truthData, np.argmax(BESpredict, axis=1) )
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    return cm
+    """
+
+def manualScale(data, paramFile, r_varDict):
+    print("Manually Scaling with: " + paramFile)
+    scaledData = np.zeros((data.shape[0], data.shape[1]))
+    # Manually scale
+    with open(paramFile, "r") as f:
+        for line in f:
+            var, scale, param1, param2 = line.split(',')
+            param1 = float(param1)
+            param2 = float(param2.strip())
+            index = int(r_varDict[var])
+            val = data[...,index]
+            if   scale == "NoScale":  result = val
+            elif scale == "MinMax":   result = (val-param1)/(param2-param1)                
+            elif scale == "Standard": result = (val-param2)/param1
+            elif scale == "MaxAbs":   result = val/param1
+            else: print("ERRRRORRRR")
+            scaledData[...,index] = result    
+
+    return scaledData
 
 #==================================================================================
 # Plot Performance ////////////////////////////////////////////////////////////////
@@ -131,7 +229,7 @@ def plotAccLoss(historyFile, suffix, plotDir):
     plt.xlabel('epoch')
     plt.ylabel('loss')
     if not os.path.isdir(plotDir): os.makedirs(plotDir)
-    # plt.savefig(plotDir+suffix+"_loss.pdf")
+    plt.savefig(plotDir+suffix+"_loss.pdf")
     plt.savefig(os.path.join(plotDir,suffix+"_loss.png"))
     plt.close()
 
@@ -143,7 +241,7 @@ def plotAccLoss(historyFile, suffix, plotDir):
     plt.legend(loc="lower right")
     plt.xlabel('epoch')
     plt.ylabel('acc')
-    # plt.savefig(plotDir+suffix+"_acc.pdf")
+    plt.savefig(plotDir+suffix+"_acc.pdf")
     plt.savefig(os.path.join(plotDir,suffix+"_acc.png"))
     plt.close()
 
@@ -180,7 +278,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
         plt.gca().tick_params(axis = 'x', direction = 'in', top = True, bottom = True)
         plt.show()
         plt.savefig(saveDir + title + ".png")
-        # plt.savefig(saveDir + title + ".pdf")
+        plt.savefig(saveDir + title + ".pdf")
         plt.clf()
     plt.close()
 
@@ -232,7 +330,7 @@ def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents, year='', testSet="f
         h5Path = "Sample_"+year+"_BESTinputs_" + mySet + "_" + args.suffix + scale + ".h5" # This just makes the next few lines a bit more readable
         # if mySet == "test": h5Path = "Sample_"+year+"_BESTinputs_" + mySet + "_" + testSet + ".h5"
         print(h5Path)
-      
+
         # Check if loading all variables. Quicker to NOT use mask in this case
         if np.all(mask): eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,:]     for mySample in sampleTypes]
         else:            eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,mask] for mySample in sampleTypes]
@@ -288,18 +386,22 @@ def shuffleArray(arrayDict, rng_state=np.random.get_state()):
 #   It is reccomended to instead save the scaled data in the h5 format. ///////////
 #----------------------------------------------------------------------------------
 
-def loadScalerModel(scale, mask):
+# def loadScalerModel(scale, mask):
+def loadScalerModel(suffix, year, mask):
 
     # scaleDir = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/ScalerParameters/"
     # scalePath = scaleDir + "ScalerParameters_" + scale + ".joblib"
+    scaleDir = "ScalerParameters_" + suffix + "/"
+    scalePath = scaleDir + "BESTScalerParameters_" + year + ".joblib"
 
-    scalePath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/ScalerParameters/newBEST_Basic.joblib"
+    # scalePath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/ScalerParameters/newBEST_Basic.joblib"
     if not os.path.isfile(scalePath):
         print(scalePath, "does not exist")
         quit()
         
     print("Loading Scaler Model: " + scalePath)
-    fullScaler = load(scalePath)
+    # fullScaler = load(scalePath)
+    fullScaler = load(scalePath, encoding='latin1')
 
     # If loading all BES vars, simply return the full Scaler model
     if np.all(mask): return fullScaler
@@ -506,8 +608,8 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
 
         path  = saveDir + "png/" + labelDict[key][1] + '_ROCplot.png'
         plt.savefig(path)
-        # path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot.pdf'
-        # plt.savefig(path)
+        path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot.pdf'
+        plt.savefig(path)
         plt.clf()
         plt.close()
 
@@ -540,7 +642,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
     # _, varDict = loadMask(args.maskPath)
     allBesVarsList = "../formatConverter/h5samples/BESvarList.txt"
     _, varDict = loadMask(allBesVarsList)
-
+    
     # for plotVar in plotDict.keys():
     for index, var in varDict.items():
         if not var in plotDict.keys(): continue
@@ -582,7 +684,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
             cmTemp = metrics.confusion_matrix(truthLabels[ptmassIndex], np.argmax(BESpredict[ptmassIndex], axis=1), labels=[0,1,2,3,4,5] )
             # Normalize
             cm[pTmassbin] = cmTemp.astype('float') / cmTemp.sum(axis=1)[:, np.newaxis]
-        
+            
         targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
         for i, target in enumerate(targetNames):
             myPtArrays = [cm[pTmassbin][:,i] for pTmassbin in bins_list]
@@ -598,7 +700,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
             plt.ylabel("Percentage of X Jets")
             plt.show()
             plt.savefig(os.path.join(saveDir, "png", suffix + '_Xas_' + target + '.png'))
-            # plt.savefig(os.path.join(saveDir, "pdf", suffix + '_Xas_' + target + '.pdf'))
+            plt.savefig(os.path.join(saveDir, "pdf", suffix + '_Xas_' + target + '.pdf'))
             plt.clf()
             plt.close()
 
@@ -611,7 +713,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
             plt.ylabel("Percentage of " + target + " Jets")
             plt.show()
             plt.savefig(os.path.join(saveDir, "png", suffix + '_' + target + '_asX.png'))
-            # plt.savefig(os.path.join(saveDir, "pdf", suffix + '_' + target + '_asX.pdf'))
+            plt.savefig(os.path.join(saveDir, "pdf", suffix + '_' + target + '_asX.pdf'))
             plt.clf()
             plt.close()
 
@@ -640,7 +742,7 @@ def plotAll(args, strings, truthData, modelType, BESpredict, year):
 
     # Accuracy and Loss plots
     plotAccLoss(historyFile, suffix, plotDir)
-    
+
     samples = ['W', 'Z', 'Higgs', 'Top', 'Bottom', 'QCD']
     # sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 
