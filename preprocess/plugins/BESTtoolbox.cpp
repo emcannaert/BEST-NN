@@ -349,8 +349,8 @@ bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl,
             // Skip this subJet if we have matched it already
             // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
 
-                double bprobVal_deepCSV = subjets.at(0)->bDiscriminator("pfDeepCSVJetTags:probb");
-                double bbprobVal_deepCSV = subjets.at(0)->bDiscriminator("pfDeepCSVJetTags:probbb");
+                double bprobVal_deepCSV = subjets.at(iSubjet)->bDiscriminator("pfDeepCSVJetTags:probb");
+                double bbprobVal_deepCSV = subjets.at(iSubjet)->bDiscriminator("pfDeepCSVJetTags:probbb");
                 double bDiscVal_deepCSV = bprobVal_deepCSV + bbprobVal_deepCSV;
 
                 // Find max bDisc value and index
@@ -393,14 +393,14 @@ bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl,
 
         // Same thing, but now for DeepCSV
         // leading updated subjet deep flavour b discriminants
-        besVars["bDisc1_deepCSV"]        = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepCSVJetTags:probb") + upSubJets.at(ileadSubJet).bDiscriminator("pfDeepCSVJetTags:probbb");
-        besVars["bDisc1_probb_deepCSV"]  = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepCSVJetTags:probb");
-        besVars["bDisc1_probbb_deepCSV"] = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepCSVJetTags:probbb");
+        besVars["bDisc1_deepCSV"]        = subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probb") + subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probbb");
+        besVars["bDisc1_probb_deepCSV"]  = subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probb");
+        besVars["bDisc1_probbb_deepCSV"] = subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probbb");
 
         // subleading updated subjet deep flavour b discriminants
-        besVars["bDisc2_deepCSV"]        = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepCSVJetTags:probb") + upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepCSVJetTags:probbb");
-        besVars["bDisc2_probb_deepCSV"]  = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepCSVJetTags:probb");
-        besVars["bDisc2_probbb_deepCSV"] = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepCSVJetTags:probbb");
+        besVars["bDisc2_deepCSV"]        = subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probb") + subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probbb");
+        besVars["bDisc2_probb_deepCSV"]  = subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probb");
+        besVars["bDisc2_probbb_deepCSV"] = subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probbb");
 
         // maximum subjet deep flavour b discriminants
         // note: in the past, these besVars referred to the bDisc scores associated with the AK8 Jet object.
