@@ -353,18 +353,28 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // listOfVecVars.push_back("SV_Ndof");
 
     // Deep Jet b Discriminants
-    listOfVars.push_back("bDisc");
-    listOfVars.push_back("bDisc_probb");
-    listOfVars.push_back("bDisc_probbb");
-    listOfVars.push_back("bDisc1");
-    listOfVars.push_back("bDisc1_probb");
-    listOfVars.push_back("bDisc1_probbb");
-    listOfVars.push_back("bDisc2");
-    listOfVars.push_back("bDisc2_probb");
-    listOfVars.push_back("bDisc2_probbb");
+    listOfVars.push_back("bDisc_deepJet");
+    listOfVars.push_back("bDisc_probb_deepJet");
+    listOfVars.push_back("bDisc_probbb_deepJet");
+    listOfVars.push_back("bDisc1_deepJet");
+    listOfVars.push_back("bDisc1_probb_deepJet");
+    listOfVars.push_back("bDisc1_probbb_deepJet");
+    listOfVars.push_back("bDisc2_deepJet");
+    listOfVars.push_back("bDisc2_probb_deepJet");
+    listOfVars.push_back("bDisc2_probbb_deepJet");
     // listOfVars.push_back("bDiscSubJet_Max");
     // listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
 
+    // DeepCSV b Discriminants
+    listOfVars.push_back("bDisc_deepCSV");
+    listOfVars.push_back("bDisc_probb_deepCSV");
+    listOfVars.push_back("bDisc_probbb_deepCSV");
+    listOfVars.push_back("bDisc1_deepCSV");
+    listOfVars.push_back("bDisc1_probb_deepCSV");
+    listOfVars.push_back("bDisc1_probbb_deepCSV");
+    listOfVars.push_back("bDisc2_deepCSV");
+    listOfVars.push_back("bDisc2_probb_deepCSV");
+    listOfVars.push_back("bDisc2_probbb_deepCSV");
 
     // nsubjettiness
     listOfVars.push_back("jetAK8_Tau4");
