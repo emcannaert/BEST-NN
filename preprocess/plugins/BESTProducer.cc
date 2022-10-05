@@ -471,7 +471,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // but it is just simpler to include it in the main tree
     // Will be either 0, 1, or 2. SHOULD always be 0.
     // Will keep this var for 2017 run just in case
-    listOfVars.push_back("nMultipleMatches"); 
+    // listOfVars.push_back("nMultipleMatches"); 
 
     // Make Branches for each variable
     for (unsigned i = 0; i < listOfVars.size(); i++){
@@ -622,8 +622,16 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     map<string, vector<TLorentzVector> > boostedDaughters;
     map<string, vector<fastjet::PseudoJet> > restJets;
 
-    std::vector<int> matchedSubJetIndices;
+    // Match Subjets
+    // vector<int> matchedSubJetIndices;
+    // std::cout << "matching..." << std::endl;
+    std::map<int, std::vector<int>> subjetMatch = matchSubjets(ak8Jets, subJets);
+    //match using dictionary: dict[ak8jetindex] = vectorofupdatedIndices [0=lead, 1=sublead]
+    // std::cout << "matched" << std::endl;
+
+    int thisAK8JetIndex = -1;
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
+        ++thisAK8JetIndex;
         bool GenMatching = false;
         daughtersOfJet.clear();
         boostedDaughters.clear();
@@ -650,7 +658,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                if (storeJetVariables(treeVars, jetColl_, ijet, subJets, matchedSubJetIndices) == false) goto endjetloop;
+                if (storeJetVariables(treeVars, ijet, subJets, subjetMatch[thisAK8JetIndex]) == false) goto endjetloop;
                 
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);
@@ -666,7 +674,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // store daughters, rest frame daughters, and rest frame jets
                 if(storeDaughters == true){
-                    storeJetDaughters(daughtersOfJet, ijet, boostedDaughters, restJets, restMasses, jetVecVars, jetColl_ );
+                    storeJetDaughters(daughtersOfJet, ijet, boostedDaughters, restJets, restMasses, jetVecVars );
                 }
 
                 // Fill the jet entry tree
