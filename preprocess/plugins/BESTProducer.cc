@@ -21,6 +21,7 @@
 #include <memory>
 #include <thread>
 #include <iostream>
+#include <set>
 
 // FWCore include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -353,17 +354,24 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // listOfVecVars.push_back("SV_Ndof");
 
     // Deep Jet b Discriminants
-    listOfVars.push_back("bDisc_deepJet");
-    listOfVars.push_back("bDisc_probb_deepJet");
-    listOfVars.push_back("bDisc_probbb_deepJet");
-    listOfVars.push_back("bDisc1_deepJet");
-    listOfVars.push_back("bDisc1_probb_deepJet");
-    listOfVars.push_back("bDisc1_probbb_deepJet");
-    listOfVars.push_back("bDisc2_deepJet");
-    listOfVars.push_back("bDisc2_probb_deepJet");
-    listOfVars.push_back("bDisc2_probbb_deepJet");
+    // listOfVars.push_back("bDisc_deepJet");
+    // listOfVars.push_back("bDisc_probb_deepJet");
+    // listOfVars.push_back("bDisc_probbb_deepJet");
+    listOfVars.push_back("bDisc1_deepJet_Naive");
+    listOfVars.push_back("bDisc1_probb_deepJet_Naive");
+    listOfVars.push_back("bDisc1_probbb_deepJet_Naive");
+    listOfVars.push_back("bDisc2_deepJet_Naive");
+    listOfVars.push_back("bDisc2_probb_deepJet_Naive");
+    listOfVars.push_back("bDisc2_probbb_deepJet_Naive");
     // listOfVars.push_back("bDiscSubJet_Max");
     // listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
+
+    listOfVars.push_back("bDisc1_deepJet_Advanced");
+    listOfVars.push_back("bDisc1_probb_deepJet_Advanced");
+    listOfVars.push_back("bDisc1_probbb_deepJet_Advanced");
+    listOfVars.push_back("bDisc2_deepJet_Advanced");
+    listOfVars.push_back("bDisc2_probb_deepJet_Advanced");
+    listOfVars.push_back("bDisc2_probbb_deepJet_Advanced");
 
     // DeepCSV b Discriminants
     listOfVars.push_back("bDisc_deepCSV");
@@ -625,7 +633,8 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     // Match Subjets
     // vector<int> matchedSubJetIndices;
     // std::cout << "matching..." << std::endl;
-    std::map<int, std::vector<int>> subjetMatch = matchSubjets(ak8Jets, subJets);
+    std::map<int, std::vector<int>> subjetMatchNaive = matchSubjetsNaive(ak8Jets, subJets);
+    std::map<int, std::vector<int>> subjetMatchAdvanced = matchSubjetsAdvanced(ak8Jets, subJets);
     //match using dictionary: dict[ak8jetindex] = vectorofupdatedIndices [0=lead, 1=sublead]
     // std::cout << "matched" << std::endl;
 
@@ -658,7 +667,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                if (storeJetVariables(treeVars, ijet, subJets, subjetMatch[thisAK8JetIndex]) == false) goto endjetloop;
+                if (storeJetVariables(treeVars, ijet, subJets, subjetMatchNaive[thisAK8JetIndex], subjetMatchAdvanced[thisAK8JetIndex]) == false) goto endjetloop;
                 
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);

@@ -39,13 +39,17 @@ int FWMoments(std::vector<TLorentzVector> particles, double (&outputs)[5] );
 void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet);
 
 // Match the AK8 subjets to the DeepJet subjets
-std::map<int, std::vector<int>> matchSubjets(
+std::map<int, std::vector<int>> matchSubjetsNaive(
+                                std::vector<pat::Jet> ak8Jets,
+                                std::vector<pat::Jet> upSubJets);
+
+std::map<int, std::vector<int>> matchSubjetsAdvanced(
                                 std::vector<pat::Jet> ak8Jets,
                                 std::vector<pat::Jet> upSubJets);
 
 // store the jet variables
 bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
-                       std::vector<pat::Jet> upSubJets, std::vector<int> thisSubjetMatch);
+                       std::vector<pat::Jet> upSubJets, std::vector<int> thisSubjetMatchNaive, std::vector<int> thisSubjetMatchAdvanced);
 
 // store the secondary vertex variables
 void storeSecVertexVariables(std::map<std::string, float> &besVars, std::map< std::string, std::vector<float> > &jetVecVars,
