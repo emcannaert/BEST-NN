@@ -280,6 +280,7 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
 
             // Grab subjets of this AK8 jet
             pat::Jet ijet = ak8Jets.at(iak8jet);
+            TLorentzVector iak8jetLV(ijet.px(), ijet.py(), ijet.pz(), ijet.energy() );
             auto isubjets = ijet.subjets("SoftDropPuppi");
 
             // Skip this AK8 jet if it doesn't have 2 subjets
@@ -300,6 +301,7 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
 
                     // Make Lorentz Vector of this AK8 jet for easier matching
                     pat::Jet jjet = ak8Jets.at(jak8jet);
+                    TLorentzVector jak8jetLV(jjet.px(), jjet.py(), jjet.pz(), jjet.energy() );
                     auto jsubjets = jjet.subjets("SoftDropPuppi");
 
                     // Skip this AK8 jet if it doesn't have 2 subjets
@@ -341,22 +343,48 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
                                 redoSubJetLV = iSubJetLV;
                             } 
                             else { // This shouldn't trigger...
-                                std::cout << "LV" << std::endl;
-                                iSubJetLV.Print();
-                                jSubJetLV.Print();                             
-                                upSubJetLV.Print();                             
-                                std::cout << "iak8" << std::endl;
-                                std::cout << iak8jet << std::endl;
-                                std::cout << jak8jet << std::endl; 
-                                std::cout << "isub" << std::endl;
-                                std::cout << iSubjet << std::endl;
-                                std::cout << jSubjet << std::endl; 
-                                std::cout << "pt" << std::endl;
-                                std::cout << ideltaPt << std::endl;
-                                std::cout << jdeltaPt << std::endl;
-                                std::cout << "r" << std::endl;
-                                std::cout << iSubJetLV.DeltaR(upSubJetLV) << std::endl;
-                                std::cout << jSubJetLV.DeltaR(upSubJetLV) << std::endl;                                
+                                std::cout << "iak8jetLV" << std::endl;
+                                iak8jetLV.Print();
+                                std::cout << "jak8jetLV" << std::endl;
+                                jak8jetLV.Print();
+                                std::cout << "updated multimatched subjet" << std::endl;
+                                upSubJetLV.Print();
+                                std::cout << "leading iak8 subjet" << std::endl;
+                                TLorentzVector ileadLV(isubjets.at(0)->px(), isubjets.at(0)->py(), isubjets.at(0)->pz(), isubjets.at(0)->energy() );
+                                ileadLV.Print();
+                                std::cout << "subleading iak8 subjet" << std::endl;
+                                TLorentzVector isubleadLV(isubjets.at(1)->px(), isubjets.at(1)->py(), isubjets.at(1)->pz(), isubjets.at(1)->energy() );
+                                isubleadLV.Print();
+                                std::cout << "leading jak8 subjet" << std::endl;
+                                TLorentzVector jleadLV(jsubjets.at(0)->px(), jsubjets.at(0)->py(), jsubjets.at(0)->pz(), jsubjets.at(0)->energy() );
+                                jleadLV.Print();                                
+                                std::cout << "subleading jak8 subjet" << std::endl;
+                                TLorentzVector jsubleadLV(jsubjets.at(1)->px(), jsubjets.at(1)->py(), jsubjets.at(1)->pz(), jsubjets.at(1)->energy() );
+                                jsubleadLV.Print(); 
+                                std::cout << "i ak8 jet index: " << iak8jet << std::endl;
+                                std::cout << "j ak8 jet index: " << jak8jet << std::endl; 
+                                std::cout << "i ak8 subjet index: " << iSubjet << std::endl;
+                                std::cout << "j ak8 subjet index: " << jSubjet << std::endl;    
+                                std::cout << "i ak8 subjet abs(delta pt): " << ideltaPt << std::endl;
+                                std::cout << "j ak8 subjet abs(delta pt): " << jdeltaPt << std::endl;     
+                                std::cout << "i ak8 subjet delta R: " << iSubJetLV.DeltaR(upSubJetLV) << std::endl;
+                                std::cout << "j ak8 subjet delta R: " << jSubJetLV.DeltaR(upSubJetLV) << std::endl;    
+                                // std::cout << "LV" << std::endl;
+                                // iSubJetLV.Print();
+                                // jSubJetLV.Print();                             
+                                // upSubJetLV.Print();                             
+                                // std::cout << "iak8" << std::endl;
+                                // std::cout << iak8jet << std::endl;
+                                // std::cout << jak8jet << std::endl; 
+                                // std::cout << "isub" << std::endl;
+                                // std::cout << iSubjet << std::endl;
+                                // std::cout << jSubjet << std::endl; 
+                                // std::cout << "pt" << std::endl;
+                                // std::cout << ideltaPt << std::endl;
+                                // std::cout << jdeltaPt << std::endl;
+                                // std::cout << "r" << std::endl;
+                                // std::cout << iSubJetLV.DeltaR(upSubJetLV) << std::endl;
+                                // std::cout << jSubJetLV.DeltaR(upSubJetLV) << std::endl;                                
                                 throw cms::Exception("JetTypeError") << " Failed to resolve subjet matching conflict!";
                             }
 
