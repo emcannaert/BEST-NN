@@ -267,10 +267,11 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
         }
     }
 
+    int identicalSubJetOffset = 0; //hotfix for cmssw bug that allows two ak8 jets to have identical subjets; for now we allow this
     checkUnique:; // Flag to return here after checking for unique matches. Repeat until uniqueMatched = True
     // Check if any subjets were multiple matched
     std::set<int> s(matchedSubJetIndices.begin(), matchedSubJetIndices.end());
-    bool uniqueMatched = (s.size() == matchedSubJetIndices.size());
+    bool uniqueMatched = ((s.size()+identicalSubJetOffset) == matchedSubJetIndices.size());
 
     // This statement only triggers if each subjet match is not unique
     if (!uniqueMatched) {
@@ -284,7 +285,7 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
             auto isubjets = ijet.subjets("SoftDropPuppi");
 
             // Skip this AK8 jet if it doesn't have 2 subjets
-            if (isubjets.size() < 2) continue;
+            // if (isubjets.size() < 2) continue;
 
             // Iterate over the subjets for this AK8 jet (SUBJET i)
             for (unsigned int iSubjet=0; iSubjet < isubjets.size(); iSubjet++){
@@ -298,6 +299,9 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
 
                 // Iterate over the AK8 Jets (JET j)
                 for (unsigned int jak8jet=0; jak8jet < ak8Jets.size(); jak8jet++){
+                    
+                    // Compare each subjet only once
+                    if (iak8jet > jak8jet) continue;
 
                     // Make Lorentz Vector of this AK8 jet for easier matching
                     pat::Jet jjet = ak8Jets.at(jak8jet);
@@ -305,13 +309,13 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
                     auto jsubjets = jjet.subjets("SoftDropPuppi");
 
                     // Skip this AK8 jet if it doesn't have 2 subjets
-                    if (jsubjets.size() < 2) continue;
+                    // if (jsubjets.size() < 2) continue;
 
                     // Iterate over the subjets for this AK8 jet (SUBJET j)
                     for (unsigned int jSubjet=0; jSubjet < jsubjets.size(); jSubjet++){
 
-                        // Don't compare the a subjet to itself
-                        if (iak8jet==jak8jet && iSubjet==jSubjet) continue;
+                        // Compare each subjet only once
+                        if (iak8jet==jak8jet && iSubjet>=jSubjet) continue;
 
                         // Check for multiple match
                         if (iMatch == subjetMatchAdvanced[jak8jet][jSubjet]) {
@@ -341,6 +345,11 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
                                 redoAK8Jet   = iak8jet;
                                 redosubJet   = iSubjet;
                                 redoSubJetLV = iSubJetLV;
+                            } 
+                            else if (ideltaPt == jdeltaPt) { // Special case where two ak8 jets have identical subjets. We allow this for now.
+                                // Increment offset, which will allow these two ak8 jets to share their subjets
+                                ++identicalSubJetOffset;
+                                continue;
                             } 
                             else { // This shouldn't trigger...
                                 std::cout << "iak8jetLV" << std::endl;
@@ -385,7 +394,7 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
                                 // std::cout << "r" << std::endl;
                                 // std::cout << iSubJetLV.DeltaR(upSubJetLV) << std::endl;
                                 // std::cout << jSubJetLV.DeltaR(upSubJetLV) << std::endl;                                
-                                throw cms::Exception("JetTypeError") << " Failed to resolve subjet matching conflict!";
+                                throw cms::Exception("SubJetMatchError") << " Failed to resolve subjet matching conflict!";
                             }
 
                             // Redo matching for chosen subjet
