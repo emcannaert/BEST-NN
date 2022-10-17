@@ -4,8 +4,6 @@
 // C++ file containing functions for use with CMS EDAnalyzer and EDProducer --------------
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// This version of BEST includes the different subjet matching methods we explored while testing
-
 #include "BESTtoolbox.h"
 
 //========================================================================================
@@ -116,20 +114,15 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 //----------------------------------------------------------------------------------------
 // This matches all of the AK8 subjets to the updated DeepJet subjets exactly once -------
 //----------------------------------------------------------------------------------------
-std::map<int, std::vector<int>> matchSubjetsNaive( 
+std::map<int, std::vector<int>> matchSubjets( 
                                 std::vector<pat::Jet> ak8Jets, 
                                 std::vector<pat::Jet> upSubJets){
-
-    // This function matches using the naive method
-    // We use both naive and advanced, and will compare performance 
 
     std::map<int, std::vector<int>> subjetMatchNaive;
     std::vector<int> matchedSubJetIndices;
 
-    /////// This uses the naive method for matching subjets
     // Iterate over the AK8 Jets
     for (unsigned int iak8jet=0; iak8jet < ak8Jets.size(); iak8jet++){
-        // std::cout << "   loop begin..." << std::endl;
 
         // Make Lorentz Vector of this AK8 jet for easier matching
         pat::Jet jet = ak8Jets.at(iak8jet);
@@ -168,292 +161,13 @@ std::map<int, std::vector<int>> matchSubjetsNaive(
                 } 
             }
 
-            // std::cout << "       one match..." << std::endl;
             // Store subjet matched index, don't iterate over it again
             subjetMatchNaive[iak8jet].push_back(iSubJetMatch);
             matchedSubJetIndices.push_back(iSubJetMatch);
-            // std::cout << "   one matched..." << std::endl;
         }
     }
-
-    // This code is obsolete, as it is no longer possible to match a subjet more than once
-    // int nMultipleMatches = 0;
-    // // This checks if we are matching any subjets more than once (Bad!)
-    // // Good to have for when we run on 2017 soon, but is NOT something to give to the NN
-    // // Will remove if 2017 runs with no problems
-    // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), ileadSubJet)) ++nMultipleMatches;
-    // matchedSubJetIndices.push_back(ileadSubJet);
-    // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), isubleadSubJet)) ++nMultipleMatches;
-    // matchedSubJetIndices.push_back(isubleadSubJet);
-    // besVars["nMultipleMatches"] = nMultipleMatches;
 
     return subjetMatchNaive;
-}
-
-std::map<int, std::vector<int>> matchSubjetsAdvanced( 
-                                std::vector<pat::Jet> ak8Jets, 
-                                std::vector<pat::Jet> upSubJets){
-
-    // This function matches using the advanced method
-    // We use both naive and advanced, and will compare performance 
-
-    std::map<int, std::vector<int>> subjetMatchAdvanced;
-    std::vector<int> matchedSubJetIndices;
-
-    /////// advanced method
-    // for each normal ak8 subjet, create a list/vector of deltaRs for each updated subjet
-    //      match to minimum of deltaR 
-    //         if more than one subjet matches to the same updated subjet, take the more minimum one
-    // so iterate over each normal subjet
-    //       create a list of deltaRs and deltaPts for each possible pairing
-    //       match (load dictionary)
-    // if statement to check if there are multiple matches
-    // if there are, resolve in if statement, then goto right before if statement
-    // check if dictionary does not have only unique values? or make a multiple matches flag
-    // if statement will stop triggering when everything is matched correctly
-    // contents of if statement:
-    //     iterate over each normal subjet again (subjet i)
-    //      
-    //          iterate over each normal subjet again, nested (subjet j)
-    //              if i and j are matched to the same subjet, compare deltaPt
-    //              smaller gets the match, the bigger one takes the next smallest match
-    //     goto right before if statement
-    
-    // Iterate over the AK8 Jets
-    // Match Naively first, don't skip already matched subjets
-    for (unsigned int iak8jet=0; iak8jet < ak8Jets.size(); iak8jet++){
-        // std::cout << "   loop begin..." << std::endl;
-
-        // Make Lorentz Vector of this AK8 jet for easier matching
-        pat::Jet jet = ak8Jets.at(iak8jet);
-        // TLorentzVector jetLV(jet.px(), jet.py(), jet.pz(), jet.energy() );
-        auto subjets = jet.subjets("SoftDropPuppi");
-
-        // Skip this AK8 jet if it doesn't have 2 subjets
-        if (subjets.size() < 2) continue;
-
-        // Iterate over the subjets for this AK8 jet
-        for (unsigned int iSubjet=0; iSubjet < subjets.size(); iSubjet++){
-
-            // Make Lorentz Vector of this AK8 subjet for easier matching 
-            TLorentzVector subJetLV(subjets.at(iSubjet)->px(), subjets.at(iSubjet)->py(), subjets.at(iSubjet)->pz(), subjets.at(iSubjet)->energy() );
-
-            int iSubJetMatch;
-            double minDeltaR = 100.0;
-
-            // Iterate over updated DeepJet subjets
-            for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
-                // Skip this subJet if we have matched it already
-                // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet)) continue;
-
-                // make Lorentz Vector of this updated DeepJet subjet for easier matching
-                TLorentzVector upSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
-
-                // Only examine the updated subjets within R<0.8 of AK8 Jet
-                // if (jetLV.DeltaR(upSubJetLV) > 0.8) continue;
-
-                // Find minimum delR, match subjets
-                double deltaR = subJetLV.DeltaR(upSubJetLV);
-
-                if (deltaR < minDeltaR) {
-                    minDeltaR  = deltaR;
-                    iSubJetMatch = iupSubjet;
-                } 
-            }
-
-            // std::cout << "       one match..." << std::endl;
-            // Store subjet matched index
-            subjetMatchAdvanced[iak8jet].push_back(iSubJetMatch);
-            matchedSubJetIndices.push_back(iSubJetMatch);
-            // std::cout << "   one matched..." << std::endl;
-        }
-    }
-
-    int identicalSubJetOffset = 0; //hotfix for cmssw bug that allows two ak8 jets to have identical subjets; for now we allow this
-    checkUnique:; // Flag to return here after checking for unique matches. Repeat until uniqueMatched = True
-    // Check if any subjets were multiple matched
-    std::set<int> s(matchedSubJetIndices.begin(), matchedSubJetIndices.end());
-    bool uniqueMatched = ((s.size()+identicalSubJetOffset) == matchedSubJetIndices.size());
-
-    // This statement only triggers if each subjet match is not unique
-    if (!uniqueMatched) {
-        std::cout << "unique triggered" << std::endl;
-        // Iterate over the AK8 Jets (JET i)
-        for (unsigned int iak8jet=0; iak8jet < ak8Jets.size(); iak8jet++){
-
-            // Grab subjets of this AK8 jet
-            pat::Jet ijet = ak8Jets.at(iak8jet);
-            TLorentzVector iak8jetLV(ijet.px(), ijet.py(), ijet.pz(), ijet.energy() );
-            auto isubjets = ijet.subjets("SoftDropPuppi");
-
-            // Skip this AK8 jet if it doesn't have 2 subjets
-            // if (isubjets.size() < 2) continue;
-
-            // Iterate over the subjets for this AK8 jet (SUBJET i)
-            for (unsigned int iSubjet=0; iSubjet < isubjets.size(); iSubjet++){
-
-                // Grab matched index
-                int iMatch = subjetMatchAdvanced[iak8jet][iSubjet];
-                
-                // Now we compare to every other subjet to find the multiple match
-                // Need to iterate over ak8 jets and their subjets again:
-                // NOTE THE DIFFERENCE IS i VS. j
-
-                // Iterate over the AK8 Jets (JET j)
-                for (unsigned int jak8jet=0; jak8jet < ak8Jets.size(); jak8jet++){
-                    
-                    // Compare each subjet only once
-                    if (iak8jet > jak8jet) continue;
-
-                    // Make Lorentz Vector of this AK8 jet for easier matching
-                    pat::Jet jjet = ak8Jets.at(jak8jet);
-                    TLorentzVector jak8jetLV(jjet.px(), jjet.py(), jjet.pz(), jjet.energy() );
-                    auto jsubjets = jjet.subjets("SoftDropPuppi");
-
-                    // Skip this AK8 jet if it doesn't have 2 subjets
-                    // if (jsubjets.size() < 2) continue;
-
-                    // Iterate over the subjets for this AK8 jet (SUBJET j)
-                    for (unsigned int jSubjet=0; jSubjet < jsubjets.size(); jSubjet++){
-
-                        // Compare each subjet only once
-                        if (iak8jet==jak8jet && iSubjet>=jSubjet) continue;
-
-                        // Check for multiple match
-                        if (iMatch == subjetMatchAdvanced[jak8jet][jSubjet]) {
-                            // Resolve match by comparing pT
-                            
-                            // Make Lorentz Vectors for both ak8 subjets and the updated DeepJet subjet 
-                            TLorentzVector iSubJetLV(isubjets.at(iSubjet)->px(), isubjets.at(iSubjet)->py(), isubjets.at(iSubjet)->pz(), isubjets.at(iSubjet)->energy() );
-                            TLorentzVector jSubJetLV(jsubjets.at(iSubjet)->px(), jsubjets.at(jSubjet)->py(), jsubjets.at(jSubjet)->pz(), jsubjets.at(jSubjet)->energy() );
-                            TLorentzVector upSubJetLV(upSubJets.at(iMatch).px(), upSubJets.at(iMatch).py(),  upSubJets.at(iMatch).pz(),  upSubJets.at(iMatch).energy() );
-
-                            // Compare deltaPt, choose the smaller value as the "true" match
-                            double ideltaPt = abs(iSubJetLV.Pt() - upSubJetLV.Pt());
-                            double jdeltaPt = abs(jSubJetLV.Pt() - upSubJetLV.Pt());
-
-                            // Determine which subjet needs to be matched again
-                            int redoAK8Jet;
-                            int redosubJet;
-                            TLorentzVector redoSubJetLV;
-                            if (ideltaPt < jdeltaPt) { // If iSubjet is true match
-                                // Redo Matching for j subjet
-                                redoAK8Jet   = jak8jet;
-                                redosubJet   = jSubjet;
-                                redoSubJetLV = jSubJetLV;
-                            }
-                            else if (ideltaPt > jdeltaPt) { // If jSubjet is true match
-                                // Redo Matching for i subjet
-                                redoAK8Jet   = iak8jet;
-                                redosubJet   = iSubjet;
-                                redoSubJetLV = iSubJetLV;
-                            } 
-                            else if (ideltaPt == jdeltaPt) { // Special case where two ak8 jets have identical subjets. We allow this for now.
-                                // Increment offset, which will allow these two ak8 jets to share their subjets
-                                ++identicalSubJetOffset;
-                                continue;
-                            } 
-                            else { // This shouldn't trigger...
-                                std::cout << "iak8jetLV" << std::endl;
-                                iak8jetLV.Print();
-                                std::cout << "jak8jetLV" << std::endl;
-                                jak8jetLV.Print();
-                                std::cout << "updated multimatched subjet" << std::endl;
-                                upSubJetLV.Print();
-                                std::cout << "leading iak8 subjet" << std::endl;
-                                TLorentzVector ileadLV(isubjets.at(0)->px(), isubjets.at(0)->py(), isubjets.at(0)->pz(), isubjets.at(0)->energy() );
-                                ileadLV.Print();
-                                std::cout << "subleading iak8 subjet" << std::endl;
-                                TLorentzVector isubleadLV(isubjets.at(1)->px(), isubjets.at(1)->py(), isubjets.at(1)->pz(), isubjets.at(1)->energy() );
-                                isubleadLV.Print();
-                                std::cout << "leading jak8 subjet" << std::endl;
-                                TLorentzVector jleadLV(jsubjets.at(0)->px(), jsubjets.at(0)->py(), jsubjets.at(0)->pz(), jsubjets.at(0)->energy() );
-                                jleadLV.Print();                                
-                                std::cout << "subleading jak8 subjet" << std::endl;
-                                TLorentzVector jsubleadLV(jsubjets.at(1)->px(), jsubjets.at(1)->py(), jsubjets.at(1)->pz(), jsubjets.at(1)->energy() );
-                                jsubleadLV.Print(); 
-                                std::cout << "i ak8 jet index: " << iak8jet << std::endl;
-                                std::cout << "j ak8 jet index: " << jak8jet << std::endl; 
-                                std::cout << "i ak8 subjet index: " << iSubjet << std::endl;
-                                std::cout << "j ak8 subjet index: " << jSubjet << std::endl;    
-                                std::cout << "i ak8 subjet abs(delta pt): " << ideltaPt << std::endl;
-                                std::cout << "j ak8 subjet abs(delta pt): " << jdeltaPt << std::endl;     
-                                std::cout << "i ak8 subjet delta R: " << iSubJetLV.DeltaR(upSubJetLV) << std::endl;
-                                std::cout << "j ak8 subjet delta R: " << jSubJetLV.DeltaR(upSubJetLV) << std::endl;    
-                                // std::cout << "LV" << std::endl;
-                                // iSubJetLV.Print();
-                                // jSubJetLV.Print();                             
-                                // upSubJetLV.Print();                             
-                                // std::cout << "iak8" << std::endl;
-                                // std::cout << iak8jet << std::endl;
-                                // std::cout << jak8jet << std::endl; 
-                                // std::cout << "isub" << std::endl;
-                                // std::cout << iSubjet << std::endl;
-                                // std::cout << jSubjet << std::endl; 
-                                // std::cout << "pt" << std::endl;
-                                // std::cout << ideltaPt << std::endl;
-                                // std::cout << jdeltaPt << std::endl;
-                                // std::cout << "r" << std::endl;
-                                // std::cout << iSubJetLV.DeltaR(upSubJetLV) << std::endl;
-                                // std::cout << jSubJetLV.DeltaR(upSubJetLV) << std::endl;                                
-                                throw cms::Exception("SubJetMatchError") << " Failed to resolve subjet matching conflict!";
-                            }
-
-                            // Redo matching for chosen subjet
-                            int iredoSubJetMatch;
-                            double redoMinDeltaR = 100.0;
-                            // Iterate over updated DeepJet subjets to find new match
-                            for (unsigned int iredoUpSubjet=0; iredoUpSubjet < upSubJets.size(); iredoUpSubjet++){
-                                // Skip the subjet claimed by true match
-                                if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iMatch)) continue;
-
-                                // make Lorentz Vector of this updated DeepJet subjet for easier matching
-                                TLorentzVector redoUpSubJetLV(upSubJets.at(iredoUpSubjet).px(), upSubJets.at(iredoUpSubjet).py(), upSubJets.at(iredoUpSubjet).pz(), upSubJets.at(iredoUpSubjet).energy() );
-
-                                // Only examine the updated subjets within R<0.8 of AK8 Jet
-                                // if (jetLV.DeltaR(upSubJetLV) > 0.8) continue;
-
-                                // Find minimum delR, match subjets
-                                double redoDeltaR = redoSubJetLV.DeltaR(redoUpSubJetLV);
-
-                                if (redoDeltaR < redoMinDeltaR) {
-                                    redoMinDeltaR  = redoDeltaR;
-                                    iredoSubJetMatch = iredoUpSubjet;
-                                } 
-                            }
-
-                            // Store new subjet matched index
-                            subjetMatchAdvanced[redoAK8Jet][redosubJet] = iredoSubJetMatch;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Now the matching conflict is resolved
-
-        // Clear matchedSubJetIndices
-        matchedSubJetIndices.clear();
-
-        // Refill matchedSubJetIndices with new matches
-        for (unsigned int iak8jet=0; iak8jet < ak8Jets.size(); iak8jet++){
-
-            // Grab subjets
-            pat::Jet jet = ak8Jets.at(iak8jet);
-            auto subjets = jet.subjets("SoftDropPuppi");
-
-            // Iterate over the subjets for this AK8 jet
-            for (unsigned int iSubjet=0; iSubjet < subjets.size(); iSubjet++){
-                // Store subjet matched index
-                matchedSubJetIndices.push_back(subjetMatchAdvanced[iak8jet][iSubjet]);
-            }
-        }
-
-        // Check for uniqueness again, repeat as necessary
-        goto checkUnique; 
-    }
-
-    return subjetMatchAdvanced;
 }
 
 //========================================================================================
@@ -466,8 +180,7 @@ std::map<int, std::vector<int>> matchSubjetsAdvanced(
 bool storeJetVariables(std::map<std::string, float> &besVars, 
                        std::vector<pat::Jet>::const_iterator jet, 
                        std::vector<pat::Jet> upSubJets,
-                       std::vector<int> thisSubjetMatchNaive,
-                       std::vector<int> thisSubjetMatchAdvanced)
+                       std::vector<int> thisSubjetMatch)
                        {
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
@@ -631,132 +344,17 @@ bool storeJetVariables(std::map<std::string, float> &besVars,
     if (!subjets[1]) return false; // Check that the subleading subjet is there
 
     // Fill leading subjet bDisc variables, and get maximum bDisc values using Deep Flavour and DeepCSV separately
-    // The testing code is still in here, just left commented out and can be removed
-
-    // // DeepCSV:
-    // double maxbDisc_deepCSV = 0;
-    // double maxbProb_deepCSV = 0;
-    // double maxbbProb_deepCSV = 0;
-
-    // for (unsigned int iSubjet=0; iSubjet < subjets.size(); iSubjet++){
-    //     // Skip this subJet if we have matched it already
-    //     // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
-
-    //     double bprobVal_deepCSV = subjets.at(iSubjet)->bDiscriminator("pfDeepCSVJetTags:probb");
-    //     double bbprobVal_deepCSV = subjets.at(iSubjet)->bDiscriminator("pfDeepCSVJetTags:probbb");
-    //     double bDiscVal_deepCSV = bprobVal_deepCSV + bbprobVal_deepCSV;
-
-    //     // Find max bDisc value and index
-    //     if (bDiscVal_deepCSV > maxbDisc_deepCSV)   maxbDisc_deepCSV  = bDiscVal_deepCSV;
-    //     if (bprobVal_deepCSV > maxbProb_deepCSV)   maxbProb_deepCSV  = bprobVal_deepCSV;
-    //     if (bbprobVal_deepCSV > maxbbProb_deepCSV) maxbbProb_deepCSV = bbprobVal_deepCSV;
-    // }
-
-    // These besVars referred to the bDisc scores associated with the AK8 Jet object
-    // They are only available for deepCSV; the AK8 jet does not have DeepJet scores
-    besVars["bDisc_deepCSV"]        = jet->bDiscriminator("pfDeepCSVJetTags:probb") + jet->bDiscriminator("pfDeepCSVJetTags:probbb");
-    besVars["bDisc_probb_deepCSV"]  = jet->bDiscriminator("pfDeepCSVJetTags:probb");
-    besVars["bDisc_probbb_deepCSV"] = jet->bDiscriminator("pfDeepCSVJetTags:probbb");
-
-    // leading ak8 subjet deepCSV b discriminants
-    besVars["bDisc1_deepCSV"]        = subjets.at(0)->bDiscriminator("pfDeepCSVJetTags:probb") + subjets.at(0)->bDiscriminator("pfDeepCSVJetTags:probbb");
-    besVars["bDisc1_probb_deepCSV"]  = subjets.at(0)->bDiscriminator("pfDeepCSVJetTags:probb");
-    besVars["bDisc1_probbb_deepCSV"] = subjets.at(0)->bDiscriminator("pfDeepCSVJetTags:probbb");
-
-    // subleading ak8 subjet deepCSV b discriminants
-    besVars["bDisc2_deepCSV"]        = subjets.at(1)->bDiscriminator("pfDeepCSVJetTags:probb") + subjets.at(1)->bDiscriminator("pfDeepCSVJetTags:probbb");
-    besVars["bDisc2_probb_deepCSV"]  = subjets.at(1)->bDiscriminator("pfDeepCSVJetTags:probb");
-    besVars["bDisc2_probbb_deepCSV"] = subjets.at(1)->bDiscriminator("pfDeepCSVJetTags:probbb");
-
-    //DeepJet
-    // double maxbDisc_deepJet = 0;
-    // double maxbProb_deepJet = 0;
-    // double maxbbProb_deepJet = 0;
-    
-    // double imaxbDisc;
-    // double ileadSubJet;
-    // double isubleadSubJet;
-
-    // int nMultipleMatches = 0;
-
-    // make Lorentz Vector for easier deltaR matching
-    // TLorentzVector leadSubJetLV(subjets.at(0)->px(), subjets.at(0)->py(), subjets.at(0)->pz(), subjets.at(0)->energy() );
-    // TLorentzVector subleadSubJetLV(subjets.at(1)->px(), subjets.at(1)->py(), subjets.at(1)->pz(), subjets.at(1)->energy() );
-    // TLorentzVector jetLV(jet->px(), jet->py(), jet->pz(), jet->energy() );
-
-    // double leadMinDelR = 100.0;
-    // double subleadMinDelR = 100.0;
-
-    // for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
-    //     // Matching already completed by matchSubjets() function
-
-    //     // Skip this subJet if we have matched it already
-    //     // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
-
-    //     // make Lorentz Vector for easier deltaR matching
-    //     TLorentzVector iupSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
-
-    //     // Examine the updated subjets within R<0.8 of AK8 Jet, match to AK8 subjets
-    //     if(jetLV.DeltaR(iupSubJetLV) < 0.8){
-    //         double bprobVal_deepJet = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb");
-    //         double bbprobVal_deepJet = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    //         double bDiscVal_deepJet = bprobVal_deepJet + bbprobVal_deepJet;
-
-    //         // double leadDelR = ( leadSubJetLV.DeltaR(iupSubJetLV) )*( abs(leadSubJetLV.Pt() - iupSubJetLV.Pt()) );
-    //         // double subleadDelR = ( subleadSubJetLV.DeltaR(iupSubJetLV) )*( abs(subleadSubJetLV.Pt() - iupSubJetLV.Pt()) );
-
-    //         // // Find minimum del R value
-    //         // if (leadDelR < leadMinDelR) {
-    //         //     leadMinDelR  = leadDelR;
-    //         //     ileadSubJet = iupSubjet;
-    //         // }
-            
-    //         // if (subleadDelR < subleadMinDelR) {
-    //         //     subleadMinDelR = subleadDelR;
-    //         //     isubleadSubJet = iupSubjet;
-    //         // }
-
-    //         // Find max bDisc value and index
-    //         if (bDiscVal_deepJet > maxbDisc_deepJet)   maxbDisc_deepJet  = bDiscVal_deepJet;
-    //         if (bprobVal_deepJet > maxbProb_deepJet)   maxbProb_deepJet  = bprobVal_deepJet;
-    //         if (bbprobVal_deepJet > maxbbProb_deepJet) maxbbProb_deepJet = bbprobVal_deepJet;
-    //     }
-    // }
-
 
     // Fill Naive vars
     // leading updated subjet deep flavour b discriminants
-    besVars["bDisc1_deepJet_Naive"]        = upSubJets.at(thisSubjetMatchNaive.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatchNaive.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    besVars["bDisc1_probb_deepJet_Naive"]  = upSubJets.at(thisSubjetMatchNaive.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb");
-    besVars["bDisc1_probbb_deepJet_Naive"] = upSubJets.at(thisSubjetMatchNaive.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
+    besVars["bDisc1"]        = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
+    besVars["bDisc1_probb"]  = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb");
+    besVars["bDisc1_probbb"] = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
 
     // subleading updated subjet deep flavour b discriminants
-    besVars["bDisc2_deepJet_Naive"]        = upSubJets.at(thisSubjetMatchNaive.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatchNaive.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    besVars["bDisc2_probb_deepJet_Naive"]  = upSubJets.at(thisSubjetMatchNaive.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb");
-    besVars["bDisc2_probbb_deepJet_Naive"] = upSubJets.at(thisSubjetMatchNaive.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
-    // Fill Advanced vars
-    // leading updated subjet deep flavour b discriminants
-    besVars["bDisc1_deepJet_Advanced"]        = upSubJets.at(thisSubjetMatchAdvanced.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatchAdvanced.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    besVars["bDisc1_probb_deepJet_Advanced"]  = upSubJets.at(thisSubjetMatchAdvanced.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb");
-    besVars["bDisc1_probbb_deepJet_Advanced"] = upSubJets.at(thisSubjetMatchAdvanced.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
-    // subleading updated subjet deep flavour b discriminants
-    besVars["bDisc2_deepJet_Advanced"]        = upSubJets.at(thisSubjetMatchAdvanced.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatchAdvanced.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    besVars["bDisc2_probb_deepJet_Advanced"]  = upSubJets.at(thisSubjetMatchAdvanced.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb");
-    besVars["bDisc2_probbb_deepJet_Advanced"] = upSubJets.at(thisSubjetMatchAdvanced.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
-    // first implementation of deepjet
-    // // leading updated subjet deep flavour b discriminants
-    // besVars["bDisc1_deepJet"]        = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    // besVars["bDisc1_probb_deepJet"]  = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb");
-    // besVars["bDisc1_probbb_deepJet"] = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
-    // // subleading updated subjet deep flavour b discriminants
-    // besVars["bDisc2_deepJet"]        = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-    // besVars["bDisc2_probb_deepJet"]  = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb");
-    // besVars["bDisc2_probbb_deepJet"] = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
+    besVars["bDisc2"]        = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
+    besVars["bDisc2_probb"]  = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb");
+    besVars["bDisc2_probbb"] = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
 
     // max values are depreciated
     // // maximum subjet deep flavour b discriminants
@@ -766,10 +364,8 @@ bool storeJetVariables(std::map<std::string, float> &besVars,
     // besVars["bDisc_probb_deepJet"]  = maxbProb_deepJet;
     // besVars["bDisc_probbb_deepJet"] = maxbbProb_deepJet;
 
-    // This var is replaced by bDisc
+    // These vars no longer makes sense to include
     // besVars["bDiscSubJet_Max"] = maxbDisc;
-
-    // This var no longer makes sense to include
     // besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
 
     return true;

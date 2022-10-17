@@ -32,8 +32,8 @@ process.source = cms.Source("PoolSource",
         # "/store/mc/RunIISummer20UL16MiniAODAPV/GluGluToBulkGravitonToHHTo4B_M-1000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_preVFP_v8-v2/120000/865B900D-E5A9-2947-9C52-45F21DD49855.root"
         #"/store/mc/RunIISummer20UL17MiniAOD/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/70000/CC9620A0-A1EE-3C48-B8DF-285766228071.root"
         # "/store/mc/RunIISummer20UL16MiniAODv2/GluGluToBulkGravitonToHHTo4B_M-8000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mcRun2_asymptotic_v17-v2/260000/53BD7641-0BEC-FE4F-9961-85BF441D6D86.root"
-        # "/store/mc/RunIISummer20UL17MiniAODv2/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/260000/38D9DDA8-E0CF-174D-9D4B-77D6F4B01A76.root"
-        "/store/mc/RunIISummer20UL17MiniAOD/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/70000/1F95D154-935E-774C-B0A4-67A6FB8802C8.root"
+        "/store/mc/RunIISummer20UL17MiniAODv2/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v9-v2/260000/38D9DDA8-E0CF-174D-9D4B-77D6F4B01A76.root"
+        # "/store/mc/RunIISummer20UL17MiniAOD/GluGluToBulkGravitonToHHTo4B_M-4000_narrow_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/70000/1F95D154-935E-774C-B0A4-67A6FB8802C8.root"
                                          )
 )
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000

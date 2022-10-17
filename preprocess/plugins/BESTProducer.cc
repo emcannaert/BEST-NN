@@ -232,15 +232,6 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     restMasses.push_back("ak8");
     restMasses.push_back("ak8SoftDrop");
 
-    // Frames that are not being used are commented out:
-    // unsigned int iterMass = 50;
-    // while(iterMass <= 400) { // Add this mass to the vector, then increment by 1 GeV if any condition is true, or 5 GeV if none are true.
-    //     restMasses.push_back(std::to_string(iterMass)+"GeV");
-    //     iterMass += 50;
-    // }
-    // restMasses.push_back("Bottom"); restMasses.push_back("W"); restMasses.push_back("Z");
-    // restMasses.push_back("Lab");
-
     //------------------------------------------------------------------------------
     // Prepare TFile Service -------------------------------------------------------
     //------------------------------------------------------------------------------
@@ -355,35 +346,14 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
     // listOfVecVars.push_back("SV_Ndof");
 
     // Deep Jet b Discriminants
-    // listOfVars.push_back("bDisc_deepJet");
-    // listOfVars.push_back("bDisc_probb_deepJet");
-    // listOfVars.push_back("bDisc_probbb_deepJet");
-    listOfVars.push_back("bDisc1_deepJet_Naive");
-    listOfVars.push_back("bDisc1_probb_deepJet_Naive");
-    listOfVars.push_back("bDisc1_probbb_deepJet_Naive");
-    listOfVars.push_back("bDisc2_deepJet_Naive");
-    listOfVars.push_back("bDisc2_probb_deepJet_Naive");
-    listOfVars.push_back("bDisc2_probbb_deepJet_Naive");
+    listOfVars.push_back("bDisc1");
+    listOfVars.push_back("bDisc1_probb");
+    listOfVars.push_back("bDisc1_probbb");
+    listOfVars.push_back("bDisc2");
+    listOfVars.push_back("bDisc2_probb");
+    listOfVars.push_back("bDisc2_probbb");
     // listOfVars.push_back("bDiscSubJet_Max");
     // listOfVars.push_back("bDiscSubJet_Max_index"); // indexes from 0
-
-    listOfVars.push_back("bDisc1_deepJet_Advanced");
-    listOfVars.push_back("bDisc1_probb_deepJet_Advanced");
-    listOfVars.push_back("bDisc1_probbb_deepJet_Advanced");
-    listOfVars.push_back("bDisc2_deepJet_Advanced");
-    listOfVars.push_back("bDisc2_probb_deepJet_Advanced");
-    listOfVars.push_back("bDisc2_probbb_deepJet_Advanced");
-
-    // DeepCSV b Discriminants
-    listOfVars.push_back("bDisc_deepCSV");
-    listOfVars.push_back("bDisc_probb_deepCSV");
-    listOfVars.push_back("bDisc_probbb_deepCSV");
-    listOfVars.push_back("bDisc1_deepCSV");
-    listOfVars.push_back("bDisc1_probb_deepCSV");
-    listOfVars.push_back("bDisc1_probbb_deepCSV");
-    listOfVars.push_back("bDisc2_deepCSV");
-    listOfVars.push_back("bDisc2_probb_deepCSV");
-    listOfVars.push_back("bDisc2_probbb_deepCSV");
 
     // nsubjettiness
     listOfVars.push_back("jetAK8_Tau4");
@@ -418,7 +388,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             listOfVars.push_back("thrust_"+frame);
 
             // Jet Mass
-            if (frame == "Higgs") listOfVars.push_back("nJets");
+            if (frame == "Higgs") listOfVars.push_back("nReclusteredJets");
 
             listOfVars.push_back("jet12_mass_"+frame);
             listOfVars.push_back("jet23_mass_"+frame);
@@ -475,12 +445,6 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig):
             // }
         // }
     }
-
-    // This variable is also part of the Temporary Debugging Code from below, 
-    // but it is just simpler to include it in the main tree
-    // Will be either 0, 1, or 2. SHOULD always be 0.
-    // Will keep this var for 2017 run just in case
-    // listOfVars.push_back("nMultipleMatches"); 
 
     // Make Branches for each variable
     for (unsigned i = 0; i < listOfVars.size(); i++){
@@ -561,11 +525,13 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     //------------------------------------------------------------------------------
 
     // Find objects corresponding to the token and link to the handle
-/*
+
+    /*
     Handle<pat::JetCollection> ak8JetsCollection;
     iEvent.getByToken(ak8JetsToken_, ak8JetsCollection);
     pat::JetCollection ak8Jets = *ak8JetsCollection.product();
-*/
+    */
+
     Handle< std::vector<pat::Jet> > ak8JetsCollection;
     iEvent.getByToken(ak8JetsToken_, ak8JetsCollection);
     vector<pat::Jet> ak8Jets = *ak8JetsCollection.product();
@@ -632,12 +598,8 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     map<string, vector<fastjet::PseudoJet> > restJets;
 
     // Match Subjets
-    // vector<int> matchedSubJetIndices;
-    // std::cout << "matching..." << std::endl;
-    std::map<int, std::vector<int>> subjetMatchNaive = matchSubjetsNaive(ak8Jets, subJets);
-    std::map<int, std::vector<int>> subjetMatchAdvanced = matchSubjetsAdvanced(ak8Jets, subJets);
-    //match using dictionary: dict[ak8jetindex] = vectorofupdatedIndices [0=lead, 1=sublead]
-    // std::cout << "matched" << std::endl;
+    std::map<int, std::vector<int>> subjetMatch = matchSubjets(ak8Jets, subJets);
+    // match using dictionary: dict[ak8jetindex] = vectorofupdatedIndices [0=lead, 1=sublead]
 
     int thisAK8JetIndex = -1;
     for (vector<pat::Jet>::const_iterator jetBegin = ak8Jets.begin(), jetEnd = ak8Jets.end(), ijet = jetBegin; ijet != jetEnd; ++ijet){
@@ -668,7 +630,7 @@ BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 // Store Jet Variables
                 // treeVars["nJets"] = ak8Jets.size();
-                if (storeJetVariables(treeVars, ijet, subJets, subjetMatchNaive[thisAK8JetIndex], subjetMatchAdvanced[thisAK8JetIndex]) == false) goto endjetloop;
+                if (storeJetVariables(treeVars, ijet, subJets, subjetMatch[thisAK8JetIndex]) == false) goto endjetloop;
                 
                 // Secondary Vertex Variables
                 storeSecVertexVariables(treeVars, jetVecVars, jet, secVertices);
