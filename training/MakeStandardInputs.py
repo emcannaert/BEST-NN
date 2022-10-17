@@ -24,7 +24,6 @@ sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 setTypes = ["train", "validation", "test"]
 
 years = ["2016_APV", "2016", "2017", "2018"]
-
     
 def checkRepeat(j, keys):
     repeatList = []
@@ -131,7 +130,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     #==================================================================================
 
     # This form of the scaler is easy to load with python ( sklearn.externals.joblib.load(scalePath) )
-    scalePath = os.path.join(scaleDir,'BESTScalerParameters_'+ year +'.joblib')
+    scalePath = os.path.join(scaleDir,'joblib','BESTScalerParameters_'+ year +'.joblib')
     print("Saving Model: " + scalePath)
     dump(ct, scalePath)
 
@@ -230,7 +229,7 @@ if __name__ == "__main__":
                         help="Suffix, used to select correct h5 input file to standardize [default: 'flattened']")
     parser.add_argument('-y','--years', dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
-                        required=True)
+                        default='all')
     parser.add_argument('-sd','--scaleDir', dest='scaleDir',
                         default="ScalerParameters",
                         help="Dir to store scale params and scaler object to check later [default: ScalerParameters]")
