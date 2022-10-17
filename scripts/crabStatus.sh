@@ -12,7 +12,10 @@ YEL='\033[93m' # Yellow
 NC='\033[0m' # No Color
 
 logFile="Logs/statusLog.txt"
+echo >> $logFile
 jobFile="Logs/jobsToCheck.txt"
+echo >> $jobFile
+
 declare -a jobsToCheck=()
 declare -a unfinishedJobs=()
 echo -e "\n${YEL}Checking jobs...${NC}"
