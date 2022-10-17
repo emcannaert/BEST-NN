@@ -16,6 +16,7 @@
 //========================================================================================
 //////////////////////////////////////////////////////////////////////////////////////////
 
+// This version of BEST includes the different subjet matching methods we explored while testing
 
 // system include files
 #include <memory>

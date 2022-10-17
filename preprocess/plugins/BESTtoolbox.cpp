@@ -4,6 +4,8 @@
 // C++ file containing functions for use with CMS EDAnalyzer and EDProducer --------------
 //////////////////////////////////////////////////////////////////////////////////////////
 
+// This version of BEST includes the different subjet matching methods we explored while testing
+
 #include "BESTtoolbox.h"
 
 //========================================================================================
