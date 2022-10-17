@@ -35,6 +35,7 @@ sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]
+# years = ["2017"]
 treeName = "run/jetTree"
 
 # Each of these key lists represent a different type of h5py dataset:
@@ -79,7 +80,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
         numIter = 0
         besDS = None
         # pfsvDS  = {}
-        batchSize = 1000
+        batchSize = 10000
         for arrays in uproot.iterate(fileList, treeName, entrysteps = batchSize, namedecode='utf-8'):
             
             # Load keys and labels

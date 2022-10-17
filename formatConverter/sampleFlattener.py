@@ -18,6 +18,7 @@ import numpy.ma as ma
 from sklearn.model_selection import train_test_split
 
 years = ["2016_APV", "2016", "2017", "2018"]
+# years = ["2017"]
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # setTypes = ["","train","validation","test"]
 setTypes = ["train","validation","test"]
@@ -176,21 +177,21 @@ if __name__ == "__main__":
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
-                        required=True)
+                        default='all')
     parser.add_argument('-st', '--setTypes',
                         dest='setTypes',
                         help='<Required> Which (comma separated) set types to process. Examples: 1) --all (includes pre-split); 2) train,validation,test',
-                        required=True)
+                        default='all')
     parser.add_argument('-b', '--batchSize',
                         dest='batchSize',
                         type=int,
-                        default=-1)
+                        default=250000)
     parser.add_argument('-fi', '--flattenIndex',
                         dest='flattenIndex',
                         type=int,
                         #default=142)
                         #default=548)
-                        default=166)
+                        default=199)
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
