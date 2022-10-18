@@ -80,7 +80,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
         numIter = 0
         besDS = None
         # pfsvDS  = {}
-        batchSize = 10000
+        batchSize = 100000
         for arrays in uproot.iterate(fileList, treeName, entrysteps = batchSize, namedecode='utf-8'):
             
             # Load keys and labels
@@ -267,11 +267,11 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--samples',
                         dest='samples',
                         help='<Required> Which (comma separated) samples to process. Examples: 1) all; 2) W,Z,b',
-                        required=True)
+                        default='all')
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2017',
-                        required=True)
+                        default='all')
     parser.add_argument('-sa', '--stopAt',
                         type=int,
                         default=-1)
