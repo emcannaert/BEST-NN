@@ -16,21 +16,24 @@
 #       Use associative arrays to clean this whole thing up
 
 ###(NOTE: 2015 = 2016_APV)###
-# As of Aug. 30, 2022:
+# As of Oct. 18, 2022:
 #   Missing Mass Points:
-#       tt:  2017,2018: 400, 500, 600, 700, 800, 900, 1000; 
-            #(All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000
+#       tt:  2017 and 2018 @ width 1%: 400, 500, 600, 700, 800, 900, 1000; 
+#            (All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000
 #   Dataset Versions:
-#       2016_APV: All tt and QCD datasets are v2, the rest is v1.
+#       2016_APV: All tt and QCD datasets are v2, the rest are v1.
 #       2016: All datasets are v2 (10 datasets dont have v1's)
-#       2017: All datasets are v2, except for one extra tt dataset (detailed below)
+#       2017: All datasets are v2
 #       2018: All datasets are v2 (NOTE: No v1 dataset exists for QCD Flat)
 #   Notes:
 #       HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong)
-#       tt: Mass points on DAS not in the 21 mass points given: (2015 and 2016: 400, 700, 900),(2015,2016,2017: 9000 @ 30% and 10%) 
+#       
+#       tt: Mass points on DAS not in the 21 mass points given: (All years: 400, 700, 900), (2015,2016,2017: 9000 @ 30% and 10%) 
 #           ^The script finds all samples, regardless of relation to the 21 mass points requested
+#       
 #       tt: Using extra tt samples that were not originally requested. Can be identified by a capital "P" in dataset name (/ZPrimeToTT... instead of /ZprimetoTT...)
-#           Gives 2 extra v2 datasets per mass point (17 from 400 to 4500, 34 total each year) at 30% and 10% width, except that (2017: M900_W270) is v1
+#           Gives 2 extra v2 datasets per mass point (17 from 400 to 4500, 34 total each year) at 30% and 10% width
+#           ^Additonally, this provides all of the mass points for tt from 5000 and above
 
 
 #==================================================================================
@@ -75,6 +78,7 @@ fi
 # Declare the full list of valid arguments for each option
 declare -a allParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
 declare -a allYears=("2016_APV" "2016" "2017" "2018")
+# declare -a allYears=("2017")
 declare -a allDatatypes=("mc" "data")
 # Declare initial arrays to fill with user chosen arguments later
 declare -a myParticles
