@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # functions.py ////////////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Sam Abbott, Reyer Band, Johan S. Bonilla, Brendan Regnary ////////////
+# Author(s): Samantha Abbott, Reyer Band, Johan S. Bonilla, Brendan Regnary ///////
 # This module contains functions to be used while training BEST ///////////////////
 #==================================================================================
 
@@ -42,7 +42,7 @@ def logTime(startTime=None, name=sys.argv[0]):
     
     timeTaken = datetime.timedelta(seconds=int(time.time() - startTime))
     timeMessage = ("\n"+str(name)+" took " + str( timeTaken ) + " to complete.")
-    print(timeMessage)
+    print(timeMessage+"\n")
     with open("Logs/timeLog.txt", "a") as f:
         f.write(timeMessage)
 
@@ -69,11 +69,13 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         print("Confusion matrix, normalized")
         title = "Normalized Confusion Matrix"
-        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_normalized.png')
+        # saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_normalized.png')
+        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '_normalized')
     else:
         print('Confusion matrix, without normalization')
         title = "Confusion Matrix"
-        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '.png')
+        # saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix + '.png')
+        saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix)
 
     print(cm)
     title = suffix + " " + title
@@ -96,8 +98,10 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
     plt.xlabel('Predicted label')
     plt.tight_layout() #make all the axis labels not get cutoff
 
-    print("Saving to: " + saveFile)
-    plt.savefig(saveFile)
+    print("Saving to: " + saveFile + ".png")
+    plt.savefig(saveFile + ".png")
+    print("Saving to: " + saveFile + ".pdf")
+    plt.savefig(saveFile + ".pdf")
 
     plt.clf()
     plt.close()
@@ -131,7 +135,7 @@ def plotAccLoss(historyFile, suffix, plotDir):
     plt.xlabel('epoch')
     plt.ylabel('loss')
     if not os.path.isdir(plotDir): os.makedirs(plotDir)
-    # plt.savefig(plotDir+suffix+"_loss.pdf")
+    plt.savefig(plotDir+suffix+"_loss.pdf")
     plt.savefig(os.path.join(plotDir,suffix+"_loss.png"))
     plt.close()
 
@@ -143,7 +147,7 @@ def plotAccLoss(historyFile, suffix, plotDir):
     plt.legend(loc="lower right")
     plt.xlabel('epoch')
     plt.ylabel('acc')
-    # plt.savefig(plotDir+suffix+"_acc.pdf")
+    plt.savefig(plotDir+suffix+"_acc.pdf")
     plt.savefig(os.path.join(plotDir,suffix+"_acc.png"))
     plt.close()
 
@@ -180,7 +184,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
         plt.gca().tick_params(axis = 'x', direction = 'in', top = True, bottom = True)
         plt.show()
         plt.savefig(saveDir + title + ".png")
-        # plt.savefig(saveDir + title + ".pdf")
+        plt.savefig(saveDir + title + ".pdf")
         plt.clf()
     plt.close()
 
@@ -192,7 +196,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
 
 # def loadMask(maskPath, max = 551):
 # def loadMask(maskPath, max = 270):
-def loadMask(maskPath, max = 294):
+def loadMask(maskPath, max = 313):
     print("Loading mask: " + maskPath)
     maskIndex = []
     varDict = {}
@@ -370,7 +374,8 @@ def dirStrings(args, year=''):
     maskName = args.maskPath[1 + args.maskPath.rfind("/"):] # Strip everything after the final '/', giving just the name of the mask
     # mySuffix = args.suffix + args.scale + maskName[11:-4] 
     if year == '': year = args.year
-    mySuffix = args.suffix + "_" + year
+    # mySuffix = args.suffix + "_" + year
+    mySuffix = year
 
     plotDir  = "plots/" + args.modelType + "/" + mySuffix + "/"
     modelDir = args.outDir + args.modelType + "/" + mySuffix + "/"
@@ -506,7 +511,7 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
 
         path  = saveDir + "png/" + labelDict[key][1] + '_ROCplot.png'
         plt.savefig(path)
-        # path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot.pdf'
+        path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot.pdf'
         # plt.savefig(path)
         plt.clf()
         plt.close()
@@ -598,7 +603,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
             plt.ylabel("Percentage of X Jets")
             plt.show()
             plt.savefig(os.path.join(saveDir, "png", suffix + '_Xas_' + target + '.png'))
-            # plt.savefig(os.path.join(saveDir, "pdf", suffix + '_Xas_' + target + '.pdf'))
+            plt.savefig(os.path.join(saveDir, "pdf", suffix + '_Xas_' + target + '.pdf'))
             plt.clf()
             plt.close()
 
@@ -611,7 +616,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
             plt.ylabel("Percentage of " + target + " Jets")
             plt.show()
             plt.savefig(os.path.join(saveDir, "png", suffix + '_' + target + '_asX.png'))
-            # plt.savefig(os.path.join(saveDir, "pdf", suffix + '_' + target + '_asX.pdf'))
+            plt.savefig(os.path.join(saveDir, "pdf", suffix + '_' + target + '_asX.pdf'))
             plt.clf()
             plt.close()
 

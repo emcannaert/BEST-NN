@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # sampleFlattener.py /////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Johan S Bonilla, Brendan Regnery, Reyer Band -------------------------
+# Author(s): Johan S Bonilla, Samantha Abbott, Brendan Regnery, Reyer Band --------
 # This program takes in h5 files and equalizes the number of events based on pt ///
 # Inputs should be h5 files after splitting the samples
 # The process plots the various files and, bin by bin, keeps all events of the
@@ -46,54 +46,54 @@ def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binS
         ## Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
         while (counter < totalEvents):
             batchSize = userBatchSize if (totalEvents > counter+userBatchSize) else (totalEvents-counter)
-            print("Batch size", batchSize, "at", counter)
+            # print("Batch size", batchSize, "at", counter)
             
             # Grab pt part of dataset to evaluate whether to keep or reject event
             myPtData = np.array(fIn["BES_vars"][counter:counter+batchSize,flattenIndex])
-            print("Shape of myPtData", myPtData.shape)
+            # print("Shape of myPtData", myPtData.shape)
             
             # For each key in dataset, take partial dataset and copy or reject. Note the random state below ensures the same set of events are kept or rejected 
             for myKey in fIn.keys():
-                print("Key", myKey)
+                # print("Key", myKey)
                 myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
                 dsetShape  = fIn[myKey].shape
                 dsetChunks = fIn[myKey].chunks 
-                print("Shape of myKeyData", myKeyData.shape)
+                # print("Shape of myKeyData", myKeyData.shape)
                 # Loop over bins (events in dataset may belong to any pt-bin)
                 for binIndex in range(0,len(bins)):
                     myProbability = keepProbs[sampleTypes.index(mySample)][binIndex]
                     if myProbability == 0:
-                        print("Probability is 0, skipping saving part")
+                        # print("Probability is 0, skipping saving part")
                         continue
                     currLowRange = bins[binIndex]
                     currHighRange = min(currLowRange+binSize, maxRange)
                     ## Pick out data in bin, myDataBool has shape (batchSize,1) with boolean values of whether the event is in the right bin
                     myDataBool = (currLowRange<myPtData)*(myPtData<currHighRange)
-                    print("Processing Bin:", currLowRange, currHighRange)
-                    print("Shape of myDataBool", myDataBool.shape)
+                    # print("Processing Bin:", currLowRange, currHighRange)
+                    # print("Shape of myDataBool", myDataBool.shape)
                     result = myKeyData[myDataBool]
-                    print("Shape of result", result.shape)
+                    # print("Shape of result", result.shape)
                     if result.shape[0] == 0:
-                        print("Result has no events in bin, continue to next bin")
+                        # print("Result has no events in bin, continue to next bin")
                         continue
                     output = result
                     if myProbability < 1:
                         ## The random state needs to be the same for each key to ensure we keep the same events across keys
                         output = train_test_split(result, train_size=myProbability, shuffle=True, random_state=29)[0]
-                    print("Size of kept events", len(output))
+                    # print("Size of kept events", len(output))
                     if len(output) == 0:
-                        print("Output has no events in bin, continue to next bin")
+                        # print("Output has no events in bin, continue to next bin")
                         continue
                     # Store kept data
                     if not myKey in besData.keys():
-                        print("Making new datset")
+                        # print("Making new datset")
                         if myKey == "BES_vars": # max shape by # of vars
                             besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
                         # else: # max shape by # of pfcands (or SV's) and # of vars
                         #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
                     else:
                         # append the dataset
-                        print("Appending dataset")
+                        # print("Appending dataset")
                         besData[myKey].resize(besData[myKey].shape[0] + len(output), axis=0)
                         besData[myKey][-len(output) :] = output
             counter += batchSize
@@ -170,10 +170,6 @@ if __name__ == "__main__":
     
     # Take in arguments
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
-    parser.add_argument('-tt', '--ttSample',
-                        dest='ttSample',
-                        help='Which TT Sample to flatten with. Default uses the combo TT file. Choices: "RSG" or "ZP".',
-                        default="")
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
@@ -191,7 +187,7 @@ if __name__ == "__main__":
                         type=int,
                         #default=142)
                         #default=548)
-                        default=199)
+                        default=184)
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
@@ -219,8 +215,6 @@ if __name__ == "__main__":
                         action='store_true')
     args = parser.parse_args()
 
-    # Append appropriate TT sample to sample list (TT, RSGTT, or ZPTT)
-    sampleTypes.append(args.ttSample + "TT")
     if not args.years == "all": years = args.years.split(',')
     if not args.setTypes == "all": setTypes = args.setTypes.split(',')
     if args.debug:

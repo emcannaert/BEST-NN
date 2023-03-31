@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # MakeStandardInputs.py ///////////////////////////////////////////////////////////
 #----------------------------------------------------------------------------------
-# Author(s): Sam Abbott ///////////////////////////////////////////////////////////
+# Author(s): Samantha Abbott //////////////////////////////////////////////////////
 # This program Standardizes the BEST Inputs ///////////////////////////////////////
 #----------------------------------------------------------------------------------
 
@@ -130,7 +130,9 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     #==================================================================================
 
     # This form of the scaler is easy to load with python ( sklearn.externals.joblib.load(scalePath) )
-    scalePath = os.path.join(scaleDir,'joblib','BESTScalerParameters_'+ year +'.joblib')
+    scalePath = os.path.join(scaleDir,'joblib')
+    if not os.path.isdir(scalePath): os.makedirs(scalePath)
+    scalePath = os.path.join(scalePath,'BESTScalerParameters_'+ year +'.joblib')
     print("Saving Model: " + scalePath)
     dump(ct, scalePath)
 
@@ -203,9 +205,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
             scaledData = ct.transform(preScaleEvents)
             
             print("Creating Standarized Dataset for ", mySample, len(scaledData))
-            # We are not keeping the RSG samples, so the ZPrime samples can just be named TTSamples from now on
-            if mySample == "ZPTT": outFilePath = h5Dir+"TTSample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
-            else:                  outFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
+            outFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
     
             with h5py.File(outFilePath, "w") as outF:
                 # outF.create_dataset('BES_vars', data=scaledData, chunks=(10, num_BES_inputs), compression='lzf', shuffle=True)
@@ -228,7 +228,7 @@ if __name__ == "__main__":
                         default="flattened",
                         help="Suffix, used to select correct h5 input file to standardize [default: 'flattened']")
     parser.add_argument('-y','--years', dest='years',
-                        help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
+                        help='Which (comma separated) years to process. Examples: 1) all; 2) 2016,2018',
                         default='all')
     parser.add_argument('-sd','--scaleDir', dest='scaleDir',
                         default="ScalerParameters",

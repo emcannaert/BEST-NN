@@ -1,5 +1,5 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# best_roc_compare.py ////////////////////////////////////////////////////////
+# best_roc_compare.py /////////////////////////////////////////////////////////////
 #==================================================================================
 # This program evaluates BEST: HH Event Shape Topology Indentification Algorithm 
 #==================================================================================
@@ -49,16 +49,22 @@ def plotROCyearcompare(setType="flattened"):
     # _, varDict = tools.loadMask(maskPath)    
     # r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
 
-    modelDir  = "models/nnBEST/"
 
     rocDict = dict()
 
     for year in years:
-        thisModel = setType+"_"+year
+        modelDir  = os.path.join("models/nnBEST/",year)
+
+        maskPath = os.path.join(modelDir,"BESvarList_nopt.txt")
+        mask, _ = tools.loadMask(maskPath)
+
+        # thisModel = setType+"_"+year
+        thisModel = year
         # Load BES model and predict
-        modelPath = os.path.join(modelDir,thisModel,"BEST_model_" + thisModel + ".h5")
+        # modelPath = os.path.join(modelDir,thisModel,"BEST_model_" + thisModel + ".h5")
         # modelPath = modelDir + "BEST_model_" + modelKey + ".h5"
         # modelPath = myModelDir + "BEST_model_" + modelKey + "_finalRuntime.h5"
+        modelPath = os.path.join(modelDir,"BEST_model_" + year + ".h5")
         print(modelPath)
         model_BESonly = load_model(modelPath)
         # scalePath = "ScalerParameters_" + setType + "/BESTScalerParameters_" + year + ".txt"    
@@ -68,7 +74,8 @@ def plotROCyearcompare(setType="flattened"):
         h5Path = "Sample_"+year+"_BESTinputs_test_" + setType + "_standardized.h5"
 
         print("Loading data...")
-        eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypes]
+        # eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypes]
+        eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:,mask] for mySample in sampleFileTypes]
 
         print("My " + thisModel + " events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
 
@@ -89,9 +96,11 @@ def plotROCyearcompare(setType="flattened"):
         print("My " + thisModel + " concatenated truth shape: ", truthArrays.shape)
 
         # eventArrays = tools.manualScale(eventArrays, scalePath, r_varDict)
-
+        
+        print("Predicting...")
         BESpredict = model_BESonly.predict(eventArrays)
 
+        print("Calculating ROC...")
         # Compute ROC curve and area for each class
         n_classes = len(samples) 
         fprBES = dict()
@@ -158,7 +167,7 @@ def plotROCyearcompare(setType="flattened"):
             plt.plot(fpr, tpr, 
                     # label= 'BES only ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
                     # label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
-                    label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                    label= "BEST " + modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
                      linewidth=2)
         # range=(0.00001, 1.),
         plt.plot([0, 1], [0, 1], 'k--', lw=2)
@@ -566,15 +575,17 @@ def plotROCCompare():
     # modelDir  = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/models/"
     modelDir  = "models/"
     modelInfo = {
-        # "noBDisc":["noBDisc","standardized","flattened_2017", "BEST w/ no bDisc"],
-        # "deepCSV":["deepCSV","standardized","flattened_2017", "BEST w/ deepCSV"],
+        "noBDisc":["noBDisc","standardized","flattened_2017", "BEST w/ no bDisc"],
+        "deepCSV":["deepCSV","standardized","flattened_2017", "BEST w/ deepCSV"],
         "naive":["naive","standardized","flattened_2017", "BEST w/ deepJet"],
         # "advanced":["advanced","standardized","flattened_2017", "advanced"],
         "deepCSVnaive":["deepCSVnaive","standardized","flattened_2017", "BEST w/ deepJet & deepCSV"],
+        
+        # "2017":["nnBEST","standardized","2017", "BEST"],
 
-        "particleNetScores":["particleNet","","", "ParticleNet"],
-        "deepAK8MDScores":["deepAK8MD","","", "DeepAK8 Mass Decorrelated"],
-        "deepAK8Scores":["deepAK8","","", "DeepAK8"],
+        # "particleNetScores":["particleNet","","", "ParticleNet"],
+        # "deepAK8MDScores":["deepAK8MD","","", "DeepAK8 Mass Decorrelated"],
+        # "deepAK8Scores":["deepAK8","","", "DeepAK8"],
     }
 
     modelKeys = list(modelInfo.keys())
@@ -626,6 +637,7 @@ def plotROCCompare():
             # Load h5 data, set up truth arrays
             # mask, _ = tools.loadMask(myModelDir + suffix + ".txt")
             maskPath = myModelDir + "BESvarList_" + modelKey + ".txt"
+            # maskPath = myModelDir + "BESvarList_nopt.txt"
             mask, _ = tools.loadMask(maskPath)
             
             # Load BES model and predict
@@ -705,10 +717,10 @@ def plotROCCompare():
         # range=(0.00001, 1.),
         plt.plot([0, 1], [0, 1], 'k--', lw=2)
 
-        workPoints = [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2]
-        for i, wp in enumerate(workPoints): 
-            plt.axvline(wp, linestyle=':', color="red")
-            plt.annotate(str(wp*100)+"%", [wp,0.1*(i+1)], color="black")
+        # workPoints = [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2]
+        # for i, wp in enumerate(workPoints): 
+        #     plt.axvline(wp, linestyle=':', color="red")
+        #     plt.annotate(str(wp*100)+"%", [wp,0.1*(i+1)], color="black")
 
 
         # plt.xlim([0.0, 1.0])
@@ -719,22 +731,23 @@ def plotROCCompare():
         plt.legend(loc="lower right")
         plt.show()
         plt.savefig(path + '.png')
+        plt.savefig(path + '.pdf')
 
-        plt.yscale('log')
-        plt.title( title + "_yLogScale")
-        plt.show()
-        plt.savefig(saveDir + title + "_ylog.png")
+        # plt.yscale('log')
+        # plt.title( title + "_yLogScale")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_ylog.png")
 
-        plt.xscale('log')
-        plt.title( title + "_xyLogScale")
-        plt.show()
-        plt.savefig(saveDir + title + "_xylog.png")
+        # plt.xscale('log')
+        # plt.title( title + "_xyLogScale")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_xylog.png")
 
-        plt.yscale('linear')
-        plt.title( title + "_xLogScale")
-        plt.legend(loc="upper left")
-        plt.show()
-        plt.savefig(saveDir + title + "_xlog.png")
+        # plt.yscale('linear')
+        # plt.title( title + "_xLogScale")
+        # plt.legend(loc="upper left")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_xlog.png")
 
 
         plt.close()

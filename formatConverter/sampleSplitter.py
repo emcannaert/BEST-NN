@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # sampleSplitter.py /////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Johan S Bonilla, Brendan Regnery -------------------------------------
+# Author(s): Johan S Bonilla, Brendan Regnery, Samantha Abbott --------------------
 # This program splits h5f files into 3 smaller but equal orthogonal files       ///
 # The point is to create separate train/validation/test samples of equal size   ///
 # Inputs should be h5f files (can be flatted, or staright from formatConverter) ///
@@ -26,7 +26,7 @@ listOfYears = ["2016_APV","2016","2017","2018"]
 
 # Helper functions
 def splitFileSKL(inputPath, outDir, debug, userBatchSize):
-    print("Starting clock")
+    # print("Starting clock")
     startTime = time.time()
     
     setTypes = ["train", "validation", "test"]
@@ -34,8 +34,7 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
     # Open file, grab keys, and NEvents
     inputFile = h5py.File(inputPath,"r")
     dataKeys = list(inputFile.keys())
-    print(dataKeys)
-    print(inputFile[dataKeys[0]].shape)
+    print(dataKeys, inputFile[dataKeys[0]].shape)
     totalEvents = inputFile[dataKeys[0]].shape[0]
 
     # Create data frame and output files to handle copied information
@@ -98,7 +97,7 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
             keyTime = time.time()
         # print("Batch time:", time.time()-batchTime)
         counter += batchSize
-    print("Splitting time:", time.time()-startTime)
+    # print("Splitting time:", time.time()-startTime)
 
 # Main function should take in arguments and call the functions you want
 if __name__ == "__main__":
@@ -139,6 +138,7 @@ if __name__ == "__main__":
         os.mkdir(args.outDir)
 
     for year in listOfYears:
+        print(year)
         for sampleType in sampleTypes:
             print("Processing", sampleType)
             inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
