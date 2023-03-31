@@ -2,7 +2,7 @@
 #=========================================================================================
 # fillSamples.sh -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Sam Abbott ------------------------------------------------------------------
+# Author(s): Samantha Abbott -------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -15,20 +15,22 @@
 # Fix bug where if a dataset is missing a v1, number of v2's is not tracked correctly.
 #       Use associative arrays to clean this whole thing up
 
-###(NOTE: 2015 = 2016_APV)###
-# As of Oct. 18, 2022:
+# As of March 6, 2023:
 #   Missing Mass Points:
 #       tt:  2017 and 2018 @ width 1%: 400, 500, 600, 700, 800, 900, 1000; 
-#            (All years @ width 1%) and (2018 at all widths): 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000
+#            All years @ width 1%: 5000, 6000, 7000, 8000, 9000
+#            All years @ all widths: 5500, 6500, 7500, 8500
+
 #   Dataset Versions:
 #       2016_APV: All tt and QCD datasets are v2, the rest are v1.
 #       2016: All datasets are v2 (10 datasets dont have v1's)
 #       2017: All datasets are v2
 #       2018: All datasets are v2 (NOTE: No v1 dataset exists for QCD Flat)
+
 #   Notes:
 #       HH: 60000 mass point instead of 6000 on DAS for HH for all years (checked this, the mass point is correctly 6000, the name is just wrong)
 #       
-#       tt: Mass points on DAS not in the 21 mass points given: (All years: 400, 700, 900), (2015,2016,2017: 9000 @ 30% and 10%) 
+#       tt: Mass points on DAS not in the 21 mass points given: (All years: 400, 700, 900), (2016_APV,2016,2017: 9000 @ 30% and 10%) 
 #           ^The script finds all samples, regardless of relation to the 21 mass points requested
 #       
 #       tt: Using extra tt samples that were not originally requested. Can be identified by a capital "P" in dataset name (/ZPrimeToTT... instead of /ZprimetoTT...)
@@ -62,7 +64,7 @@ if [[ $# != 0 ]] && [[ $# != 6 ]]; then
     echo "${CYAN}Particle arguments: ${BLUE}all${NC}, ${YEL}or${NC} any combination of ${CYAN}QCD, HH, WW, ZZ, tt, bb${NC}"
     echo "${GRN}Year arguments: ${BLUE}all${NC}, ${YEL}or${NC} any combination of ${GRN}2016_APV, 2016, 2017, 2018${NC}"
     echo "${PURP}Datatype arguments: ${BLUE}all${NC} ${YEL}or${NC} ${PURP}mc${NC} ${YEL}or${NC} ${PURP}data${NC}"
-    echo "${YEL}Note that for the ${GRN}year${YEL} arguments, ${GRN}2016_APV${YEL} is a special case. It corresponds to the 2015 datasets, but in DAS it us under 2016 with APV in the dataset name."
+    echo "${YEL}Note that for the ${GRN}year${YEL} arguments, ${GRN}2016_APV${YEL} is a special case. The 2016 data is split into two parts, with 2016_APV corresponding to data taken before some hardware fix."
     echo
     echo "All options and arguments are case-sensitive, and all options-argument pairs can be executed in any order."
     echo "${YEL}Example:${NC} ./fillSamples.sh ${PURP}-d mc ${GRN}-y ${BLUE}all ${CYAN}-p HH${NC}"
@@ -207,7 +209,7 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
     # To search for our datasets on DAS, we need to manipulate the input data a bit. This is specific to our current analysis but can be modified for other analyses.
 
     # Here we define "$dasYear", which is used to search DAS.
-    # The Summer 2020 Ultra Legacy samples for 2016_APV (2015) are named "16MiniAODAPV"; the regular 2016 files do not have the "APV".
+    # The Summer 2020 Ultra Legacy samples for 2016_APV are named "16MiniAODAPV"; the regular 2016 files do not have the "APV".
     if [[ $year == "2016_APV" ]]; then  dasYear="RunIISummer20UL16MiniAODAPV"
     # All other years are straightforward. This trims the first two characters off of the year string, so 2017 becomes 17, etc.
     else                                dasYear="RunIISummer20UL${year:2}MiniAOD"; fi
@@ -238,7 +240,7 @@ checkDASDatasets(){ ################### Takes inputs as: "checkDASDatasets parti
     k=0 # Index for $dasMasses
     for dataset in ${dasResults[*]}; do # Fill arrays if datasets pass criteria:
 
-        # The 2016 datasets will have the 2016_APV (2015) ones mixed in. Skip these datasets:
+        # The 2016 datasets will have the 2016_APV ones mixed in. Skip these datasets:
         if [[ $year == "2016" ]] && [[ $dataset =~ "RunIISummer20UL16MiniAODAPV" ]] ; then continue; fi
 
         # Skip QCD datasets with low pT, and also any MuEnriched datasets that may be present:
