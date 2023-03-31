@@ -2,7 +2,7 @@
 #=========================================================================================
 # crabSubmit.sh --------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Sam Abbott -------- ---------------------------------------------------------
+# Author(s): Samantha Abbott -------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -24,6 +24,7 @@ declare -a allParticles=("HH" "WW" "ZZ" "tt" "bb" "QCD")
 # declare -a myParticles=("bb")
 # declare -a myParticles=("QCD")
 declare -a allYears=("2016_APV" "2016" "2017" "2018")
+# declare -a allYears=("2017")
 # declare -a myYears=("2017")
 # declare -a allDatatypes=("mc" "data")
 declare -a allDatatypes=("mc")

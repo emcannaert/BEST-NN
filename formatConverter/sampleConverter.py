@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # sampleConverter.py //////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Sam Abbott, Johan S Bonilla, Brendan Regnery -------------------------
+# Author(s): Samantha Abbott, Johan S Bonilla, Brendan Regnery --------------------
 # This program converts root ntuples to the python format necessary for training //
 # Inputs should be root files from preprocess
 # Output should be three sets of hd5f files: trainingSet, validationSet, testignSet

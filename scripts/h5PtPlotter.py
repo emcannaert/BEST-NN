@@ -55,8 +55,8 @@ if __name__ == "__main__":
     parser.add_argument('-pt', '--ptIndex',
                         dest='ptIndex',
                         type=int,
-                        default=142)
-                        # default=548)                                   
+                        # default=142)
+                        default=184)                                   
     parser.add_argument('-ft','--fileTypes',
                         dest='fileTypes',
                         help='Which (comma separated) samples to process. Examples: 1) --all; 2) _train,_test',
