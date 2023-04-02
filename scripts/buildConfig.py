@@ -100,7 +100,7 @@ elif optargs.datatype:
 configtemplateFile = "templates/crab_template.py"
 runtemplateFile = "templates/run_template.py"
 
-GlobalTags = {"2016_APV":"106X_mcRun2_asymptotic_preVFP_v11", "2016":"106X_mcRun2_asymptotic_v17", "2017":"106X_mc2017_realistic_v8", "2018":"106X_upgrade2018_realistic_v15_L1v1"}
+GlobalTags = {"2016_APV":"106X_mcRun2_asymptotic_preVFP_v11", "2016":"106X_mcRun2_asymptotic_v17", "2017":"106X_mc2017_realistic_v10", "2018":"106X_upgrade2018_realistic_v16_L1v1"}
 QCDMaxEvents = {"470to600":"325000", "600to800":"500000", "800to1000":"500000", "1000to1400":"1000000", "1400to1800":"1000000", "1800to2400":"1500000", "2400to3200":"2000000", "3200toInf":"2000000"}
 
 #==================================================================================
