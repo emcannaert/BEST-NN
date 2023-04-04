@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # nnBEST.py ///////////////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Sam Abbott, Reyer Band, Johan S. Bonilla, Brendan Regnary,  ////////////
+# Author(s): Samantha Abbott, Reyer Band, Johan S. Bonilla, Brendan Regnary  //////
 # This program trains BEST with flattened inputs //////////////////////////////////
 # This uses the newBEST NN architecture ///////////////////////////////////////////
 #==================================================================================
@@ -39,7 +39,8 @@ h = tf.constant('hello world')
 print(sess.run(h))
 
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
-
+years = ["2016_APV", "2016", "2017", "2018"]
+# years = ["2017"]
 setTypes = ["train", "validation", "test"]
 
 # maxEvents is the max number of events to pull from EACH of the 6 sample files
@@ -79,7 +80,7 @@ def trainNNBEST(args, strings,mask, dataDict):
     # Add BES variables to the network
     combined = besModel.output
 
-    # The network architecture consists of 3 hidden layers with 40 nodes in each layer using a rectified-linear activation function.
+    # The network architecture consists of 3 hidden layers with 140 nodes in each layer using a rectified-linear activation function.
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combined)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
@@ -132,17 +133,29 @@ if __name__ == "__main__":
                         help="Output Dir where models are saved [default: models/]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
                         default = "../formatConverter/h5samples/BESvarList_nopt.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_noBDisc.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_deepCSV.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_naive.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_advanced.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive_trim.txt",
                         help="Path to mask file [default: ../formatConverter/h5samples/BESvarList.txt]")
                         # default = "../formatConverter/masks/BESTMask.txt",
                         # help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
     parser.add_argument('-sf','--suffix', dest='suffix',
-                        default="",
+                        default="flattened",
                         help="Suffix, used to uniquely identify model [default: '']")
     parser.add_argument('-sc','--scale', dest='scale',
                         default="standardized", # default="newBEST_Basic"
                         help="String used by MakeStandardInputs.py to name scaled data files [default: standardized]")
     parser.add_argument('-mt','--modelType', dest='modelType',
                         default="nnBEST",
+                        # default="noBDisc",
+                        # default="deepCSV",
+                        # default="naive",
+                        # default="advanced",
+                        # default="deepCSVnaive",
+                        # default="deepCSVnaive_trim",
                         help="Name of directory within models/ and plots/ [default: nnBEST]")
     parser.add_argument('-y','--years', dest='years',
                         default="all")#,
@@ -173,6 +186,8 @@ if __name__ == "__main__":
         startTimeYear = tools.logTime() # Tracks how long this year takes
 
         # Generate appropriate helper strings, check dirs
+        # NOTE TO SELF: have dirStrings also copy a 
+        #               trimmed version of the scalarParams file into model dir
         strings = tools.dirStrings(args, year)
         # stringYearDict[year] = strings
 

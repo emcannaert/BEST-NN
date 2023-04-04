@@ -38,9 +38,12 @@ int FWMoments(std::vector<TLorentzVector> particles, double (&outputs)[5] );
 // get jet's constituents
 void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vector<pat::Jet>::const_iterator jet);
 
+// Match the AK8 subjets to the DeepJet subjets
+std::map<int, std::vector<int>> matchSubjets(std::vector<pat::Jet> ak8Jets, std::vector<pat::Jet> upSubJets);
+
 // store the jet variables
-bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, std::vector<pat::Jet>::const_iterator jet,
-                       std::vector<pat::Jet> upSubJets, std::vector<int> &matchedSubJetIndices);
+bool storeJetVariables(std::map<std::string, float> &besVars, std::vector<pat::Jet>::const_iterator jet,
+                       std::vector<pat::Jet> upSubJets, std::vector<int> thisSubjetMatch);
 
 // store the secondary vertex variables
 void storeSecVertexVariables(std::map<std::string, float> &besVars, std::map< std::string, std::vector<float> > &jetVecVars,
@@ -58,7 +61,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
                        std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                     //    std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
                        std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> restMasses,
-                       std::map<std::string, std::vector<float> > &jetVecVars, int jetColl );
+                       std::map<std::string, std::vector<float> > &jetVecVars );
 
 // make rest frame z axis the boost axis
 void pboost( TVector3 pbeam, TVector3 plab, TLorentzVector &pboo );

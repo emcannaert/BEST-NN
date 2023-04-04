@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # sampleSplitter.py /////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Johan S Bonilla, Brendan Regnery -------------------------------------
+# Author(s): Johan S Bonilla, Brendan Regnery, Samantha Abbott --------------------
 # This program splits h5f files into 3 smaller but equal orthogonal files       ///
 # The point is to create separate train/validation/test samples of equal size   ///
 # Inputs should be h5f files (can be flatted, or staright from formatConverter) ///
@@ -22,10 +22,11 @@ from sklearn.model_selection import train_test_split
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # sampleTypes = ["RSG"]
 listOfYears = ["2016_APV","2016","2017","2018"]
+# listOfYears = ["2017"]
 
 # Helper functions
 def splitFileSKL(inputPath, outDir, debug, userBatchSize):
-    print("Starting clock")
+    # print("Starting clock")
     startTime = time.time()
     
     setTypes = ["train", "validation", "test"]
@@ -33,8 +34,7 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
     # Open file, grab keys, and NEvents
     inputFile = h5py.File(inputPath,"r")
     dataKeys = list(inputFile.keys())
-    print(dataKeys)
-    print(inputFile[dataKeys[0]].shape)
+    print(dataKeys, inputFile[dataKeys[0]].shape)
     totalEvents = inputFile[dataKeys[0]].shape[0]
 
     # Create data frame and output files to handle copied information
@@ -52,16 +52,16 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
     while (counter < totalEvents):
         batchTime = time.time()
         batchSize = userBatchSize if (totalEvents > counter+userBatchSize) else (totalEvents-counter)
-        print("Batch size of ",batchSize,", at counter ",counter)
-        print("Starting key loop")
+        # print("Batch size of ",batchSize,", at counter ",counter)
+        # print("Starting key loop")
         for myKey in dataKeys:
-            print("MyKey",myKey)
+            # print("MyKey",myKey)
             keyTime = time.time()
             # dsetH5 = inputFile[myKey]
             dsetShape  = inputFile[myKey].shape
             dsetChunks = inputFile[myKey].chunks 
             dsetNP     = np.array(inputFile[myKey][counter:counter+batchSize])
-            print("NPdset creation time:", time.time()-keyTime)
+            # print("NPdset creation time:", time.time()-keyTime)
             ## Shuffle=True shuffles the incoming data set.
             ## Random state sets the seed. The values are meaningless, but the same value leads to same results
             ## The most important thing here is that each key is passed the same random state so the same events are split and kept
@@ -71,13 +71,13 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
 
             train, temp = train_test_split(dsetNP, train_size=0.8, shuffle=True, random_state=42) # Full dataset -> 80% train (train), 20% 'test' (temp) -> next line
             valid, test = train_test_split(temp, train_size=0.5, shuffle=True, random_state=24) # 20% 'test' -> 10% validation (valid), 10% test (test)
-            print("Outdset creation time:", time.time()-keyTime)
+            # print("Outdset creation time:", time.time()-keyTime)
             if counter == 0:
                 if myKey == "BES_vars": # max shape by # of vars
                     besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=train, maxshape=(None, dsetShape[1]), chunks = (dsetChunks[0], dsetChunks[1]), compression='lzf', shuffle=True)
                     besData["validation"][myKey] = h5fValidation.create_dataset(myKey, data=valid, maxshape=(None, dsetShape[1]), chunks = (dsetChunks[0], dsetChunks[1]), compression='lzf', shuffle=True)
                     besData["test"][myKey] = h5fTest.create_dataset(myKey, data=test, maxshape=(None, dsetShape[1]), chunks = (dsetChunks[0], dsetChunks[1]), compression='lzf', shuffle=True)
-                    print("DS store time:", time.time()-keyTime)
+                    # print("DS store time:", time.time()-keyTime)
                 # There are no PFCands in this submission
                 # else: # max shape by # of pfcands (or SV's) and # of vars
                 #     besData["train"][myKey] = h5fTrain.create_dataset(myKey, data=train, maxshape=(None, dsetShape[1], dsetShape[2]), chunks = (dsetChunks[0], dsetChunks[1], dsetChunks[2]), compression='lzf', shuffle=True)
@@ -92,12 +92,12 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize):
                 besData["validation"][myKey][-len(valid) :] = valid
                 besData["test"][myKey].resize(besData["test"][myKey].shape[0] + len(test), axis=0)
                 besData["test"][myKey][-len(test) :] = test 
-                print("DS store time:", time.time()-keyTime)
-            print("Key iteration time:", time.time()-keyTime)
+                # print("DS store time:", time.time()-keyTime)
+            # print("Key iteration time:", time.time()-keyTime)
             keyTime = time.time()
-        print("Batch time:", time.time()-batchTime)
+        # print("Batch time:", time.time()-batchTime)
         counter += batchSize
-    print("Splitting time:", time.time()-startTime)
+    # print("Splitting time:", time.time()-startTime)
 
 # Main function should take in arguments and call the functions you want
 if __name__ == "__main__":
@@ -107,11 +107,11 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--samples',
                         dest='samples',
                         help='<Required> Which (comma separated) samples to process. Examples: 1) --all; 2) WW,ZZ,BB',
-                        required=True)
+                        default='all')
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) --all; 2) 2016,2018',
-                        required=True)
+                        default='all')
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
                         default="h5samples/")
@@ -119,8 +119,8 @@ if __name__ == "__main__":
                         dest='outDir',
                         default='h5samples/')
     parser.add_argument('-bs', '--batchSize',
-                        type=int,
-                        required=True)
+                        dest='batchSize',
+                        default=600000)
     parser.add_argument('-d','--debug',
                         action='store_true')
     args = parser.parse_args()
@@ -138,6 +138,7 @@ if __name__ == "__main__":
         os.mkdir(args.outDir)
 
     for year in listOfYears:
+        print(year)
         for sampleType in sampleTypes:
             print("Processing", sampleType)
             inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"

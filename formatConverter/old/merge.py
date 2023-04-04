@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # merge.py /////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Sam Abbott -----------------------------------------------------------
+# Author(s): Samantha Abbott ------------------------------------------------------
 # This script merges the RSGluon h5 files into the main Z h5 files. ///////////////
 # The script confirms that the merge was successful.  /////////////////////////////
 # Only needed this script since we added the RSGluon data later. ////////////////// 

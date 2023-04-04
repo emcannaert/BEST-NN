@@ -1,5 +1,5 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# plotBESTInputs.py ////////////////////////////////////////////////////////////////////
+# plotBESTInputs.py ///////////////////////////////////////////////////////////////
 #==================================================================================
 # This program trains BEST: The Boosted Event Shape Tagger ////////////////////////
 #==================================================================================
@@ -72,9 +72,10 @@ samples     = ["W","Z","H","t","b","QCD"]
 # h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_OR/"
 h5Dir = "../formatConverter/h5samples/"
 
-# years = ["2016_APV","2016","2017","2018"]
+years = ["2016_APV","2016","2017","2018"]
+# years = ["2016_APV","2016","2018"]
 # years = ["2016_APV","2016"]
-years = ["2017"]
+# years = ["2017"]
 
 
 # setTypes = ["validation","test","train"]
@@ -467,6 +468,8 @@ for year in years:
             elif "jet_px" in var: compressDir = "px"
             elif "jet_py" in var: compressDir = "py"
             elif "jet_pz" in var: compressDir = "pz"
+            elif "deepAK8" in var: compressDir = "scores"
+            elif "ParticleNet" in var: compressDir = "scores"
             else: compressDir = "invariant"
 
             saveDir = os.path.join(plotDir, compressDir)

@@ -110,16 +110,77 @@ void getJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vecto
 }
 
 //========================================================================================
+// Match Subjets -------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+// This matches all of the AK8 subjets to the updated DeepJet subjets exactly once -------
+//----------------------------------------------------------------------------------------
+std::map<int, std::vector<int>> matchSubjets( 
+                                std::vector<pat::Jet> ak8Jets, 
+                                std::vector<pat::Jet> upSubJets){
+
+    std::map<int, std::vector<int>> subjetMatchNaive;
+    std::vector<int> matchedSubJetIndices;
+
+    // Iterate over the AK8 Jets
+    for (unsigned int iak8jet=0; iak8jet < ak8Jets.size(); iak8jet++){
+
+        // Make Lorentz Vector of this AK8 jet for easier matching
+        pat::Jet jet = ak8Jets.at(iak8jet);
+        TLorentzVector jetLV(jet.px(), jet.py(), jet.pz(), jet.energy() );
+        auto subjets = jet.subjets("SoftDropPuppi");
+
+        // Skip this AK8 jet if it doesn't have 2 subjets
+        if (subjets.size() < 2) continue;
+
+        // Iterate over the subjets for this AK8 jet
+        for (unsigned int iSubjet=0; iSubjet < subjets.size(); iSubjet++){
+
+            // Make Lorentz Vector of this AK8 subjet for easier matching 
+            TLorentzVector subJetLV(subjets.at(iSubjet)->px(), subjets.at(iSubjet)->py(), subjets.at(iSubjet)->pz(), subjets.at(iSubjet)->energy() );
+
+            int iSubJetMatch;
+            double minDeltaR = 100.0;
+
+            // Iterate over updated DeepJet subjets
+            for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
+                // Skip this subJet if we have matched it already
+                if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet)) continue;
+
+                // make Lorentz Vector of this updated DeepJet subjet for easier matching
+                TLorentzVector upSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
+
+                // Only examine the updated subjets within R<0.8 of AK8 Jet
+                // if (jetLV.DeltaR(upSubJetLV) > 0.8) continue;
+
+                // Find minimum delR, match subjets
+                double deltaR = subJetLV.DeltaR(upSubJetLV);
+
+                if (deltaR < minDeltaR) {
+                    minDeltaR  = deltaR;
+                    iSubJetMatch = iupSubjet;
+                } 
+            }
+
+            // Store subjet matched index, don't iterate over it again
+            subjetMatchNaive[iak8jet].push_back(iSubJetMatch);
+            matchedSubJetIndices.push_back(iSubJetMatch);
+        }
+    }
+
+    return subjetMatchNaive;
+}
+
+//========================================================================================
 // Store Jet Variables -------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 // This takes various jet quantaties and stores them on the map used to fill -------------
 // the jet tree --------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 // bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, 
-bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl, 
+bool storeJetVariables(std::map<std::string, float> &besVars, 
                        std::vector<pat::Jet>::const_iterator jet, 
                        std::vector<pat::Jet> upSubJets,
-                       std::vector<int> &matchedSubJetIndices)
+                       std::vector<int> thisSubjetMatch)
                        {
     // pasing a variable with & is pass-by-reference which keeps changes in this func
 
@@ -255,161 +316,58 @@ bool storeJetVariables(std::map<std::string, float> &besVars, int jetColl,
         jetCharge += pow(subJetPt,0.6)*jet->daughter(subJetIndex)->charge();
         jetChargeNorm += pow(subJetPt,0.6);
     }
-    if (jetChargeNorm > 0) {
-        jetCharge = jetCharge/jetChargeNorm;
-    } else {
-        jetCharge = -99;
-    }
+    if (jetChargeNorm > 0) jetCharge = jetCharge/jetChargeNorm;
+    else jetCharge = -99;
+    
     besVars["jetAK8_charge"] = jetCharge;
 
+    // if (jetChargeNorm > 0) {
+    //     jetCharge = jetCharge/jetChargeNorm;
+    // } else {
+    //     jetCharge = -99;
+    // }
 
     // Store Subjettiness info
-    if(jetColl == 0){ // CHS jets
-        besVars["jetAK8_Tau4"]  = jet->userFloat("NjettinessAK8CHS:tau4");  //important for H->WW jets
-        besVars["jetAK8_Tau3"]  = jet->userFloat("NjettinessAK8CHS:tau3");
-        besVars["jetAK8_Tau2"]  = jet->userFloat("NjettinessAK8CHS:tau2");
-        besVars["jetAK8_Tau1"]  = jet->userFloat("NjettinessAK8CHS:tau1");
-        besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8CHS:tau2") / jet->userFloat("NjettinessAK8CHS:tau1");
-        besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8CHS:tau3") / jet->userFloat("NjettinessAK8CHS:tau2");
-        besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass");
-    }
-    if(jetColl == 1){ // PUPPI jets
-        besVars["jetAK8_Tau4"]  = jet->userFloat("NjettinessAK8Puppi:tau4");  //important for H->WW jets
-        besVars["jetAK8_Tau3"]  = jet->userFloat("NjettinessAK8Puppi:tau3");
-        besVars["jetAK8_Tau2"]  = jet->userFloat("NjettinessAK8Puppi:tau2");
-        besVars["jetAK8_Tau1"]  = jet->userFloat("NjettinessAK8Puppi:tau1");
-        besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8Puppi:tau2") / jet->userFloat("NjettinessAK8Puppi:tau1");
-        besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8Puppi:tau3") / jet->userFloat("NjettinessAK8Puppi:tau2");
-        besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
-        auto subjets = jet->subjets("SoftDropPuppi");
+    // PUPPI jets
+    besVars["jetAK8_Tau4"]  = jet->userFloat("NjettinessAK8Puppi:tau4");  //important for H->WW jets
+    besVars["jetAK8_Tau3"]  = jet->userFloat("NjettinessAK8Puppi:tau3");
+    besVars["jetAK8_Tau2"]  = jet->userFloat("NjettinessAK8Puppi:tau2");
+    besVars["jetAK8_Tau1"]  = jet->userFloat("NjettinessAK8Puppi:tau1");
+    besVars["jetAK8_Tau21"] = jet->userFloat("NjettinessAK8Puppi:tau2") / jet->userFloat("NjettinessAK8Puppi:tau1");
+    besVars["jetAK8_Tau32"] = jet->userFloat("NjettinessAK8Puppi:tau3") / jet->userFloat("NjettinessAK8Puppi:tau2");
+    besVars["jetAK8_SoftDropMass"] = jet->userFloat("ak8PFJetsPuppiSoftDropMass");
+    auto subjets = jet->subjets("SoftDropPuppi");
 
-        // Check if this AK8 jet is valid, skip if not 
-        if (subjets.size() < 2) return false; // Require at least 2 subjets
-        if (!subjets[0]) return false; // Check that the leading subjet is there
-        if (!subjets[1]) return false; // Check that the subleading subjet is there
+    // Check if this AK8 jet is valid, skip if not 
+    if (subjets.size() < 2) return false; // Require at least 2 subjets
+    if (!subjets[0]) return false; // Check that the leading subjet is there
+    if (!subjets[1]) return false; // Check that the subleading subjet is there
 
-        // Fill leading subjet bDisc variables, and get maximum bDisc values using Deep Flavour and DeepCSV separately
-        // The testing code is still in here, just left commented out and can be removed
-        double maxbDisc_deepJet = 0;
-        double maxbProb_deepJet = 0;
-        double maxbbProb_deepJet = 0;
-        
-        double maxbDisc_deepCSV = 0;
-        double maxbProb_deepCSV = 0;
-        double maxbbProb_deepCSV = 0;
-        // double imaxbDisc;
-        double ileadSubJet;
-        double isubleadSubJet;
+    // Fill leading subjet bDisc variables, and get maximum bDisc values using Deep Flavour and DeepCSV separately
 
-        int nMultipleMatches = 0;
+    // Fill Naive vars
+    // leading updated subjet deep flavour b discriminants
+    besVars["bDisc1"]        = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
+    besVars["bDisc1_probb"]  = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probb");
+    besVars["bDisc1_probbb"] = upSubJets.at(thisSubjetMatch.at(0)).bDiscriminator("pfDeepFlavourJetTags:probbb");
 
-        // make Lorentz Vector for easier deltaR matching
-        TLorentzVector leadSubJetLV(subjets.at(0)->px(), subjets.at(0)->py(), subjets.at(0)->pz(), subjets.at(0)->energy() );
-        TLorentzVector subleadSubJetLV(subjets.at(1)->px(), subjets.at(1)->py(), subjets.at(1)->pz(), subjets.at(1)->energy() );
-        TLorentzVector jetLV(jet->px(), jet->py(), jet->pz(), jet->energy() );
+    // subleading updated subjet deep flavour b discriminants
+    besVars["bDisc2"]        = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
+    besVars["bDisc2_probb"]  = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probb");
+    besVars["bDisc2_probbb"] = upSubJets.at(thisSubjetMatch.at(1)).bDiscriminator("pfDeepFlavourJetTags:probbb");
 
-        double leadMinDelRPt = 100.0;
-        double subleadMinDelRPt = 100.0;
+    // max values are depreciated
+    // // maximum subjet deep flavour b discriminants
+    // // note: in the past, these besVars referred to the bDisc scores associated with the AK8 Jet object.
+    // //          now, these three vars refer to the max bDisc values in the set of subjets within the AK8 Jet
+    // besVars["bDisc_deepJet"]        = maxbDisc_deepJet;
+    // besVars["bDisc_probb_deepJet"]  = maxbProb_deepJet;
+    // besVars["bDisc_probbb_deepJet"] = maxbbProb_deepJet;
 
-        for (unsigned int iupSubjet=0; iupSubjet < upSubJets.size(); iupSubjet++){
-            // Skip this subJet if we have matched it already
-            // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
+    // These vars no longer makes sense to include
+    // besVars["bDiscSubJet_Max"] = maxbDisc;
+    // besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
 
-            // make Lorentz Vector for easier deltaR matching
-            TLorentzVector iupSubJetLV(upSubJets.at(iupSubjet).px(), upSubJets.at(iupSubjet).py(), upSubJets.at(iupSubjet).pz(), upSubJets.at(iupSubjet).energy() );
-
-            // Examine the updated subjets within R<0.8 of AK8 Jet, match to AK8 subjets
-            if(jetLV.DeltaR(iupSubJetLV) < 0.8){
-                double bprobVal_deepJet = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probb");
-                double bbprobVal_deepJet = upSubJets.at(iupSubjet).bDiscriminator("pfDeepFlavourJetTags:probbb");
-                double bDiscVal_deepJet = bprobVal_deepJet + bbprobVal_deepJet;
-
-                double leadDelRPt = ( leadSubJetLV.DeltaR(iupSubJetLV) )*( abs(leadSubJetLV.Pt() - iupSubJetLV.Pt()) );
-                double subleadDelRPt = ( subleadSubJetLV.DeltaR(iupSubJetLV) )*( abs(subleadSubJetLV.Pt() - iupSubJetLV.Pt()) );
-
-                // Find minimum del R value
-                if (leadDelRPt < leadMinDelRPt) {
-                    leadMinDelRPt  = leadDelRPt;
-                    ileadSubJet = iupSubjet;
-                }
-                
-                if (subleadDelRPt < subleadMinDelRPt) {
-                    subleadMinDelRPt = subleadDelRPt;
-                    isubleadSubJet = iupSubjet;
-                }
-
-                // Find max bDisc value and index
-                if (bDiscVal_deepJet > maxbDisc_deepJet)   maxbDisc_deepJet  = bDiscVal_deepJet;
-                if (bprobVal_deepJet > maxbProb_deepJet)   maxbProb_deepJet  = bprobVal_deepJet;
-                if (bbprobVal_deepJet > maxbbProb_deepJet) maxbbProb_deepJet = bbprobVal_deepJet;
-            }
-        }
-
-        for (unsigned int iSubjet=0; iSubjet < subjets.size(); iSubjet++){
-            // Skip this subJet if we have matched it already
-            // if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), iupSubjet) ) return false;
-
-                double bprobVal_deepCSV = subjets.at(iSubjet)->bDiscriminator("pfDeepCSVJetTags:probb");
-                double bbprobVal_deepCSV = subjets.at(iSubjet)->bDiscriminator("pfDeepCSVJetTags:probbb");
-                double bDiscVal_deepCSV = bprobVal_deepCSV + bbprobVal_deepCSV;
-
-                // Find max bDisc value and index
-                if (bDiscVal_deepCSV > maxbDisc_deepCSV)   maxbDisc_deepCSV  = bDiscVal_deepCSV;
-                if (bprobVal_deepCSV > maxbProb_deepCSV)   maxbProb_deepCSV  = bprobVal_deepCSV;
-                if (bbprobVal_deepCSV > maxbbProb_deepCSV) maxbbProb_deepCSV = bbprobVal_deepCSV;
-        }
-
-        // This checks if we are matching any subjets more than once (Bad!)
-        // Good to have for when we run on 2017 soon, but is NOT something to give to the NN
-        // Will remove if 2017 runs with no problems
-        if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), ileadSubJet)) ++nMultipleMatches;
-        matchedSubJetIndices.push_back(ileadSubJet);
-        if (std::count(matchedSubJetIndices.begin(), matchedSubJetIndices.end(), isubleadSubJet)) ++nMultipleMatches;
-        matchedSubJetIndices.push_back(isubleadSubJet);
-        besVars["nMultipleMatches"] = nMultipleMatches;
-
-        // leading updated subjet deep flavour b discriminants
-        besVars["bDisc1_deepJet"]        = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
-        besVars["bDisc1_probb_deepJet"]  = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb");
-        besVars["bDisc1_probbb_deepJet"] = upSubJets.at(ileadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
-        // subleading updated subjet deep flavour b discriminants
-        besVars["bDisc2_deepJet"]        = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb") + upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
-        besVars["bDisc2_probb_deepJet"]  = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probb");
-        besVars["bDisc2_probbb_deepJet"] = upSubJets.at(isubleadSubJet).bDiscriminator("pfDeepFlavourJetTags:probbb");
-
-        // maximum subjet deep flavour b discriminants
-        // note: in the past, these besVars referred to the bDisc scores associated with the AK8 Jet object.
-        //          now, these three vars refer to the max bDisc values in the set of subjets within the AK8 Jet
-        besVars["bDisc_deepJet"]        = maxbDisc_deepJet;
-        besVars["bDisc_probb_deepJet"]  = maxbProb_deepJet;
-        besVars["bDisc_probbb_deepJet"] = maxbbProb_deepJet;
-
-        // This var is replaced by bDisc
-        // besVars["bDiscSubJet_Max"] = maxbDisc;
-
-        // This var no longer makes sense to include
-        // besVars["bDiscSubJet_Max_index"] = imaxbDisc; // indexes from 0
-
-        // Same thing, but now for DeepCSV
-        // leading updated subjet deep flavour b discriminants
-        besVars["bDisc1_deepCSV"]        = subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probb") + subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probbb");
-        besVars["bDisc1_probb_deepCSV"]  = subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probb");
-        besVars["bDisc1_probbb_deepCSV"] = subjets.at(0).bDiscriminator("pfDeepCSVJetTags:probbb");
-
-        // subleading updated subjet deep flavour b discriminants
-        besVars["bDisc2_deepCSV"]        = subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probb") + subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probbb");
-        besVars["bDisc2_probb_deepCSV"]  = subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probb");
-        besVars["bDisc2_probbb_deepCSV"] = subjets.at(1).bDiscriminator("pfDeepCSVJetTags:probbb");
-
-        // maximum subjet deep flavour b discriminants
-        // note: in the past, these besVars referred to the bDisc scores associated with the AK8 Jet object.
-        //          now, these three vars refer to the max bDisc values in the set of subjets within the AK8 Jet
-        besVars["bDisc_deepCSV"]        = maxbDisc_deepCSV;
-        besVars["bDisc_probb_deepCSV"]  = maxbProb_deepCSV;
-        besVars["bDisc_probbb_deepCSV"] = maxbbProb_deepCSV;
-
-    }
     return true;
 }
 
@@ -618,7 +576,7 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
                        std::map<std::string, std::vector<TLorentzVector> > &boostedDaughters,
                     //    std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<int> restMasses,
                        std::map<std::string, std::vector<fastjet::PseudoJet> > &restJets, std::vector<std::string> restMasses,
-                       std::map<std::string, std::vector<float> > &jetVecVars, int jetColl ){
+                       std::map<std::string, std::vector<float> > &jetVecVars ){
     /*
     // loop over lab frame candidates
     for(unsigned int i = 0; i < daughtersOfJet.size(); i++){
@@ -686,16 +644,14 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
         jetVecVars["LabFrame_PF_candidate_logEnergyRatio"].push_back(logEnergy - TMath::Log(jet->energy()) ); // Logarithm of the candidate's energy releative to the jet energy
 
         // PUPPI weights for puppi jets
-        if (jetColl == 1){
-            pat::PackedCandidate *iparticle = (pat::PackedCandidate *) daughtersOfJet[i];
-            if(!iparticle){
-                std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate in lab frame"<<std::endl;
-                std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
-                exit(1);
-            }
-            // jetVecVars["PUPPI_Weights"].push_back( iparticle->puppiWeight() );
-            jetVecVars["AllFrame_PF_candidate_PUPPIweights"].push_back( iparticle->puppiWeight() );
+        pat::PackedCandidate *iparticle = (pat::PackedCandidate *) daughtersOfJet[i];
+        if(!iparticle){
+            std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate in lab frame"<<std::endl;
+            std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
+            exit(1);
         }
+        // jetVecVars["PUPPI_Weights"].push_back( iparticle->puppiWeight() );
+        jetVecVars["AllFrame_PF_candidate_PUPPIweights"].push_back( iparticle->puppiWeight() );
     }
 
     */
@@ -736,15 +692,13 @@ void storeJetDaughters(std::vector<reco::Candidate * > &daughtersOfJet, std::vec
 
 
             // // PUPPI weights for puppi jets
-            // if (jetColl == 1){
-            //     pat::PackedCandidate *iparticle = (pat::PackedCandidate *) icand;
-            //     if(!iparticle){
-            //         std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate in frame: " + frame <<std::endl;
-            //         std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
-            //         exit(1);
-            //     }
-            //     jetVecVars[frame+"Frame_PF_candidate_PUPPI_Weights"].push_back( iparticle->puppiWeight() );
+            // pat::PackedCandidate *iparticle = (pat::PackedCandidate *) icand;
+            // if(!iparticle){
+            //     std::cout<<"ERROR: The PF candidate did not get properly converted to PackedCandidate in frame: " + frame <<std::endl;
+            //     std::cout<<" 'Transfiguration is some of the most dangerous and complex magic!'"<<std::endl;
+            //     exit(1);
             // }
+            // jetVecVars[frame+"Frame_PF_candidate_PUPPI_Weights"].push_back( iparticle->puppiWeight() );
         }
         */
         // loop over rest frame jets

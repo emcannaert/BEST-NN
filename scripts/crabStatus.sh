@@ -2,7 +2,7 @@
 #=========================================================================================
 # crabStatus.sh --------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Sam Abbott -------- ---------------------------------------------------------
+# Author(s): Samantha Abbott -------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/scripts directory, but should be executed through the symbolic link in the BEST/preprocess/crab directory.
@@ -12,7 +12,10 @@ YEL='\033[93m' # Yellow
 NC='\033[0m' # No Color
 
 logFile="Logs/statusLog.txt"
+echo >> $logFile
 jobFile="Logs/jobsToCheck.txt"
+echo >> $jobFile
+
 declare -a jobsToCheck=()
 declare -a unfinishedJobs=()
 echo -e "\n${YEL}Checking jobs...${NC}"
@@ -21,7 +24,10 @@ pids=
 allJobs=0
 finishedJobs=0
 
-# file=$jobFile
+file=$jobFile
+
+########## this block of code should be uncommented after the first run of crabStatus
+########## double-commented out things can remain commented
 # # OLDIFS=$IFS # Preserve the old IFS to reinstate it later
 # # IFS='\n'
 # while read -r job; do
@@ -29,7 +35,8 @@ finishedJobs=0
 #     jobsToCheck+=( "$job" )
 # done < $jobFile
 # # IFS=$OLDIFS # Resets $IFS so the rest of the code works
-
+#####################
+########### Below, switch the for loop after the first run of crabStatus
 
 # Check job status of crab jobs:
 for job in */CrabBEST/*/ ; do

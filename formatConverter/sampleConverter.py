@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # sampleConverter.py //////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Sam Abbott, Johan S Bonilla, Brendan Regnery -------------------------
+# Author(s): Samantha Abbott, Johan S Bonilla, Brendan Regnery --------------------
 # This program converts root ntuples to the python format necessary for training //
 # Inputs should be root files from preprocess
 # Output should be three sets of hd5f files: trainingSet, validationSet, testignSet
@@ -35,6 +35,7 @@ sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
 years = ["2016_APV","2016","2017","2018"]
+# years = ["2017"]
 treeName = "run/jetTree"
 
 # Each of these key lists represent a different type of h5py dataset:
@@ -79,7 +80,7 @@ def convert(eosDir, outDir, sampleType, year, debug):
         numIter = 0
         besDS = None
         # pfsvDS  = {}
-        batchSize = 1000
+        batchSize = 100000
         for arrays in uproot.iterate(fileList, treeName, entrysteps = batchSize, namedecode='utf-8'):
             
             # Load keys and labels
@@ -266,11 +267,11 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--samples',
                         dest='samples',
                         help='<Required> Which (comma separated) samples to process. Examples: 1) all; 2) W,Z,b',
-                        required=True)
+                        default='all')
     parser.add_argument('-y', '--years',
                         dest='years',
                         help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2017',
-                        required=True)
+                        default='all')
     parser.add_argument('-sa', '--stopAt',
                         type=int,
                         default=-1)

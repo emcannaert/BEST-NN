@@ -2,7 +2,7 @@
 #=========================================================================================
 # listSamples.sh -------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------
-# Author(s): Johan S Bonilla, Brendan Regnery, Sam Abbott --------------------------------
+# Author(s): Johan S Bonilla, Brendan Regnery, Samantha Abbott ---------------------------
 #-----------------------------------------------------------------------------------------
 
 # This script lives in the BEST/formatConverter/eosSamples directory.
@@ -13,8 +13,8 @@
 # get rid of the RSG code
 
 # List files from eos with BEST in name (typically /eos/path/BESTInputs_*.root)
-#eosDirPath="/store/user/maabbott/"
-eosDirPath="/store/user/sostrom/"
+eosDirPath="/store/user/maabbott/"
+# eosDirPath="/store/user/sostrom/"
 echo "Listing files in $eosDirPath"
 if [ $# -gt 0 ]; then
     echo "Your command line contains $# arguments."

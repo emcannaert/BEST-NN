@@ -1,5 +1,5 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# best_roc_compare.py ////////////////////////////////////////////////////////
+# best_roc_compare.py /////////////////////////////////////////////////////////////
 #==================================================================================
 # This program evaluates BEST: HH Event Shape Topology Indentification Algorithm 
 #==================================================================================
@@ -35,11 +35,11 @@ import tools.functions as tools
 
 
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
-sampleFileTypesScaled = ["WW","ZZ","HH","TT","BB","QCD"]
 sampleFileTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 samples = ["W", "Z", "Higgs", "Top", "Bottom", "QCD"]
 # h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_ULv1/"
-h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_OR/"
+# h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_OR/"
+h5Dir = "../formatConverter/h5samples/"
 plotDir  = "plots/BEScompare/"
 maskPath = "../formatConverter/h5samples/BESvarList.txt"
 years = ["2016_APV", "2016", "2017", "2018"]
@@ -49,16 +49,22 @@ def plotROCyearcompare(setType="flattened"):
     # _, varDict = tools.loadMask(maskPath)    
     # r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
 
-    modelDir  = "models/nnBEST/"
 
     rocDict = dict()
 
     for year in years:
-        thisModel = setType+"_"+year
+        modelDir  = os.path.join("models/nnBEST/",year)
+
+        maskPath = os.path.join(modelDir,"BESvarList_nopt.txt")
+        mask, _ = tools.loadMask(maskPath)
+
+        # thisModel = setType+"_"+year
+        thisModel = year
         # Load BES model and predict
-        modelPath = os.path.join(modelDir,thisModel,"BEST_model_" + thisModel + ".h5")
+        # modelPath = os.path.join(modelDir,thisModel,"BEST_model_" + thisModel + ".h5")
         # modelPath = modelDir + "BEST_model_" + modelKey + ".h5"
         # modelPath = myModelDir + "BEST_model_" + modelKey + "_finalRuntime.h5"
+        modelPath = os.path.join(modelDir,"BEST_model_" + year + ".h5")
         print(modelPath)
         model_BESonly = load_model(modelPath)
         # scalePath = "ScalerParameters_" + setType + "/BESTScalerParameters_" + year + ".txt"    
@@ -68,7 +74,8 @@ def plotROCyearcompare(setType="flattened"):
         h5Path = "Sample_"+year+"_BESTinputs_test_" + setType + "_standardized.h5"
 
         print("Loading data...")
-        eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypesScaled]
+        # eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypes]
+        eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:,mask] for mySample in sampleFileTypes]
 
         print("My " + thisModel + " events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
 
@@ -89,9 +96,11 @@ def plotROCyearcompare(setType="flattened"):
         print("My " + thisModel + " concatenated truth shape: ", truthArrays.shape)
 
         # eventArrays = tools.manualScale(eventArrays, scalePath, r_varDict)
-
+        
+        print("Predicting...")
         BESpredict = model_BESonly.predict(eventArrays)
 
+        print("Calculating ROC...")
         # Compute ROC curve and area for each class
         n_classes = len(samples) 
         fprBES = dict()
@@ -158,7 +167,7 @@ def plotROCyearcompare(setType="flattened"):
             plt.plot(fpr, tpr, 
                     # label= 'BES only ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
                     # label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
-                    label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                    label= "BEST " + modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
                      linewidth=2)
         # range=(0.00001, 1.),
         plt.plot([0, 1], [0, 1], 'k--', lw=2)
@@ -198,7 +207,7 @@ def plotROCpTcompare(year):
     # Load in data
     print("Loading data...")
     h5Path = "Sample_"+year+"_BESTinputs_test_flattened_standardized.h5"
-    eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypesScaled]
+    eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypes]
 
     print("My test events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
 
@@ -489,88 +498,169 @@ def plotROCflatcompare(year):
 
     print("Check out completed plots at:\n" + saveDir)
 
-def plotROCCompare(h5Dir, plotDir, samples):
+def getScores():
+    print("\nGetting tagger scores...")
+    #==================================================================================
+    # Load Scores From Other Taggers //////////////////////////////////////////////////
+    #==================================================================================
+    
+    year = "2017"
+    h5Path = "Sample_"+year+"_BESTinputs_test_flattened_standardized.h5"
+
+    maskPath = h5Dir + "BESvarList_scores.txt"
+    mask, _ = tools.loadMask(maskPath)    
+
+    print("Loading data...")
+    print(h5Path)
+    eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:,mask] for mySample in sampleFileTypes]
+
+    print("My test events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
+
+    print("Concatenating...")
+    eventArrays = np.concatenate(eventArrays)
+
+    print("My test concatenated event shape: ", eventArrays.shape)
+
+    # ParticleNet: First 17 vars [0:17]
+    particleNetScores = eventArrays[:,0:17]
+
+    # DeepAK8MD: Next 15 vars [17:32] 
+    deepAK8MDScores = eventArrays[:,17:32]
+
+    # DeepAK8: Final 15 vars [32:]
+    deepAK8Scores = eventArrays[:,32:]
+
+    del eventArrays
+
+    print("ParticleNet shape: ", particleNetScores.shape)
+    print("deepAK8MD shape: ", deepAK8MDScores.shape)
+    print("deepAK8 shape: ", deepAK8Scores.shape)
+
+    # Set up map for which score corresponds to which category
+    # W=0, Z=1, H=2, T=3, B=4, QCD=5
+    scoreDict = dict()
+    scoreDict["ParticleNet"] = {0:2, 1:2, 2:2, 3:5, 4:5, 5:5, 6:5, 7:5, 8:3, 9:3, 10:3, 11:3, 12:0, 13:0, 14:1, 15:1, 16:1}
+    scoreDict["deepAK8MD"]   = {0:2, 1:2, 2:2, 3:5, 4:5, 5:5, 6:5, 7:5, 8:3, 9:3, 10:0, 11:0, 12:1, 13:1, 14:1}
+    scoreDict["deepAK8"]     = {0:2, 1:2, 2:2, 3:5, 4:5, 5:5, 6:5, 7:5, 8:3, 9:3, 10:0, 11:0, 12:1, 13:1, 14:1}
+
+    # Get predictions, convert to usable form
+    particleNetPredict = np.argmax(particleNetScores, axis=1)
+    particleNetPredict = [scoreDict["ParticleNet"][score] for score in particleNetPredict]
+    particleNetPredict = np.eye(6)[particleNetPredict]
+
+    deepAK8MDPredict = np.argmax(deepAK8MDScores, axis=1)
+    deepAK8MDPredict = [scoreDict["deepAK8MD"][score] for score in deepAK8MDPredict]
+    deepAK8MDPredict = np.eye(6)[deepAK8MDPredict]
+
+    deepAK8Predict = np.argmax(deepAK8Scores, axis=1)
+    deepAK8Predict = [scoreDict["deepAK8"][score] for score in deepAK8Predict]
+    deepAK8Predict = np.eye(6)[deepAK8Predict]
+
+    print("ParticleNet predict shape: ", particleNetPredict.shape)
+    print("deepAK8MD predict shape: ", deepAK8MDPredict.shape)
+    print("deepAK8 predict shape: ", deepAK8Predict.shape)
+
+    # These now match the form of BESPredict
+    # Can use to plot ROC curves now
+    return {"particleNet":particleNetPredict, "deepAK8MD":deepAK8MDPredict, "deepAK8":deepAK8Predict}
+
+
+def plotROCCompare():
 
     #==================================================================================
     # Load Test Data //////////////////////////////////////////////////////////////////
     #==================================================================================
     
     # BES variables network for comparison
-    modelDir  = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/models/"
+    # modelDir  = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/models/"
+    modelDir  = "models/"
     modelInfo = {
-        # "300Basic_300_Z":["longLearn","Basic","300_Z"], "300Qmpxy_300_Z":["longLearn","Qmpxy","300_Z"], "300Qall_300_Z":["longLearn","Qall","300_Z"], 
-        # "300Basic_300":["longLearn","Basic","300"], "300Basic_300_Z":["longLearn","Basic","300_Z"], "300Basic_300_B":["longLearn","Basic","300_B"], "300Basic_300_ZB":["longLearn","Basic","300_ZB"],
-        # "300Basic_300_Z":["longLearn","Basic"], "300Qmpxy_300_Z":["longLearn","Qmpxy"], "300Qall_300_Z":["longLearn","Qall"], 
-        # "300Basic_300":["longLearn","Basic"], "300Basic_300_Z":["longLearn","Basic"], "300Basic_300_B":["longLearn","Basic"], "300Basic_300_ZB":["longLearn","Basic"], 
-       
-       
-        # "longBasic":["maskFix","Basic",""], 
-        # "longBasic_Z":["maskFix","Basic","_Z"], "longBasic_B":["maskFix","Basic","_B"], "longBasic_ZB":["maskFix","Basic","_ZB"], 
-        # "longBasic_ak8":["maskFix","Basic","_ak8"], "longBasic_ak8Z":["maskFix","Basic","_ak8Z"],
+        "noBDisc":["noBDisc","standardized","flattened_2017", "BEST w/ no bDisc"],
+        "deepCSV":["deepCSV","standardized","flattened_2017", "BEST w/ deepCSV"],
+        "naive":["naive","standardized","flattened_2017", "BEST w/ deepJet"],
+        # "advanced":["advanced","standardized","flattened_2017", "advanced"],
+        "deepCSVnaive":["deepCSVnaive","standardized","flattened_2017", "BEST w/ deepJet & deepCSV"],
+        
+        # "2017":["nnBEST","standardized","2017", "BEST"],
 
-        # "140Basic300WHT400":["recheck_long","Basic","300WHT400"],
-        # "140Basic300Wak8HT400":["recheck_long","Basic","300Wak8HT400"],
-        # "140Basic300Wak8SDHT400":["recheck_long","Basic","300Wak8SDHT400"],
-
-
-        "140Basic300WHT400":["recheck_long_2","Basic","300WHT400", "WHT300400"],
-        "140Basic300Wak8HiggsTop400":["recheck_long_2","Basic","300Wak8HiggsTop400", "WHT300400ak8"],
-        "140Basic300Wak8SDHT400":["recheck_long_2","Basic","300Wak8SDHT400", "WHT300400ak8SD"],
-
-        "140Basic300Wbothak8HT400":["recheck_long","Basic","300Wbothak8HT400", "WHT300400bothak8"],
+        # "particleNetScores":["particleNet","","", "ParticleNet"],
+        # "deepAK8MDScores":["deepAK8MD","","", "DeepAK8 Mass Decorrelated"],
+        # "deepAK8Scores":["deepAK8","","", "DeepAK8"],
     }
 
     modelKeys = list(modelInfo.keys())
     modelKeys.sort()
+
+    # Grab scores from other taggers if comparing
+    if "Scores" in '\t'.join(modelKeys): scoreDict = getScores()
+
     rocDict = dict()
-    scale = "newBEST_Basic"
-    dataDict = tools.loadH5Data(h5Dir, [True], sampleTypes, ["test"], scale) 
+    year = "2017"
+    h5Path = "Sample_"+year+"_BESTinputs_test_flattened_standardized.h5"
+
+    print("Loading data...")
+    print(h5Path)
+    eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[()] for mySample in sampleFileTypes]
+
+    print("My test events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
+
+    # Create Truth arrays; shape: N_events x 6
+    truthArrays = [np.zeros( (len(eventArrays[i]), len(sampleTypes)) ) for i in range(len(eventArrays))] 
+
+    # Arrays are filled with zeros. Now set 1's to record Truth particle info
+    for i in range(len(sampleTypes)):
+        truthArrays[i][:,i] = 1.
+
+    print("My test truth shape: ", [ truthArrays[i].shape for i in range(len(truthArrays)) ] )
+    
+    print("Concatenating...")
+    eventArrays = np.concatenate(eventArrays)
+    truthArrays  = np.concatenate(truthArrays)
+
+    print("My test concatenated event shape: ", eventArrays.shape)
+    print("My test concatenated truth shape: ", truthArrays.shape)
 
 
     for modelKey in modelKeys:
         print('\n'+modelKey)
-        # modelType = "newBEST_" + modelInfo[modelKey][0] + "/"
-        # scale     = "newBEST_" + modelInfo[modelKey][1]
         
-        modelType = modelInfo[modelKey][0] + "/"
-        scale     = modelInfo[modelKey][1]
-        suffix    = modelInfo[modelKey][2]
-        myModelDir = modelDir + modelType + modelKey + "/"
+        if "Scores" in modelKey: # Get Scores from other taggers
+            tagger = modelInfo[modelKey][0]
+            BESpredict = scoreDict[tagger]
+        else: # Get predictions from a trained BEST model
+            modelType = modelInfo[modelKey][0] + "/"
+            scale     = modelInfo[modelKey][1]
+            suffix    = modelInfo[modelKey][2]
+            # myModelDir = modelDir + modelType + modelKey + "/"
+            myModelDir = modelDir + modelType + suffix + "/"
 
-        # Load h5 data, set up truth arrays
-        # mask, _ = tools.loadMask(myModelDir + "newBESTMask_" + suffix + ".txt")
-        # mask, _ = tools.loadMask(myModelDir + "fixBESTMask" + suffix + ".txt")
-        mask, _ = tools.loadMask(myModelDir + suffix + ".txt")
-        # dataDict = tools.loadH5Data(h5Dir, mask, sampleTypes, ["test"], scale) 
-        
-        # Load BES model and predict
-        modelPath = myModelDir + "BEST_model_" + modelKey + ".h5"
-        # modelPath = myModelDir + "BEST_model_" + modelKey + "_finalRuntime.h5"
-        print(modelPath)
-        model_BESonly = load_model(modelPath)
+            # Load h5 data, set up truth arrays
+            # mask, _ = tools.loadMask(myModelDir + suffix + ".txt")
+            maskPath = myModelDir + "BESvarList_" + modelKey + ".txt"
+            # maskPath = myModelDir + "BESvarList_nopt.txt"
+            mask, _ = tools.loadMask(maskPath)
+            
+            # Load BES model and predict
+            # modelPath = myModelDir + "BEST_model_" + modelKey + ".h5"
+            modelPath = myModelDir + "BEST_model_" + suffix + ".h5"
+            print(modelPath)
+            model_BESonly = load_model(modelPath)
 
-        # model_BESonly = load_model(myModelDir + "BEST_model_" + modelKey + ".h5")
-        # BESpredict = model_BESonly.predict([dataDict["testEvents"]])
-        BESpredict = model_BESonly.predict([dataDict["testEvents"][:,mask]])
-        # eventData = dataDict["testEvents"][:,mask]
-        # print(model_BESonly.summary())
-        # print(eventData.shape)
-        # BESpredict = model_BESonly.predict([eventData])
-        # print(BESpredict.shape, BESpredict[0])
-        del model_BESonly
-        # del eventData
+            BESpredict = model_BESonly.predict([eventArrays[:,mask]])
+            del model_BESonly
 
+        print(BESpredict.shape)
         # Compute ROC curve and area for each class
         n_classes = len(samples) 
         fprBES = dict()
         tprBES = dict()
         roc_auc_BES = dict()
         for i, sample in enumerate(samples):
-            fprBES[sample], tprBES[sample], _ = roc_curve(dataDict["testTruth"][:, i], BESpredict[:, i])
+            fprBES[sample], tprBES[sample], _ = roc_curve(truthArrays[:, i], BESpredict[:, i])
             roc_auc_BES[sample] = auc(fprBES[sample], tprBES[sample])
 
         # Compute micro-average ROC curve and ROC area
-        fprBES["micro"], tprBES["micro"], _ = roc_curve(dataDict["testTruth"].ravel(), BESpredict.ravel() )
+        fprBES["micro"], tprBES["micro"], _ = roc_curve(truthArrays.ravel(), BESpredict.ravel() )
         # del dataDict
         del BESpredict
         roc_auc_BES["micro"] = auc(fprBES["micro"], tprBES["micro"] )
@@ -606,6 +696,7 @@ def plotROCCompare(h5Dir, plotDir, samples):
     saveDir = plotDir + '_'.join(modelKeys) + '/'
     if not os.path.isdir(saveDir): os.makedirs(saveDir)
     # print(rocKeys)
+    print("Plotting...")
     for key in rocKeys:
         # print(key)
         # Assign these for readability:
@@ -617,14 +708,21 @@ def plotROCCompare(h5Dir, plotDir, samples):
             fpr = thisDict["fpr"][key]
             tpr = thisDict["tpr"][key]
             roc_auc = thisDict["auc"][key]
-            lab = modelInfo[modelKey][3]
+            label = modelInfo[modelKey][3]
             plt.plot(fpr, tpr, 
                     # label= 'BES only ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
                     # label= modelKey + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
-                    label= lab + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
+                    label= label + ' ROC Curve (area = ' + str(roc_auc)[:6] + ') ',
                      linewidth=2)
         # range=(0.00001, 1.),
         plt.plot([0, 1], [0, 1], 'k--', lw=2)
+
+        # workPoints = [0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2]
+        # for i, wp in enumerate(workPoints): 
+        #     plt.axvline(wp, linestyle=':', color="red")
+        #     plt.annotate(str(wp*100)+"%", [wp,0.1*(i+1)], color="black")
+
+
         # plt.xlim([0.0, 1.0])
         # plt.ylim([0.0, 1.05])
         plt.xlabel('False Positive Rate')
@@ -633,33 +731,35 @@ def plotROCCompare(h5Dir, plotDir, samples):
         plt.legend(loc="lower right")
         plt.show()
         plt.savefig(path + '.png')
+        plt.savefig(path + '.pdf')
 
-        plt.yscale('log')
-        plt.title( title + "_yLogScale")
-        plt.show()
-        plt.savefig(saveDir + title + "_ylog.png")
+        # plt.yscale('log')
+        # plt.title( title + "_yLogScale")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_ylog.png")
 
-        plt.xscale('log')
-        plt.title( title + "_xyLogScale")
-        plt.show()
-        plt.savefig(saveDir + title + "_xylog.png")
+        # plt.xscale('log')
+        # plt.title( title + "_xyLogScale")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_xylog.png")
 
-        plt.yscale('linear')
-        plt.title( title + "_xLogScale")
-        plt.legend(loc="upper left")
-        plt.show()
-        plt.savefig(saveDir + title + "_xlog.png")
+        # plt.yscale('linear')
+        # plt.title( title + "_xLogScale")
+        # plt.legend(loc="upper left")
+        # plt.show()
+        # plt.savefig(saveDir + title + "_xlog.png")
 
 
         plt.close()
 
     print("Check out completed plots at:\n" + saveDir)
 
+
 # Run the ROC curve plot maker
-# plotROCCompare(h5Dir, plotDir, samples)
+plotROCCompare()
 
 # for year in years: plotROCflatcompare(year)
 
 # plotROCyearcompare()
 
-for year in years: plotROCpTcompare(year)
+# for year in years: plotROCpTcompare(year)

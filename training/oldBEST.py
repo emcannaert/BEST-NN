@@ -1,7 +1,7 @@
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # oldBEST.py //////////////////////////////////////////////////////////////////////
 #==================================================================================
-# Author(s): Sam Abbott, Reyer Band, Johan S. Bonilla, Brendan Regnary  ///////////
+# Author(s): Samantha Abbott, Reyer Band, Johan S. Bonilla, Brendan Regnary  //////
 # This program trains BEST with flattened inputs //////////////////////////////////
 # This uses the original oldBEST NN architecture //////////////////////////////////
 #==================================================================================
