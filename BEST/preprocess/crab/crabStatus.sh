@@ -1,0 +1,1 @@
+../../scripts/crabStatus.sh

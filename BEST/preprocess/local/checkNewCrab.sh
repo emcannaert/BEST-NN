@@ -1,0 +1,4 @@
+crab status -d BESTCrabPreprocess/crab_BEST_Ht_training_M1100_0000
+crab status -d BESTCrabPreprocess/crab_BEST_Ht_training_M1300_0000
+crab status -d BESTCrabPreprocess/crab_BEST_Ht_training_M1300_0000
+crab status -d BESTCrabPreprocess/crab_BEST_Zt_training_M1700_0002
