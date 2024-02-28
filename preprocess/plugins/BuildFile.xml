@@ -5,7 +5,36 @@
 <use name="DataFormats/PatCandidates"/>
 <use name="PhysicsTools/UtilAlgos"/>
 <use name="PhysicsTools/CandUtils"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/ServiceRegistry"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="PhysicsTools/UtilAlgos"/>
+<use name="PhysicsTools/CandUtils"/>
 
+<use name="fastjet"/>
+<use name="clhep"/>
+<use name="ROOT"/>
+
+<flags CXXFLAGS="-O0 -g3 -fno-inline"/>
+<flags EDM_PLUGIN="1"/>
+<use   name="CondCore/PluginSystem"/>
+<use   name="CondCore/DBOutputService"/>
+<use   name="DataFormats/JetReco"/>
+<use   name="DataFormats/METReco"/>
+<use   name="FWCore/Utilities"/>
+<use   name="JetMETCorrections/Algorithms"/>
+<use   name="JetMETCorrections/Objects"/>
+<use   name="JetMETCorrections/Modules"/>
+<use name="CondFormats/JetMETObjects"/>
+<use name="AnalysisDataFormats/TopObjects"/>
+<use name="ElectroWeakAnalysis/Utilities"/>
+<use name="SimDataFormats/GeneratorProducts"/>
+<use name="correctionlib"/>
+<Flags LDFLAGS="`correction config --cflags --ldflags --rpath`"/>
+<flags EDM_PLUGIN="1"/>
+<flags CXXFLAGS="-O0 -g3 -fno-inline"/>
 <use name="fastjet"/>
 <use name="clhep"/>
 <use name="ROOT"/>

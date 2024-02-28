@@ -4,6 +4,8 @@
 *.gif
 *.pdf
 preprocess/crab/submit*
+preprocess/local/allCfgs/*
+preprocess/crab/allAltCrabCfgs/*
 *log*
 # */Logs/*
 *Log.txt

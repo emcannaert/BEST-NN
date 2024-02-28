@@ -19,13 +19,14 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleTypes = ["HT","WB","ZT","Top","QCD"]
 # sampleTypes = ["RSG"]
-listOfYears = ["2016_APV","2016","2017","2018"]
+listOfYears = ["2016"]
+mass_type = ["low_mass", "high_mass"]
 # listOfYears = ["2017"]
 
 # Helper functions
-def splitFileSKL(inputPath, outDir, debug, userBatchSize):
+def splitFileSKL(inputPath, outDir, debug, userBatchSize, mass_type):
     # print("Starting clock")
     startTime = time.time()
     
@@ -140,9 +141,16 @@ if __name__ == "__main__":
     for year in listOfYears:
         print(year)
         for sampleType in sampleTypes:
-            print("Processing", sampleType)
-            inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
-            splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize)
+            mass_types = [""]
+            if sampleType in ["HT","WB","ZT"]:
+                mass_types = ["high_mass", "low_mass"]
+            for mass_type in mass_types:
+                print("Processing", sampleType)
+            	inputPath = args.h5Dir+sampleType+"Sample_"+year+"_"+mass_type+"_BESTinputs.h5"
+                if mass_type == "":
+                    inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
+                print("Splitting file %s"%inputPath)
+            	splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize, mass_type)
 
             
     print("Done")

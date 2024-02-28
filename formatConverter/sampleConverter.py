@@ -29,14 +29,15 @@ import os
 root.gROOT.SetBatch(True)
 
 # Global variables
-listBESvars = False
+listBESvars = True
 stopAt = None
-sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleTypes = ["WB","HT","ZT","Top","QCD"]
+mass_types_ = ["low_mass", "high_mass"]
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
-years = ["2016_APV","2016","2017","2018"]
+years = ["2016"]
 # years = ["2017"]
-treeName = "run/jetTree"
+treeName = "run/superjetTree"
 
 # Each of these key lists represent a different type of h5py dataset:
 besKeys = []  # Standard BES variables, only 1 value per event(jet)
@@ -56,7 +57,7 @@ batchPrint = 10
 #==================================================================================
 # Convert /////////////////////////////////////////////////////////////////////////
 #==================================================================================
-def convert(eosDir, outDir, sampleType, year, debug):
+def convert(eosDir, outDir, sampleType, year, debug, mass_type=""):
     # Find file paths that are relevant in eos and write the paths to a txt file
     # At the moment the user is expected to make the txt file by eosls dir >> listOf<sampleType>filePaths<year>.txt
     # If the files are on eos, their paths should have 'root://cmseos.fnal.gov//eosDir' as a prefix
@@ -64,16 +65,21 @@ def convert(eosDir, outDir, sampleType, year, debug):
     # This file should (for now) live in your current directory (BEST/formatConverter/eosSamples/listOf<sampleType>filePath<year>.txt)
 
     # Open file and read lines (individual file paths)
-    pathList = eosDir+"listOf"+sampleType+"FilePaths"+year+".txt"
-
+    eos_prefix = "root://cmsxrootd.fnal.gov/"
+    pathList = eosDir + "BEST_" +sampleType+"_"+year+".txt"
+    if sampleType in ["WB","HT","ZT"]:
+        pathList = eosDir+ "SuuToChiChi_" + sampleType + "_" + mass_type+ "_" + year + ".txt"
     if debug: print("Reading from", pathList)
     with open(pathList, 'r') as myFile:
         # Read file paths from txt file
-        fileList = myFile.read().splitlines()
+        fileList_ = myFile.read().splitlines()
+        fileList = [eos_prefix+ fname for fname in fileList_]
         if debug: print(fileList)
         
         # Make h5f output file to store the images and BES variables
         h5fPath = outDir+sampleType+"Sample_"+year+"_BESTinputs.h5"
+        if sampleType in ["WB","HT","ZT"]:
+            h5fPath = outDir+sampleType+"Sample_"+year+"_"+ mass_type+"_BESTinputs.h5"
         if debug: print ("Writing h5f file to",h5fPath)
         h5f = h5py.File(h5fPath,"w")
 
@@ -298,10 +304,16 @@ if __name__ == "__main__":
     if not os.path.isdir(args.outDir): os.mkdir(args.outDir)
 
     # Loop over samples and convert each separately
+
     for sampleType in sampleTypes:
-        for year in years:
-            print("Processing", sampleType, year)
-            convert(args.eosDir, args.outDir, sampleType, year, args.debug)
+        if sampleType in ["WB","HT","ZT"]:
+            mass_types = mass_types_
+        else:
+            mass_types = [""]
+        for mass_type in mass_types:
+            for year in years:
+                print("Processing", sampleType, year, mass_type)
+                convert(args.eosDir, args.outDir, sampleType, year, args.debug, mass_type)
     
     print("Done")
 
