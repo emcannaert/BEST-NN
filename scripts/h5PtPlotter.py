@@ -24,9 +24,13 @@ years = ["2016"]
 # years = ["2016","2016_APV"]
 # years = ["2017","2018"]
 # years = ["2017"]
-sampleFileTypes = ["WB","ZT","HT","Top","QCD"]
-sampleTypes     = ["WB","ZT","HT","Top","QCD"]
-mass_type_      = ["low_mass"]
+sampleFileTypes_ = ["allDecays","QCD","Top"]
+sampleTypes_     = ["allDecays","QCD","Top"]
+decay_types    = ["allDecays"]
+
+mass_types      = ["all_mass"]
+
+#mass_types      = ["all_mass","low_mass", "high_mass"]
 plot_types      = ["", "_train_flattened"]
 # listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
@@ -71,7 +75,7 @@ if __name__ == "__main__":
     # plotDir = "plots/raw/"
     # if not os.path.isdir(plotDir): os.mkdir(plotDir)
 
-    print("Samples to process: ", sampleTypes)
+    print("Samples to process: ", sampleTypes_)
     print("File types to process: ", listOfFileTypes)
 
     # Make directories you need
@@ -81,89 +85,97 @@ if __name__ == "__main__":
     
     ## First plot all pt for each collection
     ## So full samples, then train,validation,test, then train_flattened,validation_flattened,test_flattened
-    for year in years:
-        for plot_type in plot_types:
+    for decay_type in decay_types:
+        if decay_type == "allDecays":
+            sampleFileTypes = ["allDecays","Top","QCD"]
+            sampleTypes     = ["allDecays","Top","QCD"]
+        else:
+            sampleFileTypes = sampleFileTypes_
+            sampleTypes = sampleTypes_
 
-            print("Plotting year", year)
-            for fileType in listOfFileTypes:
-               
-                print("Plotting fileType", fileType)
-                # plotDir = "plots/" + fileType[1:-3] + "/"
-                plotDir = "plots/prettyHT/" + fileType[1:-3] + "/"
-                print(plotDir)
-                if not os.path.isdir(plotDir): os.makedirs(plotDir)
-                myPtArrays = []
-                for sampleType in sampleFileTypes:
-                    print(sampleType)
-                    mass_types = [""]
-                    if sampleType in ["WB","ZT","HT"]:
-                        mass_types = mass_type_
-                    for mass_type in mass_types:
-                        inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs"+ plot_type+fileType
-                        if sampleType in ["WB","ZT","HT"]:
-                            inputPath = args.h5Dir+sampleType+"Sample_"+year+"_"+ mass_type+ "_BESTinputs"+fileType
-                        print("Reading from file %s"%inputPath)
-                        inputFile = h5py.File(inputPath,"r")
-                        for key in inputFile.keys(): print(key, inputFile[key].shape)
-                        # print(inputFile.keys())
-                        myPtArrays.append(np.array(inputFile["BES_vars"][...,args.ptIndex]))
-                # --- Create histogram, legend and title ---
-                plt.figure()
-                if fileType == ".h5": suffix = ""
-                else:                 suffix = "_"+fileType.split('.')[0]
-                if suffix == "":
-                    H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes, 
-                                    stacked=False, fill=False, normed=False, log=True)
-                    # plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
-                    plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
-                else:
-                    H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes,
-                                    stacked=False, fill=False, normed=False)
-                # workPoints = [1500, 1600, 2000]
-                # for i, wp in enumerate(workPoints): 
-                #     plt.axvline(wp, linestyle=':', color="red")
-                #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
+        for mass_type in mass_types:
+            for year in years:
+                for plot_type in plot_types:
 
-                # hlines = [100000, 200000, 300000]
-                # for i, wp in enumerate(hlines): 
-                #     plt.axvline(wp, linestyle=':', color="black")
-                #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
-                #             plt.axhline(100000)
-                title = "HTDistribution_"+year+suffix + " ".join(plot_type.split("_"))
-                plt.legend(frameon=True, ncol=2, loc='lower left')
-                plt.xlabel('Event HT (GeV)')
-                plt.title(title)
-                plt.show()
-                savePath = os.path.join(plotDir, title+'_2500.png')
-                plt.savefig(savePath)
-                # savePath = os.path.join(plotDir, title+'_2500.pdf')
-                # plt.savefig(savePath)
-                plt.xlim([1250,8000])
-                savePath = os.path.join(plotDir, title+ plot_type + '.png')
-                plt.savefig(savePath)
-                # savePath = os.path.join(plotDir, title+'.pdf')
-                # plt.savefig(savePath)            
-                plt.clf()
-                plt.close()
+                    print("Plotting year", year)
+                    for fileType in listOfFileTypes:
+                       
+                        print("Plotting fileType", fileType)
+                        # plotDir = "plots/" + fileType[1:-3] + "/"
+                        plotDir = "plots/prettyHT/" + fileType[1:-3] + "/"
+                        print(plotDir)
+                        if not os.path.isdir(plotDir): os.makedirs(plotDir)
+                        myPtArrays = []
+                        for sampleType in sampleFileTypes:
+                            print(sampleType)
+                            if sampleType in ["WB","HT","ZT", "allDecays"]:
+                                mass_str= mass_type + "_"
+                                sample_str = sampleType + "_"
+                            inputPath = args.h5Dir+sample_str+"Sample_"+ mass_str + year+ "_BESTinputs"+ plot_type+fileType
+                            print("Reading from file %s"%inputPath)
+                            inputFile = h5py.File(inputPath,"r")
+                            for key in inputFile.keys(): print(key, inputFile[key].shape)
+                            # print(inputFile.keys())
+                            myPtArrays.append(np.array(inputFile["BES_vars"][...,args.ptIndex]))
+                        # --- Create histogram, legend and title ---
+                        plt.figure()
+                        if fileType == ".h5": suffix = ""
+                        else:                 suffix = "_"+fileType.split('.')[0]
+                        if suffix == "":
+                            H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes, 
+                                            stacked=False, fill=False, normed=False, log=True)
+                            # plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
+                            plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
+                        else:
+                            H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes,
+                                            stacked=False, fill=False, normed=False)
+                        # workPoints = [1500, 1600, 2000]
+                        # for i, wp in enumerate(workPoints): 
+                        #     plt.axvline(wp, linestyle=':', color="red")
+                        #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
 
-            # # --- Normalized Create histogram, legend and title ---
-            # H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
-            # plt.legend(frameon=True, ncol=2, loc='upper right')
-            # plt.xlabel('pT (GeV)')
-            # plt.title(title + " Normalized")            
-            # plt.show()
-            # savePath = os.path.join(plotDir, title+'_Normalized_2500.png')
-            # plt.savefig(savePath)
-            # # savePath = os.path.join(plotDir, title+'_Normalized_2500.pdf')
-            # # plt.savefig(savePath)
-            # plt.xlim([500,2000])
-            # savePath = os.path.join(plotDir, title+'_Normalized.png')
-            # plt.savefig(savePath)
-            # # savePath = os.path.join(plotDir, title+'_Normalized.pdf')
-            # # plt.savefig(savePath)            
-            # plt.clf()
-            # plt.close()
+                        # hlines = [100000, 200000, 300000]
+                        # for i, wp in enumerate(hlines): 
+                        #     plt.axvline(wp, linestyle=':', color="black")
+                        #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
+                        #             plt.axhline(100000)
+                        title = "HTDistribution_"+year+suffix + " ".join(plot_type.split("_"))
 
-    
-    print("Done")
+                        file_title = "HTDistribution_" + mass_type + "_"  + year+ plot_type + suffix
+                        plt.legend(frameon=True, ncol=2, loc='lower left')
+                        plt.xlabel('Event HT (GeV)')
+                        plt.title(title)
+                        plt.show()
+                        savePath = os.path.join(plotDir, title+'_2500.png')
+                        plt.savefig(savePath)
+                        # savePath = os.path.join(plotDir, title+'_2500.pdf')
+                        # plt.savefig(savePath)
+                        plt.xlim([1250,8000])
+                        savePath = os.path.join(plotDir, file_title + '.png')
+                        plt.savefig(savePath)
+                        # savePath = os.path.join(plotDir, title+'.pdf')
+                        # plt.savefig(savePath)            
+                        plt.clf()
+                        plt.close()
+
+                    # # --- Normalized Create histogram, legend and title ---
+                    # H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
+                    # plt.legend(frameon=True, ncol=2, loc='upper right')
+                    # plt.xlabel('pT (GeV)')
+                    # plt.title(title + " Normalized")            
+                    # plt.show()
+                    # savePath = os.path.join(plotDir, title+'_Normalized_2500.png')
+                    # plt.savefig(savePath)
+                    # # savePath = os.path.join(plotDir, title+'_Normalized_2500.pdf')
+                    # # plt.savefig(savePath)
+                    # plt.xlim([500,2000])
+                    # savePath = os.path.join(plotDir, title+'_Normalized.png')
+                    # plt.savefig(savePath)
+                    # # savePath = os.path.join(plotDir, title+'_Normalized.pdf')
+                    # # plt.savefig(savePath)            
+                    # plt.clf()
+                    # plt.close()
+
+            
+            print("Done with %s"%mass_type)
 

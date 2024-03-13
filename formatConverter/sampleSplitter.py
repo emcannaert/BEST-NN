@@ -19,10 +19,18 @@ import time
 from sklearn.model_selection import train_test_split
 
 # Global variables
-sampleTypes = ["HT","WB","ZT","Top","QCD"]
+
+
+#decays_types = ["","allDecays"]
+decays_types = ["allDecays"]
+
+sampleTypes_ = ["HT","WB","ZT","Top","QCD"]
 # sampleTypes = ["RSG"]
-listOfYears = ["2016"]
-mass_type = ["low_mass", "high_mass"]
+listOfYears = ["2015","2016","2017","2018"]
+#mass_types = ["low_mass", "high_mass", "all_mass"]
+mass_types = ["all_mass"]
+
+setTypes_ = ["train", "validation", "test"]
 # listOfYears = ["2017"]
 
 # Helper functions
@@ -37,6 +45,9 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize, mass_type):
     dataKeys = list(inputFile.keys())
     print(dataKeys, inputFile[dataKeys[0]].shape)
     totalEvents = inputFile[dataKeys[0]].shape[0]
+
+
+
 
     # Create data frame and output files to handle copied information
     # Make h5f file to store the images and BES variables
@@ -70,8 +81,11 @@ def splitFileSKL(inputPath, outDir, debug, userBatchSize, mass_type):
             # output1 = train_test_split(dsetNP, train_size=0.8, shuffle=True, random_state=42) # Full dataset -> 80% train (output1[0]), 20% 'test' (output1[1]) -> next line
             # output2 = train_test_split(output1[1], train_size=0.5, shuffle=True, random_state=24) # 20% 'test' -> 10% validation (output2[0]), 10% test (output2[1])
 
-            train, temp = train_test_split(dsetNP, train_size=0.8, shuffle=True, random_state=42) # Full dataset -> 80% train (train), 20% 'test' (temp) -> next line
-            valid, test = train_test_split(temp, train_size=0.5, shuffle=True, random_state=24) # 20% 'test' -> 10% validation (valid), 10% test (test)
+            train, temp = train_test_split(dsetNP, train_size=0.9, shuffle=True, random_state=42) # Full dataset -> 80% train (train), 20% 'test' (temp) -> next line
+            #### change done here by Ethan - test = validation, both used for the same purpose
+            test = temp
+            valid = temp
+            #valid, test = train_test_split(temp, train_size=0.5, shuffle=True, random_state=24) # 20% 'test' -> 10% validation (valid), 10% test (test)
             # print("Outdset creation time:", time.time()-keyTime)
             if counter == 0:
                 if myKey == "BES_vars": # max shape by # of vars
@@ -140,18 +154,37 @@ if __name__ == "__main__":
 
     for year in listOfYears:
         print(year)
-        for sampleType in sampleTypes:
-            mass_types = [""]
-            if sampleType in ["HT","WB","ZT"]:
-                mass_types = ["high_mass", "low_mass"]
-            for mass_type in mass_types:
-                print("Processing", sampleType)
-            	inputPath = args.h5Dir+sampleType+"Sample_"+year+"_"+mass_type+"_BESTinputs.h5"
-                if mass_type == "":
-                    inputPath = args.h5Dir+sampleType+"Sample_"+year+"_BESTinputs.h5"
-                print("Splitting file %s"%inputPath)
-            	splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize, mass_type)
+        for decays_type in decays_types:
+            if decays_type == "allDecays":
+                sampleTypes = ["allDecays","Top","QCD"]
+            else: sampleTypes = sampleTypes_
+            for sampleType in sampleTypes:
+                for mass_type in mass_types:
+                    if (sampleType=="QCD" or sampleType == "Top"):
+                        if mass_type != "all_mass":  # only need to do this for high_mass or low_mass and then copy to the other. The training datasets are the same
+                            continue
 
-            
+                    mass_str     = ""
+                    if sampleType in ["WB","HT","ZT", "allDecays"]:
+                        mass_str= mass_type + "_"
+                    sample_str = sampleType + "_"
+
+                    print("Processing", sampleType)
+                    inputPath = args.outDir+sample_str+"Sample_"+ mass_str +year+"_BESTinputs.h5"
+                    print("Splitting file %s"%inputPath)
+                    splitFileSKL(inputPath, args.outDir, args.debug, args.batchSize, mass_type)
+
+
+
+    for decays_type in decays_type:
+        for year in listOfYears:
+            for mass_type in mass_types:
+                for sampleType in ["QCD","Top"]:
+                    mass_str= mass_type + "_"
+                    sample_str = sampleType + "_"
+                    for setType in setTypes_:
+                        old_string = args.outDir+ sample_str+"Sample_" +year+"_BESTinputs_" +setType +".h5" # this is what was actually split, can copy this to 
+                        new_string = args.outDir+ sample_str+"Sample_"+ mass_str +year+"_BESTinputs_"+setType+".h5" # this is what was actually split, can copy this to 
+                        os.system("cp %s %s"%(old_string, new_string))
     print("Done")
 

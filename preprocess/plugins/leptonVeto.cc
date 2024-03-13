@@ -150,7 +150,7 @@ leptonVeto::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.getByToken(muonToken_, muons);
     for(auto iM = muons->begin(); iM != muons->end();iM++)
     {
-      if( (iM->passed(reco::Muon::CutBasedIdMedium)) && (iM->pt() > 8.) && (abs(iM->eta()) < 2.4)  && (iM->passed(reco::Muon::PFIsoMedium))   ) nMuon++;
+      if( (iM->passed(reco::Muon::CutBasedIdMedium)) && (iM->pt() > 8.) && (abs(iM->eta()) < 2.4)  && (iM->passed(reco::Muon::PFIsoMedium))   ) return false; // nMuon++;
     }
 
 
@@ -158,7 +158,7 @@ leptonVeto::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.getByToken(electronToken_, electrons);
     for(auto iE = electrons->begin(); iE != electrons->end();iE++)
     {
-      if((iE->electronID("mvaEleID-Fall17-iso-V2-wp90")) && (iE->pt() > 12.) && (abs(iE->eta())<2.5 )    )nE++;   //medium WP
+      if((iE->electronID("mvaEleID-Fall17-iso-V2-wp90")) && (iE->pt() > 12.) && (abs(iE->eta())<2.5 )    )  return false;    //nE++;   //medium WP
     }
 
 

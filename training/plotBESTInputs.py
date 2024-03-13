@@ -64,15 +64,20 @@ import os
 maskPath = "../formatConverter/h5samples/BESvarList.txt"
 mask, varDict = tools.loadMask(maskPath)
 
-sampleFileTypes = ["WW","ZZ","HH","TT","BB","QCD"]
-samples     = ["W","Z","H","t","b","QCD"]
+#sampleFileTypes = ["WB", "HT", "ZT", "Top", "QCD"]
+#samples     = ["WB", "HT", "ZT", "Top", "QCD"]
+
+sampleFileTypes = ["allDecays","Top","QCD"]
+samples = ["allDecays","Top","QCD"]
+
+mass_Types = ["all_mass"]
 # sampleFileTypes = ["HH"]
 # samples     = ["H"]
 # h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_ULv1/"
 # h5Dir = "/uscms/home/bonillaj/nobackup/h5samples_OR/"
 h5Dir = "../formatConverter/h5samples/"
 
-years = ["2016_APV","2016","2017","2018"]
+years = ["2016"]
 # years = ["2016_APV","2016","2018"]
 # years = ["2016_APV","2016"]
 # years = ["2017"]
@@ -398,147 +403,149 @@ for index, var in enumerate(allVars):
 # maskPath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/models/newBEST_longLearn/300Basic_300_Z/masspT.txt"
 # mask, _ = tools.loadMask(maskPath, 596)
 for year in years:
-    print("Beginning " + year)
-    for setType in setTypes:
-        print("Beginning " + setType)
-        print("Loading pre scale h5py files")
-        # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[:,mask] for mySample in sampleFileTypes]
-        # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
+    for mass_type in mass_Types:
+        print("Beginning " + year)
+        for setType in setTypes:
+            print("Beginning " + setType)
+            print("Loading pre scale h5py files")
+            # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[:,mask] for mySample in sampleFileTypes]
+            # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
 
-        # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
-        preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_" + setType + "_" + suffix + "_standardized.h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
+            # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
 
-        """
-        # print("Loading post scale h5py files")
-        # postScaleEvents = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_" + setType + "_flattened_standardized.h5","r")["BES_vars"])[:,myMask] for mySample in sampleFileTypes]
+            #preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+ "_"+ mass_type +  "_BESTinputs_" + setType + "_" + suffix + "_standardized.h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
+            preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"_Sample_"+ mass_type+ "_"+ year +  "_BESTinputs_" + setType + "_" + suffix + ".h5","r")["BES_vars"])[()] for mySample in sampleFileTypes]
 
-        # print("Pre scale events shape:", [arr.shape for arr in preScaleEvents])
-        # print("Post scale events shape:",[arr.shape for arr in postScaleEvents])
-
-        # print("Unscaling...")
-        # scalePath = "/uscms/home/bonillaj/nobackup/Brendan/CMSSW_10_2_18/src/centralBEST/BEST/training/ScalerParameters_" + setType + ".txt"
-        # scaleFile = open(scalePath, "r")
-        # means  = []
-        # scales = []
-        # i = -1
-        # for line in scaleFile:
-        #     i += 1
-        #     if str(i) not in varDict: continue
-        #     mean, vari = line.split(',')
-        #     vari = vari.strip()
-        #     means.append(float(mean))
-        #     # scales.append(float(vari))
-        #     scales.append(float(vari) ** 2)
-        # scaleFile.close()
-
-        # scaler = preprocessing.StandardScaler()
-        # scaler.mean_ = np.array(means)
-        # scaler.scale_ = np.array(scales)
-        # # scaler.var_ = np.array(scales)
-        # unScaledEvents = [scaler.inverse_transform(scaledEvents) for scaledEvents in postScaleEvents]
-        # print("Unscaled events shape:",[arr.shape for arr in unScaledEvents])
-        # print("Plotting pT...")
-        """
-
-        # plotDir = "plots/BESvars/" + setType + "/"
-        # plotDir = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/plots/vars/BESvars_OGStandardScaler/test/"
-
-
-        # plotDir = os.path.join("plots/BESvars/",setType)
-        # plotDir = os.path.join("plots/BESvars/",setType,"log")
-        # plotDir = os.path.join("plots/BESvars/",setType+"_log")
-        plotDir = "plots/BESvars/postScale/"
-        plt.figure()
-        # for index, var in enumerate(allVars):
-        for index in range(len(varDict.keys())):
-            var = varDict[str(index)]
-            print("Plotting " + var)
-            # saveDir = plotDir + var + "_" + setType + "/"
-            # saveDir = os.path.join(plotDir, var)
-            # compressDir = var
-            if   "FoxWolf" in var: compressDir = "foxwolf"
-            elif "aplanarity" in var: compressDir = "aplanarity"
-            elif "asymmetry" in var: compressDir = "asymmetry"
-            elif "sphericity" in var: compressDir = "sphericity"
-            elif "thrust" in var: compressDir = "thrust"
-            elif "DeltaCosTheta" in var: compressDir = "deltacos"
-            elif "CosTheta" in var: compressDir = "cos"
-            elif "_mass_" in var: compressDir = "mass"
-            elif "jet_energy" in var: compressDir = "energy"
-            elif "jet_px" in var: compressDir = "px"
-            elif "jet_py" in var: compressDir = "py"
-            elif "jet_pz" in var: compressDir = "pz"
-            elif "deepAK8" in var: compressDir = "scores"
-            elif "ParticleNet" in var: compressDir = "scores"
-            else: compressDir = "invariant"
-
-            saveDir = os.path.join(plotDir, compressDir)
-            if not os.path.isdir(saveDir): os.makedirs(saveDir)
-
-            maxVal = 0
-            minVal = np.inf
-            # if ("Track" in var) or ("dof" in var):
-            for arr in preScaleEvents:
-                # mintemp = int(np.amin(arr[:,index]))
-                # maxtemp = int(np.amax(arr[:,index]))
-                mintemp = np.amin(arr[:,index])
-                maxtemp = np.amax(arr[:,index])                
-                if mintemp < minVal: minVal = mintemp
-                if maxtemp > maxVal: maxVal = maxtemp
-
-            # minVal = 0
-            # if   var == "jetAK8_mass": maxVal = 300
-            # elif var == "jetAK8_SoftDropMass": maxVal = 225
-            # --- Create Pre Scale histogram, legend and title ---
-            # title = var + "_" + year + "_" + setType + "_" + suffix + "_postScale" 
-            # title = var + "_" + setType 
-            # title = var + "_" + year + "_Scaled"
-            # title = var + "_" + year + "_log"
-            title = var + "_" + year 
-            for i, array in enumerate(preScaleEvents):
-                plt.hist(array[:,index], bins=51, range=(minVal, maxVal), histtype='step')
-                # plt.hist(array[:,index], bins=51, histtype='step')
-                # Check for bad values
-                # minVal = np.amin(array[:,index])
-                # if minVal == -999.99: print("BAD VALUE: ", title, samples[i])
-            # plt.yscale('log')
-            plt.legend(frameon=False, labels = samples)
-            plt.title( title )
-            plt.show()
-            # plt.savefig(saveDir + title + ".png")
-            plt.savefig(os.path.join(saveDir,title + ".png"))
-            # plt.savefig(os.path.join(saveDir,title + ".pdf"))
-            plt.clf()
-        
             """
-            # # --- Create Post Scale histogram, legend and title ---
-            # title = var + "_" + setType + "_postScale" 
-            # for i, array in enumerate(postScaleEvents):
-            #     plt.hist(array[:,index], bins=51, histtype='step')
-            #     # Check for bad values
-            #     minVal = np.amin(array[:,index])
-            #     if minVal == -999.99: print("BAD VALUE: ", title, samples[i])
-            # plt.legend(frameon=False, labels = samples)
-            # plt.title( title )
-            # plt.show()
-            # plt.savefig(saveDir + title + ".png")
-            # plt.clf()
+            # print("Loading post scale h5py files")
+            # postScaleEvents = [np.array(h5py.File(h5Dir+mySample+"Sample_2017_BESTinputs_" + setType + "_flattened_standardized.h5","r")["BES_vars"])[:,myMask] for mySample in sampleFileTypes]
 
-            # # --- Create Unscaled histogram, legend and title ---
-            # title = var + "_" + setType + "_unscaled" 
-            # for i, array in enumerate(unScaledEvents):
-            #     plt.hist(array[:,index], bins=51, histtype='step')
-            #     # Check for bad values
-            #     minVal = np.amin(array[:,index])
-            #     if minVal == -999.99: print("BAD VALUE: ", title, samples[i])
-            # plt.legend(frameon=False, labels = samples)
-            # plt.title( title )
-            # plt.show()
-            # plt.savefig(saveDir + title + ".png")
-            # plt.clf()
+            # print("Pre scale events shape:", [arr.shape for arr in preScaleEvents])
+            # print("Post scale events shape:",[arr.shape for arr in postScaleEvents])
+
+            # print("Unscaling...")
+            # scalePath = "/uscms/home/bonillaj/nobackup/Brendan/CMSSW_10_2_18/src/centralBEST/BEST/training/ScalerParameters_" + setType + ".txt"
+            # scaleFile = open(scalePath, "r")
+            # means  = []
+            # scales = []
+            # i = -1
+            # for line in scaleFile:
+            #     i += 1
+            #     if str(i) not in varDict: continue
+            #     mean, vari = line.split(',')
+            #     vari = vari.strip()
+            #     means.append(float(mean))
+            #     # scales.append(float(vari))
+            #     scales.append(float(vari) ** 2)
+            # scaleFile.close()
+
+            # scaler = preprocessing.StandardScaler()
+            # scaler.mean_ = np.array(means)
+            # scaler.scale_ = np.array(scales)
+            # # scaler.var_ = np.array(scales)
+            # unScaledEvents = [scaler.inverse_transform(scaledEvents) for scaledEvents in postScaleEvents]
+            # print("Unscaled events shape:",[arr.shape for arr in unScaledEvents])
+            # print("Plotting pT...")
             """
-        plt.close()
-    # """
+
+            # plotDir = "plots/BESvars/" + setType + "/"
+            # plotDir = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/plots/vars/BESvars_OGStandardScaler/test/"
+
+
+            # plotDir = os.path.join("plots/BESvars/",setType)
+            # plotDir = os.path.join("plots/BESvars/",setType,"log")
+            # plotDir = os.path.join("plots/BESvars/",setType+"_log")
+            plotDir = "plots/BESvars/postScale/"
+            plt.figure()
+            # for index, var in enumerate(allVars):
+            for index in range(len(varDict.keys())):
+                var = varDict[str(index)]
+                print("Plotting " + var)
+                # saveDir = plotDir + var + "_" + setType + "/"
+                # saveDir = os.path.join(plotDir, var)
+                # compressDir = var
+                """if   "FW" in var: compressDir = "foxwolf"
+                elif "aplanarity" in var: compressDir = "aplanarity"
+                elif "asymmetry" in var: compressDir = "asymmetry"
+                elif "sphericity" in var: compressDir = "sphericity"
+                elif "thrust" in var: compressDir = "thrust"
+                elif "theta" in var: compressDir = "cos"
+                elif "_mass" in var: compressDir = "mass"
+                elif "AK41" in var: compressDir = "AK41"
+                elif "AK42" in var: compressDir = "AK42"
+                elif "AK43" in var: compressDir = "AK43"
+                elif "AK44" in var: compressDir = "AK44"
+                elif "_pz" in var: compressDir = "pz"
+                elif "SJ_" in var: compressDir = "superjet"""
+                #else: compressDir = "others"
+                compressDir = "others"
+                saveDir = os.path.join(plotDir, compressDir)
+                if not os.path.isdir(saveDir): os.makedirs(saveDir)
+
+                maxVal = 0
+                minVal = np.inf
+                # if ("Track" in var) or ("dof" in var):
+                for arr in preScaleEvents:
+                    # mintemp = int(np.amin(arr[:,index]))
+                    # maxtemp = int(np.amax(arr[:,index]))
+                    mintemp = np.amin(arr[:,index])
+                    maxtemp = np.amax(arr[:,index])                
+                    if mintemp < minVal: minVal = mintemp
+                    if maxtemp > maxVal: maxVal = maxtemp
+
+                # minVal = 0
+                # if   var == "jetAK8_mass": maxVal = 300
+                # elif var == "jetAK8_SoftDropMass": maxVal = 225
+                # --- Create Pre Scale histogram, legend and title ---
+                # title = var + "_" + year + "_" + setType + "_" + suffix + "_postScale" 
+                # title = var + "_" + setType 
+                # title = var + "_" + year + "_Scaled"
+                # title = var + "_" + year + "_log"
+                title = var + "_" + year 
+                for i, array in enumerate(preScaleEvents):
+                    plt.hist(array[:,index], bins=51, range=(minVal, maxVal), histtype='step')
+                    # plt.hist(array[:,index], bins=51, histtype='step')
+                    # Check for bad values
+                    # minVal = np.amin(array[:,index])
+                    # if minVal == -999.99: print("BAD VALUE: ", title, samples[i])
+                # plt.yscale('log')
+                plt.legend(frameon=False, labels = samples)
+                plt.title( title )
+                plt.show()
+                # plt.savefig(saveDir + title + ".png")
+                plt.savefig(os.path.join(saveDir,title + ".png"))
+                # plt.savefig(os.path.join(saveDir,title + ".pdf"))
+                plt.clf()
+            
+                """
+                # # --- Create Post Scale histogram, legend and title ---
+                # title = var + "_" + setType + "_postScale" 
+                # for i, array in enumerate(postScaleEvents):
+                #     plt.hist(array[:,index], bins=51, histtype='step')
+                #     # Check for bad values
+                #     minVal = np.amin(array[:,index])
+                #     if minVal == -999.99: print("BAD VALUE: ", title, samples[i])
+                # plt.legend(frameon=False, labels = samples)
+                # plt.title( title )
+                # plt.show()
+                # plt.savefig(saveDir + title + ".png")
+                # plt.clf()
+
+                # # --- Create Unscaled histogram, legend and title ---
+                # title = var + "_" + setType + "_unscaled" 
+                # for i, array in enumerate(unScaledEvents):
+                #     plt.hist(array[:,index], bins=51, histtype='step')
+                #     # Check for bad values
+                #     minVal = np.amin(array[:,index])
+                #     if minVal == -999.99: print("BAD VALUE: ", title, samples[i])
+                # plt.legend(frameon=False, labels = samples)
+                # plt.title( title )
+                # plt.show()
+                # plt.savefig(saveDir + title + ".png")
+                # plt.clf()
+                """
+            plt.close()
+        # """
 
 
 # Check how long the script took to run

@@ -53,7 +53,7 @@ def logTime(startTime=None, name=sys.argv[0]):
 # classes are the names of the classes that the classifier distributes among //////
 #----------------------------------------------------------------------------------
 
-def plot_confusion_matrix(cm, classes, plotDir, suffix,
+def plot_confusion_matrix(cm, classes, plotDir, suffix, year,
                           normalize=False,
                           title='Confusion Matrix',
                           cmap=plt.cm.Blues):
@@ -98,9 +98,9 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
     plt.xlabel('Predicted label')
     plt.tight_layout() #make all the axis labels not get cutoff
 
-    print("Saving to: " + saveFile + ".png")
+    print("Saving to: " + saveFile + "_%s.png"%year)
     plt.savefig(saveFile + ".png")
-    print("Saving to: " + saveFile + ".pdf")
+    print("Saving to: " + saveFile + "_%s.pdf"%year)
     plt.savefig(saveFile + ".pdf")
 
     plt.clf()
@@ -113,7 +113,7 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix,
 # acc is an array of acc and acc_val from the training ////////////////////////////
 #----------------------------------------------------------------------------------
 
-def plotAccLoss(historyFile, suffix, plotDir): 
+def plotAccLoss(historyFile, suffix, plotDir, year): 
     history = load(historyFile)
 
     # loss     = history.history["loss"]
@@ -183,8 +183,8 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
         plt.gca().tick_params(axis = 'y', which = 'both', direction = 'in', left = True, right = True)
         plt.gca().tick_params(axis = 'x', direction = 'in', top = True, bottom = True)
         plt.show()
-        plt.savefig(saveDir + title + ".png")
-        plt.savefig(saveDir + title + ".pdf")
+        plt.savefig(saveDir + "_".join(title.split(" ")) + ".png")
+        plt.savefig(saveDir + "_".join(title) + ".pdf")
         plt.clf()
     plt.close()
 
@@ -196,7 +196,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
 
 # def loadMask(maskPath, max = 551):
 # def loadMask(maskPath, max = 270):
-def loadMask(maskPath, max = 313):
+def loadMask(maskPath, max = 180):
     print("Loading mask: " + maskPath)
     maskIndex = []
     varDict = {}
@@ -210,7 +210,6 @@ def loadMask(maskPath, max = 313):
     myMask = [True if str(ind) in maskIndex else False for ind in range(max)]
     # myMask = [True if str(ind) in maskIndex else False for ind in range(596)]
     # myMask = [True if str(ind) in maskIndex else False for ind in range(551)]
-
     return myMask, varDict
 
 
@@ -221,25 +220,31 @@ def loadMask(maskPath, max = 313):
 #  concatenated data arrays and concatenated truth arrays.      ///////////////////
 #----------------------------------------------------------------------------------
 
-def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents, year='', testSet="flattened"):
+def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents, mass_type, year='', testSet="flattened"):
     h5Dir = args.h5Dir
     scale = args.scale
     if year == '': year = args.year
 
     if not scale == "": scale = "_" + scale
-
     dataDict = {}
     for mySet in setTypes:
-        numEvents = maxEvents[mySet]
 
+        numEvents = maxEvents[mySet]
         print("Loading h5 files for " + mySet)
-        h5Path = "Sample_"+year+"_BESTinputs_" + mySet + "_" + args.suffix + scale + ".h5" # This just makes the next few lines a bit more readable
+
+        mass_str= mass_type + "_"
+
+        h5Path = "_Sample_"+ mass_str +year+'_BESTinputs_' + mySet + "_" + args.suffix + scale + ".h5" # This just makes the next few lines a bit more readable
         # if mySet == "test": h5Path = "Sample_"+year+"_BESTinputs_" + mySet + "_" + testSet + ".h5"
         print(h5Path)
-      
+        
+        
         # Check if loading all variables. Quicker to NOT use mask in this case
-        if np.all(mask): eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,:]     for mySample in sampleTypes]
-        else:            eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,mask] for mySample in sampleTypes]
+        
+        if np.all(mask):
+            eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,:]     for mySample in sampleTypes]
+        else:
+            eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,mask] for mySample in sampleTypes]
 
         print("My " + mySet + " events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])
 
@@ -297,7 +302,7 @@ def loadScalerModel(scale, mask):
     # scaleDir = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/ScalerParameters/"
     # scalePath = scaleDir + "ScalerParameters_" + scale + ".joblib"
 
-    scalePath = "/uscms/home/msabbott/nobackup/general/CMSSW_10_6_27/src/abbottBEST/BEST/training/ScalerParameters/newBEST_Basic.joblib"
+    scalePath = "/uscms/home/cannaert/nobackup/newBEST/CMSSW_10_6_27/src/BEST/training/ScalerParameters/newBEST_Basic.joblib"
     if not os.path.isfile(scalePath):
         print(scalePath, "does not exist")
         quit()
@@ -369,7 +374,7 @@ def recordClassification(cm, truthTest, targetNames, modelType, suffix):
 #   Also creates suffix string, which is unique to each model. ////////////////////
 #----------------------------------------------------------------------------------
 
-def dirStrings(args, year=''):
+def dirStrings(args, nLayers, nNodes, nCats, mass_type, year=''):
     # Create useful strings
     maskName = args.maskPath[1 + args.maskPath.rfind("/"):] # Strip everything after the final '/', giving just the name of the mask
     # mySuffix = args.suffix + args.scale + maskName[11:-4] 
@@ -377,14 +382,20 @@ def dirStrings(args, year=''):
     # mySuffix = args.suffix + "_" + year
     mySuffix = year
 
-    plotDir  = "plots/" + args.modelType + "/" + mySuffix + "/"
-    modelDir = args.outDir + args.modelType + "/" + mySuffix + "/"
+    nodes_str = nNodes + "nodes_" # number of nodes
+    layers_str = nLayers + "layers_" # number of strings 
+    cats_str  = nCats + "cats_" #number of categories
+    plotDir  = "plots/"    + args.modelType+ "_" + nLayers + "Layers_" + nNodes + "Nodes_" + nCats + "Categories/" + mySuffix + "/" + mass_type + "/"
+
+    #             models/   nnBEST             _80             Layers_      3      Nodes_  all_mass   Categories    /2016/                12/
+    modelDir = args.outDir + args.modelType + "_" + nLayers + "Layers_" + nNodes + "Nodes_" + nCats + "Categories/" + mySuffix + "/" + mass_type + "/"
     
-    modelFile = modelDir + "BEST_model_" + mySuffix + ".h5"
+    modelFile = modelDir + "BEST_model_" + mass_type + "_" + cats_str+ layers_str+ nodes_str+  mySuffix + ".h5"
     # modelFile = modelDir + "BEST_model_" + mySuffix + ".pb"
     maskSave  = modelDir + maskName    
-    historyFile  = modelDir + "history_" + mySuffix + ".joblib" 
+    historyFile  = modelDir + "history_" + mass_type + "_" + mySuffix + ".joblib" 
 
+    print("Looking for history file:", historyFile)
     # Make/check directories you need
     if not os.path.isdir(args.h5Dir):
         print(args.h5Dir, "does not exist")
@@ -430,7 +441,7 @@ def dirStrings(args, year=''):
 # Create ROC Curves ///////////////////////////////////////////////////////////////
 #==================================================================================
 
-def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
+def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix, year):
 
     print("Plotting ROC curves")
     # samples = ["W", "Z", "Higgs", "Top", "Bottom", "QCD"]
@@ -446,6 +457,7 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
     roc_auc_BES = dict()
     # for i in range(n_classes):
     for i, sample in enumerate(samples):
+        print("i is %i, sample is %s"%(i,sample))
         fprBES[sample], tprBES[sample], _ = roc_curve(truthLabels[:, i], BESpredict[:, i])
         roc_auc_BES[sample] = auc(fprBES[sample], tprBES[sample])
 
@@ -509,9 +521,9 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
         plt.title(title)
         plt.legend(loc="lower right")
 
-        path  = saveDir + "png/" + labelDict[key][1] + '_ROCplot.png'
+        path  = saveDir + "png/" + labelDict[key][1] + '_ROCplot_%s.png'%year
         plt.savefig(path)
-        path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot.pdf'
+        path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot_%s.png'%year
         # plt.savefig(path)
         plt.clf()
         plt.close()
@@ -525,26 +537,30 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix):
 # Once the final arch/vars are decided, can maybe add option for which var
 #   to plot the dependence for. Could be completely general.
 # def plotpTCM(BESpredict, truthLabels, pTArray, plotDir, suffix):
-def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
+def plotpTCM(BESpredict, truthLabels, plotDir, args, mass_type, year, sampleTypes, testSet="flattened"):
 
     print("Plotting mistag rates and efficiency")
-    sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+    #sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 
     # var:[binsize, xmin, xmax, xlabel, fileSuffix]
-    plotDict = {"jetAK8_pt":[20,25,100,"pT","pt"],
-                "jetAK8_mass":[5,0,60,"Mass","mass"],
-                "jetAK8_SoftDropMass":[5,0,60,"SoftDrop Mass","softdrop"] }
+    # var:[binsize, xmin / binsize, xmax / binsize, xlabel, fileSuffix]
+    plotDict = {"tot_HT":[100,156,80,"HT","event_HT"],
+                "SJ_mass":[100,0,40,"superjet mass","SJ_mass"] }
 
     saveDir = os.path.join(plotDir,"tagging/") 
     if not os.path.isdir(saveDir+"pdf/"): os.makedirs(saveDir+"pdf/")
     if not os.path.isdir(saveDir+"png/"): os.makedirs(saveDir+"png/")
     # if not os.path.isdir(saveDir): os.makedirs(saveDir)
 
+    mass_str= mass_type + "_"
+
     # h5Path = "Sample_" + year + "_BESTinputs_test_" + args.suffix + ".h5" # This just makes the next few lines a bit more readable
-    h5Path = "Sample_" + year + "_BESTinputs_test_" + testSet + ".h5" # This just makes the next few lines a bit more readable
+    h5Path = "_Sample_"+ mass_str +year+ "_BESTinputs_test_" + testSet + ".h5" # This just makes the next few lines a bit more readable
     # _, varDict = loadMask(args.maskPath)
-    allBesVarsList = "../formatConverter/h5samples/BESvarList.txt"
+    allBesVarsList = "../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt"
     _, varDict = loadMask(allBesVarsList)
+
+
 
     # for plotVar in plotDict.keys():
     for index, var in varDict.items():
@@ -563,7 +579,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
 
         cm = {}
         # bins_list = [i*binsize for i in range(xmin,xmax)]
-        all_bins = [i*binsize for i in range(xmin,xmax)]
+        all_bins = [i*binsize for i in range(xmin,xmax+1)]
         suffix = args.suffix + "_" + year + "_" + suff
 
         # binsize = 25
@@ -584,11 +600,11 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
             # print(np.array(ptmassIndex).shape)
             if len(ptmassIndex[0]) < 100: continue            
             bins_list.append(pTmassbin)
-            cmTemp = metrics.confusion_matrix(truthLabels[ptmassIndex], np.argmax(BESpredict[ptmassIndex], axis=1), labels=[0,1,2,3,4,5] )
+            cmTemp = metrics.confusion_matrix(truthLabels[ptmassIndex], np.argmax(BESpredict[ptmassIndex], axis=1), labels=[0,1,2,3,4,5] ) 
             # Normalize
             cm[pTmassbin] = cmTemp.astype('float') / cmTemp.sum(axis=1)[:, np.newaxis]
         
-        targetNames = ['W', 'Z', 'Higgs', 'Top', 'b', 'QCD']
+        targetNames = sampleTypes
         for i, target in enumerate(targetNames):
             myPtArrays = [cm[pTmassbin][:,i] for pTmassbin in bins_list]
             # print(len(bins_list), len(myPtArrays))
@@ -626,7 +642,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, year, testSet="flattened"):
     print(saveDir)
 
 # def plotAll(args, strings, year, testSet):
-def plotAll(args, strings, truthData, modelType, BESpredict, year):
+def plotAll(args, strings, truthData, modelType, BESpredict, mass_type, year, samples):
     print("Plotting BEST Performance")
 
     # Unpack strings for readability
@@ -644,9 +660,10 @@ def plotAll(args, strings, truthData, modelType, BESpredict, year):
     # r_varDict = {v:k for k,v in varDict.items()} #invert dictionary 
 
     # Accuracy and Loss plots
-    plotAccLoss(historyFile, suffix, plotDir)
+    plotAccLoss(historyFile, suffix, plotDir, year)
     
-    samples = ['W', 'Z', 'Higgs', 'Top', 'Bottom', 'QCD']
+    #samples = ["WB","HT","ZT","Top","QCD"]
+
     # sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
 
     # dataDict = loadH5Data(args, mask, sampleTypes, ["test"], {"test":None}, year, testSet)
@@ -671,7 +688,7 @@ def plotAll(args, strings, truthData, modelType, BESpredict, year):
 
     # Plot ROC Curve
     # plotROC(BESpredict, truthData, plotDir, samples, modelType, suffix)
-    plotROC(BESpredict, truthData, plotDir, samples, args.modelType, suffix)
+    plotROC(BESpredict, truthData, plotDir, samples, args.modelType, suffix, year)
 
     # Collapse truth labels into 1D (length N_events) array containing truth index (0-5) for each event 
     truthData = np.argmax(truthData, axis=1) 
@@ -687,8 +704,8 @@ def plotAll(args, strings, truthData, modelType, BESpredict, year):
     cm = metrics.confusion_matrix(truthData, np.argmax(BESpredict, axis=1) )
                            
     # Plot Confusion Matrix, both normalized and not normalized
-    plot_confusion_matrix(cm, samples, plotDir, suffix)
-    plot_confusion_matrix(cm, samples, plotDir, suffix, normalize=True)
+    plot_confusion_matrix(cm, samples, plotDir, suffix, year)
+    plot_confusion_matrix(cm, samples, plotDir, suffix, year, normalize=True)
     # plot_confusion_matrix(cm, samples, plotDir, suffix, normalize=True, compare=True, args=args, year=year, testSet=testSet)
 
     # Record classification rates 
@@ -696,7 +713,7 @@ def plotAll(args, strings, truthData, modelType, BESpredict, year):
     recordClassification(cm, truthData, samples, args.modelType, suffix)
 
     # Plot Efficiency
-    plotpTCM(BESpredict, truthData, plotDir, args, year)
+    plotpTCM(BESpredict, truthData, plotDir, args, mass_type, year, samples)
     # plotpTCM(BESpredict, truthData, plotDir, args, year, testSet)
     # plotpTCM(scaledTestEvents, truthData, testDataDict["testEvents"][:,548], plotDir, suffix)
 

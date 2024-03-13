@@ -114,10 +114,12 @@ class hadronFilter : public edm::stream::EDFilter<> {
       edm::EDGetTokenT<std::vector<pat::Jet>> fatJetToken_;
       edm::EDGetTokenT<std::vector<pat::Jet>> jetToken_;
       edm::EDGetTokenT<edm::TriggerResults> triggerBits_;
-      std::string triggers;
-      
+      std::string year;
+      std::vector<std::string> triggers;
+
       bool doJEC = false;
       bool doJER = true;
+      bool debug = false;
       edm::EDGetTokenT<double> m_rho_token;
       TRandom3 *randomNum = new TRandom3();
 
@@ -142,11 +144,29 @@ hadronFilter::hadronFilter(const edm::ParameterSet& iConfig)
    fatJetToken_ =    consumes<std::vector<pat::Jet>>(iConfig.getParameter<edm::InputTag>("fatJetCollection"));
    triggerBits_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("bits"));
    jetToken_    = consumes<std::vector<pat::Jet>>(iConfig.getParameter<edm::InputTag>("jetCollection"));
-   triggers     = iConfig.getParameter<std::string>("triggers");
+   //triggers     = iConfig.getParameter<std::string>("triggers");
 
 
    edm::InputTag fixedGridRhoAllTag_ = edm::InputTag("fixedGridRhoAll", "", "RECO");   
    m_rho_token  = consumes<double>(fixedGridRhoAllTag_);
+   year = iConfig.getParameter<std::string>("year");
+
+   if(year == "2018")
+   {
+      triggers = {"HLT_PFJet500_v", "HLT_PFHT1050_v"};
+   }
+   else if(year == "2017")
+   {
+      triggers = {"HLT_PFJet500_v", "HLT_PFHT1050_v"};
+   }
+   else if(year == "2016")
+   {
+      triggers  = {"HLT_PFHT900_v", "HLT_PFJet450_v"};
+   }
+   else if(year == "2015")
+   {
+      triggers  = {"HLT_PFHT900_v", "HLT_PFJet450_v"};
+   }
 
 }
 
@@ -178,25 +198,35 @@ bool hadronFilter::isgoodjet(const float eta, const float NHF,const float NEMF, 
 bool hadronFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-/////////////////Trigger///////////////
+/////////////////Trigger//////////////
 
    edm::Handle<edm::TriggerResults> triggerBits;
    iEvent.getByToken(triggerBits_, triggerBits);
-   const edm::TriggerNames &names = iEvent.triggerNames(*triggerBits);
-   bool pass = false;
-   std::string trigname= triggers;
-   for (unsigned int i = 0; i < triggerBits->size(); ++i) 
-   {
-      const std::string name = names.triggerName(i);
-      const bool accept = triggerBits->accept(i);
-      if ((name.find(trigname) != std::string::npos) &&(accept)) pass =true;
-   }
 
-   if(!pass)
-   {  
-       return false;
+   const edm::TriggerNames &names = iEvent.triggerNames(*triggerBits);
+   
+   for(auto iT = triggers.begin(); iT != triggers.end(); iT++)
+   {
+      std::string trigname = *iT;
+      if(debug)std::cout << "Looking for the " << trigname << " trigger." << std::endl;
+
+      bool pass = false;
+      for (unsigned int i = 0; i < triggerBits->size(); ++i) 
+      {
+         const std::string name = names.triggerName(i);
+         const bool accept = triggerBits->accept(i);
+         if ((name.find(trigname) != std::string::npos) &&(accept))
+         {
+            if(debug)std::cout << "Found the " << *iT << " trigger." << std::endl;
+            pass =true;
+         }
+      } 
+      if(!pass)
+      {  
+          return false; // if any of the triggers aren't found, skip event
+      }
    }
-   //std::cout << "Pases trigger" << std::endl;
+   //std::cout << "Passes trigger" << std::endl;
    //calculate HT -> make HT > 1250. GeV
 
 

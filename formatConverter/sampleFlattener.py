@@ -17,135 +17,139 @@ import numpy as np
 import numpy.ma as ma
 from sklearn.model_selection import train_test_split
 
-years = ["2016"]
+years = ["2015","2016","2017","2018"]
 # years = ["2017"]
-sampleTypes = ["HT","WB","ZT","Top","QCD"]
-mass_types_ = ["low_mass"]
+decays_types = ["allDecays"]
+#decays_types = ["","allDecays"]
+
+#mass_types = ["low_mass", "high_mass", "all_mass"]
+mass_types = ["all_mass"]
+
+sampleTypes_ = ["HT", "ZT", "WB", "QCD","Top"]
+
 # setTypes = ["","train","validation","test"]
 setTypes = ["train","validation","test"]
 
 ## Loop over all files and keep/reject events in batches. One uses train_test_split to do the heavy lifting.
 ## The random state in the function ensures the same mask across the keys. Since the probabilities are binned in pt,
 ## one must loop over all pt bins and evaluate keep/reject for each.
-def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex, userBatchSize):
+def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex, userBatchSize, mass_type):
     print("Begin flattening for", setType)
     
     ## Loop over all samples and flatten each one by one. Probabilities have been previously calculated and passed in
     for mySample in sampleTypes:
-        mass_types = [""]
-        if mySample in ["WB","HT","ZT"]:
-            mass_types = mass_types_
-        for mass_type in mass_types:
-            filePath = h5Dir+mySample+'Sample_'+year+'_BESTinputs'
-            if mySample in ["WB","HT","ZT"]:
-                filePath = h5Dir+mySample+'Sample_'+year+"_" + mass_type+'_BESTinputs'
-            if setType == "":
-                filePath = filePath+".h5"
-            else:
-                filePath = filePath+"_"+setType+".h5"
-            fIn = h5py.File(filePath, 'r')
-            fOut = h5py.File(outDir+filePath.split('.')[-2].split('/')[-1]+"_flattened.h5","w")
-            besData = {}
-            counter = 0
-            totalEvents = fIn[list(fIn.keys())[0]].shape[0]
-            print("Begin batching for sample", mySample, "in year", year,"total events", totalEvents)
+
+        mass_str= mass_type + "_"
+        sample_str = mySample + "_"
+
+        filePath = h5Dir+sample_str+'Sample_'+ mass_str +year+'_BESTinputs'
+        if setType == "":
+            filePath = filePath+".h5"
+        else:
+            filePath = filePath+"_"+setType+".h5"
+        fIn = h5py.File(filePath, 'r')
+        fOut = h5py.File(outDir+filePath.split('.')[-2].split('/')[-1]+"_flattened.h5","w")
+        besData = {}
+        counter = 0
+        totalEvents = fIn[list(fIn.keys())[0]].shape[0]
+        print("Begin batching for sample", mySample, "in year", year,"total events", totalEvents)
+        
+        ## Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
+        while (counter < totalEvents):
+            batchSize = userBatchSize if (totalEvents > counter+userBatchSize) else (totalEvents-counter)
+            # print("Batch size", batchSize, "at", counter)
             
-            ## Perform the keep/throw-away operation in batches. Counter eventually reaches end of numEvents in file. Incrementer at end of while loop
-            while (counter < totalEvents):
-                batchSize = userBatchSize if (totalEvents > counter+userBatchSize) else (totalEvents-counter)
-                # print("Batch size", batchSize, "at", counter)
-                
-                # Grab pt part of dataset to evaluate whether to keep or reject event
-                myPtData = np.array(fIn["BES_vars"][counter:counter+batchSize,flattenIndex])
-                # print("Shape of myPtData", myPtData.shape)
-                
-                # For each key in dataset, take partial dataset and copy or reject. Note the random state below ensures the same set of events are kept or rejected 
-                for myKey in fIn.keys():
-                    # print("Key", myKey)
-                    myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
-                    dsetShape  = fIn[myKey].shape
-                    dsetChunks = fIn[myKey].chunks 
-                    # print("Shape of myKeyData", myKeyData.shape)
-                    # Loop over bins (events in dataset may belong to any pt-bin)
-                    for binIndex in range(0,len(bins)):
-                        myProbability = keepProbs[sampleTypes.index(mySample)][binIndex]
-                        if myProbability == 0:
-                            # print("Probability is 0, skipping saving part")
-                            continue
-                        currLowRange = bins[binIndex]
-                        currHighRange = min(currLowRange+binSize, maxRange)
-                        ## Pick out data in bin, myDataBool has shape (batchSize,1) with boolean values of whether the event is in the right bin
-                        myDataBool = (currLowRange<myPtData)*(myPtData<currHighRange)
-                        # print("Processing Bin:", currLowRange, currHighRange)
-                        # print("Shape of myDataBool", myDataBool.shape)
-                        result = myKeyData[myDataBool]
-                        # print("Shape of result", result.shape)
-                        if result.shape[0] == 0:
-                            # print("Result has no events in bin, continue to next bin")
-                            continue
-                        output = result
-                        if myProbability < 1:
-                            ## The random state needs to be the same for each key to ensure we keep the same events across keys
-                            output = train_test_split(result, train_size=myProbability, shuffle=True, random_state=29)[0]
-                        # print("Size of kept events", len(output))
-                        if len(output) == 0:
-                            # print("Output has no events in bin, continue to next bin")
-                            continue
-                        # Store kept data
-                        if not myKey in besData.keys():
-                            # print("Making new datset")
-                            if myKey == "BES_vars": # max shape by # of vars
-                                besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
-                            # else: # max shape by # of pfcands (or SV's) and # of vars
-                            #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
-                        else:
-                            # append the dataset
-                            # print("Appending dataset")
-                            besData[myKey].resize(besData[myKey].shape[0] + len(output), axis=0)
-                            besData[myKey][-len(output) :] = output
-                counter += batchSize
+            # Grab pt part of dataset to evaluate whether to keep or reject event
+            myPtData = np.array(fIn["BES_vars"][counter:counter+batchSize,flattenIndex])
+            # print("Shape of myPtData", myPtData.shape)
+            
+            # For each key in dataset, take partial dataset and copy or reject. Note the random state below ensures the same set of events are kept or rejected 
+            for myKey in fIn.keys():
+                # print("Key", myKey)
+                myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
+                dsetShape  = fIn[myKey].shape
+                dsetChunks = fIn[myKey].chunks 
+                # print("Shape of myKeyData", myKeyData.shape)
+                # Loop over bins (events in dataset may belong to any pt-bin)
+                for binIndex in range(0,len(bins)):
+                    myProbability = keepProbs[sampleTypes.index(mySample)][binIndex]
+                    if myProbability == 0:
+                        # print("Probability is 0, skipping saving part")
+                        continue
+                    currLowRange = bins[binIndex]
+                    currHighRange = min(currLowRange+binSize, maxRange)
+                    ## Pick out data in bin, myDataBool has shape (batchSize,1) with boolean values of whether the event is in the right bin
+                    myDataBool = (currLowRange<myPtData)*(myPtData<currHighRange)
+                    # print("Processing Bin:", currLowRange, currHighRange)
+                    # print("Shape of myDataBool", myDataBool.shape)
+                    result = myKeyData[myDataBool]
+                    # print("Shape of result", result.shape)
+                    if result.shape[0] == 0:
+                        # print("Result has no events in bin, continue to next bin")
+                        continue
+                    output = result
+                    if myProbability < 1:
+                        ## The random state needs to be the same for each key to ensure we keep the same events across keys
+                        output = train_test_split(result, train_size=myProbability, shuffle=True, random_state=29)[0]
+                    # print("Size of kept events", len(output))
+                    if len(output) == 0:
+                        # print("Output has no events in bin, continue to next bin")
+                        continue
+                    # Store kept data
+                    if not myKey in besData.keys():
+                        # print("Making new datset")
+                        if myKey == "BES_vars": # max shape by # of vars
+                            besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
+                        # else: # max shape by # of pfcands (or SV's) and # of vars
+                        #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
+                    else:
+                        # append the dataset
+                        # print("Appending dataset")
+                        besData[myKey].resize(besData[myKey].shape[0] + len(output), axis=0)
+                        besData[myKey][-len(output) :] = output
+            counter += batchSize
 
 ## Plot samples in pt (or variable of choice) and return a list of probabilities for keeping events
-def getProbabilities(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex):
+def getProbabilities(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange, flattenIndex, mass_type):
     print("Begin making probabilities array")
     probs = [] # First axis is sampleTypes, second axis is ptBins, values are probability to keep event in sample,ptBin
     binnedNEvents = [] # First axis is sampleTypes, second axis is ptBins, values are number of events in sample,ptBin
 
     ## The following block should populate the binnedNEvents list
+        
     for mySample in sampleTypes:
+        print("Processing", year, mySample, mass_type)
+        mass_str= mass_type + "_"
+        sample_str = mySample + "_"
 
-        mass_types = [""]
-        if mySample in ["WB","HT","ZT"]:
-            mass_types = mass_types_
-        for mass_type in mass_types:
 
-            print("Processing", year, mySample, mass_type)
-            filePath = h5Dir+mySample+'Sample_'+year+'_BESTinputs'
-            if mySample in ["WB","HT","ZT"]:
-                filePath = h5Dir+mySample+ 'Sample_'+ year +"_"+ mass_type + '_BESTinputs'
-            if setType == "":
-                filePath = filePath+".h5"
-            else:
-                filePath = filePath+"_"+setType+".h5"
-            f = h5py.File(filePath, 'r')
-            binnedNEvents.append([])
+        filePath = h5Dir+sample_str+'Sample_'+ mass_str +year+'_BESTinputs'
+        
+        if setType == "":
+            filePath = filePath+".h5"
+        else:
+            filePath = filePath+"_"+setType+".h5"
 
-            ## Only needs to be done on smallest key, BEST_vars
-            ## Output shape of myData is (NEvents,)
-            myData = np.array(f["BES_vars"][...,flattenIndex])
-            print("myData", myData.shape)
-            # print("Begin bin looping")
-            for currLowRange in bins:
-                currHighRange = min(currLowRange+binSize, maxRange)
-                ## Pick out data in bin
-                myDataBool = (currLowRange<myData)*(myData<currHighRange)
-                ## (bool = True -> mask) so need to invert mask to keep desired info
-                dataMask = ma.masked_array(myData, mask=~myDataBool)
-                ## Invert mask again (Maybe this could be cleaner)
-                ## Shape of truncated data is (NEventsPass,)
-                myTruncatedData = dataMask[~dataMask.mask]
-                ## Append NEvents in bin to last element (list) of binnedNEvents, i.e. mySample
-                binnedNEvents[-1].append(len(myTruncatedData))
+        print("Looking for file: %s"%filePath)
+        f = h5py.File(filePath, 'r')
+        binnedNEvents.append([])
+
+        ## Only needs to be done on smallest key, BEST_vars
+        ## Output shape of myData is (NEvents,)
+        myData = np.array(f["BES_vars"][...,flattenIndex])
+        print("myData", myData.shape)
+        # print("Begin bin looping")
+        for currLowRange in bins:
+            currHighRange = min(currLowRange+binSize, maxRange)
+            ## Pick out data in bin
+            myDataBool = (currLowRange<myData)*(myData<currHighRange)
+            ## (bool = True -> mask) so need to invert mask to keep desired info
+            dataMask = ma.masked_array(myData, mask=~myDataBool)
+            ## Invert mask again (Maybe this could be cleaner)
+            ## Shape of truncated data is (NEventsPass,)
+            myTruncatedData = dataMask[~dataMask.mask]
+            ## Append NEvents in bin to last element (list) of binnedNEvents, i.e. mySample
+            binnedNEvents[-1].append(len(myTruncatedData))
     #print(binnedNEvents)
 
     ## Convert to numpy array to better manipulate
@@ -167,7 +171,7 @@ def getProbabilities(h5Dir, sampleTypes, year, setType, bins, binSize, maxRange,
             else:
                 binnedProbs.append(0.)
         probs.append(binnedProbs)
-
+    print probs
     return probs 
 
 # Main function should take in arguments and call the functions you want
@@ -202,7 +206,7 @@ if __name__ == "__main__":
                         type=int,
                         #default=142)
                         #default=548)
-                        default=104) ## flattens in event HT
+                        default=179) ## flattens in event HT
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
@@ -246,10 +250,15 @@ if __name__ == "__main__":
     bins = [args.rangeLow+binSize*i for i in range(0,args.nBins)]
     if args.debug: print("Range: ", args.nBins," bins, from ", bins[0], " to ", bins[len(bins)-1]+binSize, " in steps of ", binSize) 
     if args.debug: print("Rejecting events above: ", args.rangeHigh)
+    
+    for decays_type in decays_types:
+        if decays_type == "allDecays":
+            sampleTypes = ["allDecays","Top","QCD"]
+        else: sampleTypes = sampleTypes_
 
-    for year in years:
-        for setType in setTypes:
-            print("My Type", setType)
-            keepProbs = getProbabilities(args.h5Dir, sampleTypes, year, setType, bins, binSize, args.rangeHigh, args.flattenIndex)
-            flattenFile(keepProbs, args.h5Dir, args.outDir, sampleTypes, year, setType, bins, binSize, args.rangeHigh, args.flattenIndex, args.batchSize)
+        for mass_type in mass_types:
+            for year in years:
+                for setType in setTypes:
+                    keepProbs = getProbabilities(args.h5Dir, sampleTypes, year, setType, bins, binSize, args.rangeHigh, args.flattenIndex,mass_type)
+                    flattenFile(keepProbs, args.h5Dir, args.outDir, sampleTypes, year, setType, bins, binSize, args.rangeHigh, args.flattenIndex, args.batchSize, mass_type)
 

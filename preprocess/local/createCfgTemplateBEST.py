@@ -124,7 +124,7 @@ def makeACfg(jetType, year, datafile):
    newCfg.write(' fatJetCollection = cms.InputTag("selectedUpdatedPatJetsAK8UpdatedJEC"),\n')
    newCfg.write(' jetCollection = cms.InputTag("selectedUpdatedPatJetsPileupJetID"),\n')
    newCfg.write(' bits = cms.InputTag("TriggerResults", "", "HLT"),\n')
-   newCfg.write(' triggers = cms.string("%s"),\n'%trigger)
+   #newCfg.write(' triggers = cms.string("%s"),\n'%trigger)
    newCfg.write(")\n")
 
 

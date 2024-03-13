@@ -11,7 +11,7 @@
     This EDProducer is meant to be used with CMSSW_9_4_8                 ---
 */
 //========================================================================================
-// Authors:  Brendan Regnery, Justin Pilot, Reyer Band, Devin Taylor ---------------------
+// Authors:  Brendan Regnery, Samantha Abbott, Justin Pilot, Reyer Band, Devin Taylor ---------------------
 //     Created:  WED, 8 Aug 2018 21:00:28 GMT  ---------------------------------------
 //   Modified and adapted by Ethan Cannaert, 2019-2024 
 //========================================================================================
@@ -131,6 +131,7 @@ class BESTProducer : public edm::stream::EDProducer<>
      int nHtHt = 0;
      int nZtZt = 0;
      int nPassedEvents = 0;
+     bool testNewVars = true;
 
       TRandom3 *randomNum = new TRandom3(); // for JERs
 
@@ -317,7 +318,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig)
      listOfVars.push_back("AK42_nsubjets");
      listOfVars.push_back("AK42_thrust");
      listOfVars.push_back("AK42_sphericity");
-     //listOfVars.push_back("AK42_asymmetry");
+     listOfVars.push_back("AK42_asymmetry");
      listOfVars.push_back("AK42_isotropy");
      listOfVars.push_back("AK42_aplanarity");
      listOfVars.push_back("AK42_FW1");
@@ -332,7 +333,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig)
      listOfVars.push_back("AK43_nsubjets");
      listOfVars.push_back("AK43_thrust");
      listOfVars.push_back("AK43_sphericity");
-     //listOfVars.push_back("AK43_asymmetry");
+     listOfVars.push_back("AK43_asymmetry");
      listOfVars.push_back("AK43_isotropy");
      listOfVars.push_back("AK43_aplanarity");
      listOfVars.push_back("AK43_FW1");
@@ -347,18 +348,18 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig)
      listOfVars.push_back("AK44_nsubjets");
      listOfVars.push_back("AK44_thrust");
      listOfVars.push_back("AK44_sphericity");
-     //listOfVars.push_back("AK44_asymmetry");
+     listOfVars.push_back("AK44_asymmetry");
      listOfVars.push_back("AK44_isotropy");
      listOfVars.push_back("AK44_aplanarity");
-     //listOfVars.push_back("AK44_FW1");
-     //listOfVars.push_back("AK44_FW2");
-     //listOfVars.push_back("AK44_FW3");
-     //listOfVars.push_back("AK44_FW4");
+     listOfVars.push_back("AK44_FW1");
+     listOfVars.push_back("AK44_FW2");
+     listOfVars.push_back("AK44_FW3");
+     listOfVars.push_back("AK44_FW4");
 
      //SJ BES variables
      listOfVars.push_back("SJ_thrust");
      listOfVars.push_back("SJ_sphericity");
-     listOfVars.push_back("SJ_asymmetry");
+     //listOfVars.push_back("SJ_asymmetry");
      listOfVars.push_back("SJ_isotropy");
      listOfVars.push_back("SJ_aplanarity");
      listOfVars.push_back("SJ_FW1");
@@ -396,6 +397,120 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig)
      listOfVars.push_back("SJ_nAK4_500");
      listOfVars.push_back("SJ_nAK4_800");
      listOfVars.push_back("SJ_nAK4_1000");
+
+   if(testNewVars)
+   {
+      /*
+      // fraction of daughters that have energy greater than threshold
+      AK41_daughters_frac_10
+
+      AK41_mass_10   /// mass of jet using only daughters with energy greater than 10 GeV
+      */
+
+        listOfVars.push_back("SJ_AK4_frac_10");
+        listOfVars.push_back("SJ_AK4_frac_25");
+        listOfVars.push_back("SJ_AK4_frac_50");
+        listOfVars.push_back("SJ_AK4_frac_75");
+        listOfVars.push_back("SJ_AK4_frac_100");
+        listOfVars.push_back("SJ_AK4_frac_200");
+        listOfVars.push_back("SJ_AK4_frac_300");
+        listOfVars.push_back("SJ_AK4_frac_500");
+        listOfVars.push_back("SJ_AK4_frac_800");
+
+
+        // AK41 vars
+
+        listOfVars.push_back("AK41_daughters_frac_0p1");
+        listOfVars.push_back("AK41_daughters_frac_0p5");
+        listOfVars.push_back("AK41_daughters_frac_1");
+        listOfVars.push_back("AK41_daughters_frac_2");
+        listOfVars.push_back("AK41_daughters_frac_5");
+        listOfVars.push_back("AK41_daughters_frac_7p5");
+        listOfVars.push_back("AK41_daughters_frac_10");
+        listOfVars.push_back("AK41_daughters_frac_15");
+
+        //listOfVars.push_back("AK41_daughters_frac_20");
+        //listOfVars.push_back("AK41_daughters_frac_40");
+        //listOfVars.push_back("AK41_daughters_frac_50");
+        //listOfVars.push_back("AK41_daughters_frac_75");
+        //listOfVars.push_back("AK41_daughters_frac_100");
+
+
+        listOfVars.push_back("AK41_mass_0p1");
+        listOfVars.push_back("AK41_mass_0p5");
+        listOfVars.push_back("AK41_mass_1");
+        listOfVars.push_back("AK41_mass_2");
+        listOfVars.push_back("AK41_mass_7p5");
+        listOfVars.push_back("AK41_mass_10");
+        listOfVars.push_back("AK41_mass_15");
+
+        //listOfVars.push_back("AK41_mass_20");
+        //listOfVars.push_back("AK41_mass_40");
+        //listOfVars.push_back("AK41_mass_50");
+        //listOfVars.push_back("AK41_mass_75");
+        //listOfVars.push_back("AK41_mass_100");
+
+
+
+
+
+
+        // AK42 vars
+        listOfVars.push_back("AK42_daughters_frac_0p1");
+        listOfVars.push_back("AK42_daughters_frac_0p5");
+        listOfVars.push_back("AK42_daughters_frac_1");
+        listOfVars.push_back("AK42_daughters_frac_2");
+        listOfVars.push_back("AK42_daughters_frac_5");
+        listOfVars.push_back("AK42_daughters_frac_7p5");
+        listOfVars.push_back("AK42_daughters_frac_10");
+        listOfVars.push_back("AK42_daughters_frac_15");
+
+        listOfVars.push_back("AK42_mass_0p1");
+        listOfVars.push_back("AK42_mass_0p5");
+        listOfVars.push_back("AK42_mass_1");
+        listOfVars.push_back("AK42_mass_2");
+        listOfVars.push_back("AK42_mass_7p5");
+        listOfVars.push_back("AK42_mass_10");
+        listOfVars.push_back("AK42_mass_15");
+
+        // AK43 vars
+
+        listOfVars.push_back("AK43_daughters_frac_0p1");
+        listOfVars.push_back("AK43_daughters_frac_0p5");
+        listOfVars.push_back("AK43_daughters_frac_1");
+        listOfVars.push_back("AK43_daughters_frac_2");
+        listOfVars.push_back("AK43_daughters_frac_5");
+        listOfVars.push_back("AK43_daughters_frac_7p5");
+        listOfVars.push_back("AK43_daughters_frac_10");
+        listOfVars.push_back("AK43_daughters_frac_15");
+
+        listOfVars.push_back("AK43_mass_0p1");
+        listOfVars.push_back("AK43_mass_0p5");
+        listOfVars.push_back("AK43_mass_1");
+        listOfVars.push_back("AK43_mass_2");
+        listOfVars.push_back("AK43_mass_7p5");
+        listOfVars.push_back("AK43_mass_10");
+        listOfVars.push_back("AK43_mass_15");
+
+        listOfVars.push_back("AK44_daughters_frac_0p1");
+        listOfVars.push_back("AK44_daughters_frac_0p5");
+        listOfVars.push_back("AK44_daughters_frac_1");
+        listOfVars.push_back("AK44_daughters_frac_2");
+        listOfVars.push_back("AK44_daughters_frac_5");
+        listOfVars.push_back("AK44_daughters_frac_7p5");
+        listOfVars.push_back("AK44_daughters_frac_10");
+        listOfVars.push_back("AK44_daughters_frac_15");
+
+        listOfVars.push_back("AK44_mass_0p1");
+        listOfVars.push_back("AK44_mass_0p5");
+        listOfVars.push_back("AK44_mass_1");
+        listOfVars.push_back("AK44_mass_2");
+        listOfVars.push_back("AK44_mass_7p5");
+        listOfVars.push_back("AK44_mass_10");
+        listOfVars.push_back("AK44_mass_15");
+
+
+   }
 
      // need to add more variables here ...
 
@@ -473,6 +588,11 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<TLorentzVector> genChiZt;
    std::vector<TLorentzVector> genChiHt;
    std::vector<TLorentzVector> genChiWb;
+ 
+   std::vector<TLorentzVector> genH;  // from Ht decay 
+   std::vector<TLorentzVector> genZ;  // from Zt decay
+   std::vector<TLorentzVector> genW;  // from Wb decay
+
 
    std::vector<TLorentzVector> Topb;
    std::vector<TLorentzVector> Suub;
@@ -484,6 +604,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      if ((abs(iG->pdgId()) == 24) && ((abs(iG->mother()->pdgId()) == chi_pdgid)) ) 
      {
          genChiWb.push_back( TLorentzVector(iG->mother()->px(),iG->mother()->py(),iG->mother()->pz(),iG->mother()->energy())  );
+         genW.push_back(TLorentzVector(iG->px(),iG->py(),iG->pz(),iG->energy()));
          nW++;
      }
      else if ( (abs(iG->pdgId()) == 5) && (abs(iG->mother()->pdgId()) == chi_pdgid)  )
@@ -499,11 +620,13 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      else if ( (abs(iG->pdgId()) == 25) && ((abs(iG->mother()->pdgId()) == chi_pdgid)) ) 
      {
          genChiHt.push_back( TLorentzVector(iG->mother()->px(),iG->mother()->py(),iG->mother()->pz(),iG->mother()->energy())  );
+         genH.push_back(TLorentzVector(iG->px(),iG->py(),iG->pz(),iG->energy()));
          nH++;
      }
      else if ( (abs(iG->pdgId()) == 23) && ((abs(iG->mother()->pdgId()) == chi_pdgid)) ) 
      {
          genChiZt.push_back( TLorentzVector(iG->mother()->px(),iG->mother()->py(),iG->mother()->pz(),iG->mother()->energy())  );
+         genZ.push_back(TLorentzVector(iG->px(),iG->py(),iG->pz(),iG->energy()));
          nZ++;
 
      }
@@ -604,7 +727,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    if((nAK4 <4) || (totHT < 1500.) )
    {
       
-      if(debug2)std::cout << "Failed nAK4,tot HT cut" << std::endl;
+      if(debug)std::cout << "Failed nAK4,tot HT cut" << std::endl;
       return;
 
    }
@@ -725,13 +848,16 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      }
      nfatjets++;
    }
-
-   if ( (nfatjets < 3) ||   ((nfatjet_pre < 2) && ((dijetMassOne < 1000.) || (dijetMassTwo < 1000.)  )  )  ) 
+   if (jetType_ == "QCD" || jetType_ == "Top")  // VLQs have very high efficiency rates here,  but a small portion of stats are lost, so this won't be applied to them
    {
-      if(debug2)std::cout << "Failed nfatjet, nfatjet_pre, or dijet cut" << std::endl;
-      return;
+       if (  (nfatjets < 3) ||   ((nfatjet_pre < 2) && ((dijetMassOne < 1000.) || (dijetMassTwo < 1000.)  )  )  ) 
+      {
+         if(debug)std::cout << "Failed nfatjet, nfatjet_pre, or dijet cut" << std::endl;
+         return;
+      }  
    }
-   if(debug)std::cout << "Passed AK8 and AK4 dijet cuts " << std::endl;
+
+   if(debug2)std::cout << "Passed AK8 and AK4 dijet cuts " << std::endl;
 
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    ////////////////////////////////////////////////////////  _clustering  ///////////////////////////////////////////////////////////////////////
@@ -779,7 +905,6 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    if ( ( genChiHt.size() + genChiZt.size() + genChiWb.size() ) > 2)
    {
      std::cout << "More than 2 gen Chis ... you did something wrong " << std::endl;
-     return;
    }
 
    if(debug)std::cout << "Boosting all jet particles to COM frame." << std::endl;
@@ -845,152 +970,160 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
    ////////////////// determine superjet classifications ///////////////////////
-   ///////////////// check here for a bug ... /////////////////////
-
-   if(debug)std::cout << "Characterizing superjets by matching to gen chis." << std::endl;
-
-
-   //positiveLobe = positive superjet classification: 1 = Zt, 2 = Ht, 3 = Wb
+   bool handSort = false;
    std::string positiveLobe = "";
    std::string negativeLobe = "";
-
-   TLorentzVector chi1(0,0,0,0);
-
-   if ( genChiWbBoosted.size() > 0)
+   if ( (jetType_ == "WB") || (jetType_ == "HT") || (jetType_ == "ZT"))
    {
-     for(auto iG = genChiWbBoosted.begin(); iG != genChiWbBoosted.end(); iG++ )
-     {
-      // need angle between thrust vector
-      TVector3 candJet_vec = iG->Vect();
+      if(debug)std::cout << "Characterizing superjets by matching to gen chis." << std::endl;
 
-      if( abs(chi1.Px())< 1e-8)
+      //positiveLobe = positive superjet classification: 1 = Zt, 2 = Ht, 3 = Wb
+
+
+      TLorentzVector chi1(0,0,0,0);
+
+      if ( genChiWbBoosted.size() > 0)
       {
-         chi1.SetPxPyPzE(iG->Px(), iG->Py(),iG->Pz(),iG->E());
+        for(auto iG = genChiWbBoosted.begin(); iG != genChiWbBoosted.end(); iG++ )
+        {
+         // need angle between thrust vector
+         TVector3 candJet_vec = iG->Vect();
+
+         if( abs(chi1.Px())< 1e-8)
+         {
+            chi1.SetPxPyPzE(iG->Px(), iG->Py(),iG->Pz(),iG->E());
+         }
+
+         double cosAngle = cos(candJet_vec.Angle(thrust_vector));
+         if (cosAngle > 0)
+         {
+            if ( positiveLobe == "") 
+            {
+              positiveLobe = "WB";
+            }
+            else 
+            {
+              std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
+
+               // clear the gen vectors here, most likely what is happening is the thrust axis is perpendicular to the SJ axis 
+               // assign superjets in a more sophisticated manner ... 
+              //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect()) << std::endl;
+              handSort = true;
+            }
+         }
+         else if (cosAngle < 0)
+         {
+            if ( negativeLobe == "") 
+            {
+              negativeLobe = "WB";
+            }
+            else 
+            {
+              std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
+              //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
+
+              handSort = true;
+            }
+         }
+        }   
       }
 
-      double cosAngle = cos(candJet_vec.Angle(thrust_vector));
-      if (cosAngle > 0)
+   //need to change these ones.
+      if ( genChiZtBoosted.size() > 0)
       {
-         if ( positiveLobe == "") 
-         {
-           positiveLobe = "WB";
-         }
-         else 
-         {
-           std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
-           //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect()) << std::endl;
-           return;
-         }
-      }
-      else if (cosAngle < 0)
-      {
-         if ( negativeLobe == "") 
-         {
-           negativeLobe = "WB";
-         }
-         else 
-         {
-           std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
-           //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
 
-           return;
+
+        for(auto iG = genChiZtBoosted.begin(); iG != genChiZtBoosted.end(); iG++ )
+        {
+
+         if( abs(chi1.Px())< 1e-8)
+         {
+            chi1.SetPxPyPzE(iG->Px(), iG->Py(),iG->Pz(),iG->E());
          }
+         // need angle between thrust vector
+         TVector3 candJet_vec = iG->Vect();
+         double cosAngle = cos(candJet_vec.Angle(thrust_vector));
+         if (cosAngle > 0)
+         {
+            if ( positiveLobe == "") 
+            {
+              positiveLobe = "ZT";
+            }
+            else 
+            {
+              std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
+              //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
+
+              handSort = true;
+            }
+         }
+         else if (cosAngle < 0)
+         {
+            if ( negativeLobe == "")
+            {
+              negativeLobe = "ZT";
+            } 
+            else 
+            {
+              std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
+              //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
+
+              handSort = true;
+            }
+         }
+        }   
       }
-     }   
+      if ( genChiHtBoosted.size() > 0)
+      {
+
+        for(auto iG = genChiHtBoosted.begin(); iG != genChiHtBoosted.end(); iG++ )
+        {
+         if( abs(chi1.Px())< 1e-8)
+         {
+            chi1.SetPxPyPzE(iG->Px(), iG->Py(),iG->Pz(),iG->E());
+         }
+         // need angle between thrust vector
+         TVector3 candJet_vec = iG->Vect();
+         double cosAngle = cos(candJet_vec.Angle(thrust_vector));
+         if (cosAngle > 0)
+         {
+            if ( positiveLobe == "")
+            {
+              positiveLobe = "HT";
+            } 
+            else 
+            {
+              std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
+              //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
+              handSort = true;
+            }
+         }
+         else if (cosAngle < 0)
+         {
+            if ( negativeLobe == "")
+            {
+              negativeLobe = "HT";
+            } 
+            else 
+            {
+              std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
+              //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
+              handSort = true;
+            }
+         }
+        }   
+      }
+
+
+      if(debug) std::cout << "The event has " <<genChiHtBoosted.size() << "/" << genChiWbBoosted.size() << "/"<< genChiZtBoosted.size() << " matched HT/WB/ZT superjets." << std::endl;
+
    }
-
-//need to change these ones.
-   if ( genChiZtBoosted.size() > 0)
-   {
-
-
-     for(auto iG = genChiZtBoosted.begin(); iG != genChiZtBoosted.end(); iG++ )
-     {
-
-      if( abs(chi1.Px())< 1e-8)
-      {
-         chi1.SetPxPyPzE(iG->Px(), iG->Py(),iG->Pz(),iG->E());
-      }
-      // need angle between thrust vector
-      TVector3 candJet_vec = iG->Vect();
-      double cosAngle = cos(candJet_vec.Angle(thrust_vector));
-      if (cosAngle > 0)
-      {
-         if ( positiveLobe == "") 
-         {
-           positiveLobe = "ZT";
-         }
-         else 
-         {
-           std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
-           //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
-
-           return;
-         }
-      }
-      else if (cosAngle < 0)
-      {
-         if ( negativeLobe == "")
-         {
-           negativeLobe = "ZT";
-         } 
-         else 
-         {
-           std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
-           //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
-
-           return;
-         }
-      }
-     }   
-   }
-   if ( genChiHtBoosted.size() > 0)
-   {
-
-     for(auto iG = genChiHtBoosted.begin(); iG != genChiHtBoosted.end(); iG++ )
-     {
-      if( abs(chi1.Px())< 1e-8)
-      {
-         chi1.SetPxPyPzE(iG->Px(), iG->Py(),iG->Pz(),iG->E());
-      }
-      // need angle between thrust vector
-      TVector3 candJet_vec = iG->Vect();
-      double cosAngle = cos(candJet_vec.Angle(thrust_vector));
-      if (cosAngle > 0)
-      {
-         if ( positiveLobe == "")
-         {
-           positiveLobe = "HT";
-         } 
-         else 
-         {
-           std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
-           //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
-           return;
-         }
-      }
-      else if (cosAngle < 0)
-      {
-         if ( negativeLobe == "")
-         {
-           negativeLobe = "HT";
-         } 
-         else 
-         {
-           std::cout << "Two Chis on one side of SJ ... problem. " << std::endl;
-           //std::cout << "The angle between them is " << candJet_vec.Angle(chi1.Vect());
-           return;
-         }
-      }
-     }   
-   }
-   if(debug) std::cout << "The event has " <<genChiHtBoosted.size() << "/" << genChiWbBoosted.size() << "/"<< genChiZtBoosted.size() << " matched HT/WB/ZT superjets." << std::endl;
 
 
    //sort jets in terms of angle relative to thrust axis
 
-    std::vector<TLorentzVector> negSuperJet_preSort;
-    std::vector<TLorentzVector> posSuperJet_preSort;
+   std::vector<TLorentzVector> negSuperJet_preSort;
+   std::vector<TLorentzVector> posSuperJet_preSort;
    std::vector<TLorentzVector> miscJets;
    for (auto iJet=jetsFJ_jet0.begin(); iJet<jetsFJ_jet0.end(); iJet++)                             
    {
@@ -1019,6 +1152,110 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    }
 
    if(debug)std::cout << "There are "<< posSuperJet.size() << "/" << negSuperJet.size() << "positive/negative post sort AK8 jets per superjet." << std::endl;
+
+
+
+   // hand sort the superjets if there was a problem earlier in assignment 
+   if(handSort)
+   {
+      negativeLobe = "";
+      positiveLobe = "";
+      // find the main VLQ daughter (H,T,W,Z) of the jetType_ and assign it to the SJ that has the closest reclustered associated AK8 jet in delta R
+      // this is not a great way to do this, but more accurate than nothing
+      
+      if(jetType_ == "HT")
+      {
+         // loop over the gen Hs 
+         for(auto iH = genH.begin(); iH!=genH.end();iH++)
+         {
+            double minAngle = 9e15;
+            for(auto iJet = posSuperJet.begin(); iJet != posSuperJet.end(); iJet++)
+            {
+               TVector3 iH_vec = iH->Vect();
+               double angle = abs(iH_vec.Angle(iJet->Vect()));
+               if(angle < minAngle)
+               {
+                  minAngle     = angle;
+                  positiveLobe = "HT";
+               }
+            }
+            for(auto iJet = negSuperJet.begin(); iJet != negSuperJet.end(); iJet++)
+            {
+               TVector3 iH_vec = iH->Vect();
+               double angle = abs(iH_vec.Angle(iJet->Vect()));
+               if(angle < minAngle)
+               {
+                  minAngle     = angle;
+                  negativeLobe = "HT";
+               }
+            }
+         }
+      }
+      else if(jetType_ == "WB")
+      {
+         for(auto iW = genW.begin(); iW!=genW.end();iW++)
+         {
+            double minAngle = 9e15;
+            for(auto iJet = posSuperJet.begin(); iJet != posSuperJet.end(); iJet++)
+            {
+               TVector3 iW_vec = iW->Vect();
+               double angle = abs(iW_vec.Angle(iJet->Vect()));
+               if(angle < minAngle)
+               {
+                  minAngle     = angle;
+                  positiveLobe = "WB";
+               }
+            }
+            for(auto iJet = negSuperJet.begin(); iJet != negSuperJet.end(); iJet++)
+            {
+               TVector3 iW_vec = iW->Vect();
+               double angle = abs(iW_vec.Angle(iJet->Vect()));
+               if(angle < minAngle)
+               {
+                  minAngle     = angle;
+                  negativeLobe = "WB";
+               }   
+            }
+         }
+      }
+      else if(jetType_ == "ZT")
+      {
+         for(auto iZ = genZ.begin(); iZ!=genZ.end();iZ++)
+         {
+            double minAngle = 9e15;
+            for(auto iJet = posSuperJet.begin(); iJet != posSuperJet.end(); iJet++)
+            {
+               TVector3 iZ_vec = iZ->Vect();
+               double angle = abs(iZ_vec.Angle(iJet->Vect()));
+               if(angle < minAngle)
+               {
+                  minAngle     = angle;
+                  positiveLobe = "ZT";
+               }   
+            }
+            for(auto iJet = negSuperJet.begin(); iJet != negSuperJet.end(); iJet++)
+            {
+               TVector3 iZ_vec = iZ->Vect();
+               double angle = abs(iZ_vec.Angle(iJet->Vect()));
+               if(angle < minAngle)
+               {
+                  minAngle     = angle;
+                  negativeLobe = "ZT";
+               }   
+            }
+         }
+      }     
+      if ((jetType_ != positiveLobe) && (jetType_ != negativeLobe))
+      {
+         return; // nothing to do here, things still didn't work
+      } 
+      else
+      {
+         std::cout << "double chi problem resolved. " << std::endl;
+      }
+   }
+
+
 
    std::vector<fastjet::PseudoJet> superJetOne;     //jets for dot prduct #cos(theta) > 0
    std::vector<fastjet::PseudoJet> superJetTwo;      //jets for dot product #cos(theta) < 0 
@@ -1157,7 +1394,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       boostedSuperJetPart_TLV.push_back(TLorentzVector(iP_->px(),iP_->py(),iP_->pz(),iP_->E()));
       boostedSuperJetPart_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP_->px(),iP_->py(),iP_->pz(),iP_->E())));
       boostedSuperJetPart_XYZ.push_back(math::XYZVector( iP_->px(),iP_->py(),iP_->pz() ));
-      sumPz += iP_->pz();
+      sumPz += abs(iP_->pz());
       sumP += abs(sqrt(pow(iP_->pz(),2) + pow(iP_->px(),2)+ pow(iP_->py(),2)));
      }
 
@@ -1176,6 +1413,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
      double SJ_25_px = 0, SJ_25_py=0,SJ_25_pz=0,SJ_25_E=0;
      double SJ_50_px = 0, SJ_50_py=0,SJ_50_pz=0,SJ_50_E=0;
+     double SJ_75_px = 0, SJ_75_py=0,SJ_75_pz=0,SJ_75_E=0;
      double SJ_100_px = 0, SJ_100_py=0,SJ_100_pz=0,SJ_100_E=0;
      double SJ_150_px = 0, SJ_150_py=0,SJ_150_pz=0,SJ_150_E=0;
      double SJ_200_px = 0, SJ_200_py=0,SJ_200_pz=0,SJ_200_E=0;
@@ -1185,10 +1423,13 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      double SJ_800_px = 0, SJ_800_py=0,SJ_800_pz=0,SJ_800_E=0;
      double SJ_1000_px = 0, SJ_1000_py=0,SJ_1000_pz=0,SJ_1000_E=0;
 
+     int SJ_nAK4_1 = 0, SJ_nAK4_5 = 0, SJ_nAK4_10_ = 0;
      int SJ_nAK4_25_ = 0;
-     int SJ_nAK4_50_ = 0,SJ_nAK4_100_ = 0,SJ_nAK4_150_ = 0,SJ_nAK4_200_ = 0,SJ_nAK4_300_ = 0;
+     int SJ_nAK4_50_ = 0, SJ_nAK4_75_ = 0, SJ_nAK4_100_ = 0,SJ_nAK4_150_ = 0,SJ_nAK4_200_ = 0,SJ_nAK4_300_ = 0;
      int SJ_nAK4_400_ = 0,SJ_nAK4_500_ = 0,SJ_nAK4_800_ = 0,SJ_nAK4_1000_ = 0;
 
+
+     // particles in each superjet in the SJ COM frame
      std::vector<TLorentzVector> AK41_parts;
      std::vector<TLorentzVector> AK42_parts;
      std::vector<TLorentzVector> AK43_parts;
@@ -1208,132 +1449,133 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      for (auto iPJ=jetsFJ_jet.begin(); iPJ<jetsFJ_jet.end(); iPJ++)               
      {
 
-      // do calculations of AK4 btagged particle ratios for leading 4 AK4 jets
-      std::vector<fastjet::PseudoJet> iPJ_daughters = iPJ->constituents();
+         // do calculations of AK4 btagged particle ratios for leading 4 AK4 jets
+         std::vector<fastjet::PseudoJet> iPJ_daughters = iPJ->constituents();
 
-      if ( pseudoJetNum < 4)
-      {
-         for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+         if ( pseudoJetNum < 4)
          {
-           if(nSuperJets == 0)SJParts1.push_back( fastjet::PseudoJet( iPart->px(), iPart->py(),iPart->pz(),iPart->E()   )   );
-           else if(nSuperJets == 0)SJParts2.push_back( fastjet::PseudoJet( iPart->px(), iPart->py(),iPart->pz(),iPart->E() )   );
+            for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+            {
+              if(nSuperJets == 0)SJParts1.push_back( fastjet::PseudoJet( iPart->px(), iPart->py(),iPart->pz(),iPart->E()   )   );
+              else if(nSuperJets == 0)SJParts2.push_back( fastjet::PseudoJet( iPart->px(), iPart->py(),iPart->pz(),iPart->E() )   );
 
+            }
          }
-      }
 
-      if(debug)std::cout << "Looking at reclustered superjet CA4 jets." << std::endl;
+         if(debug)std::cout << "Looking at reclustered superjet CA4 jets." << std::endl;
 
-      if(pseudoJetNum == 0)
-      {   
-         for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+         if(pseudoJetNum == 0)
+         {   
+            for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+            {
+
+              AK41_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
+              AK41_px+=iPart->px();AK41_py+=iPart->py();AK41_pz+=iPart->pz();AK41_E+=iPart->E();
+            }
+         }
+         else if(pseudoJetNum == 1)
          {
-           AK41_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
-           AK41_px+=iPart->px();AK41_py+=iPart->py();AK41_pz+=iPart->pz();AK41_E+=iPart->E();
+            for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+            {
+              AK42_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
+              AK42_px+=iPart->px();AK42_py+=iPart->py();AK42_pz+=iPart->pz();AK42_E+=iPart->E();
+            }
          }
-      }
-      else if(pseudoJetNum == 1)
-      {
-         for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+         else if(pseudoJetNum == 2)
          {
-           AK42_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
-           AK42_px+=iPart->px();AK42_py+=iPart->py();AK42_pz+=iPart->pz();AK42_E+=iPart->E();
+            for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+            {
+              AK43_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
+              AK43_px+=iPart->px();AK43_py+=iPart->py();AK43_pz+=iPart->pz();AK43_E+=iPart->E();
+            }
          }
-      }
-      else if(pseudoJetNum == 2)
-      {
-         for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+         else if(pseudoJetNum == 3)
          {
-           AK43_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
-           AK43_px+=iPart->px();AK43_py+=iPart->py();AK43_pz+=iPart->pz();AK43_E+=iPart->E();
+            for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+            {
+              AK44_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
+              AK44_px+=iPart->px();AK44_py+=iPart->py();AK44_pz+=iPart->pz();AK44_E+=iPart->E();
+
+            }
          }
-      }
-      else if(pseudoJetNum == 3)
-      {
-         for(auto iPart = iPJ_daughters.begin(); iPart != iPJ_daughters.end(); iPart++)
+         if(debug)std::cout << "Looking at reclustered CA4 jets with energy thresholds." << std::endl;
+
+
+         if(iPJ->E()>1.)
          {
-           AK44_parts.push_back(TLorentzVector(iPart->px(),iPart->py(),iPart->pz(),iPart->E()));
-           AK44_px+=iPart->px();AK44_py+=iPart->py();AK44_pz+=iPart->pz();AK44_E+=iPart->E();
-
+            SJ_nAK4_1++;   // this is just used for a fraction calculation
          }
-      }
-      if(debug)std::cout << "Looking at reclustered CA4 jets with energy thresholds." << std::endl;
+         if(iPJ->E()>5.)
+         {
+            SJ_nAK4_5++;   // this is just used for a fraction calculation
+         }
+         if(iPJ->E()>10.)
+         {
+            SJ_nAK4_10_++;
+         }
+         if(iPJ->E()>25.)
+         {
+            SJ_25_px+=iPJ->px();SJ_25_py+=iPJ->py();SJ_25_pz+=iPJ->pz();SJ_25_E+=iPJ->E();
+            SJ_nAK4_25_++;
+         }
 
-      if(iPJ->E()>25.)
-      {
-         SJ_25_px+=iPJ->px();SJ_25_py+=iPJ->py();SJ_25_pz+=iPJ->pz();SJ_25_E+=iPJ->E();
-         SJ_nAK4_25_++;
-      }
+         if(iPJ->E()>50.)
+         {
+            SJ_50_px+=iPJ->px();SJ_50_py+=iPJ->py();SJ_50_pz+=iPJ->pz();SJ_50_E+=iPJ->E();
+            SJ_nAK4_50_++;
+         }
+         if(iPJ->E()>75.)
+         {
+            SJ_75_px+=iPJ->px();SJ_75_py+=iPJ->py();SJ_75_pz+=iPJ->pz();SJ_75_E+=iPJ->E();
+            SJ_nAK4_75_++;
+         }
+         if(iPJ->E()>100)
+         {
+            SJ_100_px+=iPJ->px();SJ_100_py+=iPJ->py();SJ_100_pz+=iPJ->pz();SJ_100_E+=iPJ->E();
+            SJ_nAK4_100_++; 
+         }
 
-      if(iPJ->E()>50.)
-      {
-         SJ_50_px+=iPJ->px();SJ_50_py+=iPJ->py();SJ_50_pz+=iPJ->pz();SJ_50_E+=iPJ->E();
-         SJ_nAK4_50_++;
-      }
+         if(iPJ->E()>150)
+         {
+            SJ_150_px+=iPJ->px();SJ_150_py+=iPJ->py();SJ_150_pz+=iPJ->pz();SJ_150_E+=iPJ->E();
+            SJ_nAK4_150_++; 
+         }
 
-      if(iPJ->E()>100)
-      {
-         SJ_100_px+=iPJ->px();SJ_100_py+=iPJ->py();SJ_100_pz+=iPJ->pz();SJ_100_E+=iPJ->E();
-         SJ_nAK4_100_++; 
-      }
+         if(iPJ->E()>200)
+         {
+            SJ_200_px+=iPJ->px();SJ_200_py+=iPJ->py();SJ_200_pz+=iPJ->pz();SJ_200_E+=iPJ->E();
+            SJ_nAK4_200_++; 
+         }
+         if(iPJ->E()>300)
+         {
+            SJ_300_px+=iPJ->px();SJ_300_py+=iPJ->py();SJ_300_pz+=iPJ->pz();SJ_300_E+=iPJ->E();
+            SJ_nAK4_300_++; 
+         }
+         if(iPJ->E()>400)
+         {
+            SJ_400_px+=iPJ->px();SJ_400_py+=iPJ->py();SJ_400_pz+=iPJ->pz();SJ_400_E+=iPJ->E();
+            SJ_nAK4_400_++; 
+         }
+         if(iPJ->E()>500)
+         {
+            SJ_500_px+=iPJ->px();SJ_500_py+=iPJ->py();SJ_500_pz+=iPJ->pz();SJ_500_E+=iPJ->E();
+            SJ_nAK4_500_++; 
+         }
+         if(iPJ->E()>800)
+         {
+            SJ_800_px+=iPJ->px();SJ_800_py+=iPJ->py();SJ_800_pz+=iPJ->pz();SJ_800_E+=iPJ->E();
+            SJ_nAK4_800_++; 
+         }
+         if(iPJ->E()>1000)
+         {
+            SJ_1000_px+=iPJ->px();SJ_1000_py+=iPJ->py();SJ_1000_pz+=iPJ->pz();SJ_1000_E+=iPJ->E();
+            SJ_nAK4_1000_++; 
+         }
 
-      if(iPJ->E()>150)
-      {
-         SJ_150_px+=iPJ->px();SJ_150_py+=iPJ->py();SJ_150_pz+=iPJ->pz();SJ_150_E+=iPJ->E();
-         SJ_nAK4_150_++; 
-      }
-
-      if(iPJ->E()>200)
-      {
-         SJ_200_px+=iPJ->px();SJ_200_py+=iPJ->py();SJ_200_pz+=iPJ->pz();SJ_200_E+=iPJ->E();
-         SJ_nAK4_200_++; 
-      }
-      if(iPJ->E()>300)
-      {
-         SJ_300_px+=iPJ->px();SJ_300_py+=iPJ->py();SJ_300_pz+=iPJ->pz();SJ_300_E+=iPJ->E();
-         SJ_nAK4_300_++; 
-      }
-      if(iPJ->E()>400)
-      {
-         SJ_400_px+=iPJ->px();SJ_400_py+=iPJ->py();SJ_400_pz+=iPJ->pz();SJ_400_E+=iPJ->E();
-         SJ_nAK4_400_++; 
-      }
-      if(iPJ->E()>500)
-      {
-         SJ_500_px+=iPJ->px();SJ_500_py+=iPJ->py();SJ_500_pz+=iPJ->pz();SJ_500_E+=iPJ->E();
-         SJ_nAK4_500_++; 
-      }
-      if(iPJ->E()>800)
-      {
-         SJ_800_px+=iPJ->px();SJ_800_py+=iPJ->py();SJ_800_pz+=iPJ->pz();SJ_800_E+=iPJ->E();
-         SJ_nAK4_800_++; 
-      }
-      if(iPJ->E()>1000)
-      {
-         SJ_1000_px+=iPJ->px();SJ_1000_py+=iPJ->py();SJ_1000_pz+=iPJ->pz();SJ_1000_E+=iPJ->E();
-         SJ_nAK4_1000_++; 
-      }
-
-      pseudoJetNum++;
+         pseudoJetNum++;
      }
-
-     //std::cout << "SJ COM particles for superjet " << nSuperJets << std::endl;
-     //if(nSuperJets == 0)
-     //{
-       //  for(auto iP = SJParts1.begin(); iP!=SJParts1.end();iP++)
-       //  {
-      // std::cout << iP->px() << " " << iP->py() << " " << iP->pz() << " " << iP->E() << std::endl;
-        // }
-      // }
-     //else if(nSuperJets==1)
-     //{
-      //   for(auto iP = SJParts2.begin(); iP!=SJParts2.end();iP++)
-        // {
-        //   std::cout << iP->px() << " " << iP->py() << " " << iP->pz() << " " << iP->E() << std::endl;
-        // }
-      // }
-     //std::cout << "There are " << jetsFJ_jet[0].constituents().size() + jetsFJ_jet[1].constituents().size() + jetsFJ_jet[2].constituents().size() + jetsFJ_jet[3].constituents().size() << " total particles in leading 4 reclustered AK4 jets in SJ "<< nSuperJets << std::endl;
      boostedSuperJetPart.clear();   //shouldn't be needed, just in case
-     //std::cout << "--------------New Superjet--------------" << std::endl;
+
      nSuperJets++; 
 
 
@@ -1363,39 +1605,232 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      std::vector<math::XYZVector>  boostedAK44_Part_XYZ;
 
      double sumPz_AK41 =0,sumPz_AK42 = 0,sumPz_AK43 = 0,sumPz_AK44 = 0;
-     double sumP_AK41 = 0,sumP_AK42 = 0,sumP_AK43 = 0, sumP_AK44 = 0;
+     double sumP_AK41 = 0, sumP_AK42 = 0,sumP_AK43 = 0, sumP_AK44 = 0;
+
+     int n_AK41_parts_1 = 0, n_AK41_parts_5 = 0, n_AK41_parts_10 =0; // n_AK41_parts_20=0, n_AK41_parts_40=0, n_AK41_parts_50=0, n_AK41_parts_75=0, n_AK41_parts_100=0;
+     int n_AK41_parts_0p1 = 0, n_AK41_parts_0p5 = 0, n_AK41_parts_2 =0, n_AK41_parts_7p5=0, n_AK41_parts_15=0;
+     int n_AK42_parts_1 = 0, n_AK42_parts_5 = 0, n_AK42_parts_10 =0; 
+     int n_AK42_parts_0p1 = 0, n_AK42_parts_0p5 = 0, n_AK42_parts_2 =0, n_AK42_parts_7p5=0, n_AK42_parts_15=0;
+     int n_AK43_parts_1 = 0, n_AK43_parts_5 = 0, n_AK43_parts_10 =0; 
+     int n_AK43_parts_0p1 = 0, n_AK43_parts_0p5 = 0, n_AK43_parts_2 =0, n_AK43_parts_7p5=0, n_AK43_parts_15=0;
+     int n_AK44_parts_1 = 0, n_AK44_parts_5 = 0, n_AK44_parts_10 =0; 
+     int n_AK44_parts_0p1 = 0, n_AK44_parts_0p5 = 0, n_AK44_parts_2 =0, n_AK44_parts_7p5=0, n_AK44_parts_15=0;
+
+
+     TLorentzVector AK41_0p1(0,0,0,0); TLorentzVector AK41_0p5(0,0,0,0); TLorentzVector AK41_1(0,0,0,0); 
+     TLorentzVector AK41_2(0,0,0,0); TLorentzVector AK41_5(0,0,0,0); TLorentzVector AK41_7p5(0,0,0,0);
+     TLorentzVector AK41_10(0,0,0,0); TLorentzVector AK41_15(0,0,0,0);
+     TLorentzVector AK41_20(0,0,0,0); //TLorentzVector AK41_40(0,0,0,0);
+     //TLorentzVector AK41_50(0,0,0,0); TLorentzVector AK41_75(0,0,0,0); TLorentzVector AK41_100(0,0,0,0);
+     TLorentzVector AK42_0p1(0,0,0,0); TLorentzVector AK42_0p5(0,0,0,0); TLorentzVector AK42_1(0,0,0,0); 
+     TLorentzVector AK42_2(0,0,0,0); TLorentzVector AK42_5(0,0,0,0); TLorentzVector AK42_7p5(0,0,0,0);
+     TLorentzVector AK42_10(0,0,0,0); TLorentzVector AK42_15(0,0,0,0);
+     TLorentzVector AK42_20(0,0,0,0); 
+     TLorentzVector AK43_0p1(0,0,0,0); TLorentzVector AK43_0p5(0,0,0,0); TLorentzVector AK43_1(0,0,0,0); 
+     TLorentzVector AK43_2(0,0,0,0); TLorentzVector AK43_5(0,0,0,0); TLorentzVector AK43_7p5(0,0,0,0);
+     TLorentzVector AK43_10(0,0,0,0); TLorentzVector AK43_15(0,0,0,0);
+     TLorentzVector AK43_20(0,0,0,0); 
+     TLorentzVector AK44_0p1(0,0,0,0); TLorentzVector AK44_0p5(0,0,0,0); TLorentzVector AK44_1(0,0,0,0); 
+     TLorentzVector AK44_2(0,0,0,0); TLorentzVector AK44_5(0,0,0,0); TLorentzVector AK44_7p5(0,0,0,0);
+     TLorentzVector AK44_10(0,0,0,0); TLorentzVector AK44_15(0,0,0,0);
+     TLorentzVector AK44_20(0,0,0,0); 
+
      for(auto iP = AK41_parts.begin(); iP != AK41_parts.end(); iP++)
      {
-      iP->Boost(-AK41_boost.X(),-AK41_boost.Y(), -AK41_boost.Z());
-      boostedAK41_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
-      boostedAK41_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
-      boostedAK41_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() ));
-      sumPz_AK41+=iP->Pz(); sumP_AK41+= abs(iP->P());
+         iP->Boost(-AK41_boost.X(),-AK41_boost.Y(), -AK41_boost.Z());
+         boostedAK41_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
+         boostedAK41_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
+         boostedAK41_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() ));
+
+         if(iP->E() > 0.1)
+         {
+            AK41_0p1+= *iP;
+            n_AK41_parts_0p1++;
+         }
+         if(iP->E() > 0.5)
+         {
+            AK41_0p5+= *iP;
+            n_AK41_parts_0p5++;
+         }
+         if(iP->E() > 1)
+         {
+            AK41_1+= *iP;
+            n_AK41_parts_1++;
+         }
+         if(iP->E() > 2)
+         {
+            AK41_2+= *iP;
+            n_AK41_parts_2++;
+         }
+         if(iP->E() > 5)
+         {
+            AK41_5+= *iP;
+            n_AK41_parts_5++;
+         }
+         if(iP->E() > 7.5)
+         {
+            AK41_7p5+= *iP;
+            n_AK41_parts_7p5++;
+         }
+         if(iP->E() > 10)
+         {
+            AK41_10+= *iP;
+            n_AK41_parts_10++;
+         }
+         if(iP->E() > 15)
+         {
+            AK41_15+= *iP;
+            n_AK41_parts_15++;
+         }
+         sumPz_AK41+= abs(iP->Pz()); 
+         sumP_AK41 += abs(iP->P());
      }
      for(auto iP = AK42_parts.begin(); iP != AK42_parts.end(); iP++)
      {
-      iP->Boost(-AK42_boost.X(),-AK42_boost.Y(), -AK42_boost.Z());
-      boostedAK42_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
-      boostedAK42_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
-      boostedAK42_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() ));  
-      sumPz_AK42+=iP->Pz(); sumP_AK42+= abs(iP->P());
-
+         iP->Boost(-AK42_boost.X(),-AK42_boost.Y(), -AK42_boost.Z());
+         boostedAK42_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
+         boostedAK42_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
+         boostedAK42_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() ));  
+         if(iP->E() > 0.1)
+         {
+            AK42_0p1+= *iP;
+            n_AK42_parts_0p1++;
+         }
+         if(iP->E() > 0.5)
+         {
+            AK42_0p5+= *iP;
+            n_AK42_parts_0p5++;
+         }
+         if(iP->E() > 1)
+         {
+            AK42_1+= *iP;
+            n_AK42_parts_1++;
+         }
+         if(iP->E() > 2)
+         {
+            AK42_2+= *iP;
+            n_AK42_parts_2++;
+         }
+         if(iP->E() > 5)
+         {
+            AK42_5+= *iP;
+            n_AK42_parts_5++;
+         }
+         if(iP->E() > 7.5)
+         {
+            AK42_7p5+= *iP;
+            n_AK42_parts_7p5++;
+         }
+         if(iP->E() > 10)
+         {
+            AK42_10+= *iP;
+            n_AK42_parts_10++;
+         }
+         if(iP->E() > 15)
+         {
+            AK42_15+= *iP;
+            n_AK42_parts_15++;
+         }
+         sumPz_AK42+= abs(iP->Pz()); 
+         sumP_AK42 += abs(iP->P());
      }
      for(auto iP = AK43_parts.begin(); iP != AK43_parts.end(); iP++)
      {
-      iP->Boost(-AK43_boost.X(),-AK43_boost.Y(), -AK43_boost.Z());
-      boostedAK43_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
-      boostedAK43_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
-      boostedAK43_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() )); 
-      sumPz_AK43 += iP->Pz(); sumP_AK43 += abs(iP->P());   
+         iP->Boost(-AK43_boost.X(),-AK43_boost.Y(), -AK43_boost.Z());
+         boostedAK43_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
+         boostedAK43_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
+         boostedAK43_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() )); 
+         if(iP->E() > 0.1)
+         {
+            AK43_0p1+= *iP;
+            n_AK43_parts_0p1++;
+         }
+         if(iP->E() > 0.5)
+         {
+            AK43_0p5+= *iP;
+            n_AK43_parts_0p5++;
+         }
+         if(iP->E() > 1)
+         {
+            AK43_1+= *iP;
+            n_AK43_parts_1++;
+         }
+         if(iP->E() > 2)
+         {
+            AK43_2+= *iP;
+            n_AK43_parts_2++;
+         }
+         if(iP->E() > 5)
+         {
+            AK43_5+= *iP;
+            n_AK43_parts_5++;
+         }
+         if(iP->E() > 7.5)
+         {
+            AK43_7p5+= *iP;
+            n_AK43_parts_7p5++;
+         }
+         if(iP->E() > 10)
+         {
+            AK43_10+= *iP;
+            n_AK43_parts_10++;
+         }
+         if(iP->E() > 15)
+         {
+            AK43_15+= *iP;
+            n_AK43_parts_15++;
+         }
+         sumPz_AK43+= abs(iP->Pz()); 
+         sumP_AK43 += abs(iP->P());
      }
      for(auto iP = AK44_parts.begin(); iP != AK44_parts.end(); iP++)
      {
-      iP->Boost(-AK44_boost.X(),-AK44_boost.Y(), -AK44_boost.Z());
-      boostedAK44_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
-      boostedAK44_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
-      boostedAK44_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() )); 
-      sumPz_AK44 += iP->Pz(); sumP_AK44 += abs(iP->P());   
+         iP->Boost(-AK44_boost.X(),-AK44_boost.Y(), -AK44_boost.Z());
+         boostedAK44_Part_TLV.push_back(TLorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E()));
+         boostedAK44_Part_LC.push_back(reco::LeafCandidate(+1, reco::Candidate::LorentzVector(iP->Px(),iP->Py(),iP->Pz(),iP->E())));
+         boostedAK44_Part_XYZ.push_back(math::XYZVector( iP->Px(),iP->Py(),iP->Pz() )); 
+         if(iP->E() > 0.1)
+         {
+            AK44_0p1+= *iP;
+            n_AK44_parts_0p1++;
+         }
+         if(iP->E() > 0.5)
+         {
+            AK44_0p5+= *iP;
+            n_AK44_parts_0p5++;
+         }
+         if(iP->E() > 1)
+         {
+            AK44_1+= *iP;
+            n_AK44_parts_1++;
+         }
+         if(iP->E() > 2)
+         {
+            AK44_2+= *iP;
+            n_AK44_parts_2++;
+         }
+         if(iP->E() > 5)
+         {
+            AK44_5+= *iP;
+            n_AK44_parts_5++;
+         }
+         if(iP->E() > 7.5)
+         {
+            AK44_7p5+= *iP;
+            n_AK44_parts_7p5++;
+         }
+         if(iP->E() > 10)
+         {
+            AK44_10+= *iP;
+            n_AK44_parts_10++;
+         }
+         if(iP->E() > 15)
+         {
+            AK44_15+= *iP;
+            n_AK44_parts_15++;
+         }
+         sumPz_AK44+= abs(iP->Pz()); 
+         sumP_AK44 += abs(iP->P());
      }
 
      ////vectors to get angles
@@ -1410,7 +1845,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
      if(debug)std::cout << "Calculating threshold CA4 combined masses." << std::endl;
 
-     treeVars["tot_HT"] = totHT; 
+     treeVars["tot_HT"] = totHT;  
      treeVars["eventNumber"] = eventNumber;
      treeVars["SJ_mass"]   = sqrt(pow(superJetE,2)-pow(superJetpx,2)-pow(superJetpy,2)-pow(superJetpz,2)); 
      treeVars["SJ_mass_25"] = sqrt(pow(SJ_25_E,2)-pow(SJ_25_px,2)-pow(SJ_25_py,2)-pow(SJ_25_pz,2)); 
@@ -1424,26 +1859,26 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      treeVars["SJ_mass_500"] = sqrt(pow(SJ_500_E,2)-pow(SJ_500_px,2)-pow(SJ_500_py,2)-pow(SJ_500_pz,2)); 
      treeVars["SJ_mass_800"] = sqrt(pow(SJ_800_E,2)-pow(SJ_800_px,2)-pow(SJ_800_py,2)-pow(SJ_800_pz,2)); 
      treeVars["SJ_mass_1000"] = sqrt(pow(SJ_1000_E,2)-pow(SJ_1000_px,2)-pow(SJ_1000_py,2)-pow(SJ_1000_pz,2)); 
-
+     double offsetInts = 0.5;
 
      //SJ nAK4 variables
      if(debug)std::cout << "Calculating the nAK4_XXX vars." << std::endl;
 
-     treeVars["SJ_nAK4_25"] = SJ_nAK4_25_; 
-     treeVars["SJ_nAK4_50"] = SJ_nAK4_50_; 
-     treeVars["SJ_nAK4_100"] = SJ_nAK4_100_; 
-     treeVars["SJ_nAK4_150"] = SJ_nAK4_150_; 
-     treeVars["SJ_nAK4_200"] = SJ_nAK4_200_; 
-     treeVars["SJ_nAK4_300"] = SJ_nAK4_300_; 
-     treeVars["SJ_nAK4_400"] = SJ_nAK4_400_; 
-     treeVars["SJ_nAK4_500"] = SJ_nAK4_500_; 
-     treeVars["SJ_nAK4_800"] = SJ_nAK4_800_; 
-     treeVars["SJ_nAK4_1000"] = SJ_nAK4_1000_; 
+     treeVars["SJ_nAK4_25"] = SJ_nAK4_25_ + offsetInts; 
+     treeVars["SJ_nAK4_50"] = SJ_nAK4_50_ + offsetInts; 
+     treeVars["SJ_nAK4_100"] = SJ_nAK4_100_ + offsetInts; 
+     treeVars["SJ_nAK4_150"] = SJ_nAK4_150_ + offsetInts; 
+     treeVars["SJ_nAK4_200"] = SJ_nAK4_200_ + offsetInts; 
+     treeVars["SJ_nAK4_300"] = SJ_nAK4_300_ + offsetInts; 
+     treeVars["SJ_nAK4_400"] = SJ_nAK4_400_ + offsetInts; 
+     treeVars["SJ_nAK4_500"] = SJ_nAK4_500_ + offsetInts; 
+     treeVars["SJ_nAK4_800"] = SJ_nAK4_800_ + offsetInts; 
+     treeVars["SJ_nAK4_1000"] = SJ_nAK4_1000_ + offsetInts; 
 
-     treeVars["AK41_nDaughters"] = jetsFJ_jet[0].constituents().size(); 
-     treeVars["AK42_nDaughters"] = jetsFJ_jet[1].constituents().size(); 
-     treeVars["AK43_nDaughters"] = jetsFJ_jet[2].constituents().size(); 
-     treeVars["AK44_nDaughters"] = jetsFJ_jet[3].constituents().size(); 
+     treeVars["AK41_nDaughters"] = jetsFJ_jet[0].constituents().size() + offsetInts; 
+     treeVars["AK42_nDaughters"] = jetsFJ_jet[1].constituents().size() + offsetInts; 
+     treeVars["AK43_nDaughters"] = jetsFJ_jet[2].constituents().size() + offsetInts; 
+     treeVars["AK44_nDaughters"] = jetsFJ_jet[3].constituents().size() + offsetInts; 
 
 
      //softdrop mass???
@@ -1525,13 +1960,13 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      if(debug)std::cout << "Calculating the rest of the BES variables." << std::endl;
 
      //AK4 jet boosted information - boost reclustered AK4 jets into their COM and look at BES variables, ndaughters, nsubjettiness
-     treeVars["AK41_ndaughters"] = jetsFJ_jet[0].constituents().size(); 
-     //treeVars["AK41_Tau32"] = ; 
-     //treeVars["AK41_Tau21"] = ; 
-     treeVars["AK41_nsubjets"] = jetsFJ_jet[0].n_exclusive_subjets(0.2); 
+     treeVars["AK41_ndaughters"] = jetsFJ_jet[0].constituents().size() + offsetInts; 
+     treeVars["AK41_nsubjets"] = jetsFJ_jet[0].n_exclusive_subjets(0.2) + offsetInts; 
      treeVars["AK41_thrust"] = thrustCalculatorAK41.thrust();
      treeVars["AK41_sphericity"] = eventShapesAK41.sphericity();
-     //treeVars["AK41_asymmetry"] = sumPz_AK41/sumP_AK41; 
+
+
+     treeVars["AK41_asymmetry"] = sumPz_AK41/ sumP_AK41;     //jetsFJ_jet[0].p();   // asymmetry should be calculated in the SJ frame, arbitrary ax
      treeVars["AK41_isotropy"] = eventShapesAK41.isotropy();
      treeVars["AK41_aplanarity"] = eventShapesAK41.aplanarity();
      treeVars["AK41_FW1"] = fwmAK41[1]; 
@@ -1539,48 +1974,42 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      treeVars["AK41_FW3"] = fwmAK41[3]; 
      treeVars["AK41_FW4"] = fwmAK41[4]; 
 
-     treeVars["AK42_ndaughters"] = jetsFJ_jet[1].constituents().size(); 
-     //treeVars["AK42_Tau32"] = ; 
-     //treeVars["AK42_Tau21"] = ;
-     treeVars["AK42_nsubjets"] = jetsFJ_jet[1].exclusive_subjets(0.2).size();
+     treeVars["AK42_ndaughters"] = jetsFJ_jet[1].constituents().size() + offsetInts; 
+     treeVars["AK42_nsubjets"] = jetsFJ_jet[1].exclusive_subjets(0.2).size() + offsetInts;
      treeVars["AK42_thrust"] = thrustCalculatorAK42.thrust(); 
      treeVars["AK42_sphericity"] = eventShapesAK42.sphericity();
-     //treeVars["AK42_asymmetry"] = sumPz_AK42/sumP_AK42; 
-     //treeVars["AK42_isotropy"] = eventShapesAK42.isotropy();
+     treeVars["AK42_asymmetry"] = sumPz_AK42/ sumP_AK42;   //jetsFJ_jet[1].p(); 
+     treeVars["AK42_isotropy"] = eventShapesAK42.isotropy();
      treeVars["AK42_aplanarity"] = eventShapesAK42.aplanarity();
      treeVars["AK42_FW1"] = fwmAK42[1]; 
      treeVars["AK42_FW2"] = fwmAK42[2]; 
      treeVars["AK42_FW3"] = fwmAK42[3]; 
      treeVars["AK42_FW4"] = fwmAK42[4]; 
 
-     treeVars["AK43_ndaughters"] = jetsFJ_jet[2].constituents().size(); 
-     //treeVars["AK43_Tau32"] = ; 
-     //treeVars["AK43_Tau21"] = ; 
-     treeVars["AK43_nsubjets"] = jetsFJ_jet[2].exclusive_subjets(0.2).size();
+     treeVars["AK43_ndaughters"] = jetsFJ_jet[2].constituents().size() + offsetInts; 
+     treeVars["AK43_nsubjets"] = jetsFJ_jet[2].exclusive_subjets(0.2).size() + offsetInts;
      treeVars["AK43_thrust"] = thrustCalculatorAK43.thrust();
      treeVars["AK43_sphericity"] = eventShapesAK43.sphericity();
-     //treeVars["AK43_asymmetry"] = sumPz_AK43/sumP_AK43; 
-     //treeVars["AK43_isotropy"] = eventShapesAK43.isotropy();
+     treeVars["AK43_asymmetry"] = sumPz_AK43/ sumP_AK43;  //jetsFJ_jet[2].p(); 
+     treeVars["AK43_isotropy"] = eventShapesAK43.isotropy();
      treeVars["AK43_aplanarity"] = eventShapesAK43.aplanarity();
      treeVars["AK43_FW1"] = fwmAK43[1]; 
      treeVars["AK43_FW2"] = fwmAK43[2]; 
      treeVars["AK43_FW3"] = fwmAK43[3]; 
      treeVars["AK43_FW4"] = fwmAK43[4]; 
 
-     treeVars["AK44_ndaughters"] = jetsFJ_jet[3].constituents().size(); 
-     //treeVars["AK43_Tau32"] = ; 
-     //treeVars["AK43_Tau21"] = ; 
-     treeVars["AK44_nsubjets"] = jetsFJ_jet[3].exclusive_subjets(0.2).size();
+     treeVars["AK44_ndaughters"] = jetsFJ_jet[3].constituents().size() + offsetInts; 
+     treeVars["AK44_nsubjets"] = jetsFJ_jet[3].exclusive_subjets(0.2).size() + offsetInts;
      treeVars["AK44_thrust"] = thrustCalculatorAK44.thrust();
      treeVars["AK44_sphericity"] = eventShapesAK44.sphericity();
 
-     //treeVars["AK44_asymmetry"] = sumPz_AK44/sumP_AK44; 
-     //treeVars["AK44_isotropy"] = eventShapesAK44.isotropy();
+     treeVars["AK44_asymmetry"] = sumPz_AK44 / sumP_AK44;  //jetsFJ_jet[3].p(); 
+     treeVars["AK44_isotropy"] = eventShapesAK44.isotropy();
      treeVars["AK44_aplanarity"] = eventShapesAK44.aplanarity();
-     //treeVars["AK44_FW1"] = fwmAK44[1]; 
-     //treeVars["AK44_FW2"] = fwmAK44[2]; 
-     //treeVars["AK44_FW3"] = fwmAK44[3]; 
-     //treeVars["AK44_FW4"] = fwmAK44[4]; 
+     treeVars["AK44_FW1"] = fwmAK44[1]; 
+     treeVars["AK44_FW2"] = fwmAK44[2]; 
+     treeVars["AK44_FW3"] = fwmAK44[3]; 
+     treeVars["AK44_FW4"] = fwmAK44[4]; 
 
      //Full SJ BES variablesf
      EventShapeVariables eventShapes( boostedSuperJetPart_XYZ );
@@ -1597,14 +2026,102 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      treeVars["SJ_FW3"] = fwm[3]; 
      treeVars["SJ_FW4"] = fwm[4]; 
 
+
+     if(testNewVars)
+     {
+
+        treeVars["SJ_AK4_frac_10"] = 1.0*SJ_nAK4_10_ / SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_25"] = 1.0*SJ_nAK4_25_ / SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_50"] = 1.0*SJ_nAK4_50_ / SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_75"] = 1.0*SJ_nAK4_75_ / SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_100"] = 1.0*SJ_nAK4_100_/ SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_200"] = 1.0*SJ_nAK4_200_/ SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_300"] = 1.0*SJ_nAK4_300_/ SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_500"] = 1.0*SJ_nAK4_500_ / SJ_nAK4_1;
+        treeVars["SJ_AK4_frac_800"] = 1.0*SJ_nAK4_800_/ SJ_nAK4_1;
+
+        treeVars["AK41_daughters_frac_0p1"] = 1.0*n_AK41_parts_0p1  /AK41_parts.size();   
+        treeVars["AK41_daughters_frac_0p5"] = 1.0*n_AK41_parts_0p5  /AK41_parts.size();   
+        treeVars["AK41_daughters_frac_1"] = 1.0*n_AK41_parts_1  /AK41_parts.size();   
+        treeVars["AK41_daughters_frac_2"] = 1.0*n_AK41_parts_2  /AK41_parts.size();   
+        treeVars["AK41_daughters_frac_5"] = 1.0*n_AK41_parts_5  /AK41_parts.size(); 
+        treeVars["AK41_daughters_frac_7p5"] = 1.0*n_AK41_parts_7p5 /AK41_parts.size();     
+        treeVars["AK41_daughters_frac_10"] = 1.0*n_AK41_parts_10  /AK41_parts.size();   
+        treeVars["AK41_daughters_frac_15"] = 1.0*n_AK41_parts_15 /AK41_parts.size();   
+
+        treeVars["AK41_mass_0p1"] = AK41_0p1.M();
+        treeVars["AK41_mass_0p5"] = AK41_0p5.M();
+        treeVars["AK41_mass_1"] = AK41_1.M();
+        treeVars["AK41_mass_2"] = AK41_2.M();
+        treeVars["AK41_mass_5"] = AK41_5.M();
+        treeVars["AK41_mass_7p5"] = AK41_7p5.M();
+        treeVars["AK41_mass_10"] = AK41_10.M();
+        treeVars["AK41_mass_15"] = AK41_15.M();
+
+        treeVars["AK42_daughters_frac_0p1"] = 1.0*n_AK42_parts_0p1  /AK42_parts.size();   
+        treeVars["AK42_daughters_frac_0p5"] = 1.0*n_AK42_parts_0p5  /AK42_parts.size();   
+        treeVars["AK42_daughters_frac_1"] = 1.0*n_AK42_parts_1  /AK42_parts.size();   
+        treeVars["AK42_daughters_frac_2"] = 1.0*n_AK42_parts_2  /AK42_parts.size();   
+        treeVars["AK42_daughters_frac_5"] = 1.0*n_AK42_parts_5  /AK42_parts.size(); 
+        treeVars["AK42_daughters_frac_7p5"] = 1.0*n_AK42_parts_7p5 /AK42_parts.size();     
+        treeVars["AK42_daughters_frac_10"] = 1.0*n_AK42_parts_10  /AK42_parts.size();   
+        treeVars["AK42_daughters_frac_15"] = 1.0*n_AK42_parts_15 /AK42_parts.size();   
+
+        treeVars["AK42_mass_0p1"] = AK42_0p1.M();
+        treeVars["AK42_mass_0p5"] = AK42_0p5.M();
+        treeVars["AK42_mass_1"] = AK42_1.M();
+        treeVars["AK42_mass_2"] = AK42_2.M();
+        treeVars["AK42_mass_5"] = AK42_5.M();
+        treeVars["AK42_mass_7p5"] = AK42_7p5.M();
+        treeVars["AK42_mass_10"] = AK42_10.M();
+        treeVars["AK42_mass_15"] = AK42_15.M();
+
+        treeVars["AK43_daughters_frac_0p1"] = 1.0*n_AK43_parts_0p1  /AK43_parts.size();   
+        treeVars["AK43_daughters_frac_0p5"] = 1.0*n_AK43_parts_0p5  /AK43_parts.size();   
+        treeVars["AK43_daughters_frac_1"] = 1.0*n_AK43_parts_1  /AK43_parts.size();   
+        treeVars["AK43_daughters_frac_2"] = 1.0*n_AK43_parts_2  /AK43_parts.size();   
+        treeVars["AK43_daughters_frac_5"] = 1.0*n_AK43_parts_5  /AK43_parts.size(); 
+        treeVars["AK43_daughters_frac_7p5"] = 1.0*n_AK43_parts_7p5 /AK43_parts.size();     
+        treeVars["AK43_daughters_frac_10"] = 1.0*n_AK43_parts_10  /AK43_parts.size();   
+        treeVars["AK43_daughters_frac_15"] = 1.0*n_AK43_parts_15 /AK43_parts.size();   
+
+        treeVars["AK43_mass_0p1"] = AK43_0p1.M();
+        treeVars["AK43_mass_0p5"] = AK43_0p5.M();
+        treeVars["AK43_mass_1"] = AK43_1.M();
+        treeVars["AK43_mass_2"] = AK43_2.M();
+        treeVars["AK43_mass_5"] = AK43_5.M();
+        treeVars["AK43_mass_7p5"] = AK43_7p5.M();
+        treeVars["AK43_mass_10"] = AK43_10.M();
+        treeVars["AK43_mass_15"] = AK43_15.M();
+
+        treeVars["AK44_daughters_frac_0p1"] = 1.0*n_AK44_parts_0p1  /AK44_parts.size();   
+        treeVars["AK44_daughters_frac_0p5"] = 1.0*n_AK44_parts_0p5  /AK44_parts.size();   
+        treeVars["AK44_daughters_frac_1"] = 1.0*n_AK44_parts_1  /AK44_parts.size();   
+        treeVars["AK44_daughters_frac_2"] = 1.0*n_AK44_parts_2  /AK44_parts.size();   
+        treeVars["AK44_daughters_frac_5"] = 1.0*n_AK44_parts_5  /AK44_parts.size(); 
+        treeVars["AK44_daughters_frac_7p5"] = 1.0*n_AK44_parts_7p5 /AK44_parts.size();     
+        treeVars["AK44_daughters_frac_10"] = 1.0*n_AK44_parts_10  /AK44_parts.size();   
+        treeVars["AK44_daughters_frac_15"] = 1.0*n_AK44_parts_15 /AK44_parts.size();   
+
+        treeVars["AK44_mass_0p1"] = AK44_0p1.M();
+        treeVars["AK44_mass_0p5"] = AK44_0p5.M();
+        treeVars["AK44_mass_1"] = AK44_1.M();
+        treeVars["AK44_mass_2"] = AK44_2.M();
+        treeVars["AK44_mass_5"] = AK44_5.M();
+        treeVars["AK44_mass_7p5"] = AK44_7p5.M();
+        treeVars["AK44_mass_10"] = AK44_10.M();
+        treeVars["AK44_mass_15"] = AK44_15.M();
+
+     }
+
      if(debug)std::cout << "Checking health of variables." << std::endl;
 
      for (unsigned i = 0; i < listOfVars.size(); i++)
      {
       if (  (treeVars[ listOfVars[i] ] != treeVars[ listOfVars[i] ] ) || ( isinf(treeVars[ listOfVars[i] ])   )  )
       {
-         std::cout << "Skipped Event because of variable " << listOfVars[i] << std::endl;
-         return;
+         if(debug)std::cout << "Bad variable: " << listOfVars[i] << ". Setting to 0 " << std::endl;
+         treeVars[ listOfVars[i] ] = 0.;
       }
       else if ( abs(treeVars[ listOfVars[i] ]+999.99 ) < 1.0e-10 )
       {
@@ -1613,7 +2130,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       } 
      }
 
-     if(debug)std::cout << "Filling tree." << std::endl;
+     if(debug2)std::cout << "Filling tree." << std::endl;
 
      superjetTree->Fill();
      for (unsigned i = 0; i < listOfVars.size(); i++)

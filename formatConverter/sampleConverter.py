@@ -31,11 +31,14 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = True
 stopAt = None
-sampleTypes = ["WB","HT","ZT","Top","QCD"]
-mass_types_ = ["low_mass", "high_mass"]
+sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
+
+decays_types = ["allDecays"]
+
+mass_types = ["all_mass"]   #,"low_mass", "high_mass"
 # sampleTypes = ["HH"]
 # sampleTypes = ["RSG"]
-years = ["2016"]
+years = ["2015","2016","2017","2018"]
 # years = ["2017"]
 treeName = "run/superjetTree"
 
@@ -54,10 +57,15 @@ besKeys = []  # Standard BES variables, only 1 value per event(jet)
 firstConvert = True 
 batchPrint = 10
 
+
+
+
+
+
 #==================================================================================
 # Convert /////////////////////////////////////////////////////////////////////////
 #==================================================================================
-def convert(eosDir, outDir, sampleType, year, debug, mass_type=""):
+def convert(eosDir, outDir, sampleType, year, debug, mass_type):
     # Find file paths that are relevant in eos and write the paths to a txt file
     # At the moment the user is expected to make the txt file by eosls dir >> listOf<sampleType>filePaths<year>.txt
     # If the files are on eos, their paths should have 'root://cmseos.fnal.gov//eosDir' as a prefix
@@ -66,9 +74,23 @@ def convert(eosDir, outDir, sampleType, year, debug, mass_type=""):
 
     # Open file and read lines (individual file paths)
     eos_prefix = "root://cmsxrootd.fnal.gov/"
-    pathList = eosDir + "BEST_" +sampleType+"_"+year+".txt"
-    if sampleType in ["WB","HT","ZT"]:
-        pathList = eosDir+ "SuuToChiChi_" + sampleType + "_" + mass_type+ "_" + year + ".txt"
+    
+    # SuuToChiChi_AllDecays_all_mass_2018
+    # SuuToChiChi_ZT_all_mass_2016
+    # SuuToChiChi_WB_all_mass_Suu1p5_2015
+
+    mass_str     = ""
+
+    if sampleType in ["WB","HT","ZT", "allDecays"]:
+        mass_str= mass_type + "_"
+    sample_str = sampleType + "_"
+
+    pathList = eosDir+ "SuuToChiChi_" + sample_str + mass_str +  year + ".txt"
+
+    print("Looking for file %s"%pathList)
+
+    #a bunch of different cases for the file naming stuff
+
     if debug: print("Reading from", pathList)
     with open(pathList, 'r') as myFile:
         # Read file paths from txt file
@@ -77,9 +99,8 @@ def convert(eosDir, outDir, sampleType, year, debug, mass_type=""):
         if debug: print(fileList)
         
         # Make h5f output file to store the images and BES variables
-        h5fPath = outDir+sampleType+"Sample_"+year+"_BESTinputs.h5"
-        if sampleType in ["WB","HT","ZT"]:
-            h5fPath = outDir+sampleType+"Sample_"+year+"_"+ mass_type+"_BESTinputs.h5"
+
+        h5fPath = outDir+sample_str+"Sample_"+ mass_str +year+"_BESTinputs.h5"
         if debug: print ("Writing h5f file to",h5fPath)
         h5f = h5py.File(h5fPath,"w")
 
@@ -305,16 +326,21 @@ if __name__ == "__main__":
 
     # Loop over samples and convert each separately
 
-    for sampleType in sampleTypes:
-        if sampleType in ["WB","HT","ZT"]:
-            mass_types = mass_types_
-        else:
-            mass_types = [""]
+
+
+
+    for decays_type in decays_types:
         for mass_type in mass_types:
-            for year in years:
-                print("Processing", sampleType, year, mass_type)
-                convert(args.eosDir, args.outDir, sampleType, year, args.debug, mass_type)
-    
+            if decays_type == "allDecays":
+                sampleTypes = ["allDecays", "Top", "QCD"]
+            else: sampleTypes = sampleTypes_
+            for sampleType in sampleTypes:
+                for year in years:
+                    print("Processing", sampleType, year, mass_type)
+                    convert(args.eosDir, args.outDir, sampleType, year, args.debug, mass_type)
+
+    #        for chi_mass in chi_masses:
+
     print("Done")
 
     # Check how long the script took to run

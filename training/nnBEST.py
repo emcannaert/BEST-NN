@@ -38,10 +38,17 @@ sess = tf.Session(config=config)
 h = tf.constant('hello world')
 print(sess.run(h))
 
-sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
-years = ["2016_APV", "2016", "2017", "2018"]
+sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
+years = ["2016"]
+decayTypes = ["allDecays"]
+mass_types = ["all_mass"]
+
+#mass_types = ["all_mass","low_mass", "high_mass"]
 # years = ["2017"]
 setTypes = ["train", "validation", "test"]
+
+nCats = 3
+nLayers = 4
 
 # maxEvents is the max number of events to pull from EACH of the 6 sample files
 # "None" means use all of events in each file 
@@ -80,11 +87,21 @@ def trainNNBEST(args, strings,mask, dataDict):
     # Add BES variables to the network
     combined = besModel.output
 
-    # The network architecture consists of 3 hidden layers with 140 nodes in each layer using a rectified-linear activation function.
+    # The network architecture consists of 6 hidden layers with 50 nodes in each layer using a rectified-linear activation function.
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combined)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
-    outputModel = Dense( 6, kernel_initializer="glorot_normal", activation="softmax")(combLayer)
+
+    #combLayer   = Dense(40, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    #combLayer   = Dense(40, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    #combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    #combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    outputModel = Dense( nCats, kernel_initializer="glorot_normal", activation="softmax")(combLayer)
 
     # Compile the model
     myModel = Model(inputs = [besModel.input], outputs = outputModel)
@@ -132,14 +149,14 @@ if __name__ == "__main__":
                         default="models/",
                         help="Output Dir where models are saved [default: models/]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
-                        default = "../formatConverter/h5samples/BESvarList_nopt.txt",
+                        default = "../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt",
                         # default = "../formatConverter/h5samples/BESvarList_noBDisc.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSV.txt",
                         # default = "../formatConverter/h5samples/BESvarList_naive.txt",
                         # default = "../formatConverter/h5samples/BESvarList_advanced.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive_trim.txt",
-                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList.txt]")
+                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt]")
                         # default = "../formatConverter/masks/BESTMask.txt",
                         # help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
     parser.add_argument('-sf','--suffix', dest='suffix',
@@ -166,11 +183,11 @@ if __name__ == "__main__":
                         help="Number of Epochs to wait for improvement before EarlyStopping [default: 20]")
     parser.add_argument('-tol','--tolerance', dest='tolerance',      
                         # default="0.01",
-                        default="0.001",
+                        default="0.00001",
                         help="Improvement tolerance for EarlyStopping; smaller tolerance means longer training [default: 0.01]")
     parser.add_argument('-n','--nodes', dest='nodes',
                         default="140",                     
-                        help="Number of nodes per hidden layer [default: 140]")
+                        help="Number of nodes per hidden layer [default: 80]")
     parser.add_argument('-r','--replace', dest='replace',
                         action='store_true',
                         help="Boolean, use flag to overwrite current model and plots [default: False]")
@@ -182,47 +199,54 @@ if __name__ == "__main__":
     if not args.years == "all": years = args.years.split(',')
 
     stringYearDict = {}
-    for year in years:
-        startTimeYear = tools.logTime() # Tracks how long this year takes
+    for decayType in decayTypes:
+        if decayType == "allDecays":
+            sampleTypes = ["allDecays", "Top", "QCD"]
+        else: sampleTypes = sampleTypes_
+        for mass_type in mass_types:
+            for year in years:
+                
+                    startTimeYear = tools.logTime() # Tracks how long this year takes
 
-        # Generate appropriate helper strings, check dirs
-        # NOTE TO SELF: have dirStrings also copy a 
-        #               trimmed version of the scalarParams file into model dir
-        strings = tools.dirStrings(args, year)
-        # stringYearDict[year] = strings
+                    # Generate appropriate helper strings, check dirs
+                    # NOTE TO SELF: have dirStrings also copy a 
+                    #               trimmed version of the scalarParams file into model dir
+                    strings = tools.dirStrings(args, str(nLayers), str(args.nodes), str(nCats), mass_type, year)
+                    # stringYearDict[year] = strings
 
-        # Load Mask
-        mask, _ = tools.loadMask(args.maskPath)
+                    # Load Mask
+                    mask, _ = tools.loadMask(args.maskPath)
+                    # need to set mask
 
-        if args.train: # Run with -t to only plot the performance of the model
-            # Load h5 Data, set up truth arrays
-            dataDict = tools.loadH5Data(args, mask, sampleTypes, ["train", "validation"], maxEvents, year) 
+                    if args.train: # Run with -t to only plot the performance of the model
+                        # Load h5 Data, set up truth arrays
+                        dataDict = tools.loadH5Data(args, mask, sampleTypes, ["train", "validation"], maxEvents, mass_type, year) 
 
-            # Shuffle arrays
-            tools.shuffleArray(dataDict)
+                        # Shuffle arrays
+                        tools.shuffleArray(dataDict)
 
-            # Train using nnBEST
-            trainNNBEST(args, strings, mask, dataDict)
-            del dataDict
+                        # Train using nnBEST
+                        trainNNBEST(args, strings, mask, dataDict)
+                        del dataDict
 
-        # Load test data, evaluate model performance
-        # dataDict = tools.loadH5Data(args, mask, sampleTypes, ["test"], maxEvents, year)
-        dataDict = tools.loadH5Data(args, [True], sampleTypes, ["test"], maxEvents, year)
+                    # Load test data, evaluate model performance
+                    # dataDict = tools.loadH5Data(args, mask, sampleTypes, ["test"], maxEvents, year)
+                    dataDict = tools.loadH5Data(args, [True], sampleTypes, ["test"], maxEvents,mass_type, year)
 
-        # Load model
-        print("Using BEST to predict...")
-        # BESpredict  = load_model(strings["modelFile"]).predict(dataDict["testEvents"])
-        BESpredict  = load_model(strings["modelFile"]).predict(dataDict["testEvents"][:,mask])
+                    # Load model
+                    print("Using BEST to predict...")
+                    # BESpredict  = load_model(strings["modelFile"]).predict(dataDict["testEvents"])
+                    BESpredict  = load_model(strings["modelFile"]).predict(dataDict["testEvents"][:,mask])
 
-        # Make all performance plots
-        tools.plotAll(args, strings, dataDict["testTruth"], args.modelType, BESpredict, year)
-        # tools.plotAll(args, strings, dataDict, mask, year)
-        # tools.plotAll(args, strings, year, "flattened")
-        # tools.plotAll(args, strings, year, "flatTop")
+                    # Make all performance plots
+                    tools.plotAll(args, strings, dataDict["testTruth"], args.modelType, BESpredict,mass_type, year, sampleTypes)
+                    # tools.plotAll(args, strings, dataDict, mask, year)
+                    # tools.plotAll(args, strings, year, "flattened")
+                    # tools.plotAll(args, strings, year, "flatTop")
 
-        tools.logTime(startTimeYear, strings["suffix"])
+                    tools.logTime(startTimeYear, strings["suffix"])
 
-    # # Save as .pb model for analysis
-    # for year in years: prepareSavedModel(stringYearDict[year])
-    
+                # # "" as .pb model for analysis
+                # for year in years: prepareSavedModel(stringYearDict[year])
+            
     tools.logTime(startTime)

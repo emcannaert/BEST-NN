@@ -18,12 +18,15 @@ from sklearn.externals.joblib import dump
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler
 from sklearn.compose import ColumnTransformer
 
-sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]
+sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
 
+decay_types = ["allDecays"]
 # It is important that "train" is FIRST in this list!!!!
 setTypes = ["train", "validation", "test"]
+mass_types = [ "all_mass"]
 
-years = ["2016_APV", "2016", "2017", "2018"]
+#mass_types = ["low_mass", "high_mass", "all_mass"]
+years = ["2015"]
     
 def checkRepeat(j, keys):
     repeatList = []
@@ -33,7 +36,7 @@ def checkRepeat(j, keys):
     # print(repeatList)
     return repeatList
 
-def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):  
+def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, mass_type):  
     #==================================================================================
     # Prepare Scaler //////////////////////////////////////////////////////////////////
     #==================================================================================
@@ -54,18 +57,47 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
             inds.append(index)
             vars.append(var)
 
-            if "jetAK8_pt" in var: # Scale pT from [500,2000] to [0,1]
-                scalerDict["minmax"][i] = (var) 
-            elif "jet_p" in var: # Scale px,py,pz to 0 mean and unit variance
+            #if "AK4_m" in var: # Scale pT from [500,2000] to [0,1]  AK4X_E    /// other option is minmax
+            """
+            #    scalerDict["maxabs"][i] = (var) 
+            if "_px" in var: # Scale px,py,pz to 0 mean and unit variance
                 scalerDict["standard"][i] = (var)  
-            elif "jet_energy" in var: # Normalize energy by dividing by max value, giving [0,1] 
+            elif "_py" in var: # Scale px,py,pz to 0 mean and unit variance
+                scalerDict["standard"][i] = (var)   
+            elif "_pz" in var: # Scale px,py,pz to 0 mean and unit variance
+                scalerDict["standard"][i] = (var)  
+
+            elif "_E" in var: # Normalize energy by dividing by max value, giving [0,1] 
+                scalerDict["minmax"][i] = (var)
+            elif "AK4_theta" in var.lower(): # Normalize mass by dividing by max value, giving [0,1]
+                scalerDict["minmax"][i] = (var)  
+            #elif "SJ_mass" in var: # Normalize by dividing by max value, giving [0,1]
+            #    scalerDict["maxabs"][i] = (var)
+            #elif "SJ_mass"  in var.lower():    # thinking here is that we don't want to assume a SJ mass, but the shapes are very different between sig and BR
+            #    scalerDict["maxabs"][i] = (var)  
+            # change all integer values to be normalized
+            elif "SJ_nAK4_" in var: 
                 scalerDict["maxabs"][i] = (var)
-            elif "mass" in var.lower(): # Normalize mass by dividing by max value, giving [0,1]
-                scalerDict["maxabs"][i] = (var)  
-            elif "jetAK8_eta" in var: # Normalize eta by dividing by max value, giving [0,1]
-                scalerDict["maxabs"][i] = (var)
-            else: # All other variables are not scaled (they are already close to [-1,1] or [0,1])
-                scalerDict["noscale"][i] = (var)
+            elif "_nsubjets" in var: 
+                scalerDict["standard"][i] = (var)
+
+            elif "_nDaughters" in var: 
+                scalerDict["standard"][i] = (var)
+
+            #elif "AK41_mass_" in var: 
+            #    scalerDict["maxabs"][i] = (var)
+            #elif "AK42_mass_" in var: 
+            #    scalerDict["maxabs"][i] = (var)
+            #elif "AK43_mass_" in var: 
+            #    scalerDict["maxabs"][i] = (var)
+            #elif "AK44_mass_" in var: 
+            #    scalerDict["maxabs"][i] = (var)
+
+
+
+            """
+            #else: # All other variables are not scaled (they are already close to [-1,1] or [0,1])
+            scalerDict["noscale"][i] = (var)
     
     # Currently we do not generate unused vars
     # mask = [True if str(i) in inds else False for i in range(num_BES_inputs)]
@@ -96,7 +128,8 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
 
     # IMPORTANT: ONLY FIT THE SCALE MODEL ON THE TRAINING SET. THEN, APPLY THAT MODEL TO EVERYTHING ELSE.
     print("Loading pre scale h5py files")
-    preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
+
+    preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"_Sample_"+ mass_type + "_" +year+"_BESTinputs_"  +"train"+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
     # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
     print("Pre scale events shape:", [arr.shape for arr in preScaleEvents])
 
@@ -132,12 +165,12 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
     # This form of the scaler is easy to load with python ( sklearn.externals.joblib.load(scalePath) )
     scalePath = os.path.join(scaleDir,'joblib')
     if not os.path.isdir(scalePath): os.makedirs(scalePath)
-    scalePath = os.path.join(scalePath,'BESTScalerParameters_'+ year +'.joblib')
+    scalePath = os.path.join(scalePath,'BESTScalerParameters_' + mass_type+ '_' + year +'.joblib')
     print("Saving Model: " + scalePath)
     dump(ct, scalePath)
 
     # This form of the scaler is for manually recreating the scaler, specifically for the NTuplizer C++ code used later
-    scalePath = os.path.join(scaleDir,'BESTScalerParameters_'+ year +'.txt')
+    scalePath = os.path.join(scaleDir,'BESTScalerParameters_'+ mass_type+ '_' +  year +'.txt')
     print("Saving Parameters: " + scalePath)
     with open(scalePath, 'w') as f: # Comments below describe transformation applied
         for name, transformer, events in ct.transformers_: 
@@ -181,7 +214,6 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
                 param1 = transformer.max_abs_
                 # param2 = transformer.scale_
                 param2 = [0]*numEvents # scale_ and max_abs_ are the same parameter
-
             for i, event in enumerate(events):
                 # f.write('{},{},{},{}\n'.format(event, nameKey, param1[i], param2[i]))
                 f.write('{},{},{},{}\n'.format(vars[event], nameKey, param1[i], param2[i]))
@@ -198,22 +230,31 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year):
             # mySample = sampleTypes[i]
             # scaledData = ct.transform(arr)
 
+
+
         for mySample in sampleTypes:
-            print("Transforming ", mySample)
-            inFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+".h5"
-            preScaleEvents = np.array(h5py.File(inFilePath,"r")["BES_vars"])[()]
-            scaledData = ct.transform(preScaleEvents)
-            
-            print("Creating Standarized Dataset for ", mySample, len(scaledData))
-            outFilePath = h5Dir+mySample+"Sample_"+year+"_BESTinputs_"+mySet+suffix+"_standardized.h5"
-    
-            with h5py.File(outFilePath, "w") as outF:
-                # outF.create_dataset('BES_vars', data=scaledData, chunks=(10, num_BES_inputs), compression='lzf', shuffle=True)
-                outF.create_dataset('BES_vars', data=scaledData, compression='lzf', shuffle=True)
-            
-            print("Done creating", outFilePath)
-            del scaledData
-            del preScaleEvents
+            for mass_type in mass_types:
+
+                mass_str= mass_type + "_"
+                sample_str = mySample + "_"
+
+
+                print("Transforming ", mySample)
+
+                inFilePath = h5Dir+sample_str+"Sample_"+mass_str +year+"_BESTinputs_"  +mySet+suffix+".h5"
+                preScaleEvents = np.array(h5py.File(inFilePath,"r")["BES_vars"])[()]
+                scaledData = ct.transform(preScaleEvents)
+                
+                print("Creating Standarized Dataset for ", mySample, len(scaledData))
+                outFilePath = h5Dir+sample_str+"Sample_"+mass_str +year+"_BESTinputs_"  +mySet+suffix+"_standardized.h5"
+        
+                with h5py.File(outFilePath, "w") as outF:
+                    # outF.create_dataset('BES_vars', data=scaledData, chunks=(10, num_BES_inputs), compression='lzf', shuffle=True)
+                    outF.create_dataset('BES_vars', data=scaledData, compression='lzf', shuffle=True)
+                
+                print("Done creating", outFilePath)
+                del scaledData
+                del preScaleEvents
 
     del ct
 
@@ -236,7 +277,7 @@ if __name__ == "__main__":
     parser.add_argument('-mp','--maskPath', dest='maskPath',
                         # default = "../formatConverter/masks/BESTMask.txt",
                         default = "../formatConverter/h5samples/BESvarList.txt",
-                        help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
+                        help="Path to mask file [default: ../formatConverter/masks/BESvarList_noHT_noEventNum.txt]")
     args = parser.parse_args()
 
     suffix = args.suffix
@@ -252,7 +293,12 @@ if __name__ == "__main__":
         quit()
     if not os.path.isdir(args.scaleDir): os.makedirs(args.scaleDir)
 
-    for year in years:
-        standardizeBESTVars(args.h5Dir, args.scaleDir, args.maskPath, sampleTypes, suffix, year)
+    for year in years:             
+        for decay_type in decay_types:
+            if decay_type == "allDecays":
+                sampleTypes = ["allDecays","QCD","Top"]
+            else: sampleTypes = sampleTypes_
+            for mass_type in mass_types:
+                standardizeBESTVars(args.h5Dir, args.scaleDir, args.maskPath, sampleTypes, suffix, year, mass_type)
 
     tools.logTime(startTime)
