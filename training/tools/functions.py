@@ -196,7 +196,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
 
 # def loadMask(maskPath, max = 551):
 # def loadMask(maskPath, max = 270):
-def loadMask(maskPath, max = 180):
+def loadMask(maskPath, max = 182):
     print("Loading mask: " + maskPath)
     maskIndex = []
     varDict = {}
@@ -244,6 +244,12 @@ def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents, mass_type, year='',
         if np.all(mask):
             eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,:]     for mySample in sampleTypes]
         else:
+
+            #print("numEvents is ", numEvents)
+            #print("mask is ", mask)
+            #print([sample for sample in sampleTypes])
+            #print("length of that is %i"%len([sample for sample in sampleTypes]) )
+            #print( np.array(h5py.File(h5Dir + "QCD" + h5Path, "r")["BES_vars"])[0,:]    )
             eventArrays = [np.array(h5py.File(h5Dir + mySample + h5Path, "r")["BES_vars"])[:numEvents,mask] for mySample in sampleTypes]
 
         print("My " + mySet + " events shape:", [eventArrays[i].shape for i in range(len(eventArrays))])

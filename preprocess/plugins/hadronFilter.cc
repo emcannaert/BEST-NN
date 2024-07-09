@@ -104,6 +104,7 @@ class hadronFilter : public edm::stream::EDFilter<> {
    public:
       explicit hadronFilter(const edm::ParameterSet&);
       ~hadronFilter();
+      bool isHEM(const float jet_eta, const float jet_phi);
       bool isgoodjet(const float eta, const float NHF,const float NEMF, const size_t NumConst,const float CHF,const int CHM, const float MUF, const float CEMF);
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -169,7 +170,17 @@ hadronFilter::hadronFilter(const edm::ParameterSet& iConfig)
    }
 
 }
+bool hadronFilter::isHEM(const float jet_eta, const float jet_phi)
+{
 
+   if(year != "2018")return false; // HEM is only relevant for 2018
+   if( (jet_phi >  -1.57)&&( jet_phi < -0.87) )
+   {
+      if( (jet_eta > -3.0)&&(jet_eta < -1.3))return true;
+
+   }
+   return false;
+}
 
 hadronFilter::~hadronFilter()
 {
@@ -197,37 +208,6 @@ bool hadronFilter::isgoodjet(const float eta, const float NHF,const float NEMF, 
 // ------------ method called on each new Event  ------------
 bool hadronFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-
-/////////////////Trigger//////////////
-
-   edm::Handle<edm::TriggerResults> triggerBits;
-   iEvent.getByToken(triggerBits_, triggerBits);
-
-   const edm::TriggerNames &names = iEvent.triggerNames(*triggerBits);
-   
-   for(auto iT = triggers.begin(); iT != triggers.end(); iT++)
-   {
-      std::string trigname = *iT;
-      if(debug)std::cout << "Looking for the " << trigname << " trigger." << std::endl;
-
-      bool pass = false;
-      for (unsigned int i = 0; i < triggerBits->size(); ++i) 
-      {
-         const std::string name = names.triggerName(i);
-         const bool accept = triggerBits->accept(i);
-         if ((name.find(trigname) != std::string::npos) &&(accept))
-         {
-            if(debug)std::cout << "Found the " << *iT << " trigger." << std::endl;
-            pass =true;
-         }
-      } 
-      if(!pass)
-      {  
-          return false; // if any of the triggers aren't found, skip event
-      }
-   }
-   //std::cout << "Passes trigger" << std::endl;
-   //calculate HT -> make HT > 1250. GeV
 
 
    ///////////////////////////////////
@@ -301,6 +281,8 @@ bool hadronFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(corrJet.pt() > 30.)totHT+= abs(corrJet.pt() );
 
       if( (corrJet.pt()  <30.) || (!(corrJet.isPFJet())) || (!isgoodjet(corrJet.eta(),corrJet.neutralHadronEnergyFraction(), corrJet.neutralEmEnergyFraction(),corrJet.numberOfDaughters(),corrJet.chargedHadronEnergyFraction(),corrJet.chargedMultiplicity(),corrJet.muonEnergyFraction(),corrJet.chargedEmEnergyFraction())) ) continue;
+      if (isHEM(corrJet.eta(),corrJet.phi())) return false;
+
       nAK4++;
    }
 

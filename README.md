@@ -1,10 +1,7 @@
-# BEST: Boosted Event Shape Tagger
+# BEST for SuuToChiChi : Boosted Event Shape Tagger for the diquark to VLQ to jets analysis 
 
-## Overview
+This is a modified version of the Boosted Event Shape Tagger that trains a neural network to identify vector-like quarks decaying to jets in their center of mass frames. Each VLQ consistes of a collection of jets called superjets. Superjets from signal (comprising all three VLQ decays - Wb, Zt, ht), QCD, and TTbar are used to define the corresponding training categories. 
 
-Before training the neural network, the CMS datasets must be converted into a usable form.
-To do this, see the instructions in the ``preprocess`` directory, and then the ``formatConverter`` directory.
-Then, check the instructions in the ``training`` directory to use the files to train a neural network.
 
 ## Dependencies 
 
@@ -23,66 +20,58 @@ Then, make a fork, clone the repository, and compile the programs as modules for
 
 ```bash
 cd CMSSW_10_6_27/src/
-git clone https://gitlab.cern.ch/BoostedEventShapeTagger/BEST.git
+git clone https://github.com/emcannaert/BEST-NN.git
 scram b -j8
 ```
 
-Now the repository can be used. 
 
-## Instructions for Contributing to this Repository
+## pre-process (creating input TTrees)
 
-First, fork this repository and push code to the forked version.
-Please only submit pull requests to the `developer` branch. Before submitting a pull request, 
-please test your code. To test any changes to the preprocess step, please open a screen and do the following:
+The process starts by creating TTrees for each training category that contain all input features (about 130 per event) that will be used for training. TTrees are created by the plugins/BESTProducer.cc analyzer, but the analyzer cfg and crab cfg files need to be created to in order to run and submit with different background and signal samples. These can be created by running the template scripts - 
 
 ```bash
-cd BEST/preprocess/
-cmsenv
-scram b -j8
-cd local/
-./submitLocal.sh
-python localPlotter.py 
+cd local
+python createCfgTemplateBEST.py
+cd ../crab/templates
+python createCrabCfgTemplateBEST.py
 ```
 
-Check the run_X.py files to select different files to run over. 
-Either open up the output root files directly from ``submitLocal.sh`` and examine them, 
-or plot them with ``localPlotter.py``. Both scripts will take a long time, so be sure to open a screen.
-There are no tests yet for any of the training files. So please keep old, stable training code
-in the `legacy` folder and create a new file when you make changes. 
+The analyzer cfgs and crab cfgs will be located in the $CMSSW_BASE/src//BEST/preprocess/local/allCfgs/ and $CMSSW_BASE/src/BEST/preprocess/crab/allAltCrabCfgs/ folders respectively. 
 
-After tests, please rebase to the current developer version:
+The crab cfg files can be submitted, resubmitted, and checked using shell scripts in the allAltCrabCfgs/ folder - 
+```bash
+cd $CMSSW_BASE/src/BEST/preprocess/crab/allAltCrabCfgs/
+source submitCrab_All.sh
+source resubmitCrab_All.sh
+source checkCrab_All.sh
+```
+
+## format conversion (turning TTrees into usable h5 files)
+
+NN training with tensorflow requires inputs in the form of h5 files. The TTrees created in the pre-process step can be converted to this format using scripts in the $CMSSW_BASE/src/BEST/formatConverter folder. The eos paths to the TTrees first need to be collected into to text files in the eosSamples folder, which can be done through the create_sample_lists.sh script - 
+
 
 ```bash
-# if this is your first time submitting a pull request, then do
-git remote add BEST https://gitlab.cern.ch/boostedeventshapetagger/BEST.git
-git fetch -p --all
-git checkout -b CentralDev -t BEST/developer #this creates a local branch called CentralDev that tracks the main developer branch
-# then every time you want to ensure that the code is up to date
-git fetch -p --all
-git checkout CentralDev
-git pull
-git checkout feature/MyFeatureBranch
-git rebase -i CentralDev
-# follow the rebase instructions
-git push 
+source create_sample_lists.sh <path to eos folder where training TTrees are stored>   # example: /store/user/ecannaer/BESTInputTrees_202445_162215
 ```
 
-Finally, submit your a merge request on GitLab to the `developer` branch in `boostedeventshapetagger/BEST`.
-There is a short form to fill out for the pull request, this will help the maintainers understand your changes.
-Then, your changes will be reviewed before being added. 
-
-#### To make a new feature branch
-
-Make sure that you are up-to-date with BEST/developer before making a new feature branch
+The training events can then be converted, split (into training and test), and flattened - 
 
 ```bash
-git fetch -p --all
-git checkout CentralDev
-git pull
-git checkout -b feature/MyFeatureBranch
+python sampleConverter.py
+python sampleSplitter.py
+python sampleFlattener.py
 ```
 
-## NTuple location
+These output subsequent h5 files locally in the h5samples folder, so be careful about running out of disk space.
 
-Some preprocessed ntuples of the Monte Carlo simulated data already exist on the LPC EOS at `/store/user/rband/BESTSamples`.
+## format conversion (turning TTrees into usable h5 files)
+
+The NN must then be trained. 
+
+```bash
+python nnBEST.py -r  ## -r overwrites older models
+```
+
+This will take a while (a couple hours likely), and the model and plots will be stored in the models/ and plots/ folders respectively. The model file will need to be moved to your main analysis workspace in order to be imported by any analyzers using this NN.
 

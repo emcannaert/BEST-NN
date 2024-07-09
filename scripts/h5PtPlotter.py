@@ -14,12 +14,12 @@ import argparse, os
 # User definitons
 # bins_list = [i*100 for i in range(0,40)]
 # bins_list = [i*50 for i in range(10,60)]
-bins_list = [i*50 for i in range(25,160)]
+bins_list = [i*50 for i in range(0,200)]
 # bins_list = [i*20 for i in range(25,100)]
 
 #cmslpc127
 # Global variables
-years = ["2016"]
+years = ["2015","2016","2017","2018"]
 # years = ["2018","2017","2016_APV","2016"]
 # years = ["2016","2016_APV"]
 # years = ["2017","2018"]
@@ -31,7 +31,7 @@ decay_types    = ["allDecays"]
 mass_types      = ["all_mass"]
 
 #mass_types      = ["all_mass","low_mass", "high_mass"]
-plot_types      = ["", "_train_flattened"]
+plot_types      = [ "_train","_train_flattened"]
 # listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
 # listOfFileTypes = ["_train_flattened.h5"]
@@ -62,7 +62,7 @@ if __name__ == "__main__":
                         dest='ptIndex',
                         type=int,
                         # default=142)
-                        default=104)                                   
+                        default=181) #155)                                   
     parser.add_argument('-ft','--fileTypes',
                         dest='fileTypes',
                         help='Which (comma separated) samples to process. Examples: 1) --all; 2) _train,_test',
@@ -100,24 +100,32 @@ if __name__ == "__main__":
                     print("Plotting year", year)
                     for fileType in listOfFileTypes:
                        
-                        print("Plotting fileType", fileType)
-                        # plotDir = "plots/" + fileType[1:-3] + "/"
+                        #print("Plotting fileType", fileType)
+                        #plotDir = "plots/" + fileType[1:-3] + "/"
+                        
+
+                        #plotDir = "plots/SJ_mass/" + fileType[1:-3] + "/"
                         plotDir = "plots/prettyHT/" + fileType[1:-3] + "/"
+
+
+
                         print(plotDir)
                         if not os.path.isdir(plotDir): os.makedirs(plotDir)
                         myPtArrays = []
                         for sampleType in sampleFileTypes:
                             print(sampleType)
-                            if sampleType in ["WB","HT","ZT", "allDecays"]:
-                                mass_str= mass_type + "_"
-                                sample_str = sampleType + "_"
-                            inputPath = args.h5Dir+sample_str+"Sample_"+ mass_str + year+ "_BESTinputs"+ plot_type+fileType
+                            #if sampleType in ["allDecays"]:
+                            mass_str= mass_type + "_"
+                            #    sample_str = sampleType + "_"
+                            inputPath = args.h5Dir+sampleType+"_Sample_"+ mass_str + year+ "_BESTinputs"+ plot_type+fileType
                             print("Reading from file %s"%inputPath)
                             inputFile = h5py.File(inputPath,"r")
                             for key in inputFile.keys(): print(key, inputFile[key].shape)
                             # print(inputFile.keys())
                             myPtArrays.append(np.array(inputFile["BES_vars"][...,args.ptIndex]))
                         # --- Create histogram, legend and title ---
+
+                        #print("@@@@@@@@ There are %s files used as inputs (should be 3!) @@@@@@@@@ "%len(myPtArrays))
                         plt.figure()
                         if fileType == ".h5": suffix = ""
                         else:                 suffix = "_"+fileType.split('.')[0]
@@ -139,18 +147,41 @@ if __name__ == "__main__":
                         #     plt.axvline(wp, linestyle=':', color="black")
                         #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
                         #             plt.axhline(100000)
-                        title = "HTDistribution_"+year+suffix + " ".join(plot_type.split("_"))
 
-                        file_title = "HTDistribution_" + mass_type + "_"  + year+ plot_type + suffix
+
+                        year_str = year
+                        if year == "2015":
+                            year_str = "2016preAPV"
+                        elif year == "2016":
+                            year_str = "2016postAPV"
+
+                        # change this back
+                        #title = "HTDistribution_"+year+suffix + " ".join(plot_type.split("_"))
+                        title = "Event H_{T} of training events for %s"%(year_str)
+
+                        # change this back
+                        file_title = "HT_Distribution_" + mass_type + "_"  + year+ plot_type + suffix
+                        #file_title = "HTDistribution_" + mass_type + "_"  + year+ plot_type + suffix
                         plt.legend(frameon=True, ncol=2, loc='lower left')
+                        
+
+                        #change this back
                         plt.xlabel('Event HT (GeV)')
+                        #plt.xlabel('Superjet mass (GeV)')
                         plt.title(title)
                         plt.show()
-                        savePath = os.path.join(plotDir, title+'_2500.png')
+                        savePath = os.path.join(plotDir, file_title+'_2500.png')
                         plt.savefig(savePath)
                         # savePath = os.path.join(plotDir, title+'_2500.pdf')
                         # plt.savefig(savePath)
-                        plt.xlim([1250,8000])
+
+
+
+                        # change this back
+                        plt.xlim([1250,10000])
+                        #plt.xlim([0,4500])
+
+
                         savePath = os.path.join(plotDir, file_title + '.png')
                         plt.savefig(savePath)
                         # savePath = os.path.join(plotDir, title+'.pdf')

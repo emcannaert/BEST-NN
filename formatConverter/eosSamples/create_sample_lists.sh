@@ -1,38 +1,25 @@
 #!/bin/bash
 
-# usage: find_eos_files.sh <main BEST eos folder to search> <year>
-
 # need to split the files into 8 total neural networks:
-
-#2015 low mass
-#2015 high mass
-
-#2016 low mass
-#2016 high mass
-
-#2017 low mass
-#2017 high mass
-
-#2018 low mass
-#2018 high mass
 
 ###### USAGE: give the name of the eos folder you want to draw files from
 
-EOSBASE="/store/user/ecannaer/"
+
+#EOSBASE=""
 
 if [ -z "$1" ];
 then
 	echo "Invalid crab submission folder. Please provide the most recent crab submission folder on eos (Ex. BESTInputTrees_2024219_161315.....)."
 else
-	echo "Looking for EOS files for directory $EOSBASE$1"
+	echo "Looking for EOS files for directory $1"
 
-	xrdfs root://cmseos.fnal.gov ls -R /store/user/ecannaer/$1 | grep 2015 | grep root > all_BEST_files_2015.txt
+	xrdfs root://cmseos.fnal.gov ls -R $1 | grep 2015 | grep root > all_BEST_files_2015.txt
 	echo "Created 2015 files."
-	xrdfs root://cmseos.fnal.gov ls -R /store/user/ecannaer/$1 | grep 2016 | grep root > all_BEST_files_2016.txt
+	xrdfs root://cmseos.fnal.gov ls -R $1 | grep 2016 | grep root > all_BEST_files_2016.txt
 	echo "Created 2016 files."
-	xrdfs root://cmseos.fnal.gov ls -R /store/user/ecannaer/$1 | grep 2017 | grep root > all_BEST_files_2017.txt
+	xrdfs root://cmseos.fnal.gov ls -R $1 | grep 2017 | grep root > all_BEST_files_2017.txt
 	echo "Created 2017 files."
-	xrdfs root://cmseos.fnal.gov ls -R /store/user/ecannaer/$1 | grep 2018 | grep root > all_BEST_files_2018.txt
+	xrdfs root://cmseos.fnal.gov ls -R $1 | grep 2018 | grep root > all_BEST_files_2018.txt
 	echo "Created 2018 files."
 
 	## create 2015 samples

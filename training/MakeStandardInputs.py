@@ -26,8 +26,9 @@ setTypes = ["train", "validation", "test"]
 mass_types = [ "all_mass"]
 
 #mass_types = ["low_mass", "high_mass", "all_mass"]
-years = ["2015"]
-    
+years = ["2015","2016","2017","2018"]
+ 
+#years = ["2018"]   
 def checkRepeat(j, keys):
     repeatList = []
     while j in keys:
@@ -47,7 +48,6 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
     vars = []
     inds = []
     scalerDict = { "standard":{}, "minmax":{}, "maxabs":{}, "noscale":{} }
-    
     # Load in the desired mask, and sort the events to be scaled accordingly.
     with open(maskPath, "r") as maskFile:
         for i, line in enumerate(maskFile):
@@ -58,8 +58,12 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
             vars.append(var)
 
             #if "AK4_m" in var: # Scale pT from [500,2000] to [0,1]  AK4X_E    /// other option is minmax
-            """
+        
             #    scalerDict["maxabs"][i] = (var) 
+
+
+
+
             if "_px" in var: # Scale px,py,pz to 0 mean and unit variance
                 scalerDict["standard"][i] = (var)  
             elif "_py" in var: # Scale px,py,pz to 0 mean and unit variance
@@ -69,8 +73,8 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
 
             elif "_E" in var: # Normalize energy by dividing by max value, giving [0,1] 
                 scalerDict["minmax"][i] = (var)
-            elif "AK4_theta" in var.lower(): # Normalize mass by dividing by max value, giving [0,1]
-                scalerDict["minmax"][i] = (var)  
+            #elif "AK4_theta" in var.lower(): # Normalize mass by dividing by max value, giving [0,1]
+            #    scalerDict["minmax"][i] = (var)  
             #elif "SJ_mass" in var: # Normalize by dividing by max value, giving [0,1]
             #    scalerDict["maxabs"][i] = (var)
             #elif "SJ_mass"  in var.lower():    # thinking here is that we don't want to assume a SJ mass, but the shapes are very different between sig and BR
@@ -84,24 +88,25 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
             elif "_nDaughters" in var: 
                 scalerDict["standard"][i] = (var)
 
-            #elif "AK41_mass_" in var: 
-            #    scalerDict["maxabs"][i] = (var)
-            #elif "AK42_mass_" in var: 
-            #    scalerDict["maxabs"][i] = (var)
-            #elif "AK43_mass_" in var: 
-            #    scalerDict["maxabs"][i] = (var)
-            #elif "AK44_mass_" in var: 
-            #    scalerDict["maxabs"][i] = (var)
+
+            #### new 
+            elif "mass" in var:
+                scalerDict["maxabs"][i] = (var)
+
+            elif "AK4_m" in var:
+                scalerDict["maxabs"][i] = (var)
+
+            else: # All other variables are not scaled (they are already close to [-1,1] or [0,1])
+                scalerDict["noscale"][i] = (var)
+
+ 
+
+            #scalerDict["noscale"][i] = (var)
 
 
 
-            """
-            #else: # All other variables are not scaled (they are already close to [-1,1] or [0,1])
-            scalerDict["noscale"][i] = (var)
-    
     # Currently we do not generate unused vars
     # mask = [True if str(i) in inds else False for i in range(num_BES_inputs)]
-
     # Create list of transformers to apply, in order of when the events appear.
     # Use checkRepeat to see how many events in a row use the same transformer.
     transformers = []
@@ -175,6 +180,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
     with open(scalePath, 'w') as f: # Comments below describe transformation applied
         for name, transformer, events in ct.transformers_: 
             numEvents = len(events)
+
             # print(name)
             if "noscale" in name: # scaledvar = var
                 nameKey = "NoScale"
@@ -277,7 +283,7 @@ if __name__ == "__main__":
     parser.add_argument('-mp','--maskPath', dest='maskPath',
                         # default = "../formatConverter/masks/BESTMask.txt",
                         default = "../formatConverter/h5samples/BESvarList.txt",
-                        help="Path to mask file [default: ../formatConverter/masks/BESvarList_noHT_noEventNum.txt]")
+                        help="Path to mask file [default: ../formatConverter/masks/BESvarList_mask.txt]")
     args = parser.parse_args()
 
     suffix = args.suffix

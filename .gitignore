@@ -4,8 +4,10 @@
 *.gif
 *.pdf
 preprocess/crab/submit*
-preprocess/local/allCfgs/*
-preprocess/crab/allAltCrabCfgs/*
+preprocess/local/allCfgs/*cfg.py
+preprocess/local/allCfgs/*cfg.pyc
+preprocess/crab/allAltCrabCfgs/*.pyc
+preprocess/crab/allAltCrabCfgs/*.py
 *log*
 # */Logs/*
 *Log.txt
@@ -17,3 +19,10 @@ preprocess/crab/allAltCrabCfgs/*
 *workspace*
 samples/backup/*
 training/models/*
+training/plots/*
+*.txt
+tools/BuilderExport/*
+tools/GraphExport/*
+*.swp
+formatConverter/eosSamples/*.txt
+preprocess/crab/allAltCrabCfgs/crab_projects/

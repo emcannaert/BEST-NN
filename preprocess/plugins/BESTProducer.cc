@@ -303,7 +303,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig)
      listOfVars.push_back("AK41_nsubjets");
      listOfVars.push_back("AK41_thrust");
      listOfVars.push_back("AK41_sphericity");
-     //listOfVars.push_back("AK41_asymmetry");
+     listOfVars.push_back("AK41_asymmetry");
      listOfVars.push_back("AK41_isotropy");
      listOfVars.push_back("AK41_aplanarity");
      listOfVars.push_back("AK41_FW1");
@@ -359,7 +359,7 @@ BESTProducer::BESTProducer(const edm::ParameterSet& iConfig)
      //SJ BES variables
      listOfVars.push_back("SJ_thrust");
      listOfVars.push_back("SJ_sphericity");
-     //listOfVars.push_back("SJ_asymmetry");
+     listOfVars.push_back("SJ_asymmetry");
      listOfVars.push_back("SJ_isotropy");
      listOfVars.push_back("SJ_aplanarity");
      listOfVars.push_back("SJ_FW1");
@@ -715,7 +715,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       PUID = bool( (corrJet.userInt("pileupJetIdUpdated:fullId") & (1 << 1)) || (corrJet.pt() > 50.) );
 
       if( (corrJet.pt()  <30.) || (!(corrJet.isPFJet())) || (!isgoodjet(corrJet.eta(),corrJet.neutralHadronEnergyFraction(), corrJet.neutralEmEnergyFraction(),corrJet.numberOfDaughters(),corrJet.chargedHadronEnergyFraction(),corrJet.chargedMultiplicity(),corrJet.muonEnergyFraction(),corrJet.chargedEmEnergyFraction(),PUID, corrJet.pt() )) ) continue;
-      //if( isHEM(corrJet.eta(), corrJet.phi())) return;
+      if( isHEM(corrJet.eta(), corrJet.phi())) return;
 
      if(nAK4 < 4)
      {
@@ -724,13 +724,14 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      nAK4++;
 
    }
+
    if((nAK4 <4) || (totHT < 1500.) )
    {
       
       if(debug)std::cout << "Failed nAK4,tot HT cut" << std::endl;
       return;
 
-   }
+   } 
 
    if(debug)std::cout << "Passed AK4 and tot HT cuts " << std::endl;
 
@@ -739,6 +740,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    double minDeltaRDisc13 = sqrt( pow(leadAK4Jets[0].DeltaR(leadAK4Jets[2]),2) + pow(leadAK4Jets[1].DeltaR(leadAK4Jets[3]),2));
    double minDeltaRDisc14 = sqrt( pow(leadAK4Jets[0].DeltaR(leadAK4Jets[3]),2) + pow(leadAK4Jets[1].DeltaR(leadAK4Jets[2]),2));
 
+   
    if (  abs(min(minDeltaRDisc12, min(minDeltaRDisc13,minDeltaRDisc14)) -minDeltaRDisc12)<1e-8 ) 
    {
      //set dijet masses
@@ -757,6 +759,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      dijetMassOne = (leadAK4Jets[0] +leadAK4Jets[3]).M();
      dijetMassTwo = (leadAK4Jets[1] +leadAK4Jets[2]).M();
    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    ////////////////////////////////////////////////////////////_AK8 Jets_/////////////////////////////////////////////////////////////////////
@@ -833,7 +836,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       if((corrJet.pt() > 500.) && ((corrJet.isPFJet())) && (isgoodjet(corrJet.eta(),corrJet.neutralHadronEnergyFraction(), corrJet.neutralEmEnergyFraction(),corrJet.numberOfDaughters(),corrJet.chargedHadronEnergyFraction(),corrJet.chargedMultiplicity(),corrJet.muonEnergyFraction(),corrJet.chargedEmEnergyFraction(),nfatjets) ) && (corrJet.userFloat("ak8PFJetsPuppiSoftDropMass") > 45.)) 
       {
-         if(!isHEM(corrJet.eta(),corrJet.phi()))nfatjet_pre++;
+         nfatjet_pre++;
       }
       if((sqrt(pow(corrJet.mass(),2)+pow(corrJet.pt(),2)) < 200.) || (!(corrJet.isPFJet())) || (!isgoodjet(corrJet.eta(),corrJet.neutralHadronEnergyFraction(), corrJet.neutralEmEnergyFraction(),corrJet.numberOfDaughters(),corrJet.chargedHadronEnergyFraction(),corrJet.chargedMultiplicity(),corrJet.muonEnergyFraction(),corrJet.chargedEmEnergyFraction(),nfatjets )) || (corrJet.mass()< 0.)) continue; //userFloat("ak8PFJetsPuppiSoftDropMass")
       //if(isHEM(corrJet.eta(),corrJet.phi()))continue;
@@ -848,14 +851,19 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      }
      nfatjets++;
    }
-   if (jetType_ == "QCD" || jetType_ == "Top")  // VLQs have very high efficiency rates here,  but a small portion of stats are lost, so this won't be applied to them
+
+
+
+   //if (jetType_ == "QCD" || jetType_ == "Top")  // VLQs have very high efficiency rates here,  but a small portion of stats are lost, so this won't be applied to them
+   //{
+   if (  (nfatjets < 3) ||   ((nfatjet_pre < 2) && ((dijetMassOne < 1000.) || (dijetMassTwo < 1000.)  )  )  ) 
    {
-       if (  (nfatjets < 3) ||   ((nfatjet_pre < 2) && ((dijetMassOne < 1000.) || (dijetMassTwo < 1000.)  )  )  ) 
-      {
-         if(debug)std::cout << "Failed nfatjet, nfatjet_pre, or dijet cut" << std::endl;
-         return;
-      }  
-   }
+      if(debug)std::cout << "Failed nfatjet, nfatjet_pre, or dijet cut" << std::endl;
+      return;
+   }  
+   //}
+
+
 
    if(debug2)std::cout << "Passed AK8 and AK4 dijet cuts " << std::endl;
 
@@ -1928,12 +1936,12 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      //AK4 jet angles 
      if(debug)std::cout << "Calculating CA4 jet angles." << std::endl;
 
-     treeVars["AK4_theta12"] = abs(AK4_jet1.Angle(AK4_jet2));   
-     treeVars["AK4_theta13"] = abs(AK4_jet1.Angle(AK4_jet3));
-     treeVars["AK4_theta14"] = abs(AK4_jet1.Angle(AK4_jet4));
-     treeVars["AK4_theta23"] = abs(AK4_jet2.Angle(AK4_jet3));
-     treeVars["AK4_theta24"] = abs(AK4_jet2.Angle(AK4_jet4));
-     treeVars["AK4_theta34"] = abs(AK4_jet3.Angle(AK4_jet4));
+     treeVars["AK4_theta12"] = cos(abs(AK4_jet1.Angle(AK4_jet2)));   
+     treeVars["AK4_theta13"] = cos(abs(AK4_jet1.Angle(AK4_jet3)));
+     treeVars["AK4_theta14"] = cos(abs(AK4_jet1.Angle(AK4_jet4)));
+     treeVars["AK4_theta23"] = cos(abs(AK4_jet2.Angle(AK4_jet3)));
+     treeVars["AK4_theta24"] = cos(abs(AK4_jet2.Angle(AK4_jet4)));
+     treeVars["AK4_theta34"] = cos(abs(AK4_jet3.Angle(AK4_jet4)));
 
      if(debug)std::cout << "Calculating Thrust, FW, etc." << std::endl;
 
@@ -2118,6 +2126,7 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
      for (unsigned i = 0; i < listOfVars.size(); i++)
      {
+
       if (  (treeVars[ listOfVars[i] ] != treeVars[ listOfVars[i] ] ) || ( isinf(treeVars[ listOfVars[i] ])   )  )
       {
          if(debug)std::cout << "Bad variable: " << listOfVars[i] << ". Setting to 0 " << std::endl;
@@ -2133,9 +2142,21 @@ void BESTProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      if(debug2)std::cout << "Filling tree." << std::endl;
 
      superjetTree->Fill();
-     for (unsigned i = 0; i < listOfVars.size(); i++)
+
+
+     /*
+      std::cout << "-------------------------------- new SJ ----------------------------------------- " << std::endl;
+      std::cout << "eventNumber" << " " << eventNumber << std::endl;
+      std::cout << "superjet_num" << " " << nSuperJets + 1<< std::endl;
+      std::cout << "totHT" << " " << totHT << std::endl;
+      */
+      for (unsigned i = 0; i < listOfVars.size(); i++)
      {
+
          if ( (listOfVars[i] ==  "tot_HT" ) || (  listOfVars[i] == "eventNumber")) continue;
+         
+        // std::cout<< listOfVars[i] << " "  << treeVars[ listOfVars[i] ] << std::endl;
+
          treeVars[ listOfVars[i] ] = -999.99;
      }
    }

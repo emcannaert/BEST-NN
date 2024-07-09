@@ -1,0 +1,59 @@
+b'hello world'
+Looking for history file: models/nnBEST_6Layers_75Nodes_3Categories/2015/all_mass/history_all_mass_2015.joblib
+modelDir:  models/nnBEST_6Layers_75Nodes_3Categories/2015/all_mass/
+Replacing directories...
+Suffix is:  2015
+Loading mask: ../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt
+Mask size: 107
+Loading h5 files for train
+_Sample_all_mass_2015_BESTinputs_train_flattened_standardized.h5
+numEvents is  None
+mask is  [True, True, True, True, True, True, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, True, True, True, True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, True, True, True, True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, True, True, True, True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False, False, False, False, True, False, False, False, False, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, False, False, False, False, False, False, False, False, False, True, True, True, True, True, True, True, True, False, True, True, True, True, True, True, True, False, True, False, True, True, True, True, True, True, False, False, True, True, False, False]
+['allDecays', 'Top', 'QCD']
+length of that is 3
+[ 5.3105015e-02  1.8237332e+02  5.2462619e-02  1.3150109e-01
+  1.1264179e-01  8.7325335e-02  2.0172353e-01  8.9655173e-01
+  3.4482759e-01  1.0344828e-01  0.0000000e+00  0.0000000e+00
+  0.0000000e+00  0.0000000e+00  0.0000000e+00  4.3351558e-01
+  1.4101741e+01  9.0575829e+00  3.9673543e+00  0.0000000e+00
+  0.0000000e+00  0.0000000e+00  0.0000000e+00  2.9500000e+01
+  3.5000000e+00  1.3152856e+02 -9.4656807e+01 -8.2433418e+01
+  6.7236102e-01  6.4016360e-01  1.6238400e+02  1.4943385e-01
+  5.6017905e-01  1.8897304e-01  4.4920421e-01  2.6183998e-02
+  7.1298450e-01  1.0000000e+00  5.3846157e-01  1.5384616e-01
+  0.0000000e+00  0.0000000e+00  1.5384616e-01  0.0000000e+00
+  0.0000000e+00  7.2576213e-01  1.2947250e+01  1.0679952e+01
+  7.0641217e+00  0.0000000e+00  0.0000000e+00  7.0641217e+00
+  0.0000000e+00  1.3500000e+01  3.5000000e+00 -1.0503168e+02
+  1.0373332e+02  6.6397865e+01  8.7386049e-02  8.6720967e-01
+  5.3678478e+01  8.5501581e-02  2.6659611e-01  1.2344839e-01
+  1.1891739e-01  1.2592156e-01  3.3454540e-01  9.2857140e-01
+  5.0000000e-01  0.0000000e+00  0.0000000e+00  0.0000000e+00
+  0.0000000e+00  0.0000000e+00  0.0000000e+00  4.3335611e-01
+  6.6426964e+00  4.7063541e+00  0.0000000e+00  0.0000000e+00
+  0.0000000e+00  0.0000000e+00  0.0000000e+00  1.4500000e+01
+  6.5000000e+00  2.2960987e+01 -1.9864658e+01 -4.3755550e+01
+  4.7459692e-01  7.5832778e-01  3.8227699e+01  1.4246537e-01
+  2.2805665e-01  3.2641685e-01  3.3139881e-01  1.1127131e-01
+  4.7944632e-01  8.8888890e-01  3.3333334e-01  0.0000000e+00
+  0.0000000e+00  0.0000000e+00  0.0000000e+00  0.0000000e+00
+  0.0000000e+00  4.5017630e-01  3.6615145e+00  2.1228344e+00
+  0.0000000e+00  0.0000000e+00  0.0000000e+00  0.0000000e+00
+  0.0000000e+00  9.5000000e+00  3.5000000e+00 -2.4664188e+01
+  6.4859438e+00  2.8228994e+01  6.3833493e-01  6.4357781e-01
+  1.4320775e+01  3.4324335e+02  3.9065796e+02  4.3479376e+02
+  3.8247000e+02  5.3052887e+01  1.9263123e+02  1.6288828e+02
+  1.2947250e+01  1.8000214e+02  2.0620212e+02  4.8182014e+01
+  6.7096672e+00  8.9575562e+01  3.7538145e+00  2.9935422e+00
+  4.9787289e-01  2.6774945e+00  2.5978911e+00  5.8389330e-01
+  2.8329453e+00  3.7500000e-01  1.2500000e-01  0.0000000e+00
+  2.5000000e-01  0.0000000e+00  1.8750000e-01  0.0000000e+00
+  1.2500000e-01  0.0000000e+00  4.1450165e-02  7.3942286e-01
+  5.4778460e-02  4.8521748e-01  8.5379286e-03  8.4351766e-01
+  4.9234976e+02  3.4324335e+02  0.0000000e+00  3.4324335e+02
+  0.0000000e+00  4.3479376e+02  0.0000000e+00  0.0000000e+00
+  3.9065796e+02  0.0000000e+00  0.0000000e+00  2.5000000e+00
+  5.0000000e-01  2.5000000e+00  5.0000000e-01  4.5000000e+00
+  5.0000000e-01  5.0000000e-01  3.5000000e+00  5.0000000e-01
+  5.0000000e-01  3.8436562e-02  9.4339383e-01  1.4676290e+07
+  1.5460476e+03]

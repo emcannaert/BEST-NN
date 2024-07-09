@@ -206,7 +206,7 @@ if __name__ == "__main__":
                         type=int,
                         #default=142)
                         #default=548)
-                        default=179) ## flattens in event HT
+                        default=181) ## flattens in event HT
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
@@ -217,7 +217,7 @@ if __name__ == "__main__":
                         type=float,
                         # default=3500)
                         # default=1600)
-                        default=8000)
+                        default=10000)
     parser.add_argument('-nb', '--nBins',
                         dest='nBins',
                         type=int,

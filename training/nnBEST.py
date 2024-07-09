@@ -39,7 +39,12 @@ h = tf.constant('hello world')
 print(sess.run(h))
 
 sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
-years = ["2016"]
+
+
+
+#years = ["2015","2016","2017","2018"]
+
+years = ["2015","2016","2017","2018"]
 decayTypes = ["allDecays"]
 mass_types = ["all_mass"]
 
@@ -48,7 +53,7 @@ mass_types = ["all_mass"]
 setTypes = ["train", "validation", "test"]
 
 nCats = 3
-nLayers = 4
+nLayers = 8
 
 # maxEvents is the max number of events to pull from EACH of the 6 sample files
 # "None" means use all of events in each file 
@@ -93,12 +98,11 @@ def trainNNBEST(args, strings,mask, dataDict):
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
 
     #combLayer   = Dense(40, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
-    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    #combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     #combLayer   = Dense(40, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
-    #combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
-    #combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
+    combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     outputModel = Dense( nCats, kernel_initializer="glorot_normal", activation="softmax")(combLayer)
@@ -149,14 +153,14 @@ if __name__ == "__main__":
                         default="models/",
                         help="Output Dir where models are saved [default: models/]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
-                        default = "../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt",
+                        default = "../formatConverter/h5samples/BESvarList_mask.txt",
                         # default = "../formatConverter/h5samples/BESvarList_noBDisc.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSV.txt",
                         # default = "../formatConverter/h5samples/BESvarList_naive.txt",
                         # default = "../formatConverter/h5samples/BESvarList_advanced.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive_trim.txt",
-                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt]")
+                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList_mask.txt]")
                         # default = "../formatConverter/masks/BESTMask.txt",
                         # help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
     parser.add_argument('-sf','--suffix', dest='suffix',
@@ -183,10 +187,10 @@ if __name__ == "__main__":
                         help="Number of Epochs to wait for improvement before EarlyStopping [default: 20]")
     parser.add_argument('-tol','--tolerance', dest='tolerance',      
                         # default="0.01",
-                        default="0.00001",
+                        default="0.0001",
                         help="Improvement tolerance for EarlyStopping; smaller tolerance means longer training [default: 0.01]")
     parser.add_argument('-n','--nodes', dest='nodes',
-                        default="140",                     
+                        default="130",                     
                         help="Number of nodes per hidden layer [default: 80]")
     parser.add_argument('-r','--replace', dest='replace',
                         action='store_true',
