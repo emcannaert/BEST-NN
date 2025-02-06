@@ -5,7 +5,7 @@
 
 using namespace std;
 #include <iostream>
-#include "/uscms_data/d3/cannaert/analysis/CMSSW_10_6_30/src/sortJets.h"
+#include "sortJets.h"
 
 sortJets::sortJets(std::vector<TLorentzVector> SJ1, std::vector<TLorentzVector> SJ2, std::vector<TLorentzVector> _miscJets )
 {
