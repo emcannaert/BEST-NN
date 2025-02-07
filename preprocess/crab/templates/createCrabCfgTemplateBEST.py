@@ -40,7 +40,7 @@ def makeAltCrabCfg(year, dataset,dateTimeString, jetType, cfg_num):
 		newCfg.write("config.JobType.maxMemoryMB = 3000 # might be necessary for some of the QCD jobs\n")
 
 	newCfg.write("config.Data.outputDatasetTag = 'BESTInputTrees_%s_%s'\n"%(jetType,year))
-	newCfg.write("config.Data.outLFNDirBase = '/store/user/ecannaer/BESTInputTrees_%s'\n"%dateTimeString)
+	newCfg.write("config.Data.outLFNDirBase = '/store/user/tjian/BESTInputTrees_%s'\n"%dateTimeString)
 	newCfg.write("config.Site.storageSite = 'T3_US_FNALLPC'\n")
 
 
@@ -56,13 +56,13 @@ def main():
 
 	current_time = datetime.now()
 	dateTimeString = "%s%s%s_%s%s%s"%(current_time.year,current_time.month,current_time.day,current_time.hour,current_time.minute,current_time.second )
-	lastCrabSubmission.write("/store/user/ecannaer/BESTInputTrees_%s\n"%dateTimeString)
+	lastCrabSubmission.write("/store/user/tjian/BESTInputTrees_%s\n"%dateTimeString)
 	years   = ["2015","2016","2017","2018"]
-	jetTypes = ["WB", "HT", "ZT", "Top", "QCD"]
+	jetTypes = ["WB", "HT", "ZT", "Top", "QCD", "ST", "WJets"]
 	num_files_created = 0
 	# remove old files
 	os.system("rm ../allAltCrabCfgs/*_cfg.py")
-	cfg_num_tot = {"WB":0, "HT":0, "ZT":0, "QCD":0,"Top":0}
+	cfg_num_tot = {"WB":0, "HT":0, "ZT":0, "QCD":0,"Top":0, "ST":0, "WJets":0}
 	for year in years:
 		
 		datasets = []
@@ -73,13 +73,21 @@ def main():
 			Top_files = f.readlines()
 		with open("training_datasets/NN_QCD_training_%s.txt"%year) as f:
 			QCD_files = f.readlines()
+		with open("training_datasets/NN_ST_training_%s.txt"%year) as f:
+			ST_files = f.readlines()
+		with open("training_datasets/NN_WJets_training_%s.txt"%year) as f:
+			WJets_files = f.readlines()
+
 
 		datasets.extend(sig_files)
 		datasets.extend(Top_files)
 		datasets.extend(QCD_files)
+		datasets.extend(ST_files)
+		datasets.extend(WJets_files)
+		
 
 		#### check to se if the signal cfgs are being reated corretly (how many of each should there be?)
-		cfg_num = {"WB":0, "HT":0, "ZT":0, "QCD":0,"Top":0}
+		cfg_num = {"WB":0, "HT":0, "ZT":0, "QCD":0,"Top":0, "ST":0, "WJets":0}
 		for dataset in datasets:	
 			for jetType in jetTypes:
 					if jetType != "Top" and jetType in dataset:
@@ -92,8 +100,17 @@ def main():
 						cfg_num[jetType]+=1
 						cfg_num_tot[jetType]+=1
 						num_files_created+=1
+					elif jetType == "WJets" and "WToQQ" in dataset:
+							makeAltCrabCfg(year, dataset,dateTimeString, jetType, cfg_num[jetType])
+							cfg_num[jetType]+=1
+							cfg_num_tot[jetType]+=1
+							num_files_created+=1
+						
 					elif jetType == "Top": 		# the top datasets are named a number of different things
 						isTTbar = False
+					
+
+
 
 						for TTbar_dataset in TTbar_datasets:
 							if TTbar_dataset in dataset:
@@ -109,7 +126,7 @@ def main():
 
 
 	print("Created %i cfg files."%num_files_created)
-	print("Breakdown: QCD/Top/HT/WB/ZT: %i/%i/%i/%i/%i"%(cfg_num_tot["QCD"],cfg_num_tot["Top"],cfg_num_tot["HT"],cfg_num_tot["WB"],cfg_num_tot["ZT"]))
+	print("Breakdown: QCD/Top/HT/WB/ZT/ST/WJets: %i/%i/%i/%i/%i/%i/%i"%(cfg_num_tot["QCD"],cfg_num_tot["Top"],cfg_num_tot["HT"],cfg_num_tot["WB"],cfg_num_tot["ZT"],cfg_num_tot["ST"],cfg_num_tot["WJets"]))
 	return
 
 if __name__ == "__main__":
