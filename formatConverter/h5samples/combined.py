@@ -6,10 +6,10 @@ import numpy as np
 directory = '.'
 
 # Output file
-output_file = 'allDecays_combined.h5'
+output_file = 'bg_combined.h5'
 
 # Get a list of all .h5 files in the directory that start with 'allDecays'
-file_paths = [f for f in os.listdir(directory) if f.endswith('train_1.h5') and f.startswith('allDecays')]
+file_paths = [f for f in os.listdir(directory) if f.endswith('.h5') and f.startswith('bg')]
 
 # Determine the total size of the new dataset
 total_size = 0
@@ -19,7 +19,7 @@ for file_path in file_paths:
 
 # Create a new h5 file and an empty dataset
 with h5py.File(output_file, 'w') as f:
-    combined = f.create_dataset('BES_vars', (total_size, 182), dtype='float32')
+    combined = f.create_dataset('BES_vars', (total_size, 113), dtype='float32')
 
     # Loop over all the files and append their data
     start = 0

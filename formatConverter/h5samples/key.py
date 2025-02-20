@@ -8,9 +8,15 @@ def get_bes_vars_as_array(h5_file, dataset_name):
     return data, size
 
 # Usage
-h5_file = 'allDecays_Sample_all_mass_combine_BESTinputs_test_flattened_standardized.h5'
+h5_file = 'bg_2015.h5'
 dataset_name = 'BES_vars'
 bes_vars_array, size = get_bes_vars_as_array(h5_file, dataset_name)
 
 print("Dataset size:", size)
 print(bes_vars_array)
+
+output_file_path = "2015.txt"
+with open(output_file_path, 'w') as outfile:
+            outfile.write(bes_vars_array)
+        
+

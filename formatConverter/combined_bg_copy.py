@@ -281,25 +281,13 @@ def calculate_qcd_ratio(frac_file_path, nevents_file_path, ht_bin):
 
         if TT_ratio > 1 or qcd_ratio > 1:
             qcd_fraction = 0.99
-            tt_fraction = 0.01
-            W_fraction = 0
+            tt_fraction = 0.005
+            W_fraction = 0.005
             ST_fraction = 0
             N_selected_total = N_TTbar_total
             N_QCD_selected = (1-tt_fraction)*N_selected_total/tt_fraction
             qcd_ratio = float(N_QCD_selected) / N_QCD_total
             TT_ratio = 1
-            ST_ratio = 0
-            WJets_ratio = 0
-            print(N_selected_total)
-        if TT_ratio > 1 or qcd_ratio > 1:
-            qcd_fraction = 0.99
-            tt_fraction = 0.01
-            W_fraction = 0
-            ST_fraction = 0
-            N_selected_total = N_QCD_total
-            N_TTbar_selected = (1-qcd_fraction)*N_selected_total/qcd_fraction
-            TT_ratio = float(N_TTbar_selected) / N_TTbar_total
-            qcd_ratio = 1
             ST_ratio = 0
             WJets_ratio = 0
             print(N_selected_total)
@@ -412,8 +400,8 @@ def calculate_qcd_ratio(frac_file_path, nevents_file_path, ht_bin):
 
             if TT_ratio > 1 or qcd_ratio > 1:
                 qcd_fraction = 0.99
-                tt_fraction = 0.01
-                W_fraction = 0
+                tt_fraction = 0.005
+                W_fraction = 0.005
                 ST_fraction = 0
                 N_selected_total = N_QCD_total
                 N_TTbar_selected = (1-qcd_fraction)*N_selected_total/qcd_fraction
@@ -426,8 +414,8 @@ def calculate_qcd_ratio(frac_file_path, nevents_file_path, ht_bin):
 
             if TT_ratio > 1 or qcd_ratio > 1:
                 qcd_fraction = 0.99
-                tt_fraction = 0.01
-                W_fraction = 0
+                tt_fraction = 0.005
+                W_fraction = 0.005
                 ST_fraction = 0
                 N_selected_total = N_TTbar_total
                 N_QCD_selected = (1-tt_fraction)*N_selected_total/tt_fraction
@@ -441,15 +429,15 @@ def calculate_qcd_ratio(frac_file_path, nevents_file_path, ht_bin):
         
 
 def main():
-    frac_file_paths = "./txt_files/background_proporitons_h_totHT_1b_2018.txt"
-    nevents_file_path = "./txt_files/2018_nevents.txt"
+    frac_file_paths = "./txt_files/background_proporitons_h_totHT_1b_2016.txt"
+    nevents_file_path = "./txt_files/2016_nevents.txt"
     ht_bins = [i for i in range(1700, 9900, 200)]
-    qcd_file = './h5samples/QCD_Sample_2018_BESTinputs_train_1.h5'
-    tt_file = './h5samples/Top_Sample_2018_BESTinputs_train_1.h5'
-    st_file = './h5samples/ST_Sample_2018_BESTinputs_train_1.h5'
-    wjets_file = './h5samples/WJets_Sample_2018_BESTinputs_train_1.h5'
-    output_file_path = './h5samples/bg_2018.h5'
-    ratio_path='ratios_2018.txt'
+    qcd_file = './h5samples/QCD_Sample_2016_BESTinputs_train_1.h5'
+    tt_file = './h5samples/Top_Sample_2016_BESTinputs_train_1.h5'
+    st_file = './h5samples/ST_Sample_2016_BESTinputs_train_1.h5'
+    wjets_file = './h5samples/WJets_Sample_2016_BESTinputs_train_1.h5'
+    output_file_path = './h5samples/bg_2016.h5'
+    ratio_path='ratios_2016.txt'
     
     combined_data = []
     with h5py.File(qcd_file, 'r') as qcd, \
@@ -467,53 +455,8 @@ def main():
             qcd_ratio, TT_ratio, ST_ratio, WJets_ratio = calculate_qcd_ratio(frac_file_paths, nevents_file_path, ht_bin)
             with open(ratio_path, 'a') as ratio_file:
                 ratio_file.write("{},{},{},{},{}\n".format(ht_bin, qcd_ratio, TT_ratio, ST_ratio, WJets_ratio))
-            ht_min = ht_bin-100
-            ht_max = ht_bin + 100
-        
-            qcd_filtered = qcd_data[(qcd_data[:, 111] >= ht_min) & (qcd_data[:, 111] < ht_max)]
-            tt_filtered = tt_data[(tt_data[:, 111] >= ht_min) & (tt_data[:, 111] < ht_max)]
-            st_filtered = st_data[(st_data[:, 111] >= ht_min) & (st_data[:, 111] < ht_max)]
-            wjets_filtered = wjets_data[(wjets_data[:, 111] >= ht_min) & (wjets_data[:, 111] < ht_max)]
-            print(ht_bin, qcd_filtered.shape,tt_filtered.shape)
-            if len(qcd_filtered) > 0:
-                if qcd_ratio == 1:
-                    combined_data.append(qcd_filtered)
-                elif qcd_ratio > 0:
-                    qcd_selected, _ = train_test_split(qcd_filtered, train_size=qcd_ratio, shuffle=True, random_state=42)
-                    combined_data.append(qcd_selected)
-                print(qcd_filtered.shape if qcd_ratio == 1 else qcd_selected.shape)
-
-            if len(tt_filtered) > 0:
-                if TT_ratio == 1:
-                    combined_data.append(tt_filtered)
-                elif TT_ratio > 0:
-                    tt_selected, _ = train_test_split(tt_filtered, train_size=TT_ratio, shuffle=True, random_state=42)
-                    combined_data.append(tt_selected)
-                print(tt_filtered.shape if TT_ratio == 1 else tt_selected.shape)
-
-            if len(st_filtered) > 0:
-                if ST_ratio == 1:
-                    combined_data.append(st_filtered)
-                elif ST_ratio > 0:
-                    st_selected, _ = train_test_split(st_filtered, train_size=ST_ratio, shuffle=True, random_state=42)
-                    combined_data.append(st_selected)
-                print(st_filtered.shape if ST_ratio == 1 else st_selected.shape)
-
-            if len(wjets_filtered) > 0:
-                if WJets_ratio == 1:
-                    combined_data.append(wjets_filtered)
-                elif WJets_ratio > 0:
-                    wjets_selected, _ = train_test_split(wjets_filtered, train_size=WJets_ratio, shuffle=True, random_state=42)
-                    combined_data.append(wjets_selected)
-                print(wjets_filtered.shape if WJets_ratio == 1 else wjets_selected.shape)
-
-    combined_data = np.vstack(combined_data)
-    with h5py.File(output_file_path, 'w') as output_file:
-        output_file.create_dataset('BES_vars', data=combined_data)
-
 if __name__ == "__main__":
-    main()
-
+    main()       
 
 
     

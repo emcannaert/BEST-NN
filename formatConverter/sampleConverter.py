@@ -31,7 +31,7 @@ root.gROOT.SetBatch(True)
 # Global variables
 listBESvars = True
 stopAt = None
-sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
+sampleTypes_ = ["QCD"]
 
 decays_types = ["allDecays"]
 
@@ -316,11 +316,7 @@ if __name__ == "__main__":
     if args.stopAt > 0: stopAt = args.stopAt
 
     # Diagnostic debug
-    if args.debug:
-        print("Samples to process:", sampleTypes)
-        print("Years to process:", years)
-        print("Reading every nEvents:", stopAt)
-
+  
     # Make directories you need
     if not os.path.isdir(args.outDir): os.mkdir(args.outDir)
 
@@ -332,12 +328,17 @@ if __name__ == "__main__":
     for decays_type in decays_types:
         for mass_type in mass_types:
             if decays_type == "allDecays":
-                sampleTypes = ["allDecays", "Top", "QCD"]
+                sampleTypes = ["QCD"]
             else: sampleTypes = sampleTypes_
             for sampleType in sampleTypes:
                 for year in years:
                     print("Processing", sampleType, year, mass_type)
                     convert(args.eosDir, args.outDir, sampleType, year, args.debug, mass_type)
+            if args.debug:
+                print("Samples to process:", sampleTypes)
+                print("Years to process:", years)
+                print("Reading every nEvents:", stopAt)
+
 
     #        for chi_mass in chi_masses:
 

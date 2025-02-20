@@ -17,7 +17,8 @@ import numpy as np
 import numpy.ma as ma
 from sklearn.model_selection import train_test_split
 
-years = ["2015","2016","2017","2018"]
+# years = ["2015","2016","2017","2018"]
+years = ["combine"]
 # years = ["2017"]
 decays_types = ["allDecays"]
 #decays_types = ["","allDecays"]
@@ -25,8 +26,8 @@ decays_types = ["allDecays"]
 #mass_types = ["low_mass", "high_mass", "all_mass"]
 mass_types = ["all_mass"]
 
-sampleTypes_ = ["HT", "ZT", "WB", "QCD","Top"]
-
+# sampleTypes_ = ["HT", "ZT", "WB", "QCD","Top"]
+sampleTypes_ = ["HT", "ZT", "WB", "bg"]
 # setTypes = ["","train","validation","test"]
 setTypes = ["train","validation","test"]
 
@@ -67,9 +68,14 @@ def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binS
             for myKey in fIn.keys():
                 # print("Key", myKey)
                 myKeyData = np.array(fIn[myKey][counter:counter+batchSize,...])
+                print("myKeyData", myKeyData)
                 dsetShape  = fIn[myKey].shape
                 dsetChunks = fIn[myKey].chunks 
-                # print("Shape of myKeyData", myKeyData.shape)
+                if dsetChunks is None:
+                    dsetChunks = (min(1000, dsetShape[0]), dsetShape[1])  # Default chunk size
+                print("dsetShape", dsetShape)
+                print("dsetChunks", dsetChunks)
+                print("Shape of myKeyData", myKeyData.shape)
                 # Loop over bins (events in dataset may belong to any pt-bin)
                 for binIndex in range(0,len(bins)):
                     myProbability = keepProbs[sampleTypes.index(mySample)][binIndex]
@@ -99,6 +105,14 @@ def flattenFile(keepProbs, h5Dir, outDir, sampleTypes, year, setType, bins, binS
                     if not myKey in besData.keys():
                         # print("Making new datset")
                         if myKey == "BES_vars": # max shape by # of vars
+                            # Ensure dsetShape and dsetChunks are properly initialized
+                            if dsetShape is None or dsetChunks is None:
+                                raise ValueError("dsetShape and dsetChunks must be initialized before creating the dataset")
+
+                        # Ensure dsetShape and dsetChunks have the expected structure
+                            if len(dsetShape) < 2 or len(dsetChunks) < 2:
+                                raise ValueError("dsetShape and dsetChunks must have at least two elements")
+
                             besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1]), chunks=(dsetChunks[0],dsetChunks[1]), compression='lzf', shuffle=True)
                         # else: # max shape by # of pfcands (or SV's) and # of vars
                         #     besData[myKey] = fOut.create_dataset(myKey, data=output, maxshape=(None,dsetShape[1],dsetShape[2]), chunks=(dsetChunks[0],dsetChunks[1],dsetChunks[2]), compression='lzf', shuffle=True)
@@ -206,12 +220,12 @@ if __name__ == "__main__":
                         type=int,
                         #default=142)
                         #default=548)
-                        default=181) ## flattens in event HT
+                        default=111) ## flattens in event HT
     parser.add_argument('-rl', '--rangeLow',
                         dest='rangeLow',
                         type=float,
                         # default=0)
-                        default=500)
+                        default=1000)
     parser.add_argument('-rh', '--rangeHigh',
                         dest='rangeHigh',
                         type=float,
@@ -223,7 +237,7 @@ if __name__ == "__main__":
                         type=int,
                         # default=175)
                         # default=55)
-                        default=50)
+                        default=113)
     parser.add_argument('-hd','--h5Dir',
                         dest='h5Dir',
                         default="h5samples/")
@@ -253,7 +267,8 @@ if __name__ == "__main__":
     
     for decays_type in decays_types:
         if decays_type == "allDecays":
-            sampleTypes = ["allDecays","Top","QCD"]
+            # sampleTypes = ["allDecays","Top","QCD", "WJets"]
+            sampleTypes = ["allDecays", "bg"]
         else: sampleTypes = sampleTypes_
 
         for mass_type in mass_types:
