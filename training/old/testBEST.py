@@ -38,7 +38,7 @@ k.tensorflow_backend.set_session(tf.Session(config=config))
 
 # user modules
 # import tools.functions as tools
-import tools.functions as tools
+import training.tools.functions_test as tools
 from plotConfusionMatrix import plotAll
 
 # Print which gpu/cpu this is running on

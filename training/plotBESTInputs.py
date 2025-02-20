@@ -9,7 +9,7 @@
 # script STILL needs to be cleaned up. the compare plotting scripts as well
 
 # user modules
-import tools.functions as tools
+import training.tools.functions_test as tools
 startTime = tools.logTime() # Tracks how long script takes
 
 # modules

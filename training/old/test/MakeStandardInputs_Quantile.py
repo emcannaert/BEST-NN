@@ -4,7 +4,7 @@
 # Author(s): Samantha Abbott //////////////////////////////////////////////////////
 # This program Standardizes the BEST Inputs ///////////////////////////////////////
 #----------------------------------------------------------------------------------
-import tools.functions as tools
+import training.tools.functions_test as tools
 
 startTime = tools.logTime() # Tracks how long script takes
 

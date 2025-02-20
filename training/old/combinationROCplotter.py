@@ -39,7 +39,7 @@ from keras.utils import np_utils, to_categorical, plot_model
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 # user modules
-import tools.functions as tools
+import training.tools.functions_test as tools
 
 # enter batch mode in root (so python can access displays)
 #root.gROOT.SetBatch(True)

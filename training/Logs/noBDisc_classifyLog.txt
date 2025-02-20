@@ -1,0 +1,128 @@
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+	bg Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+	bg Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of 2246588 (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of [2246588] (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of [2246588] (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[2246588] 2246588 out of [2246588] (100.0%) truth events.
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[1152235       0] 1152235 out of [2246588] (51.288%) truth events.
+	bg Category: Tagger predicted	[1094353       0] 1094353 out of [2246588] (0.0%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[952175 200060] 1152235 out of 1123320 (84.764%) truth events.
+	bg Category: Tagger predicted	[171145 923208] 1094353 out of 1123268 (82.189%) truth events.
+-----------------------------------
+-----------------------------------
+Running combine:
+										W	 Z	  H	  Top	b  QCD  Total
+	allDecays Category: Tagger predicted	[956671 203610] 1160281 out of 1123320 (85.164%) truth events.
+	bg Category: Tagger predicted	[166649 919658] 1086307 out of 1123268 (81.873%) truth events.
+-----------------------------------

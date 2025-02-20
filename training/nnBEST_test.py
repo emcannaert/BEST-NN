@@ -7,7 +7,7 @@
 #==================================================================================
 
 # user modules
-import tools.functions as tools
+import tools.functions_test as tools
 startTime = tools.logTime() # Tracks how long script takes
 
 # modules
@@ -38,13 +38,15 @@ sess = tf.Session(config=config)
 h = tf.constant('hello world')
 print(sess.run(h))
 
-sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
+sampleTypes_ = ["WB","HT","ZT","bg"]
+# sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
 
 
 
-#years = ["2015","2016","2017","2018"]
+#cyears = ["2015","2016","2017","2018"]
 
-years = ["2015","2016","2017","2018"]
+years = ["combine"]
+# years = ["2015","2016","2017","2018"]
 decayTypes = ["allDecays"]
 mass_types = ["all_mass"]
 
@@ -80,7 +82,7 @@ def trainNNBEST(args, strings,mask, dataDict):
     #==================================================================================
     # Train the Neural Network ////////////////////////////////////////////////////////
     #==================================================================================
-    BatchSize = 1200
+    BatchSize = 2000
 
     # Create the BES framework
 
@@ -105,11 +107,12 @@ def trainNNBEST(args, strings,mask, dataDict):
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
     combLayer   = Dense(nodes, kernel_initializer="glorot_normal", activation="relu"   )(combLayer)
-    outputModel = Dense( nCats, kernel_initializer="glorot_normal", activation="softmax")(combLayer)
+    # outputModel = Dense( nCats, kernel_initializer="glorot_normal", activation="softmax")(combLayer)
+    outputModel = Dense(1, activation='sigmoid')(combLayer) 
 
     # Compile the model
     myModel = Model(inputs = [besModel.input], outputs = outputModel)
-    myModel.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    myModel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     print(myModel.summary() )
 
     # Early stopping
@@ -153,14 +156,15 @@ if __name__ == "__main__":
                         default="models/",
                         help="Output Dir where models are saved [default: models/]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
-                        default = "../formatConverter/h5samples/BESvarList_mask.txt",
+                        # default = "../formatConverter/h5samples/BESvarList_noHT_noEventNum.txt",
+                        default = "../formatConverter/h5samples/BESvarList_train.txt",
                         # default = "../formatConverter/h5samples/BESvarList_noBDisc.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSV.txt",
                         # default = "../formatConverter/h5samples/BESvarList_naive.txt",
                         # default = "../formatConverter/h5samples/BESvarList_advanced.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive.txt",
                         # default = "../formatConverter/h5samples/BESvarList_deepCSVnaive_trim.txt",
-                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList_mask.txt]")
+                        help="Path to mask file [default: ../formatConverter/h5samples/BESvarList_train.txt]")
                         # default = "../formatConverter/masks/BESTMask.txt",
                         # help="Path to mask file [default: ../formatConverter/masks/BESTMask.txt]")
     parser.add_argument('-sf','--suffix', dest='suffix',
@@ -170,8 +174,8 @@ if __name__ == "__main__":
                         default="standardized", # default="newBEST_Basic"
                         help="String used by MakeStandardInputs.py to name scaled data files [default: standardized]")
     parser.add_argument('-mt','--modelType', dest='modelType',
-                        default="nnBEST",
-                        # default="noBDisc",
+                        # default="nnBEST",
+                        default="noBDisc",
                         # default="deepCSV",
                         # default="naive",
                         # default="advanced",
@@ -205,7 +209,8 @@ if __name__ == "__main__":
     stringYearDict = {}
     for decayType in decayTypes:
         if decayType == "allDecays":
-            sampleTypes = ["allDecays", "Top", "QCD"]
+            sampleTypes = ["allDecays", "bg"]
+            # sampleTypes = ["allDecays", "Top", "QCD"]
         else: sampleTypes = sampleTypes_
         for mass_type in mass_types:
             for year in years:

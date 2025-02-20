@@ -53,7 +53,7 @@ BatchSize = 1200
 print("Begin CM")
 
 def makeCM(model_BEST, h5Dir, plotDir, suffix, maskPath, testMaxEvents, modelType, scalePath):
-    import tools.functions as functs
+    import training.tools.functions_test as functs
     print("Begin CM")
     cm = {}
 

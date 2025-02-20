@@ -1,0 +1,2 @@
+Ran combine: acc = 0.8351,  Max val_acc = 0.8348
+Ran combine: acc = 0.8370,  Max val_acc = 0.8354

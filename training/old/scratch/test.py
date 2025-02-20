@@ -33,7 +33,7 @@ k.tensorflow_backend.set_session(tf.Session(config=config))
 import h5py
 import numpy as np
 import numpy.random
-import tools.functions as tools
+import training.tools.functions_test as tools
 
 
 sampleTypes = ["WW","ZZ","HH","TT","BB","QCD"]

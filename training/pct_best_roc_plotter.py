@@ -25,7 +25,7 @@ from keras.utils import to_categorical
 
 # user modules
 # import tools.functions as tools
-import tools.functions as tools
+import training.tools.functions_test as tools
 
 # enter batch mode in root (so python can access displays)
 #root.gROOT.SetBatch(True)

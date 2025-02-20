@@ -8,7 +8,7 @@
 ##############Note to self:
 #fix arguments, default should be all
 
-import tools.functions as tools
+import training.tools.functions_test as tools
 startTime = tools.logTime() # Tracks how long script takes
 
 import numpy as np
@@ -22,11 +22,13 @@ sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
 
 decay_types = ["allDecays"]
 # It is important that "train" is FIRST in this list!!!!
+# setTypes = ["test_1"]
 setTypes = ["train", "validation", "test"]
 mass_types = [ "all_mass"]
 
 #mass_types = ["low_mass", "high_mass", "all_mass"]
-years = ["2015","2016","2017","2018"]
+years = ["combine"]
+# years = ["2015","2016","2017","2018"]
  
 #years = ["2018"]   
 def checkRepeat(j, keys):
@@ -134,7 +136,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
     # IMPORTANT: ONLY FIT THE SCALE MODEL ON THE TRAINING SET. THEN, APPLY THAT MODEL TO EVERYTHING ELSE.
     print("Loading pre scale h5py files")
 
-    preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"_Sample_"+ mass_type + "_" +year+"_BESTinputs_"  +"train"+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
+    preScaleEvents  = [np.array(h5py.File("../formatConverter/h5samples/" + mySample+"_Sample_"+ mass_type + "_" +"combine"+"_BESTinputs_"  +"train"+suffix+".h5","r")["BES_vars"])[()] for mySample in sampleTypes]
     # preScaleEvents  = [np.array(h5py.File(h5Dir+mySample+"Sample_"+year+"_BESTinputs_train"+suffix+".h5","r")["BES_vars"])[:,mask] for mySample in sampleTypes]
     print("Pre scale events shape:", [arr.shape for arr in preScaleEvents])
 
@@ -180,6 +182,7 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
     with open(scalePath, 'w') as f: # Comments below describe transformation applied
         for name, transformer, events in ct.transformers_: 
             numEvents = len(events)
+            print("numEvents"+str(numEvents))
 
             # print(name)
             if "noscale" in name: # scaledvar = var
@@ -221,6 +224,11 @@ def standardizeBESTVars(h5Dir, scaleDir, maskPath, sampleTypes, suffix, year, ma
                 # param2 = transformer.scale_
                 param2 = [0]*numEvents # scale_ and max_abs_ are the same parameter
             for i, event in enumerate(events):
+                print("i" + str(i))
+                print("event" + str(event))
+                print(vars[event])
+
+
                 # f.write('{},{},{},{}\n'.format(event, nameKey, param1[i], param2[i]))
                 f.write('{},{},{},{}\n'.format(vars[event], nameKey, param1[i], param2[i]))
 
@@ -282,7 +290,7 @@ if __name__ == "__main__":
                         help="Dir to store scale params and scaler object to check later [default: ScalerParameters]")
     parser.add_argument('-mp','--maskPath', dest='maskPath',
                         # default = "../formatConverter/masks/BESTMask.txt",
-                        default = "../formatConverter/h5samples/BESvarList.txt",
+                        default = "../formatConverter/h5samples/BESvarList_full.txt",
                         help="Path to mask file [default: ../formatConverter/masks/BESvarList_mask.txt]")
     args = parser.parse_args()
 
@@ -302,7 +310,7 @@ if __name__ == "__main__":
     for year in years:             
         for decay_type in decay_types:
             if decay_type == "allDecays":
-                sampleTypes = ["allDecays","QCD","Top"]
+                sampleTypes = ["allDecays","bg"]
             else: sampleTypes = sampleTypes_
             for mass_type in mass_types:
                 standardizeBESTVars(args.h5Dir, args.scaleDir, args.maskPath, sampleTypes, suffix, year, mass_type)

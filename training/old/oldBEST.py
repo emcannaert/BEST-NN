@@ -51,7 +51,7 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.7
 k.tensorflow_backend.set_session(tf.Session(config=config))
 
 # user modules
-import tools.functions as tools
+import training.tools.functions_test as tools
 from plotConfusionMatrix import makeCM
 
 # Print which gpu/cpu this is running on

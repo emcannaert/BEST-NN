@@ -6,7 +6,7 @@
 #==================================================================================
 
 # user module 
-import tools.functions as tools
+import training.tools.functions_test as tools
 
 # modules
 import numpy as np
