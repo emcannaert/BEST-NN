@@ -1,212 +1,82 @@
-# modules
-# import ROOT as root
 import numpy as np
 import matplotlib
-matplotlib.use('Agg') #prevents opening displays (fast), must use before pyplot
+matplotlib.use('Agg')  # Prevents opening displays
 import matplotlib.pyplot as plt
 import h5py
-import argparse, os
+import argparse, os, sys
 
-################################## NOTES TO SELF ##################################
-# Plots need titles, code needs more comments.
-# Might be made obsolete by training/plotBESTInputs.py.
+# User definitions
+bins_list = [i * 50 for i in range(20, 200)]
 
-# User definitons
-# bins_list = [i*100 for i in range(0,40)]
-# bins_list = [i*50 for i in range(10,60)]
-bins_list = [i*50 for i in range(0,200)]
-# bins_list = [i*20 for i in range(25,100)]
-
-#cmslpc127
 # Global variables
-years = ["2015","2016","2017","2018"]
-# years = ["2018","2017","2016_APV","2016"]
-# years = ["2016","2016_APV"]
-# years = ["2017","2018"]
-# years = ["2017"]
-sampleFileTypes_ = ["allDecays","QCD","Top"]
-sampleTypes_     = ["allDecays","QCD","Top"]
-decay_types    = ["allDecays"]
+years = ["combine"]
+sampleFileTypes = ["bg", "allDecays"]
+sampleTypes = ["bg", "allDecays"]
+listOfFileTypes = ["_train_flattened.h5"]
 
-mass_types      = ["all_mass"]
-
-#mass_types      = ["all_mass","low_mass", "high_mass"]
-plot_types      = [ "_train","_train_flattened"]
-# listOfFileTypes = [".h5","_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
-# listOfFileTypes = ["_train.h5","_validation.h5","_test.h5","_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
-# listOfFileTypes = ["_train_flattened.h5"]
-listOfFileTypes = [".h5"]
-# listOfFileTypes = ["_train_flattened.h5","_validation_flattened.h5","_test_flattened.h5"]
-
-# Main function should take in arguments and call the functions you want
 if __name__ == "__main__":
-    # Take in arguments
     parser = argparse.ArgumentParser(description='Parse user command-line arguments to execute format conversion to prepare for training.')
-    parser.add_argument('-s', '--samples',
-                        dest='samples',
-                        help='Which (comma separated) samples to process. Examples: 1) --all; 2) W,Z,b',
-                        default="all")
-    parser.add_argument('-hd','--h5Dir',
-                        dest='h5Dir',
-                        help='Location of directory containing h5 files to plot',
-                        # default="/uscms/home/bonillaj/nobackup/h5samples_OR/")
-                        # default="/uscms/home/bonillaj/nobackup/h5samples_ULv1/")
-                        # default="/uscms/home/sostrom/nobackup/BEST/CMSSW_10_6_27/src/BEST/formatConverter/h5samples/")
-                        default="../formatConverter/h5samples/")
-    parser.add_argument('-y', '--years',
-                        dest='years',
-                        help='<Required> Which (comma separated) years to process. Examples: 1) all; 2) 2016,2017',
-                        # required=True)             
-                        default="all")             
-    parser.add_argument('-pt', '--ptIndex',
-                        dest='ptIndex',
-                        type=int,
-                        # default=142)
-                        default=181) #155)                                   
-    parser.add_argument('-ft','--fileTypes',
-                        dest='fileTypes',
-                        help='Which (comma separated) samples to process. Examples: 1) --all; 2) _train,_test',
-                        default="all")
+    parser.add_argument('-s', '--samples', dest='samples', default="all")
+    parser.add_argument('-hd', '--h5Dir', dest='h5Dir', default="../formatConverter/h5samples/")
+    parser.add_argument('-y', '--years', dest='years', default="all")
+    parser.add_argument('-pt', '--ptIndex', dest='ptIndex', type=int, default=111)
+    parser.add_argument('-ft', '--fileTypes', dest='fileTypes', default="all")
     args = parser.parse_args()
-    if not args.samples == "all": sampleTypes = args.samples.split(',')
-    if not args.fileTypes == "all": listOfFileTypes = args.fileTypes.split(',')
-    if not args.years == "all": years = args.years.split(',')
-    # plotDir = "plots/"
-    # plotDir = "plots/raw/"
-    # if not os.path.isdir(plotDir): os.mkdir(plotDir)
 
-    print("Samples to process: ", sampleTypes_)
-    print("File types to process: ", listOfFileTypes)
+    if args.samples != "all": sampleTypes = args.samples.split(',')
+    if args.fileTypes != "all": listOfFileTypes = args.fileTypes.split(',')
+    if args.years != "all": years = args.years.split(',')
 
-    # Make directories you need
     if not os.path.isdir(args.h5Dir):
         print(args.h5Dir, "does not exist")
-        quit()
-    
-    ## First plot all pt for each collection
-    ## So full samples, then train,validation,test, then train_flattened,validation_flattened,test_flattened
-    for decay_type in decay_types:
-        if decay_type == "allDecays":
-            sampleFileTypes = ["allDecays","Top","QCD"]
-            sampleTypes     = ["allDecays","Top","QCD"]
-        else:
-            sampleFileTypes = sampleFileTypes_
-            sampleTypes = sampleTypes_
+        sys.exit()
 
-        for mass_type in mass_types:
-            for year in years:
-                for plot_type in plot_types:
+    for year in years:
+        for fileType in listOfFileTypes:
+            plotDir = "plots/prettyHT/{}/".format(fileType[1:-3])
+            if not os.path.exists(plotDir):
+                os.makedirs(plotDir)
 
-                    print("Plotting year", year)
-                    for fileType in listOfFileTypes:
-                       
-                        #print("Plotting fileType", fileType)
-                        #plotDir = "plots/" + fileType[1:-3] + "/"
-                        
-
-                        #plotDir = "plots/SJ_mass/" + fileType[1:-3] + "/"
-                        plotDir = "plots/prettyHT/" + fileType[1:-3] + "/"
-
-
-
-                        print(plotDir)
-                        if not os.path.isdir(plotDir): os.makedirs(plotDir)
-                        myPtArrays = []
-                        for sampleType in sampleFileTypes:
-                            print(sampleType)
-                            #if sampleType in ["allDecays"]:
-                            mass_str= mass_type + "_"
-                            #    sample_str = sampleType + "_"
-                            inputPath = args.h5Dir+sampleType+"_Sample_"+ mass_str + year+ "_BESTinputs"+ plot_type+fileType
-                            print("Reading from file %s"%inputPath)
-                            inputFile = h5py.File(inputPath,"r")
-                            for key in inputFile.keys(): print(key, inputFile[key].shape)
-                            # print(inputFile.keys())
-                            myPtArrays.append(np.array(inputFile["BES_vars"][...,args.ptIndex]))
-                        # --- Create histogram, legend and title ---
-
-                        #print("@@@@@@@@ There are %s files used as inputs (should be 3!) @@@@@@@@@ "%len(myPtArrays))
-                        plt.figure()
-                        if fileType == ".h5": suffix = ""
-                        else:                 suffix = "_"+fileType.split('.')[0]
-                        if suffix == "":
-                            H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes, 
-                                            stacked=False, fill=False, normed=False, log=True)
-                            # plt.ylim(top=10000000000)  # adjust the top leaving bottom unchanged
-                            plt.ylim(bottom=0.1)  # adjust the bottom leaving top unchanged
-                        else:
-                            H = plt.hist(myPtArrays, bins = bins_list, histtype='step', label=sampleTypes,
-                                            stacked=False, fill=False, normed=False)
-                        # workPoints = [1500, 1600, 2000]
-                        # for i, wp in enumerate(workPoints): 
-                        #     plt.axvline(wp, linestyle=':', color="red")
-                        #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
-
-                        # hlines = [100000, 200000, 300000]
-                        # for i, wp in enumerate(hlines): 
-                        #     plt.axvline(wp, linestyle=':', color="black")
-                        #     plt.annotate(str(wp)+"pT", [wp,0.1*(i+1)], color="black")
-                        #             plt.axhline(100000)
-
-
-                        year_str = year
-                        if year == "2015":
-                            year_str = "2016preAPV"
-                        elif year == "2016":
-                            year_str = "2016postAPV"
-
-                        # change this back
-                        #title = "HTDistribution_"+year+suffix + " ".join(plot_type.split("_"))
-                        title = "Event H_{T} of training events for %s"%(year_str)
-
-                        # change this back
-                        file_title = "HT_Distribution_" + mass_type + "_"  + year+ plot_type + suffix
-                        #file_title = "HTDistribution_" + mass_type + "_"  + year+ plot_type + suffix
-                        plt.legend(frameon=True, ncol=2, loc='lower left')
-                        
-
-                        #change this back
-                        plt.xlabel('Event HT (GeV)')
-                        #plt.xlabel('Superjet mass (GeV)')
-                        plt.title(title)
-                        plt.show()
-                        savePath = os.path.join(plotDir, file_title+'_2500.png')
-                        plt.savefig(savePath)
-                        # savePath = os.path.join(plotDir, title+'_2500.pdf')
-                        # plt.savefig(savePath)
-
-
-
-                        # change this back
-                        plt.xlim([1250,10000])
-                        #plt.xlim([0,4500])
-
-
-                        savePath = os.path.join(plotDir, file_title + '.png')
-                        plt.savefig(savePath)
-                        # savePath = os.path.join(plotDir, title+'.pdf')
-                        # plt.savefig(savePath)            
-                        plt.clf()
-                        plt.close()
-
-                    # # --- Normalized Create histogram, legend and title ---
-                    # H = plt.hist(myPtArrays, histtype='step', stacked=False, fill=False, bins = bins_list, label=sampleTypes, normed=True)
-                    # plt.legend(frameon=True, ncol=2, loc='upper right')
-                    # plt.xlabel('pT (GeV)')
-                    # plt.title(title + " Normalized")            
-                    # plt.show()
-                    # savePath = os.path.join(plotDir, title+'_Normalized_2500.png')
-                    # plt.savefig(savePath)
-                    # # savePath = os.path.join(plotDir, title+'_Normalized_2500.pdf')
-                    # # plt.savefig(savePath)
-                    # plt.xlim([500,2000])
-                    # savePath = os.path.join(plotDir, title+'_Normalized.png')
-                    # plt.savefig(savePath)
-                    # # savePath = os.path.join(plotDir, title+'_Normalized.pdf')
-                    # # plt.savefig(savePath)            
-                    # plt.clf()
-                    # plt.close()
-
+            myPtArrays = []
+            labels = []  # CHANGED: Added label list for legend
+            colors = []  # CHANGED: Added color list for legend
             
-            print("Done with %s"%mass_type)
+            for sampleType in sampleFileTypes:
+                inputPath = os.path.join(args.h5Dir, "{}_Sample_all_mass_{}_BESTinputs{}".format(sampleType, year, fileType))
+                try:
+                    inputFile = h5py.File(inputPath, "r")
+                except (OSError, IOError):
+                    print("Error: Cannot open {}".format(inputPath))
+                    continue
 
+                if sampleType == "bg":
+                    data = np.array(inputFile["BES_vars"])
+                    sample_labels = ['QCD','TT','WJets','ST']  # CHANGED: Defined labels for bg
+                    sample_colors = ['blue', 'green', 'red', 'purple']  # CHANGED: Defined colors for bg
+                    
+                    for i in [3, 2, 1, 0]:
+                        myPtArrays.append(data[data[..., 112] == i][..., args.ptIndex])
+                        labels.append(sample_labels[i])  # CHANGED: Append correct label
+                        colors.append(sample_colors[i])  # CHANGED: Append correct color
+                else:
+                    myPtArrays.append(np.array(inputFile["BES_vars"][..., args.ptIndex]))
+                    labels.append("allDecays")  # CHANGED: Added allDecays label
+                    colors.append("black")  # CHANGED: Assigned color for allDecays
+
+            plt.figure()
+            plt.hist(myPtArrays[:-1], bins=bins_list, histtype='stepfilled', label=labels[:-1], stacked=True, color=colors[:-1], alpha=0.7, log=True)
+            plt.hist(myPtArrays[-1], bins=bins_list, histtype='step', label=labels[-1], color=colors[-1], log=True)  # CHANGED: Use defined labels/colors
+            plt.legend(frameon=True, loc='upper right')  # CHANGED: Ensure legend includes all samples
+            plt.xlabel('HT (GeV)')
+            plt.title("HT Distribution {}".format(year))
+            plt.ylim(bottom=0.1)
+
+            savePath = os.path.join(plotDir, "HT_Distribution_{}.png".format(year))
+            plt.savefig(savePath)
+            plt.xlim([1400, 10000])  # CHANGED: Ensure zoomed version is correctly modified
+            savePath_zoomed = os.path.join(plotDir, "HT_Distribution_{}_zoomed.png".format(year))
+            plt.savefig(savePath_zoomed)    
+            plt.clf()
+            plt.close()
+
+    print("Done")
