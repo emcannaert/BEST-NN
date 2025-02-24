@@ -41,9 +41,8 @@ The analyzer cfgs and crab cfgs will be located in the $CMSSW_BASE/src//BEST/pre
 The crab cfg files can be submitted, resubmitted, and checked using shell scripts in the allAltCrabCfgs/ folder - 
 ```bash
 cd $CMSSW_BASE/src/BEST/preprocess/crab/allAltCrabCfgs/
-source submitCrab_All.sh
-source resubmitCrab_All.sh
-source checkCrab_All.sh
+source submit.sh
+source submit_all.sh
 ```
 
 ## format conversion (turning TTrees into usable h5 files)
@@ -53,6 +52,18 @@ NN training with tensorflow requires inputs in the form of h5 files. The TTrees 
 
 ```bash
 source create_sample_lists.sh <path to eos folder where training TTrees are stored>   # example: /store/user/ecannaer/BESTInputTrees_202445_162215
+```
+
+Delete variables not used for training and add variable to record the sample type
+```bash
+python3 modify_key.py
+```
+
+Combine different years and bg samples
+
+```bash
+python3 combine_bg_new.py
+python3 combine.py
 ```
 
 The training events can then be converted, split (into training and test), and flattened - 
