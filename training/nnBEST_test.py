@@ -38,7 +38,7 @@ sess = tf.Session(config=config)
 h = tf.constant('hello world')
 print(sess.run(h))
 
-sampleTypes_ = ["WB","HT","ZT","bg"]
+sampleTypes_ = ["bg","WB","HT","ZT"]
 # sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
 
 
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     stringYearDict = {}
     for decayType in decayTypes:
         if decayType == "allDecays":
-            sampleTypes = ["allDecays", "bg"]
+            sampleTypes = ["bg","allDecays"]
             # sampleTypes = ["allDecays", "Top", "QCD"]
         else: sampleTypes = sampleTypes_
         for mass_type in mass_types:

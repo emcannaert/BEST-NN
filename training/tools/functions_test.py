@@ -285,8 +285,12 @@ def loadH5Data(args, mask, sampleTypes, setTypes, maxEvents, mass_type, year='',
             print("sampletype", sampleTypes[i])
             if sampleTypes[i] == "bg":
                 truthArrays[i][:, 0] = 0  
+                num_bg_events = truthArrays[i].shape[0] 
             else:
                 truthArrays[i][:, 0] = 1 
+                num_signal_events = truthArrays[i].shape[0]
+        print("num_bg_events",num_bg_events)
+        print("num_signal_events",num_signal_events)    
         print(truthArrays)        
 
         print("My " + mySet + " truth shape: ", [ truthArrays[i].shape for i in range(len(truthArrays)) ] )
@@ -382,13 +386,14 @@ def loadScalerModel(scale, mask):
 #   Provides the same information as the Confusion Matrix. ////////////////////////
 #----------------------------------------------------------------------------------
 
-def recordClassification(cm, truthTest, targetNames, modelType, suffix):
+def recordClassification(cm, truthTest, targetNames, modelType, suffix,workingpoint):
 
     print("Recording Classifcation Rates...")
     logFile = "Logs/" + modelType + "_classifyLog.txt"
     classifylog = open(logFile, "a") 
     classifylog.write("-----------------------------------\n")
     classifylog.write("Running " + suffix + ":\n")
+    classifylog.write("Working Point " + str(workingpoint) + ":\n")
     truthTest = truthTest.astype(int)
     totalTested = np.bincount(truthTest)
     classifylog.write("\t\t\t\t\t\t\t\t\t\tW\t Z\t  H\t  Top\tb  QCD  Total\n")
@@ -397,7 +402,7 @@ def recordClassification(cm, truthTest, targetNames, modelType, suffix):
             totalPredicted = cm[:, i]
         else:
             totalPredicted = cm[:, 0]
-        print("cm shape", cm.shape)
+        
         classifyMessage = "\t" + target + " Category: Tagger predicted\t" + str( totalPredicted ) + " " + str(np.sum(totalPredicted)) + " out of " + str(totalTested[i]) + " (" + str(100 * (float(totalPredicted[i])/float(totalTested[i]))  )[:6] + "%) truth events.\n"        
         print(classifyMessage)
         classifylog.write(classifyMessage)
@@ -763,9 +768,12 @@ def plotAll(args, strings, truthData, modelType, BESpredict, mass_type, year, sa
     BESpredict_flat = BESpredict.flatten()
     BESpredict_flat_signal = BESpredict_flat[truthData == 1]
     BESpredict_flat_bg = BESpredict_flat[truthData == 0]
+    workingpoint = 0.5
 
     # Plot the histogram
     plt.hist(BESpredict_flat_signal, bins=20, edgecolor='black')
+    signal_efficiency = np.sum(BESpredict_flat_signal > workingpoint) / len(BESpredict_flat_signal)
+    print("signal_efficiency",signal_efficiency)
     plt.title('Histogram of signal BESpredict')
     plt.xlabel('Prediction Values')
     plt.ylabel('Events')
@@ -774,15 +782,18 @@ def plotAll(args, strings, truthData, modelType, BESpredict, mass_type, year, sa
     plt.clf()
 
     plt.hist(BESpredict_flat_bg, bins=20, edgecolor='black')
+    bg_mis_rate = np.sum(BESpredict_flat_bg > workingpoint) / len(BESpredict_flat_bg)
+    print("bg_mis_rate", bg_mis_rate)
     plt.title('Histogram of background BESpredict')
     plt.xlabel('Prediction Values')
     plt.ylabel('Events')
     plt.savefig('BESpredict_histogram_bg.png')
     plt.show()
     
-
-    predicted_labels = (BESpredict >= 0.5).astype(int)
-    cm = metrics.confusion_matrix(truthData,predicted_labels )
+    
+    
+    predicted_labels = (BESpredict >= workingpoint).astype(int)
+    cm = metrics.confusion_matrix(truthData,predicted_labels)
     print("Confusion Matrix:")
     print(cm)
                            
@@ -793,7 +804,7 @@ def plotAll(args, strings, truthData, modelType, BESpredict, mass_type, year, sa
 
     # Record classification rates 
     # recordClassification(cm, truthData, samples, modelType, suffix)
-    recordClassification(cm, truthData, samples, args.modelType, suffix)
+    recordClassification(cm, truthData, samples, args.modelType, suffix,workingpoint)
 
     # Plot Efficiency
     plotpTCM(predicted_labels, truthData, plotDir, args, mass_type, year, samples)

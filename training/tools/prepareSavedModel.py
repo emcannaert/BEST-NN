@@ -36,9 +36,12 @@ def main(filepath):
         year = "2017"
     elif "2018" in filepath:
         year = "2018"
+    elif "combine" in filepath:
+        year = "combine"
     else:
         print("ERROR: year not interpreted correctly from file. ")
         return
+    print(year)
 
     #output_str = [  str(model.outputs).split("'")[1].split(":")[0]       ]
     #outputs = output_str
@@ -70,5 +73,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     main(args.filepath)
+
+
 
 
