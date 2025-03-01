@@ -6,7 +6,7 @@ import numpy as np
 directory = '.'
 
 # Output file
-output_file = 'bg_combined.h5'
+output_file = 'bg_Sample_combine_BESTinputs.h5'
 
 # Get a list of all .h5 files in the directory that start with 'allDecays'
 file_paths = [f for f in os.listdir(directory) if f.endswith('.h5') and f.startswith('bg')]

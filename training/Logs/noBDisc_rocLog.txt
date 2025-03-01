@@ -76,3 +76,17 @@ combine:                       Avg: 1.828292, allDecays: 0.914145, bg: 0.914145,
 combine:                       Avg: 1.828292, allDecays: 0.914145, bg: 0.914145, avg: 0.914145
 combine:                       Avg: 1.828292, bg: 0.914145, allDecays: 0.914145, avg: 0.914145
 combine:                       Avg: 1.828292, bg: 0.914145, allDecays: 0.914145, avg: 0.914145
+combine:                       Avg: 5.484329, allDecays_MChi-1000: 0.914054, allDecays_MChi-1500: 0.914054, allDecays_MChi-2000: 0.914054, allDecays_MChi-2500: 0.914054, allDecays_MChi-3000: 0.914054, bg: 0.914054, avg: 0.914054
+combine:                       Avg: nan, allDecays_MChi-1000: nan, allDecays_MChi-1500: nan, allDecays_MChi-2000: nan, allDecays_MChi-2500: nan, allDecays_MChi-3000: nan, bg: 0.914054, avg: 0.914054
+combine:                       Avg: nan, allDecays_MChi-1000: nan, allDecays_MChi-1500: nan, allDecays_MChi-2000: nan, allDecays_MChi-2500: nan, allDecays_MChi-3000: nan, bg: nan, avg: 0.914054
+combine:                       Avg: nan, allDecays_MChi-1000: nan, allDecays_MChi-1500: nan, allDecays_MChi-2000: nan, allDecays_MChi-2500: nan, allDecays_MChi-3000: nan, bg: nan, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 4.570359, allDecays_MChi-1000: 0.913633, allDecays_MChi-1500: 0.914965, allDecays_MChi-2000: 0.911683, allDecays_MChi-2500: 0.917345, allDecays_MChi-3000: 0.912728, avg: 0.914054
+combine:                       Avg: 1.832379, bg: 0.916189, allDecays: 0.916189, avg: 0.916189

@@ -8,15 +8,17 @@ def get_bes_vars_as_array(h5_file, dataset_name):
     return data, size
 
 # Usage
-h5_file = 'bg_2015.h5'
+h5_file = 'bg_Sample_all_mass_combine_BESTinputs_test.h5'
 dataset_name = 'BES_vars'
 bes_vars_array, size = get_bes_vars_as_array(h5_file, dataset_name)
+last_column = bes_vars_array[:, -1]
+# Sum all the elements in the last column
+total_sum = np.sum(last_column)
 
 print("Dataset size:", size)
 print(bes_vars_array)
+print(total_sum)
 
-output_file_path = "2015.txt"
-with open(output_file_path, 'w') as outfile:
-            outfile.write(bes_vars_array)
+
         
 

@@ -8,7 +8,7 @@
 ##############Note to self:
 #fix arguments, default should be all
 
-import training.tools.functions_test as tools
+import tools.functions_test as tools
 startTime = tools.logTime() # Tracks how long script takes
 
 import numpy as np
@@ -18,7 +18,7 @@ from sklearn.externals.joblib import dump
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler
 from sklearn.compose import ColumnTransformer
 
-sampleTypes_ = ["WB","HT","ZT","Top","QCD"]
+sampleTypes_ = ["WB","HT","ZT","bg"]
 
 decay_types = ["allDecays"]
 # It is important that "train" is FIRST in this list!!!!

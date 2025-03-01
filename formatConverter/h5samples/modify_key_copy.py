@@ -23,7 +23,7 @@ def delete_columns(h5_file, dataset_name, columns_to_delete):
         f.create_dataset(dataset_name, data=modified_data)
 
 # Usage
-h5_file = 'ST_Sample_2018_BESTinputs_train_1.h5'
+h5_file = 'ST_Sample_2018_BESTinputs.h5'
 dataset_name = 'BES_vars'
 columns_to_delete = [112]  
 
