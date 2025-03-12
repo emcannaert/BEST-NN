@@ -19,6 +19,7 @@ import datetime
 import sys
 import tensorflow as tf
 
+
 # functions from modules
 from shutil import rmtree
 from scipy import interp
@@ -53,6 +54,24 @@ def logTime(startTime=None, name=sys.argv[0]):
 # classes are the names of the classes that the classifier distributes among //////
 #----------------------------------------------------------------------------------
 
+
+
+def draw_labels(CMS_label_xpos, CMS_label_ypos , SIM_label_xpos, SIM_label_ypos, data_type_str, lumistuff_xpos, lumistuff_ypos, lumistuff):
+    
+
+    # Draw CMS label
+    plt.text(CMS_label_xpos, CMS_label_ypos, "CMS", fontsize=12, fontweight='bold', ha='center', va='center', transform=plt.gca().transAxes)
+
+    # Draw simulation label
+    plt.text(SIM_label_xpos, SIM_label_ypos, data_type_str, fontsize=10, fontstyle='italic', ha='center', va='center', transform=plt.gca().transAxes)
+
+    # Draw luminosity information
+    plt.text(lumistuff_xpos, lumistuff_ypos, lumistuff, fontsize=10, ha='right', va='center', transform=plt.gca().transAxes)
+
+    
+
+
+
 def plot_confusion_matrix(cm, classes, plotDir, suffix, year,
                           normalize=False,
                           title='Confusion Matrix',
@@ -78,19 +97,24 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix, year,
         saveFile = os.path.join(saveDir, 'ConfusionMatrix_BES' + suffix)
 
     print(cm)
-    if (suffix=="2015"):
-        title = "2016_preAPV"+ " " + title
-    elif (suffix=="2016"):
-        title= "2016_postAPV"+ " " + title
-    else:
-        title = suffix + " " + title
-    plt.figure()
+    #if (suffix=="2015"):
+        #title = "2016_preAPV"+ " " + title
+    #elif (suffix=="2016"):
+        #title= "2016_postAPV"+ " " + title
+    #else:
+        # title = suffix + " " + title
+        
+    plt.figure(figsize=(9.5, 6))
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
+    plt.title(title, pad=15)
     plt.colorbar()
+
+    
+    
     tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
+    labels = ['Background' if cls == 'bg' else 'Signal' if cls == 'allDecays' else cls for cls in classes]
+    plt.xticks(tick_marks, labels, rotation=45)
+    plt.yticks(tick_marks, labels)
 
     fmt = '.2f' if normalize else 'd'
     thresh = cm.max() / 2.
@@ -102,7 +126,9 @@ def plot_confusion_matrix(cm, classes, plotDir, suffix, year,
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.tight_layout() #make all the axis labels not get cutoff
-
+    
+    plt.subplots_adjust(top=0.85, bottom=0.25)
+    draw_labels(0.01, 1.02, 0.4, 1.02,  "Private Work (CMS simulation)" , 1.03, 1.02, "(13 TeV)")
     print("Saving to: " + saveFile + "_%s.png"%year)
     plt.savefig(saveFile + ".png")
     print("Saving to: " + saveFile + "_%s.pdf"%year)
@@ -135,6 +161,7 @@ def plotAccLoss(historyFile, suffix, plotDir, year):
 
     # plot loss vs epoch
     plt.figure()
+    
     plt.plot(loss, label='loss; Min loss: ' + str(np.min(loss))[:6] + ', Epoch: ' + str(np.argmin(loss)) )
     plt.plot(val_loss, label='val_loss; Min val_loss: ' + str(np.min(val_loss))[:6] + ', Epoch: ' + str(np.argmin(val_loss)) )
     if (suffix=="2015"):
@@ -142,11 +169,14 @@ def plotAccLoss(historyFile, suffix, plotDir, year):
     elif (suffix=="2016"):
         plt.title("2016_postAPV" + " loss and val_loss vs. epochs")
     else:
-        plt.title(suffix + " loss and val_loss vs. epochs")
+        plt.title("loss and val_loss vs. epochs",pad=20)
     plt.legend(loc="upper right")
     plt.xlabel('epoch')
     plt.ylabel('loss')
+    plt.ylim(top=plt.ylim()[1] * 1.1)
     if not os.path.isdir(plotDir): os.makedirs(plotDir)
+    plt.subplots_adjust(top=0.85, bottom=0.15)
+    draw_labels(0.03, 1.02, 0.35, 1.02,  "Private Work (CMS simulation)" , 1.01, 1.02, "(13 TeV)")
     plt.savefig(plotDir+suffix+"_loss.pdf")
     plt.savefig(os.path.join(plotDir,suffix+"_loss.png"))
     plt.close()
@@ -156,14 +186,16 @@ def plotAccLoss(historyFile, suffix, plotDir, year):
     plt.plot(acc,     label='acc; Max acc: '  + str(np.max(acc))[:6] + ', Epoch: ' + str(np.argmax(acc)) )
     plt.plot(val_acc, label='val_acc; Max val_acc: ' + str(np.max(val_acc))[:6] + ', Epoch: ' + str(np.argmax(val_acc)) )
     if (suffix=="2015"):
-        plt.title("2016_preAPV" + " acc and val_acc vs. epochs")
+        plt.title("2016_preAPV" + " acc and val_acc vs. epochs", pad=20)
     elif (suffix=="2016"):
-        plt.title("2016_postAPV" + " acc and val_acc vs. epochs")
+        plt.title("2016_postAPV" + " acc and val_acc vs. epochs", pad=20)
     else:
-        plt.title(suffix + " acc and val_acc vs. epochs")
+        plt.title("acc and val_acc vs. epochs", pad=20)
     plt.legend(loc="lower right")
     plt.xlabel('epoch')
     plt.ylabel('acc')
+    plt.subplots_adjust(top=0.85, bottom=0.15)
+    draw_labels(0.05, 1.02, 0.32, 1.02,  "Private Work (CMS simulation)" , 0.97, 1.02, "(13 TeV)")
     plt.savefig(plotDir+suffix+"_acc.pdf")
     plt.savefig(os.path.join(plotDir,suffix+"_acc.png"))
     plt.close()
@@ -184,6 +216,7 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
     if not os.path.isdir(saveDir): os.makedirs(saveDir)
     
     plt.figure()
+    
     for i, target in enumerate(targetNames):
 
         # --- Create Class. Prob. histogram, legend and title ---
@@ -204,7 +237,10 @@ def plotProbabilities(plotDir, eventPredictions, truthTest, targetNames, year):
         plt.xlabel( title )
         plt.gca().tick_params(axis = 'y', which = 'both', direction = 'in', left = True, right = True)
         plt.gca().tick_params(axis = 'x', direction = 'in', top = True, bottom = True)
+        plt.subplots_adjust(top=0.85, bottom=0.15)
+        draw_labels(0.05, 1.02, 0.32, 1.02,  "Private Work (CMS simulation)" , 0.97, 1.02, "(13 TeV)")
         plt.show()
+
         plt.savefig(saveDir + "_".join(title.split(" ")) + ".png")
         plt.savefig(saveDir + "_".join(title) + ".pdf")
         plt.clf()
@@ -556,6 +592,7 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix, year):
         else:
             title = suffix + " " + labelDict[key][0] + " ROC Curve"  
         plt.figure(1)
+        
         plt.plot(fprBES[key], tprBES[key],
                 # label= 'BES ROC Curve (area = {0:0.2f})' ''.format(rocAUC),
                 label= 'BES ROC Curve (area = ' + str(rocAUC)[:6] + ') ',
@@ -568,7 +605,8 @@ def plotROC(BESpredict, truthLabels, plotDir, samples, modelType, suffix, year):
         plt.ylabel('True Positive Rate')
         plt.title(title)
         plt.legend(loc="lower right")
-
+        plt.subplots_adjust(top=0.85, bottom=0.15)
+        draw_labels(0.05, 1.02, 0.32, 1.02,  "Private Work (CMS simulation)" , 0.97, 1.02, "(13 TeV)")
         path  = saveDir + "png/" + labelDict[key][1] + '_ROCplot_%s.png'%year
         plt.savefig(path)
         path  = saveDir + "pdf/" + labelDict[key][1] + '_ROCplot_%s.png'%year
@@ -664,6 +702,7 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, mass_type, year, sampleType
 
             # --- Create histogram, legend and title ---
             plt.figure()
+           
             plt.plot(bins_list, myPtArrays)
             plt.legend(targetNames, title = "True Particle")
             if (year=="2015"):
@@ -675,6 +714,8 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, mass_type, year, sampleType
             plt.xlabel("Jet " + xlabel + " (GeV)")
             plt.ylabel("Percentage of X Jets")
             plt.show()
+            plt.subplots_adjust(top=0.85, bottom=0.15)
+            draw_labels(0.05, 1.02, 0.32, 1.02,  "Private Work (CMS simulation)" , 0.97, 1.02, "(13 TeV)")
             plt.savefig(os.path.join(saveDir, "png", suffix + '_Xas_' + target + '.png'))
             plt.savefig(os.path.join(saveDir, "pdf", suffix + '_Xas_' + target + '.pdf'))
             plt.clf()
@@ -693,6 +734,8 @@ def plotpTCM(BESpredict, truthLabels, plotDir, args, mass_type, year, sampleType
             plt.xlabel("Jet " + xlabel + " (GeV)")
             plt.ylabel("Percentage of " + target + " Jets")
             plt.show()
+            plt.subplots_adjust(top=0.85, bottom=0.15)
+            draw_labels(0.05, 1.02, 0.32, 1.02,  "Private Work (CMS simulation)" , 0.97, 1.02, "(13 TeV)")
             plt.savefig(os.path.join(saveDir, "png", suffix + '_' + target + '_asX.png'))
             plt.savefig(os.path.join(saveDir, "pdf", suffix + '_' + target + '_asX.pdf'))
             plt.clf()
@@ -771,24 +814,22 @@ def plotAll(args, strings, truthData, modelType, BESpredict, mass_type, year, sa
     workingpoint = 0.5
 
     # Plot the histogram
-    plt.hist(BESpredict_flat_signal, bins=20, edgecolor='black')
+    plt.figure(figsize=(9.5, 6))  # Increase figure size
+    plt.hist(BESpredict_flat_signal, bins=20, edgecolor='black', histtype='step', label='Signal', density = True)
     signal_efficiency = np.sum(BESpredict_flat_signal > workingpoint) / len(BESpredict_flat_signal)
     print("signal_efficiency",signal_efficiency)
-    plt.title('Histogram of signal BESpredict')
+    plt.hist(BESpredict_flat_bg, bins=20, edgecolor='red', histtype='step', label='Background', density = True)
+    bg_mis_rate = np.sum(BESpredict_flat_bg > workingpoint) / len(BESpredict_flat_bg)
+    print("bg_mis_rate",bg_mis_rate)
+    plt.title('NN Tagger Output Score Shapes', pad=20)
     plt.xlabel('Prediction Values')
-    plt.ylabel('Events')
-    plt.savefig('BESpredict_histogram_sig.png')
+    plt.ylabel('Normalized Events')
+    plt.legend(loc='upper left')
+    plt.subplots_adjust(top=0.85, bottom=0.15)
+    draw_labels(0.05, 1.02, 0.32, 1.02,  "Private Work (CMS simulation)" , 0.97, 1.02, "(13 TeV)")
+    plt.savefig('BESpredict_histogram_sig.pdf')
     plt.show()
     plt.clf()
-
-    plt.hist(BESpredict_flat_bg, bins=20, edgecolor='black')
-    bg_mis_rate = np.sum(BESpredict_flat_bg > workingpoint) / len(BESpredict_flat_bg)
-    print("bg_mis_rate", bg_mis_rate)
-    plt.title('Histogram of background BESpredict')
-    plt.xlabel('Prediction Values')
-    plt.ylabel('Events')
-    plt.savefig('BESpredict_histogram_bg.png')
-    plt.show()
     
     
     
