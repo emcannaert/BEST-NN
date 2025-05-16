@@ -2,6 +2,7 @@
 # sampleFlattener.py /////////////////////////////////////////////////////
 #==================================================================================
 # Author(s): Johan S Bonilla, Samantha Abbott, Brendan Regnery, Reyer Band --------
+# Heavily modified and adapted by Ethan Cannaert 
 # This program takes in h5 files and equalizes the number of events based on pt ///
 # Inputs should be h5 files after splitting the samples
 # The process plots the various files and, bin by bin, keeps all events of the
