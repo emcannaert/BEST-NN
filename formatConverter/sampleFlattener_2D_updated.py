@@ -19,6 +19,7 @@ import numpy.ma as ma
 from sklearn.model_selection import train_test_split
 import pickle
 import random
+import math
 
 # years = ["2015","2016","2017","2018"]
 years = ["combine"]
@@ -145,7 +146,26 @@ def flattenFile(keepProbs_2D, h5Dir, outDir, sampleTypes, year, setType, bins_SJ
 
                         # Apply the probability to keep events
                         if prob < 1:
-                            result = train_test_split(result_old, train_size=prob, shuffle=True, random_state=29)[0]
+
+                            #result = train_test_split(result_old, train_size=prob, shuffle=True, random_state=29)[0]
+
+                            random.shuffle(result_old)
+                            #events_to_keep = int(math.ceil(len( result_old ) * prob))
+
+
+                            random_val = random.random()
+                            if ( random_val < 0.5): extra_val = 1
+                            else: extra_val = 0
+
+                            events_to_keep = int(math.floor(len( result_old ) * prob)) + extra_val
+
+
+                            result =  result_old[:events_to_keep] 
+
+
+
+
+
                             #print("For sample %s --------- bin %s/%s (HT=%s, SJ mass = %s), the probability is %s, old bin size / new bin size = %s (original # events= %s, new # events = %s)"%(sample, i,j, htLow, sjMassLow, prob, float(len(result)) / float(len(result_old)), len(result_old), len(result) ))
                         else:
                             result = result_old
@@ -273,13 +293,15 @@ def flattenFileNew(min_events, nEvents, h5Dir, outDir, sampleTypes, year, setTyp
                     ### get total number of events to be kept
                     random.shuffle(result_old)   ## shuffle to get random selection of events
 
-
                     #print("len(result_old) = %s"%(len(result_old)))
-
                     ## get new results
                     #### get the minimum number of events from this bin
 
-                    events_to_keep = int(  min(     nEvents[0][i][j],nEvents[1][i][j] )     )
+                    random_val = random.random()
+                    if ( random_val < 0.5): extra_val = 1
+                    else: extra_val = 0
+
+                    events_to_keep = math.floor(len( result_old ) * prob) + extra_val
 
                     result = result_old[:events_to_keep]
                     #print("For %s, i/j = %s/%s, the number of events is %s, will keep %s of these (nEvents[0][i][j] = %s, nEvents[1][i][j] = %s). In the end, kept %s events.  "%(sample, i,j, len(result_old), events_to_keep, nEvents[0][i][j], nEvents[1][i][j], len(result) ))
@@ -424,26 +446,34 @@ def getProbabilities2D(h5Dir, sampleTypes, year, setType, mass_type,args, bins_H
     nEvents = np.array(nEvents) # this is a 2xNxM matrix (2x (NxM) for {sig,BR}x{HT}x{SJ mass})
     nEvents = nEvents.astype(float)
 
-    #print("Number of signal events: ")
-    #print_matrix(nEvents[0],0,1)
+    print("Number of signal events: ")
+    print_matrix(nEvents[0],0,1)
 
-    #print("Number of background events: ")
+    print("Number of background events: ")
     print_matrix(nEvents[1],0,1)
-
-
 
     print("Calculating probabilities.")
     min_events = np.minimum(nEvents[0], nEvents[1])  # gives NxM array of the minimum events between samples
     probs.append(  min_events/nEvents[0] )
     probs.append(  min_events/nEvents[1] )
 
-    probs = np.nan_to_num(probs)
+    probs = np.nan_to_num(probs) ## are things getting set to zero here?
+
+
 
     print("Signal probs is: ")
     print_matrix(probs[0],6,1)
     
     print("BR probs is: ")
     print_matrix(probs[1],6,1)
+
+
+    print("With probs applied, signal events should be: ")
+    print_matrix( probs[0]*nEvents[0], 0, 1  )
+    print("With probs applied, background events should be: ")
+    print_matrix( probs[1]*nEvents[1], 0, 1  )
+
+
 
     with open("test_probs.pkl", "wb") as f:
         pickle.dump(probs, f)
@@ -685,11 +715,11 @@ if __name__ == "__main__":
         for mass_type in mass_types:
             for year in years:
                 for setType in setTypes:
-                    #keepnEvents2D = getProbabilities2D(args.h5Dir, sampleTypes, year, setType, mass_type,args)
-                    #flattenFile(keepnEvents2D, args.h5Dir, args.outDir, sampleTypes, year, setType, bins_SJ, bins_HT, args.batchSize, mass_type, args)
+                    keepnEvents2D = getProbabilities2D(args.h5Dir, sampleTypes, year, setType, mass_type,args, bins_HT, bins_SJ)
+                    flattenFile(keepnEvents2D, args.h5Dir, args.outDir, sampleTypes, year, setType, bins_SJ, bins_HT, args.batchSize, mass_type, args)
 
-                    min_events_2d, nEvents_2d = getMinNEventsPerBin(args.h5Dir, sampleTypes, year, setType, mass_type,args,bins_HT,bins_SJ)
-                    flattenFileNew(min_events_2d, nEvents_2d, args.h5Dir, args.outDir, sampleTypes, year, setType, bins_SJ, bins_HT, args.batchSize, mass_type, args)
+                    #min_events_2d, nEvents_2d = getMinNEventsPerBin(args.h5Dir, sampleTypes, year, setType, mass_type,args,bins_HT,bins_SJ)
+                    #flattenFileNew(min_events_2d, nEvents_2d, args.h5Dir, args.outDir, sampleTypes, year, setType, bins_SJ, bins_HT, args.batchSize, mass_type, args)
                     printPostFlatNEvents(args.h5Dir, sampleTypes, year, setType, mass_type,args, bins_HT, bins_SJ)
 
 
